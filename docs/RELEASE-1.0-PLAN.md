@@ -36,7 +36,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T08** | Canonical physical-file kinds and public adapter factory | **Blocking fix passes local publication checks; hosted checks/release pending** | Neutral contract consumers conflict with test Evidence; consumer framework migration remains separately required |
+| **T08** | Canonical physical-file kinds and public adapter factory | **Merged; local and hosted Ubuntu/Windows checks passed; release pending** | Neutral contract consumers conflict with test Evidence; consumer framework migration remains separately required |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |

@@ -48,7 +48,12 @@ evidence; the upstream tests below are independent public reproductions, not tha
   contract test-consumer facts, strict SHACL, real SCIP, RDF/SPARQL projection, CLI/npx and MCP.
   Independent review found no remaining blocker. All 79 original source path/hash pairs are intact.
 
-Hosted checks, merge and publication are recorded after completion. No private application files
+[PR 27](https://github.com/jchewitt/weftlet/pull/27) merged at
+`7b3b0a4af260a6fa70f1107b3c5c315826c22c0e`. Exact feature head
+`493c68faada31f35e4c7dd5d047e70ac5c96b2ad` passed hosted Ubuntu and native Windows checks
+in [push run 40420049204](https://github.com/jchewitt/weftlet/actions/runs/40420049204) and
+[PR run 40420084937](https://github.com/jchewitt/weftlet/actions/runs/40420084937).
+Publication is pending the separately reviewed 0.4.0 release. No private application files
 or installed consumer packages were modified. The consumer must upgrade both released packages,
 migrate/version its framework extractor, run composed adapter tests, then complete full hydration
 and repeat acceptance before its adoption blocker can be declared resolved.
