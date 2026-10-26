@@ -69,12 +69,12 @@ See the [validation record](docs/VALIDATION.md).
 
 ## Preview hydration before model work
 
-`hydrate --plan` is implemented in the development source and is **not included in the
-published 0.2.1 packages**. From a development checkout, inspect a project's committed inputs:
+`hydrate --plan` requires toolkit **0.3.0 or newer**. Releases through 0.2.1 do not support
+this flag. With a supporting version installed, inspect a project's committed inputs:
 
 ```sh
-pnpm weftlet hydrate --plan --config /path/to/project/context-graph.config.json --ref HEAD
-pnpm weftlet hydrate --plan --json --config /path/to/project/context-graph.config.json --ref HEAD
+pnpm exec weftlet hydrate --plan --config /path/to/project/context-graph.config.json --ref HEAD
+pnpm exec weftlet hydrate --plan --json --config /path/to/project/context-graph.config.json --ref HEAD
 ```
 
 The human summary and JSON identify the resolved commit, current local configuration, selected
@@ -103,8 +103,8 @@ SOT traversal and default validation-document separation remain T07 work. See
 
 ## SHACL validation and performance
 
-The development source includes a cold-validation optimization that is **not included in the
-published 0.2.1 packages**. The toolkit still uses JavaScript `rdf-validate-shacl` and an in-memory
+Starting with 0.3.0, the toolkit indexes a temporary union to accelerate cold validation.
+The toolkit uses JavaScript `rdf-validate-shacl` and an in-memory
 N3 store. Each hydration validates the complete graph; semantic artifact reuse does not make
 validation incremental, and there is no validation-result cache, Rust engine or GraphDB service.
 Saved queries do not rerun SHACL.

@@ -1,6 +1,6 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: maintainer-directed work, recorded on 2026-10-26 from a consumer integration report.
+Status: maintainer-directed work; source checkpoint on 2026-10-26 before the planned 0.3.0 release.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
 genuine consumer acceptance remains pending. T02 is merged and awaits release. T05's focused
 cold-validation optimization is implemented in development source, with validation/release pending;

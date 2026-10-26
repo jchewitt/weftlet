@@ -1,5 +1,8 @@
 # Delivery roadmap
 
+Source checkpoint: 2026-10-26, before the planned 0.3.0 release. Publication evidence is
+recorded separately in [validation](VALIDATION.md); this roadmap is not a live registry status.
+
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
