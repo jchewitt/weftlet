@@ -8,10 +8,72 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Weftlet 0.3.0 preview and SHACL performance release, 2026-10-26
+
+T02 and the focused cold-validation portion of T05 shipped ahead of the remaining 1.0 work.
+Both `@weftlet/core@0.3.0` and `@weftlet/toolkit@0.3.0` are public npm `latest` at this
+checkpoint. Core advances with the fixed release group and has no code change in this release.
+
+- [Preview PR 18](https://github.com/jchewitt/weftlet/pull/18) merged at
+  `63c70f85b26a6cc60f8bc0615a86f6042a61ecd0`.
+  [SHACL PR 20](https://github.com/jchewitt/weftlet/pull/20) merged at
+  `e45fda59037293a6ded20da70b812bbd385500a5`. Its final head
+  `ec7bb87ea3287a6322eeb09fa72ba53b3f1eec4e` passed hosted Ubuntu and focused Windows
+  checks in [run 40402839679](https://github.com/jchewitt/weftlet/actions/runs/40402839679)
+  and [run 40402826889](https://github.com/jchewitt/weftlet/actions/runs/40402826889).
+- [Release PR 19](https://github.com/jchewitt/weftlet/pull/19) advanced both versions to 0.3.0.
+  Exact head `897e731222180cc58ccf8acfe9cc2cd6252245b5` passed local `pnpm release:prepare`
+  and [dispatched Ubuntu/Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40403315203).
+  The bot's automatic PR run required GitHub approval and ran no jobs; the explicit dispatch
+  validated that same head. The version PR contains only generated release metadata/changelogs
+  and consumed changesets, with no implementation changes.
+- [Trusted-publishing run 40403950446](https://github.com/jchewitt/weftlet/actions/runs/40403950446)
+  completed preparation, publication and release records on attempt 1 at merged commit
+  `ffc332adb84b8f9e854370ff4799aab32e189356`. Both package-specific tags and GitHub Releases
+  identify that commit, and main's package versions agree with npm.
+- Local publication checks passed 264 deterministic tests (1 core, 263 toolkit), one optional
+  OML skip, 12 existing advisory architecture findings, inventory, licenses and fresh packed-consumer
+  CLI/npx/MCP, preview, real SCIP, RDF/SPARQL/SHACL and viewer checks. Independent code review
+  found no remaining blocker. No shape, assertion, baseline or exception was removed or added to
+  conceal a failure. The 79 original source path/hash pairs remain unchanged.
+- Independent archive review covered core's 11 entries and toolkit's 196 entries. Runtime assets,
+  declarations, examples, README, Apache license and attribution/notices are present. No Git state,
+  credentials, caches, private consumer payloads or compiled tests were included. Toolkit's packed
+  core dependency is `^0.3.0`. Public archives match both the hosted prepared archives and locally
+  reviewed archives byte for byte. Public SLSA provenance subjects match their SHA-512 hashes and
+  identify the expected source, repository, `publish.yml` and workflow attempt. This is a provenance
+  content/source check, not a separate cryptographic signature audit.
+- A fresh Linux/Node 24.19.0 consumer installed only toolkit 0.3.0 directly from npm with
+  `--ignore-scripts`; core resolved transitively to 0.3.0. Both package-lock registry URLs and
+  integrity hashes matched the reviewed archives. The public two-document fixture retained
+  2 semantic facts within 17 total facts, including 4 real SCIP facts. Impact returned 17 facts;
+  SPARQL returned four canonical document references. Cold hydration extracted 2/reused 0;
+  the repeat extracted 0/reused 2 with identical snapshot identity, content digest and bytes.
+- Installed cold/warm `hydrate --plan --json` worked with the provider module unavailable,
+  reported 2 expected extractions then 2 reusable artifacts, preserved source authority and
+  performed no preview storage writes or provider calls. Saved queries still worked with the
+  provider disabled. Hydration used a deterministic fixture provider; no external model calls
+  were made during these checks.
+
+The installed public `RdfEvidenceGraph.validate()` also passed bounded, fresh-process public
+synthetic checks, preserving exact canonical serialization:
+
+| Facts / topology | Original quads | Validation including union | Whole-process maximum RSS |
+| --- | ---: | ---: | ---: |
+| 2,000 unique | 56,003 | 0.632 s | 492 MiB |
+| 10,000 unique | 280,003 | 2.903 s | 1,640 MiB |
+
+These are single-run synthetic measurements. Memory includes imports, fixtures and serialization;
+the extra union has a material memory cost. This installed-package probe ran on Linux; hosted
+Windows covers the new parity tests separately. Neither establishes the private consumer's total
+generation time. Full consumer hydration/repeat acceptance, live semantic quality, broader T05
+progress/reuse work and the remaining [1.0 tasks](RELEASE-1.0-PLAN.md) remain open. The SHACL
+change preserves compatible 0.2.1 semantic artifacts and does not require forced re-extraction.
+
 ## T05 cold SHACL validation improvement, 2026-10-26
 
-Implemented in development source following the T02 preview merge. Published npm packages
-remain 0.2.1 until a separately recorded release succeeds. [ADR 017](ADR-017-shacl-validation-union.md)
+Pre-release source checkpoint following the T02 preview merge; npm was still at 0.2.1.
+The subsequent 0.3.0 publication is recorded above. [ADR 017](ADR-017-shacl-validation-union.md)
 records the measured graph-wildcard lookup cost and the temporary all-triples union used by the
 unchanged JavaScript SHACL validator. The canonical named dataset and every assertion remain intact.
 
@@ -53,14 +115,14 @@ repeated validation. A 2,200-fact case detects the invalid final assertion witho
 The existing full hydration integration still verifies that failed SHACL preserves the last head.
 The shape Turtle is byte-for-byte unchanged from the T02 merge; no shape or assertion was dropped.
 
-Hosted checks and release status remain pending at this source checkpoint.
+Hosted checks and release status were pending at this source checkpoint; their results are above.
 Early identity preflight, in-phase progress, validation-result reuse and incremental validation
 remain separate work. Each hydration still performs full SHACL before publishing; saved queries
 do not repeat validation. Private consumer full hydration/repeat acceptance remains pending.
 
 ## T02 no-model hydration preview, 2026-10-26
 
-Implemented in development source; published npm packages remain 0.2.1. See
+Pre-release source checkpoint, while npm was still at 0.2.1. Subsequent 0.3.0 publication is above. See
 [ADR-016](ADR-016-hydration-preview.md) for source, cache and readiness semantics.
 
 [PR 18](https://github.com/jchewitt/weftlet/pull/18) merged at

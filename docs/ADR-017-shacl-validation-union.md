@@ -1,6 +1,6 @@
 # ADR-017: Validate a temporary RDF union without changing canonical evidence
 
-Status: accepted and implemented for the focused 0.3.0 release plan; absent from 0.2.1.
+Status: accepted and implemented in the focused 0.3.0 release; absent from 0.2.1.
 See [validation](VALIDATION.md) for checks and recorded publication evidence.
 
 ## Problem and measured mechanism
