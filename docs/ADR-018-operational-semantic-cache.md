@@ -1,7 +1,7 @@
 # ADR-018: Preserve Codex artifacts across operational configuration changes
 
-Status: accepted and implemented in development source after 0.3.0; release evidence is recorded
-in [validation](VALIDATION.md). This increment does not claim a new npm publication.
+Status: accepted and shipped in 0.4.0; release and validation evidence is recorded in
+[validation](VALIDATION.md).
 
 ## Problem
 

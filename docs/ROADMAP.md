@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-Release checkpoint: 2026-10-26, after verified 0.3.0 publication. Evidence is recorded in
+Release checkpoint: 2026-10-26, after verified 0.4.0 publication. Evidence is recorded in
 [validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
@@ -9,13 +9,13 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the verified release at this checkpoint is 0.3.0. The received consumer findings are tracked in the
+the verified release at this checkpoint is 0.4.0. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
-no-model preview and T05's cold-validation improvement shipped in 0.3.0. Operational cache reuse
-and timeout diagnostics are development increments; document coverage and other acceptance work
-remain open before official 1.0.
-The 2.0 plan distinguishes proposed work from delivered capability.
+no-model preview and T05's cold-validation improvement shipped in 0.3.0. T03 operational cache
+reuse, T04 timeout diagnostics and T08 deterministic physical-file consistency shipped in 0.4.0.
+Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
+before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
 publication. T02 and the focused T05 optimization shipped together in 0.3.0 through
@@ -35,22 +35,21 @@ peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeou
 Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
 engine, graph database or validation-result cache is introduced by this focused release.
 
-[T03 operational cache reuse](ADR-018-operational-semantic-cache.md) is merged with local and
-hosted checks passing and is not part of published 0.3.0. Built-in Codex user
-artifacts can survive changes to timeout/retry/concurrency/document/byte limits while snapshots
-retain their full configuration identity. Exact legacy reads and explicit no-model adoption
-preserve prior artifacts; custom providers remain conservative.
-[T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) add safe failure reports, opaque source
-mapping and accurate settled progress without changing extraction/cache identity. T04 is merged
-with local and hosted Ubuntu/Windows checks passing; release remains pending. Broader T05 and
-T06/T07 work remain open.
+[T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in
+Codex user artifacts can survive changes to timeout/retry/concurrency/document/byte limits while
+snapshots retain their full configuration identity. Exact legacy reads and explicit no-model
+adoption preserve prior artifacts; custom providers remain conservative.
+[T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) shipped in the same release, adding
+safe failure reports, opaque source mapping and settled progress without changing extraction/cache
+identity. Broader T05 and T06/T07 work remain open.
 
-A subsequent 0.3.0 consumer report makes [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md)
-the next release priority. Its neutral contract consumer fix and public core factory are merged
-with deterministic producer adoption, version guards and passing local/hosted Ubuntu/Windows
-checks. Publication is pending; the consumer's framework adapter migration and full acceptance
-remain consumer-owned.
-This fix preserves semantic artifacts and does not reinterpret model assertions to hide conflicts.
+[T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
+0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and
+public-registry installation. The public core factory and deterministic producers share one policy
+under strict SHACL. Historical snapshots
+remain queryable, with version guards for current validation. The consumer's framework adapter
+migration and full acceptance remain consumer-owned. This fix preserves semantic artifacts and
+does not reinterpret model assertions to hide conflicts.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
