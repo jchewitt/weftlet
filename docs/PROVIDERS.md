@@ -96,13 +96,13 @@ digest/stable ID, extractor/adapter/ontology versions, confidence threshold and 
 Unchanged artifacts are reused; forced revisions are separate. Failures never replace a valid
 snapshot. Progress shows phase and counts on stderr, with no document text or paths.
 
-The development T04 increment adds opaque source IDs, source elapsed times and structured semantic
-failure reports; it is not present in published 0.3.0. Run the following from the development
-checkout, retaining the same committed ref and any agent scope options as the failed run:
+Starting with 0.4.0, T04 adds opaque source IDs, source elapsed times and structured semantic
+failure reports. With that version or newer installed, retain the same committed ref and any
+agent scope options as the failed run:
 
 ```sh
-pnpm weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --plan --json
-pnpm weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --json --quiet
+pnpm exec weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --plan --json
+pnpm exec weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --json --quiet
 ```
 
 The first command makes no model calls and maps each `sourceId` to its local document path. Review
@@ -123,7 +123,7 @@ For a timeout, review `semantic.timeoutMs` and preview again before retrying wit
 an ordinary rerun or a new forced run. Custom provider configuration changes remain conservative.
 See [ADR 019](ADR-019-semantic-failure-diagnostics.md) for reporting and privacy boundaries.
 
-The development increment after 0.3.0 separates built-in Codex semantic artifacts from user
+Starting with 0.4.0, built-in Codex semantic artifacts are separate from user
 snapshot profiles. Changing `timeoutMs`, `retries`, `concurrency`, `maxDocuments` or
 `maxSourceBytes` can reuse completed artifacts; selection budgets are still enforced. Snapshot
 configuration digests remain complete and saved snapshots are not accepted as current merely
@@ -133,11 +133,11 @@ unchanged. See [ADR 018](ADR-018-operational-semantic-cache.md) for exact isolat
 If an older user-cache run was interrupted and its configuration has already changed, retain an
 exact copy of the previous configuration in its original directory. Its original `repositoryRoot`
 must still resolve to the same checkout; editing that field changes the old profile identity.
-From this development checkout:
+With 0.4.0 or newer installed:
 
 ```sh
-pnpm weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD --dry-run
-pnpm weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD
+pnpm exec weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD --dry-run
+pnpm exec weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD
 ```
 
 For an agent-scoped run, supply the same `--owner-doc`, `--task` or `--capability` selection used

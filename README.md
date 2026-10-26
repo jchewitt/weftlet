@@ -101,6 +101,12 @@ evidence roots; selected validation documents still undergo semantic extraction 
 SOT traversal and default validation-document separation remain T07 work. See
 [ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
 
+Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
+failures report completed/remaining work and recovery guidance; `hydrate --json --quiet` emits
+their structured report on stderr. Built-in Codex can reuse completed artifacts after supported
+operational changes such as increasing a timeout. See [provider recovery](docs/PROVIDERS.md#limits-and-reuse)
+for preview, retry and explicit legacy-cache adoption instructions.
+
 ## SHACL validation and performance
 
 Starting with 0.3.0, the toolkit indexes a temporary union to accelerate cold validation.
@@ -171,6 +177,15 @@ evidence roots, runtime evidence, storage and optional adapter explicitly.
 For tests excluded by the build config or workspace packages whose outputs are absent from
 committed archives, configure an [explicit TypeScript source project](docs/ADR-010-committed-source-indexing.md)
 with selected files and local package aliases.
+
+Repository adapters using **0.4.0 or newer** should import `repositoryFileNode` from
+`@weftlet/core` for physical-file nodes. It preserves canonical document IDs, spec/test Evidence
+and production Component kinds, including test files containing mocked calls or decorators.
+Keep business-concept nodes separate; see the [core API example](packages/core/README.md) and
+[producer decision](docs/ADR-020-canonical-physical-file-producers.md). After upgrading, rebuild
+the graph with compatible cached artifacts; historical snapshots remain queryable but cannot
+satisfy current validation with old extraction versions. Consumer-owned adapters must be migrated
+as well; the toolkit cannot correct nodes they still classify independently.
 
 In a selected document such as `docs/intent.md`, link a responsibility to its sources:
 

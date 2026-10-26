@@ -46,9 +46,10 @@ with local and hosted Ubuntu/Windows checks passing; release remains pending. Br
 T06/T07 work remain open.
 
 A subsequent 0.3.0 consumer report makes [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md)
-the next release priority. Its neutral contract consumer fix and public core factory are implemented
-with deterministic producer adoption and version guards; validation/publication are recorded
-separately. The consumer's framework adapter migration and full acceptance remain consumer-owned.
+the next release priority. Its neutral contract consumer fix and public core factory are merged
+with deterministic producer adoption, version guards and passing local/hosted Ubuntu/Windows
+checks. Publication is pending; the consumer's framework adapter migration and full acceptance
+remain consumer-owned.
 This fix preserves semantic artifacts and does not reinterpret model assertions to hide conflicts.
 
 | Milestone | Delivered and checked | Remaining limits |

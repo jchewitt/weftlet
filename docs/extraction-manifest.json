@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "abdee46af5297ed708e30e3bf505f2ecca48d5467b16d85843b581b539610dbb"
+      "destinationSha256": "c929bd90f5d2bae73554df2dcd0af0ad1bfd45d0843cd7940bde90c42b1266b9"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",

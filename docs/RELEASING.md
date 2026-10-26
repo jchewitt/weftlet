@@ -1,7 +1,9 @@
 # Weftlet npm releases
 
-`@weftlet/core@0.2.1` and `@weftlet/toolkit@0.2.1` are published through GitHub OIDC.
-[Run 40382864083](https://github.com/jchewitt/weftlet/actions/runs/40382864083) completed
+`@weftlet/core` and `@weftlet/toolkit` are published through GitHub OIDC. The latest verified
+release checkpoint is recorded in [validation](VALIDATION.md); the following are historical
+publication records. For release 0.2.1,
+[run 40382864083](https://github.com/jchewitt/weftlet/actions/runs/40382864083) completed
 preparation, publication and release records on its first attempt at commit
 `5d1db91bf19ed493a20849b2d0f92d3aeac35dfe`. Registry archives match the reviewed archives;
 provenance and package tags identify that commit. A fresh public-registry installation passes
