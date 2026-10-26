@@ -4,14 +4,9 @@ import type {
 } from '@weftlet/core';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { documentReferences, resolveDocumentReference } from './document-references.js';
+import { repositoryFileNode as fileNode } from './repository-nodes.js';
 
 export const documentLinkerIdentity = { id: 'document-linker', version: '2.0.0' } as const;
-
-function fileNode(path: string): GraphNode {
-  if (/\.(?:md|mdx|txt)$/i.test(path)) return { id: `document:${path}`, kind: 'Document', label: path };
-  return { id: `component:file:${path}`, label: path,
-    kind: /\.(spec|test)\.[^.]+$/i.test(path) ? 'Evidence' : 'Component' };
-}
 
 export function linkSemanticDocuments(
   context: ExtractionContext,

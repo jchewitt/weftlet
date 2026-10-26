@@ -23,6 +23,7 @@ import type {
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { SemanticArtifactStore } from "../storage/storage.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
+import { canonicalizeRepositoryDocumentNode, repositoryNodeIdentityVersion } from './repository-nodes.js';
 import {
   assertSemanticCitation,
   numberedSemanticSource,
@@ -52,6 +53,21 @@ export interface SemanticOutput {
 export interface SemanticExtractionResult {
   readonly parsed: SemanticOutput;
   readonly rawModelOutput: string;
+}
+
+function canonicalizeRepositoryDocuments(output: SemanticOutput): SemanticOutput {
+  const ids = new Map<string, string>();
+  const assertions = output.assertions.map((assertion) => {
+    const subject = canonicalizeRepositoryDocumentNode(assertion.subject);
+    const object = canonicalizeRepositoryDocumentNode(assertion.object);
+    ids.set(assertion.subject.id, subject.id);
+    ids.set(assertion.object.id, object.id);
+    return { ...assertion, subject, object };
+  });
+  return { ...output, assertions, diagnostics: output.diagnostics?.map((diagnostic) => ({
+    ...diagnostic,
+    relatedNodeIds: diagnostic.relatedNodeIds.map((id) => ids.get(id) ?? id),
+  })) };
 }
 
 function omlEscape(value: string): string {
@@ -279,7 +295,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
     private readonly runner: SemanticCommandRunner = spawnSemanticCommand,
     private readonly loginProbe: CodexLoginProbe = readCodexLoginMode,
   ) {
-    this.identity = `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v2`;
+    this.identity = `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v3`;
   }
 
   async extract(
@@ -306,7 +322,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
       'Use neutral graph kinds and the allowed precise predicates. Never guess a missing mapping.',
       'Use product-wide canonical IDs derived from durable concepts, not IDs scoped to this file.',
       'Reuse capability, policy, workflow, contract, and component IDs that another source would use for the same concept.',
-      'When the source names a repository path, use component:file:<path> so semantic and static facts join deterministically.',
+      'For a repository document path ending in .md, .mdx or .txt, use document:<path> with kind Document. For other repository files use component:file:<path>; test/spec files have kind Evidence, other files Component. Use exact repository-relative paths; keep business concepts in their own IDs instead of assigning their kind to a file.',
       'Capture why a rule exists, its decision authority, and cross-domain dependencies when the source explicitly states them.',
       'Every assertion must cite inclusive 1-based source line numbers and carry calibrated confidence.',
       `Source lines are explicitly prefixed N| below. Cite those original-source numbers, not prompt lines or visual wraps; valid lines are 1-${lineCount}.`,
@@ -399,6 +415,7 @@ export class SemanticHydrator {
       failOnUnresolved: this.config.failOnUnresolved,
       forceRevision,
       diagnosticContractVersion: 3,
+      repositoryNodeIdentityVersion,
     };
     const key = sha256(stableJson(keyInput));
     const existing = await this.store.read(key);
@@ -409,7 +426,7 @@ export class SemanticHydrator {
     if (typeof extraction.rawModelOutput !== 'string' || Buffer.byteLength(extraction.rawModelOutput) > 2 * 1024 * 1024) {
       throw new SemanticProviderError('invalid-output', 'Invalid or oversized raw semantic output');
     }
-    const output = extraction.parsed;
+    const output = canonicalizeRepositoryDocuments(extraction.parsed);
     const lineCount = source.content.split('\n').length;
     const facts: Omit<GraphFact, 'snapshotId'>[] = output.assertions.map((assertion, index) => {
       assertSemanticCitation(assertion.citation, source.path, lineCount, `assertion[${index}]`);

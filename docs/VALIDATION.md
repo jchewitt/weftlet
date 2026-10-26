@@ -8,6 +8,36 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Repository document identity patch, 2026-10-26
+
+The public reproduction confirms the reported 0.2.0 defect: two unchanged semantic
+assertions give one repository document ID different kinds and fail single-kind SHACL.
+[ADR-015](ADR-015-repository-document-identity.md) records the canonical identity policy,
+cache contract and immutable snapshot migration. The consumer follow-ups are tracked in
+the [1.0 plan](RELEASE-1.0-PLAN.md).
+
+- Local `pnpm context-graph:publication-check` passed: 227 deterministic tests (1 core,
+  226 toolkit), one optional OML skip, 12 advisory architecture findings, inventory,
+  licenses and a fresh packed-consumer CLI/npx/MCP, real SCIP and RDF/SHACL smoke.
+- The new public regression uses two committed source documents and a deterministic
+  module provider that reproduces the conflicting classifications. Both semantic facts
+  retain their citations, confidence and separate source/assertion authority; deterministic
+  document links and SPARQL join the canonical document. Real TypeScript indexing and
+  SHACL pass. Fresh extraction reports 2 extracted/0 reused; repeat reports 0/2 with
+  identical snapshot identity/content digest. Raw provider output is preserved byte for byte.
+- Seeded artifacts using the released 0.2.0 cache-key formula are not reused or overwritten.
+  Historical graph-v4 snapshot bytes remain unchanged and readable. Subject references
+  normalize too; unrelated concept-kind conflicts still fail SHACL. A missing document
+  mentioned in plain prose retains a cited implementation-gap diagnostic.
+- Independent review found and resolved that missing-path diagnostic regression. No blocking
+  findings remained. All 79 original imported source paths and source hashes are preserved.
+
+These are deterministic upstream checks, not live semantic-quality or private consumer
+acceptance results. The consumer's full hydration was stopped after its isolated reproduction;
+no complete consumer SHACL verdict or published snapshot is claimed. Full-graph validation
+latency remains a separate investigation. Release and hosted-check evidence will be recorded
+after the patch completes the normal publishing workflow.
+
 ## Weftlet 0.2.0 publication, 2026-10-26
 
 The maintainer authorized publication of both packages. [Release PR 4](https://github.com/jchewitt/weftlet/pull/4)

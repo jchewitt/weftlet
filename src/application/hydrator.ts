@@ -19,6 +19,7 @@ import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
 import { repositoryFileExtractorIdentity } from '../extraction/static.js';
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
+import { repositoryNodeIdentityVersion } from '../extraction/repository-nodes.js';
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
@@ -148,7 +149,7 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v4', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
+    const effectiveSuffix = ['graph-v5', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
       ...(config.routingSources?.length ? [`routes-${routingExtractorIdentity.version}`] : []),
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
@@ -235,7 +236,7 @@ export class ContextGraphHydrator {
     const tracked = new Set(trackedPaths);
     for (const fact of semanticFacts) {
       for (const node of [fact.subject, fact.object]) {
-        const path = node.id.startsWith('component:file:') ? node.id.slice('component:file:'.length) : undefined;
+        const path = /^(?:component:file:|document:)(.+)$/.exec(node.id)?.[1];
         if (path && !tracked.has(path)) diagnostics.push({
           id: sha256(stableJson({ fact: fact.id, missing: path })),
           kind: 'implementationGaps',
@@ -305,7 +306,8 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
-          assembly: 'standalone-graph-v4',
+          assembly: 'standalone-graph-v5',
+          'repository-node-identity': String(repositoryNodeIdentityVersion),
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           ...(config.routingSources?.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}),
           semantic: config.semantic.extractorVersion,

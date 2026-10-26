@@ -6,8 +6,10 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the published packages remain 0.2.0. Incoming consumer integration findings take priority
-before feature implementation. The plan distinguishes proposed work from delivered capability.
+the published packages remain 0.2.0. The received consumer findings are tracked in the
+[consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): first release the blocking
+document-identity patch, then address setup, reuse, diagnostics and document coverage before
+official 1.0 acceptance. The 2.0 plan distinguishes proposed work from delivered capability.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
