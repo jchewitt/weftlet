@@ -3,17 +3,18 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.3.0",
-      "previousVersion": "0.2.1"
+      "version": "0.4.0",
+      "previousVersion": "0.3.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.3.0",
-      "previousVersion": "0.2.1"
+      "version": "0.4.0",
+      "previousVersion": "0.3.0"
     }
   ],
   "changesets": [
-    "accelerate-full-shacl-validation.md",
-    "preview-semantic-hydration.md"
+    "canonical-physical-files.md",
+    "explain-semantic-failures.md",
+    "retain-operational-cache.md"
   ]
 }

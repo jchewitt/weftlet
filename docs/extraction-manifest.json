@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "95326a545b7d77607bfd841ff009ef58231b8f9c5ae3f2605e1dac95c9995c4d"
+      "destinationSha256": "1e5ae982ffbb2cb02071bbf6c4f8040836dcc451c5e478f10b07cc5646f0e1eb"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "4fe851d728bc96fc25bb31295b4705560691f384d887e7ed714e943fae4e69b3"
+      "destinationSha256": "090d8d90cbf775e6edf1656215d75200f9961009ef75f2ab4de55fe5603814ea"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -578,11 +578,8 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
-    ".changeset/canonical-physical-files.md",
     ".changeset/config.json",
-    ".changeset/explain-semantic-failures.md",
     ".changeset/release-plan.json",
-    ".changeset/retain-operational-cache.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
