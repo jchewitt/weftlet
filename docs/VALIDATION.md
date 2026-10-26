@@ -16,6 +16,14 @@ the five operational settings that may share artifacts, and conservative custom-
 Snapshot profiles, full configuration digests, workspace paths and the 0.2.1/0.3.0 artifact-key
 contract remain unchanged. No credential environment values are read to construct cache identity.
 
+- [PR 22](https://github.com/jchewitt/weftlet/pull/22) merged at
+  `5b889854e8a4b3a84653770e3244dee39d4b7d37`. Exact feature head
+  `c92689699fb09c80246edd61b692fca086ff6e83` passed hosted Ubuntu and focused native Windows
+  checks in [push run 40411921483](https://github.com/jchewitt/weftlet/actions/runs/40411921483)
+  and [PR run 40411954882](https://github.com/jchewitt/weftlet/actions/runs/40411954882).
+  Both runs completed successfully; Windows includes all four new cache test suites plus
+  inventory and license checks. Independent review found no remaining blocker. All 79 original
+  source path/hash pairs remain unchanged.
 - Local `pnpm context-graph:publication-check` passed: 327 deterministic tests (1 core,
   326 toolkit), one optional OML skip, 12 existing advisory architecture findings, inventory,
   licenses and fresh packed-consumer checks. No new architecture baseline or exception was added.
@@ -46,8 +54,8 @@ contract remain unchanged. No credential environment values are read to construc
 
 These are public deterministic fixtures, including an injected Codex runner, not live model
 extractions or private consumer acceptance. Existing full SHACL and fresh snapshot publication
-remain required after cache reuse. Hosted checks and source merge are recorded after completion;
-published packages remain at 0.3.0 at this checkpoint. T04 timeout diagnostics and the remaining
+remain required after cache reuse. Published packages remain at 0.3.0 at this checkpoint;
+the minor changeset is pending a separate release. T04 timeout diagnostics and the remaining
 1.0 work are separate increments.
 
 ## Weftlet 0.3.0 preview and SHACL performance release, 2026-10-26
