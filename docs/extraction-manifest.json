@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "5d68e9efc168600f8daaef5e1f34911990257972acc100e91875dcb194ef7cc2"
+      "destinationSha256": "cc748024bc52793ca8878e09ff2ac2dc755af262e6358b72d8101aa30c15432c"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -227,21 +227,21 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "7b23a94ad1a0f3acb5c6b9b01f1f8255af9398d5ba4b79f692249a04eaac3b74"
+      "destinationSha256": "13146dde21f8da54f98b78bc7c1a3e9bbadad0f9bd381f4088f17c63e08065bf"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
       "destinationPath": "src/configuration/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
       "modified": true,
-      "destinationSha256": "bf4cd31b7469313d9483a15217be3c6041c1f3532bec144cf654a13aef1bb42b"
+      "destinationSha256": "676467260f107d5120c19c11a6a32d785acbf6a0f69c03f96074ccd2c5e05b32"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "fef7af32de49f73c4ade5f48a84c3a5db1e52171949cfdcd84720bf5e194b901"
+      "destinationSha256": "02616a30d6fbd86227cc77b472f8cc192a8d653ea4959eeac7612b566fbcf65e"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "9f986584ecba26d9b78b52aff19b07f4c572686d35f4363e06fa70b17756e704"
+      "destinationSha256": "ddc11abecf7e7e4151a1ea7c253bba8cdea92858cf8e051c540a638cbf199d4d"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "214d0378b75af7d4960b06981b165da19a37c2ebccb34f8ffa485ca86776f94f"
+      "destinationSha256": "0eb4c55e45c56bf23f64a0c053ac6348353f830f79fe234282bd81b85b6f9c64"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "1104a909c280209862b9615129487d4aeb647377b726819fcd1b8846ca19a3b7"
+      "destinationSha256": "48a4eabe1954f612b1d27f2ac56cb63ae064b0b957570c25c349154adfc2d34d"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/retain-operational-cache.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -610,6 +611,7 @@
     "docs/ADR-015-repository-document-identity.md",
     "docs/ADR-016-hydration-preview.md",
     "docs/ADR-017-shacl-validation-union.md",
+    "docs/ADR-018-operational-semantic-cache.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -734,11 +736,15 @@
     "scripts/update-inventory.mjs",
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
+    "src/application/cache-adoption.ts",
     "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
+    "src/application/semantic-artifact-store.ts",
+    "src/application/semantic-scope.ts",
     "src/cli.ts",
+    "src/configuration/cache.test.ts",
     "src/configuration/scip-project.ts",
     "src/extraction/codex-auth.test.ts",
     "src/extraction/codex-auth.ts",
@@ -769,6 +775,7 @@
     "src/graph/rdf.ts",
     "src/graph/shacl-shapes.ts",
     "src/infrastructure/module-resolution.ts",
+    "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/init.test.ts",
@@ -782,12 +789,14 @@
     "src/telemetry.ts",
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
+    "tests/cache-adoption.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf.test.ts",
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
+    "tests/semantic-cache-reuse.test.ts",
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",
     "tests/snapshot-lifecycle.test.ts"

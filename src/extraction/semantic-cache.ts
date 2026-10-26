@@ -9,6 +9,7 @@ export interface SemanticCacheInspection {
   readonly key?: string;
   readonly reason: string;
   readonly artifact?: SemanticArtifact;
+  readonly origin?: 'primary' | 'legacy';
 }
 
 function record(value: unknown): value is Record<string, unknown> {
@@ -58,7 +59,12 @@ export async function inspectSemanticCache(store: SemanticArtifactStore, config:
   source: SemanticSource, modelIdentity: string, forceRevision?: string): Promise<SemanticCacheInspection> {
   const key = semanticArtifactKey(config, source, modelIdentity, forceRevision);
   let value: unknown;
-  try { value = await store.read(key); }
+  let origin: 'primary' | 'legacy' | undefined;
+  try {
+    const entry = await store.readEntry(key);
+    value = entry?.artifact;
+    origin = entry?.origin;
+  }
   catch (error) {
     return error instanceof SyntaxError
       ? { status: 'corrupt', key, reason: 'Cached artifact is not valid JSON; retain it for diagnosis or use an explicit forced refresh.' }
@@ -68,5 +74,9 @@ export async function inspectSemanticCache(store: SemanticArtifactStore, config:
   if (!reusableArtifact(value, key, source, config, modelIdentity)) {
     return { status: 'corrupt', key, reason: 'Cached artifact identity, structure or content digest is invalid; retain it for diagnosis or use an explicit forced refresh.' };
   }
-  return { status: 'hit', key, reason: 'Readable artifact matches the source and extraction contract; reuse remains subject to unchanged inputs.', artifact: value };
+  return { status: 'hit', key, origin,
+    reason: origin === 'legacy'
+      ? 'Validated artifact is available in the exact legacy configuration profile; hydration can retain a copy in the operationally stable cache.'
+      : 'Readable artifact matches the source and extraction contract; reuse remains subject to unchanged inputs.',
+    artifact: value };
 }

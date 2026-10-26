@@ -95,10 +95,20 @@ export class FileSnapshotStore implements SnapshotStore {
 }
 
 export class SemanticArtifactStore {
-  constructor(private readonly root: string) {}
+  constructor(private readonly root: string, private readonly legacyRoots: readonly string[] = []) {}
 
-  read(key: string): Promise<SemanticArtifact | undefined> {
-    return readJson(join(this.root, 'artifacts', 'semantic', `${safeKey(key)}.json`));
+  async read(key: string): Promise<SemanticArtifact | undefined> {
+    return (await this.readEntry(key))?.artifact;
+  }
+
+  /** Only explicitly supplied roots are consulted; never enumerate other consumers' profiles. */
+  async readEntry(key: string): Promise<{ artifact: SemanticArtifact; origin: 'primary' | 'legacy' } | undefined> {
+    const filename = `${safeKey(key)}.json`;
+    for (const [index, root] of [this.root, ...this.legacyRoots].entries()) {
+      const artifact = await readJson<SemanticArtifact>(join(root, 'artifacts', 'semantic', filename));
+      if (artifact !== undefined) return { artifact, origin: index === 0 ? 'primary' : 'legacy' };
+    }
+    return undefined;
   }
 
   async write(artifact: SemanticArtifact): Promise<void> {

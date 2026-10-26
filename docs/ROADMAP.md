@@ -34,6 +34,13 @@ peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeou
 Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
 engine, graph database or validation-result cache is introduced by this focused release.
 
+The next bounded increment, [T03 operational cache reuse](ADR-018-operational-semantic-cache.md),
+is implemented in development source and is not part of published 0.3.0. Built-in Codex user
+artifacts can survive changes to timeout/retry/concurrency/document/byte limits while snapshots
+retain their full configuration identity. Exact legacy reads and explicit no-model adoption
+preserve prior artifacts; custom providers remain conservative. Validation is recorded separately
+before this increment is merged or released. T04 diagnostics and T06/T07 work remain open.
+
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
 | 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |
