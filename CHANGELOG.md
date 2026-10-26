@@ -1,5 +1,24 @@
 # @weftlet/toolkit
 
+## 0.4.0
+
+### Minor Changes
+
+- a919b82: Report semantic hydration failures with opaque source IDs, safe failure categories, elapsed time, timeout scope, final completed/remaining counts and recovery guidance. Preserve the initiating failure during concurrent cancellation, retain completed artifacts and published snapshots, and keep private provider messages out of reports.
+  
+  Map source IDs locally through hydration preview; use `hydrate --json --quiet` for semantic failure JSON on stderr. Distinguish missing provider infrastructure from unknown provider errors, and keep extraction/cache identities and timeout defaults unchanged.
+- 5b88985: Reuse built-in Codex semantic artifacts across timeout, retry, concurrency and document/byte-limit changes in user storage. Keep snapshot profiles and full configuration digests distinct, preserve existing workspace behavior and conservative custom-provider identities, and validate every reused artifact.
+  
+  Read the exact compatible legacy profile without scanning other caches; hydration can retain a validated copy atomically. Add no-model `cache adopt --from-config <previous.json>` with a read-only `--dry-run` to recover completed artifacts after operational settings were already changed. Corrupt or conflicting artifacts remain intact and are reported rather than overwritten. Existing 0.2.1/0.3.0 artifact keys and source provenance are preserved.
+
+### Patch Changes
+
+- 7b3b0a4: Export the dependency-free `repositoryFileNode` factory from core and use its existing physical-file policy across neutral, SCIP, contract, document, routing and architecture producers. Contract consumers in spec/test files now retain Evidence kind and join the neutral file records under strict SHACL; production files remain Component and documents retain canonical Document identities.
+  
+  Advance deterministic extraction/assembly identities, preserve historical snapshots and semantic artifacts, label extraction-version mismatches on saved queries, and reject old versions in current validation. Validate overlays with SHACL regardless of routing configuration. Consumer adapters should adopt the public factory; this release does not modify their code or reinterpret non-document semantic assertions.
+- Updated dependencies [7b3b0a4]
+  - @weftlet/core@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
