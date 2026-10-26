@@ -82,7 +82,7 @@ try {
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
-        'dist/extraction/routing.js',
+        'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
         'dist/graph/ranking.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',

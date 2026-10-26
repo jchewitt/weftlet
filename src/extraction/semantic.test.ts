@@ -146,7 +146,8 @@ describe('SemanticHydrator', () => {
       });
     }
     expect(source.content).toBe('# Capability\nThe worker realizes search.\n');
-    expect(extractor.identity).toBe('codex-cli:test-model:low:prompt-v1:contract-v2');
+    expect(capturedPrompt).toContain('use document:<path> with kind Document');
+    expect(extractor.identity).toBe('codex-cli:test-model:low:prompt-v1:contract-v3');
     await expect(readFile(isolatedRoot, 'utf8')).rejects.toThrow();
   });
 

@@ -46,16 +46,17 @@ Existing gap reports do not establish completeness of a project's business requi
 
 ## Immediate priority: consumer integration findings
 
-The maintainer is preparing a report from an existing consumer integration. Its details have
-not yet been supplied; no specific defect or fix is assumed here. Process that report before
-starting feature implementation under this plan. Ordinary reliability fixes should ship
-independently of the companion platform.
+The maintainer supplied a consumer integration report on 2026-10-26. The
+[consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md) records its seven items and acceptance
+criteria. First ship the blocking repository-document identity/kind fix as an isolated patch;
+then work through the other improvements toward an official 1.0. Ordinary reliability fixes
+ship independently of the companion platform described here.
 
 | Intake item | Status | Next action |
 | --- | --- | --- |
-| Consumer integration report | Pending maintainer report | Record observed behavior and environment; separate defects from requests |
-| Reproduction and severity | Awaiting report | Produce public-safe reproductions and prioritize adoption/correctness blockers |
-| Fix/release mapping | Awaiting triage | Assign bounded fixes, regression evidence and compatible release increments |
+| Consumer integration report | Received; task list recorded | Preserve private evidence with the consumer and use public-safe upstream reproductions |
+| Reproduction and severity | Identity/kind defect is the reported adoption blocker | Reproduce two-document conflict upstream; keep validation latency a separate investigation |
+| Fix/release mapping | Blocker patch in progress; remaining tasks planned | Release T01 first, then T02–T07 and genuine consumer acceptance before official 1.0 |
 
 For each finding, retain toolkit/version, repository SHA, relevant configuration and scope,
 exact command or MCP request, expected/actual behavior, logs/exit status, snapshot identity,
@@ -120,12 +121,13 @@ Preserve these distinctions throughout extraction, RDF, queries, visualization a
 
 ## Delivery sequence
 
-All milestones below are planned. M0 is awaiting input. Each should be split into independently
-testable PRs and retain saved-snapshot compatibility; schema changes need an explicit migration ADR.
+M0 consumer hardening is in progress; M1–M7 remain proposed work. Each should be split into
+independently testable PRs and retain saved-snapshot compatibility; schema changes need an
+explicit migration ADR.
 
 | Milestone | Depends on | Deliverable and completion evidence |
 | --- | --- | --- |
-| **M0 — Consumer hardening** | Incoming report | Triage actual integration findings, add focused public-safe regressions, fix adoption/correctness blockers and record any unresolved limitations. Release independently as appropriate. |
+| **M0 — Consumer hardening** | Received report; [1.0 task list](RELEASE-1.0-PLAN.md) | Ship the identity/kind blocker patch first, then bounded setup/reuse/diagnostics/coverage improvements and genuine consumer acceptance. Release independently of the companion platform. |
 | **M1 — Claims, lineage and approvals** | M0 triage | Versioned records, durable derivation, revision-scoped approvals, actor trust and explicit legacy handling. Prove generated documents cannot acquire approval through paths or repeated extraction. Verify persistence/RDF/projection/query equivalence and old-snapshot readability. |
 | **M2 — Code-derived drafts** | M1 | Opt-in generation for selected TypeScript modules using existing local Codex first; structured candidate claims and Markdown rendered from those claims. Demonstrate no-doc and partial-doc fixtures with citations, unknown rationale, bounded cost, cache reuse and rename/delete invalidation. |
 | **M3 — Decisions and reconciliation** | M1–M2 | Capture explicit accepted requirements/decisions, compare changes from code and documents, distinguish scope differences from conflicts, and propose focused amendments. Demonstrate a resolved documentation disagreement with a remaining implementation gap. |
@@ -271,8 +273,8 @@ Resolve these decisions in small ADRs as their milestones approach:
 
 ## Next handoff
 
-1. Receive and triage the maintainer's consumer integration report under M0.
-2. Ship any agreed reliability fixes without waiting for the website or managed AI.
+1. Resolve and publish the identity/kind blocker patch under M0, then obtain a genuine consumer re-run.
+2. Complete the remaining [1.0 tasks](RELEASE-1.0-PLAN.md) and review acceptance without waiting for the website or managed AI.
 3. Design M1's minimal records and compatibility rules, then implement M2 on bounded public fixtures.
 4. Review real extraction/review results before committing to hosted scope, paid operation or more adapters.
 

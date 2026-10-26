@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "546465bb9907051ebbae9f1c421b8b7be23414ce51c44891092d0fb793f67e8b"
+      "destinationSha256": "7db15ce23e217d8bc14772ff1287dfff0f81e9f402b3d8a5053d386736e8c078"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -283,7 +283,7 @@
       "destinationPath": "src/extraction/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
       "modified": true,
-      "destinationSha256": "de198e73b3b2c828c99bb35c806461dba06526df9ae94592926d26346fbefe79"
+      "destinationSha256": "0235abe0e2a7a0cb06495027c5dc240cf5b0658faabbdc01d0006fa3b456432c"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "bbd264bf4224632f3e0fea81718910fab4dd5f8e79680faccf61059219bf9dde"
+      "destinationSha256": "9baaacb29c863abdb48c96b054a7f430ce18784badfe585ec5ee88a17f21c0bd"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "8c751fe04922d1117728672b78a1de2d6f42f403e9d506f387c95661e641a5c0"
+      "destinationSha256": "356dcec76c68e76492a56fd17017e1809f8cc30f237bfe540c827ade8337ad88"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -444,14 +444,14 @@
       "destinationPath": "src/extraction/semantic.test.ts",
       "sourceSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac",
       "modified": true,
-      "destinationSha256": "77958d8fb6d384d55f53c3ab200a7f812a951365e1c08e3ba35c93ef44bddcb3"
+      "destinationSha256": "94c79552f70a891888a6df342fde4cd0ac097344f779f9339c3cb3140a3729a6"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic.ts",
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "9872f2b8ac3bd14f33194d76082fecf0fd34325a6e74b2397f538898aa8fe21e"
+      "destinationSha256": "eb31d432f0cbb7bd6799562a7e514aa04bbbd2df221f4ef916989eeeea3997f0"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/canonical-document-identities.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -607,12 +608,14 @@
     "docs/ADR-012-impact-ranking.md",
     "docs/ADR-013-relative-module-requests.md",
     "docs/ADR-014-routing-declarations.md",
+    "docs/ADR-015-repository-document-identity.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",
     "docs/PROVIDERS.md",
+    "docs/RELEASE-1.0-PLAN.md",
     "docs/RELEASING.md",
     "docs/ROADMAP.md",
     "docs/SOURCE-INVENTORY.md",
@@ -744,6 +747,8 @@
     "src/extraction/module-request.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
+    "src/extraction/repository-nodes.test.ts",
+    "src/extraction/repository-nodes.ts",
     "src/extraction/routing.test.ts",
     "src/extraction/routing.ts",
     "src/extraction/scip-project.test.ts",
@@ -774,6 +779,7 @@
     "tests/rdf.test.ts",
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
+    "tests/semantic-identity.test.ts",
     "tests/snapshot-lifecycle.test.ts"
   ],
   "publicationAuthorization": {
