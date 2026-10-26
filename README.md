@@ -13,7 +13,7 @@ to retain reproducible queries, logs and human-reviewed findings.
 ## Set up a project
 
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
-automatically. Both packages are available on npm at `0.1.2`.
+automatically. Both packages are available on npm at `0.2.0`.
 See [release status](docs/RELEASING.md). Existing Tently users should follow
 the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
 
@@ -126,7 +126,7 @@ Install the locally packed core and toolkit tarballs together. The installed com
 `weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:
 
 ```sh
-npm install --save-dev /path/to/weftlet/.release/weftlet-core-0.1.1.tgz /path/to/weftlet/.release/weftlet-toolkit-0.1.1.tgz
+npm install --save-dev /path/to/weftlet/.release/weftlet-core-0.2.0.tgz /path/to/weftlet/.release/weftlet-toolkit-0.2.0.tgz
 npx weftlet init
 ```
 

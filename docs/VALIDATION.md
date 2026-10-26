@@ -8,6 +8,48 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Weftlet 0.2.0 publication, 2026-10-26
+
+The maintainer authorized publication of both packages. [Release PR 4](https://github.com/jchewitt/weftlet/pull/4)
+committed their `0.2.0` versions to main at `ffe7f1d81f0421b35220bd7ba5b1555246c7a0e1`.
+[Trusted-publishing run 40344526047](https://github.com/jchewitt/weftlet/actions/runs/40344526047)
+completed successfully on attempt 2. Both npm `latest` tags resolve to `0.2.0`.
+
+- Exact release-PR head `a818ee6312f6970015cea66f55cf6bb2cc62e363` passed the
+  [dispatched Ubuntu/Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40042137308).
+  Local `pnpm release:prepare` also passed 222 deterministic tests, one optional OML skip,
+  12 advisory architecture findings, inventory, licenses and fresh packed-consumer checks.
+  The publication workflow repeated preparation at the merged source commit.
+- Independent review checked the generated release plan, versions/changelogs, all 79 original
+  source identities and the actual archives. Core contains 11 entries and toolkit 179;
+  runtime assets, public examples and licenses/notices are present. No credentials, Git history,
+  caches or generated graph snapshots were included. Toolkit's packed core dependency is `^0.2.0`.
+- Both public npm tarballs match the hosted prepared archives byte for byte, and those hashes
+  match the locally reviewed archives. Public SLSA provenance subjects match their SHA-512
+  digests and reference this exact commit, repository and `publish.yml` workflow. This checks
+  provenance content and source identity; it is not a separate cryptographic signature audit.
+- Attempt 1 published and verified core, then toolkit's provenance submission failed with
+  `TLOG_CREATE_ENTRY_ERROR` / HTTP 409 for an equivalent transparency-log entry. The core
+  acceptance receipt and original archives were retained. Registry state was inspected before
+  rerunning only failed jobs in the same run. Attempt 2 completed toolkit publication using the
+  unchanged version/archives; core was already present. No provenance setting was disabled.
+- Package tags `@weftlet/core@0.2.0` and `@weftlet/toolkit@0.2.0`, and their public GitHub
+  Releases, point to `ffe7f1d81f0421b35220bd7ba5b1555246c7a0e1`. The release records contain
+  the verified archive digests. Main's package versions agree with npm.
+- A fresh public-registry consumer on Linux / Node 24.19.0 installed only
+  `@weftlet/toolkit@0.2.0` directly (`npm install --ignore-scripts`); core resolved transitively
+  to `0.2.0`. Both lockfile registry URLs and integrity hashes match the prepared archives.
+  CLI init/configuration and the npm-exec launcher passed. Real TypeScript indexing produced
+  15 SCIP facts within 22 total facts; the impact query returned 22 and SHACL conformed.
+  Repeat hydration preserved snapshot identity/content. Saved queries preserved snapshot bytes
+  and labeled excluded working edits. MCP initialized, discovered `impact.scan`, returned a
+  bounded 20-fact response and reported a missing snapshot as an error. No semantic documents
+  were selected: both hydrations extracted/reused zero artifacts, so this does not establish
+  model extraction or semantic artifact reuse.
+
+Live model/authentication quality, browser interaction and genuine fresh-task cloud restoration
+remain separate. No source application was changed and no live model call was made for release.
+
 ## Development workspace recovery, 2026-10-23
 
 The existing Codex development workspace became executable again at repository commit

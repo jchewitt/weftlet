@@ -89,8 +89,8 @@ preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
-`@weftlet/toolkit` are published at 0.1.2 through GitHub OIDC, with provenance and a fresh public
-installation verified. Changesets now prepares reviewed version PRs for the fixed package group;
+`@weftlet/toolkit` are published at 0.2.0 through GitHub OIDC; the publication and verification
+record is in [validation](VALIDATION.md). Changesets prepares reviewed version PRs for the fixed package group;
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).
 Earlier Tently packages remain available and undeprecated.
