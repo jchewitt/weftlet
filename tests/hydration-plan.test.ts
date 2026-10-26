@@ -23,7 +23,7 @@ const sourceContents = {
 };
 
 afterEach(async () => {
-  await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
+  await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 })));
 });
 
 async function fixture(overrides: Partial<ContextGraphConfig> = {}) {
@@ -55,7 +55,9 @@ async function fixture(overrides: Partial<ContextGraphConfig> = {}) {
   };
   const configPath = join(root, 'context-graph.config.json');
   await writeFile(configPath, JSON.stringify(config));
-  const git = async (...args: string[]) => (await execute('git', ['--no-optional-locks', ...args], { cwd: root })).stdout.trim();
+  // Keep fixture commits from leaving detached maintenance processes racing teardown.
+  const git = async (...args: string[]) => (await execute('git', ['-c', 'maintenance.auto=false',
+    '-c', 'gc.auto=0', '--no-optional-locks', ...args], { cwd: root })).stdout.trim();
   const commit = async () => {
     await git('add', '.');
     await git('-c', 'user.name=Public Preview Fixture', '-c', 'user.email=fixture@example.invalid',
