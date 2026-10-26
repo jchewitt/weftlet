@@ -13,6 +13,8 @@ export interface AgentSemanticScope {
   readonly semanticSources: readonly string[];
   readonly headName: string;
   readonly snapshotSuffix: string;
+  readonly omittedDocuments?: readonly string[];
+  readonly ignoredSearchTerms?: number;
 }
 
 function normalizeRepositoryPath(path: string): string {
@@ -29,16 +31,18 @@ export class AgentSemanticScopeResolver {
     private readonly repository: GitRepository,
   ) {}
 
-  async resolve(request: ImpactScanRequest): Promise<AgentSemanticScope> {
+  async resolve(request: ImpactScanRequest, ref = 'HEAD'): Promise<AgentSemanticScope> {
     const agent = this.config.agentContext;
     if (!agent) throw new Error('Agent context preparation is not configured');
-    const commitSha = await this.repository.resolveRef('HEAD');
+    const commitSha = await this.repository.resolveRef(ref);
     const available = new Set(
       (await this.repository.listFilesAt(commitSha, this.config.semanticSources)).filter((path) =>
         /\.(?:md|mdx|txt)$/i.test(path),
       ),
     );
     const selected = new Set<string>();
+    const omitted = new Set<string>();
+    let ignoredSearchTerms = 0;
     for (const path of await this.repository.listFilesAt(commitSha, agent.alwaysSemanticSources)) {
       if (available.has(path)) selected.add(path);
     }
@@ -57,6 +61,7 @@ export class AgentSemanticScopeResolver {
           .map((match) => match[0])
           .filter((path) => available.has(path));
         for (const path of references.slice(0, agent.maxReferencedDocuments)) selected.add(path);
+        for (const path of references.slice(agent.maxReferencedDocuments)) omitted.add(path);
       }
       if (agent.includeMatchingEvidence) {
         const ownerSlug = basename(ownerDocument).replace(/\.md$/i, '');
@@ -70,19 +75,21 @@ export class AgentSemanticScopeResolver {
         }
       }
     } else {
-      const terms = [
+      const requestedTerms = [
         request.task,
         ...(request.checklistItems ?? []),
         ...(request.capabilities ?? []),
       ]
-        .filter((term): term is string => Boolean(term))
-        .slice(0, 8);
-      const matches = await this.repository.findTextAt(
+        .filter((term): term is string => Boolean(term));
+      const terms = requestedTerms.slice(0, 8);
+      ignoredSearchTerms = requestedTerms.length - terms.length;
+      const matches = (await this.repository.findTextAt(
         commitSha,
         terms,
         this.config.semanticSources,
-      );
+      )).filter((match) => available.has(match.path));
       for (const match of matches.slice(0, agent.maxReferencedDocuments)) selected.add(match.path);
+      for (const match of matches.slice(agent.maxReferencedDocuments)) omitted.add(match.path);
     }
     const semanticSources = [...selected].sort();
     if (semanticSources.length === 0) {
@@ -94,6 +101,8 @@ export class AgentSemanticScopeResolver {
       semanticSources,
       headName: `agent-${scopeDigest}`,
       snapshotSuffix: `agent-${scopeDigest}`,
+      omittedDocuments: [...omitted].filter((path) => !selected.has(path)).sort(),
+      ignoredSearchTerms,
     };
   }
 }

@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "7db15ce23e217d8bc14772ff1287dfff0f81e9f402b3d8a5053d386736e8c078"
+      "destinationSha256": "5b5d4c4715f453ef0f5bb4c9640cf3dd5e8a3c6075197b6dcdd25c801cbf0f73"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -213,7 +213,7 @@
       "destinationPath": "src/application/agent-context.ts",
       "sourceSha256": "0a45ce6d878f3c2c19a1707b799e8c1d6e9e99ab5cb068aa73088b32f420aa23",
       "modified": true,
-      "destinationSha256": "97f16a8388bb7fbff228e83896bae4cd708d978ffb95135988a016e3ae6b0a5c"
+      "destinationSha256": "9c5778d66ed674c87a25ce132379e14805c00cd98ff76bc31f4e06151bec7430"
     },
     {
       "sourcePath": "tools/context-graph/src/application.test.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "2dbb28c9ae609e6e988578fd3eb82e9ca51735b77d16e23ab0dd910030eac008"
+      "destinationSha256": "fef7af32de49f73c4ade5f48a84c3a5db1e52171949cfdcd84720bf5e194b901"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -297,7 +297,7 @@
       "destinationPath": "src/repository/git.ts",
       "sourceSha256": "484d3986633bb32ccc3b665f2144007a213c303df51b375c1d653729921d6d2c",
       "modified": true,
-      "destinationSha256": "66c9230d73e972ed1696880dbd31339a8e618b8cabcb2bfebbeeccc112d65768"
+      "destinationSha256": "2557d47d1c54a6bbefc61d16eac4a4d16f995adadb480130ea39f558ce3522f1"
     },
     {
       "sourcePath": "tools/context-graph/src/glob.ts",
@@ -311,21 +311,21 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "9baaacb29c863abdb48c96b054a7f430ce18784badfe585ec5ee88a17f21c0bd"
+      "destinationSha256": "d3c3e4e18adb571d7b9ef5232f10173344c1f6ae126ba76e50c2e32584782709"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "356dcec76c68e76492a56fd17017e1809f8cc30f237bfe540c827ade8337ad88"
+      "destinationSha256": "1bb8c8481706590f1d994baf6d48818dc76dec014d9e583ee3ae5b5c9aaa265f"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "6d2e5a298c96013f45f102f44a87fd7390cbe2a3174410560bb6fc8cc24012ea"
+      "destinationSha256": "9f986584ecba26d9b78b52aff19b07f4c572686d35f4363e06fa70b17756e704"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "eb31d432f0cbb7bd6799562a7e514aa04bbbd2df221f4ef916989eeeea3997f0"
+      "destinationSha256": "214d0378b75af7d4960b06981b165da19a37c2ebccb34f8ffa485ca86776f94f"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/preview-semantic-hydration.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -608,6 +609,7 @@
     "docs/ADR-013-relative-module-requests.md",
     "docs/ADR-014-routing-declarations.md",
     "docs/ADR-015-repository-document-identity.md",
+    "docs/ADR-016-hydration-preview.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -731,6 +733,7 @@
     "scripts/update-inventory.mjs",
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
+    "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
@@ -752,8 +755,11 @@
     "src/extraction/routing.ts",
     "src/extraction/scip-project.test.ts",
     "src/extraction/scip-project.ts",
+    "src/extraction/semantic-cache.ts",
+    "src/extraction/semantic-identity.ts",
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
+    "src/extraction/semantic-sources.ts",
     "src/governance/governance.test.ts",
     "src/governance/governance.ts",
     "src/graph/authority.ts",
@@ -762,6 +768,7 @@
     "src/graph/rdf.ts",
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/doctor.ts",
+    "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/init.test.ts",
     "src/interfaces/init.ts",
     "src/mcp.ts",
@@ -773,6 +780,7 @@
     "src/telemetry.ts",
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
+    "tests/hydration-plan.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf.test.ts",

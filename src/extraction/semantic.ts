@@ -23,7 +23,9 @@ import type {
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { SemanticArtifactStore } from "../storage/storage.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
-import { canonicalizeRepositoryDocumentNode, repositoryNodeIdentityVersion } from './repository-nodes.js';
+import { canonicalizeRepositoryDocumentNode } from './repository-nodes.js';
+import { semanticArtifactKey, semanticArtifactOutputDigest, semanticProviderIdentity } from './semantic-identity.js';
+import { inspectSemanticCache } from './semantic-cache.js';
 import {
   assertSemanticCitation,
   numberedSemanticSource,
@@ -295,7 +297,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
     private readonly runner: SemanticCommandRunner = spawnSemanticCommand,
     private readonly loginProbe: CodexLoginProbe = readCodexLoginMode,
   ) {
-    this.identity = `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v3`;
+    this.identity = semanticProviderIdentity(config);
   }
 
   async extract(
@@ -403,23 +405,10 @@ export class SemanticHydrator {
     options: SemanticRunOptions = {},
   ): Promise<{ artifact: SemanticArtifact; reused: boolean }> {
     options.signal?.throwIfAborted();
-    const keyInput = {
-      stableSemanticId: source.stableSemanticId,
-      sourceDigest: source.digest,
-      promptVersion: this.config.promptVersion,
-      extractorVersion: this.config.extractorVersion,
-      modelIdentity: this.extractor.identity,
-      adapterVersion: this.config.adapterVersion,
-      ontologyVersion: this.config.ontologyVersion,
-      minimumConfidence: this.config.minimumConfidence,
-      failOnUnresolved: this.config.failOnUnresolved,
-      forceRevision,
-      diagnosticContractVersion: 3,
-      repositoryNodeIdentityVersion,
-    };
-    const key = sha256(stableJson(keyInput));
-    const existing = await this.store.read(key);
-    if (existing) return { artifact: existing, reused: true };
+    const key = semanticArtifactKey(this.config, source, this.extractor.identity, forceRevision);
+    const cached = await inspectSemanticCache(this.store, this.config, source, this.extractor.identity, forceRevision);
+    if (cached.status === 'hit') return { artifact: cached.artifact!, reused: true };
+    if (cached.status !== 'miss') throw new Error(cached.reason);
 
     const extraction = await this.extractor.extract(source, context, options);
     assertSemanticOutput(extraction.parsed, source);
@@ -485,9 +474,7 @@ export class SemanticHydrator {
       );
     }
     const compiledOml = renderOml(key, output.assertions);
-    const outputDigest = sha256(
-      stableJson({ facts, diagnostics, compiledOml, rawModelOutput: extraction.rawModelOutput }),
-    );
+    const outputDigest = semanticArtifactOutputDigest({ facts, diagnostics, oml: compiledOml, rawModelOutput: extraction.rawModelOutput });
     const artifact: SemanticArtifact = {
       key,
       stableSemanticId: source.stableSemanticId,

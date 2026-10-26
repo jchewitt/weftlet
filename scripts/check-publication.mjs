@@ -83,6 +83,8 @@ try {
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
+        'dist/application/hydration-plan.js', 'dist/extraction/semantic-identity.js',
+        'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
         'dist/graph/ranking.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
@@ -366,8 +368,26 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     ],
     consumer,
   );
-  run(process.execPath, ['smoke.mjs'], consumer);
   const installedRoot = join(consumer, 'node_modules', '@weftlet', 'toolkit');
+  const previewConfig = JSON.parse(await readFile(
+    join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
+  ));
+  Object.assign(previewConfig, { semanticSources: ['intent.md'], approvedIntentSources: [],
+    adapter: './missing-preview-adapter.mjs',
+    semantic: { ...previewConfig.semantic, provider: 'module', providerIdentity: 'publication-preview:1',
+      providerModule: './missing-preview-provider.mjs' } });
+  delete previewConfig.semantic.auth;
+  await writeFile(join(consumer, 'preview.config.json'), JSON.stringify(previewConfig));
+  const plan = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'),
+    'hydrate', '--plan', '--json', '--config', 'preview.config.json'], consumer));
+  if (!plan.ready || plan.documents.length !== 1 || plan.documents[0].path !== 'intent.md' ||
+      plan.documents[0].cache.status !== 'miss' || plan.estimates.extractions !== 1 ||
+      (await readdir(consumer)).includes('.context-graph')) {
+    throw new Error('Installed hydration preview must select committed inputs without adapters, providers or graph writes');
+  }
+  const publicApi = await import(toolkitModule);
+  if (typeof publicApi.planHydration !== 'function') throw new Error('Missing public hydration planner export');
+  run(process.execPath, ['smoke.mjs'], consumer);
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
   ));
@@ -395,7 +415,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Packed npm exec/npx setup and config passed. Installed consumer: runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
+  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

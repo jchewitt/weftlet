@@ -18,6 +18,7 @@ import { FileSnapshotStore } from "../storage/storage.js";
 import { diagnoseSetup } from "./doctor.js";
 import { runInit } from "./init.js";
 import { loadConfig } from "../configuration/config.js";
+import { planHydration, type HydrationPlan } from '../application/hydration-plan.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -52,10 +53,40 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
   };
 }
 
+function formatHydrationPlan(plan: HydrationPlan): string {
+  const readiness = plan.issues.some((issue) => issue.severity === 'error')
+    ? 'blocked' : plan.ready ? 'ready' : 'needs review';
+  const lines = [
+    `Hydration plan: ${plan.repositoryId}`,
+    `Commit: ${plan.commitSha} (ref ${plan.ref})`,
+    `Configuration: ${plan.configurationDigest}`,
+    `Scope: ${plan.scope.mode}, ${plan.scope.complete ? 'complete' : 'incomplete'}; head ${plan.scope.headName}`,
+    `Documents: ${plan.budgets.selectedDocuments}/${plan.budgets.maxDocuments}; ${plan.budgets.totalSourceBytes} bytes total; ${plan.budgets.maxSourceBytes} bytes maximum per document`,
+    `Expected cache reuse: ${plan.estimates.reusableArtifacts}; extractions: ${plan.estimates.extractions}; unknown cache entries: ${plan.estimates.unknownArtifacts}`,
+    `Source/cache/budget checks: ${readiness}`,
+  ];
+  for (const document of plan.documents) {
+    lines.push(`- ${JSON.stringify(document.path)}: ${document.bytes} bytes, ${document.lines} lines; ${document.role}; source ${document.sourceAuthority}, extraction ${document.extractionReview}; cache ${document.cache.status}; selected by ${document.selectedBy.map((selector) => JSON.stringify(selector)).join(', ')}`);
+  }
+  for (const selection of plan.selections.filter((item) => item.status !== 'matched')) {
+    lines.push(`Selection ${JSON.stringify(selection.selector)}: ${selection.status}`);
+  }
+  for (const issue of plan.issues) lines.push(`${issue.severity.toUpperCase()} [${issue.code}]: ${issue.message}`);
+  if (plan.scope.omittedDocuments.length) {
+    lines.push(`Documents omitted by scope limits: ${plan.scope.omittedDocuments.map((path) => JSON.stringify(path)).join(', ')}`);
+  }
+  if (plan.scope.ignoredSearchTerms) lines.push(`Search terms omitted by scope limits: ${plan.scope.ignoredSearchTerms}`);
+  if (plan.excludedWorkingChanges.length) {
+    lines.push(`Working changes excluded: ${plan.excludedWorkingChanges.map((path) => JSON.stringify(path)).join(', ')}`);
+  }
+  lines.push(...plan.assumptions.map((assumption) => `Note: ${assumption}`));
+  return `${lines.join('\n')}\n`;
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
     return;
   }
   if (args[0] === 'init') {
@@ -86,6 +117,16 @@ async function main(): Promise<void> {
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
   if (args[0] === 'doctor') {
     process.stdout.write(`${JSON.stringify(await diagnoseSetup(configPath), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === 'hydrate' && args.includes('--plan')) {
+    const plan = await planHydration(configPath, {
+      ref: valueAfter(args, '--ref') ?? 'HEAD',
+      forceSemantic: args.includes('--force-semantic'),
+      request: impactRequestFromArgs(args),
+    });
+    process.stdout.write(args.includes('--json') ? `${JSON.stringify(plan, null, 2)}\n` : formatHydrationPlan(plan));
+    if (!plan.ready) process.exitCode = 1;
     return;
   }
   const application = await createContextGraphApplication(configPath);
@@ -119,9 +160,10 @@ async function main(): Promise<void> {
     const controller = new AbortController();
     const cancel = () => controller.abort();
     process.once('SIGINT', cancel);
-    const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args));
+    const ref = valueAfter(args, '--ref') ?? 'HEAD';
+    const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args), ref);
     const result = await application.hydrator.hydrate({
-      ref: valueAfter(args, '--ref') ?? 'HEAD',
+      ref: scope?.commitSha ?? ref,
       headName: scope?.headName ?? application.headName,
       semanticSources: scope?.semanticSources,
       forceSemantic: args.includes('--force-semantic'),

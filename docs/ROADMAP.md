@@ -8,9 +8,23 @@ consumer hardening, cited code-derived drafts, scoped approvals and reconciliati
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
 the published packages are 0.2.1. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
-published and passes upstream checks; genuine consumer acceptance remains pending. Setup,
-reuse, diagnostics and document coverage remain open before official 1.0 acceptance.
+published and passes upstream checks; genuine consumer acceptance remains pending. T02's
+no-model preview is implemented in development source but is not in published 0.2.1. Cache reuse,
+diagnostics and document coverage remain open before official 1.0 acceptance.
 The 2.0 plan distinguishes proposed work from delivered capability.
+
+T05 now blocks adoption: the maintainer reports SHACL pushing generation past a 30-minute
+timeout before graph publication. After the T02 preview increment, prioritize a focused validation
+performance release; the other 1.0 features must not delay that fix.
+
+[Hydration planning](ADR-016-hydration-preview.md) shares committed selection and semantic cache
+identity with execution, reports human/JSON scope and work estimates, and preserves source versus
+assertion authority. It performs no model work or graph writes. Complete its validation, then
+prioritize T05's SHACL performance investigation; npm publication remains separate. The current JavaScript validator
+checks the complete in-memory N3 graph on each hydration; saved queries do not repeat validation.
+T05 will measure graph construction and validation separately, assess safe result reuse and
+incremental validation, and benchmark native/database alternatives when justified. No performance
+diagnosis or backend migration is claimed by the preview increment.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |

@@ -85,7 +85,7 @@ describe('committed routing declarations in independent repositories', () => {
     ];
     const { root, config, configPath, application: control } = await fixture([...routes, ...invalid], false);
     const old = (await control.hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).snapshot;
-    const expectedId = [old.manifest.commitSha, 'graph-v5', `links-${documentLinkerIdentity.version}`,
+    const expectedId = [old.manifest.commitSha, 'graph-v6', `links-${documentLinkerIdentity.version}`,
       `files-${repositoryFileExtractorIdentity.version}`, sha256(stableJson(control.config)).slice(0, 16),
       sha256(stableJson(control.config.semanticSources)).slice(0, 12)].join('-');
     expect(old.manifest.snapshotId).toBe(expectedId);
