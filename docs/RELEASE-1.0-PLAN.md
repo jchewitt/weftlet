@@ -36,7 +36,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | --- | --- | --- | --- |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
-| **T03** | Artifact reuse across operational configuration changes | Local publication checks passed; hosted checks/release pending | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
+| **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
 | **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
@@ -121,7 +121,8 @@ Acceptance:
 
 ## T03 — Reuse valid artifacts after operational changes
 
-Implemented after 0.3.0; this source checkpoint does not claim npm publication.
+Merged in [PR 22](https://github.com/jchewitt/weftlet/pull/22) after 0.3.0, with local publication
+and hosted Ubuntu/Windows checks passing. This source checkpoint does not claim npm publication.
 [ADR 018](ADR-018-operational-semantic-cache.md) separates built-in Codex user artifacts from
 full snapshot profiles. Timeout, retry, concurrency and document/byte limits can change without
 hiding completed artifacts. Model/policy/authentication descriptors and unknown fields remain
