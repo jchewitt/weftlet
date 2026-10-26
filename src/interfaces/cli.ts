@@ -19,6 +19,7 @@ import { diagnoseSetup } from "./doctor.js";
 import { runInit } from "./init.js";
 import { loadConfig } from "../configuration/config.js";
 import { planHydration, type HydrationPlan } from '../application/hydration-plan.js';
+import { adoptSemanticCache } from '../application/cache-adoption.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -86,7 +87,7 @@ function formatHydrationPlan(plan: HydrationPlan): string {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|cache adopt|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\ncache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run] returns JSON and copies only validated compatible artifacts, without model calls or snapshot writes. --dry-run performs no cache writes. Agent configurations accept the same --owner-doc, --task and --capability selection as hydrate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
     return;
   }
   if (args[0] === 'init') {
@@ -115,6 +116,19 @@ async function main(): Promise<void> {
     return;
   }
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
+  if (args[0] === 'cache') {
+    const fromConfigPath = valueAfter(args, '--from-config');
+    if (args[1] !== 'adopt' || !fromConfigPath || fromConfigPath.startsWith('--')) {
+      throw new Error('Usage: weftlet cache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run]');
+    }
+    const result = await adoptSemanticCache(configPath, {
+      fromConfigPath, ref: valueAfter(args, '--ref') ?? 'HEAD', dryRun: args.includes('--dry-run'),
+      request: impactRequestFromArgs(args),
+    });
+    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    if (!result.ready) process.exitCode = 1;
+    return;
+  }
   if (args[0] === 'doctor') {
     process.stdout.write(`${JSON.stringify(await diagnoseSetup(configPath), null, 2)}\n`);
     return;

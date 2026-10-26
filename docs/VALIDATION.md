@@ -8,6 +8,48 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T03 operational semantic-cache reuse, 2026-10-26
+
+Implemented in development source after 0.3.0; no new npm publication is claimed here.
+[ADR 018](ADR-018-operational-semantic-cache.md) records the built-in Codex user-cache partition,
+the five operational settings that may share artifacts, and conservative custom-provider behavior.
+Snapshot profiles, full configuration digests, workspace paths and the 0.2.1/0.3.0 artifact-key
+contract remain unchanged. No credential environment values are read to construct cache identity.
+
+- Local `pnpm context-graph:publication-check` passed: 327 deterministic tests (1 core,
+  326 toolkit), one optional OML skip, 12 existing advisory architecture findings, inventory,
+  licenses and fresh packed-consumer checks. No new architecture baseline or exception was added.
+- 28 configuration cases distinguish supported operational/default settings from model/policy/
+  authentication descriptors, unknown fields, repository/checkout and custom-provider changes.
+  The full snapshot storage profile still changes when its configuration changes.
+- 11 integration/storage cases cover an interrupted run followed by a longer timeout: the
+  completed source is reused, the unfinished source is extracted, and the new snapshot records
+  the complete current configuration. Old-configuration evidence fails current snapshot checks;
+  a saved query can still label it as historical. An actual application hydration uses real
+  bundled SCIP and cached semantic artifacts with a tripwire against unexpected Codex calls.
+- Legacy fixtures independently reproduce the frozen 0.3.0 profile/key formulas. Planning
+  neither copies artifacts nor creates directories; hydration promotes only validated entries
+  from the exact compatible legacy profile. Unrelated profiles and incomplete temporary files
+  are ignored. Old artifact bytes, raw output and provenance remain intact.
+- 21 adoption cases exercise explicit previous-config recovery, dry-run/index/filesystem
+  preservation, current and historical agent scope, budgets, source changes and omitted coverage.
+  Incompatible policies, authentication descriptors, unknown fields, providers and checkouts are
+  refused. Corrupt, unreadable and conflicting entries are reported without overwriting them.
+- Concurrent-writer tests cover matching/different outputs and malformed identity metadata with
+  a deceptively matching output-digest field. Both adoption and hydration promotion fully inspect
+  the retained entry before claiming success. Forced extraction preserves the old artifact.
+- Three CLI subprocess cases verify that adoption runs before provider/adapter initialization,
+  preserves the active checkout, supports historical refs, rejects malformed invocation, and
+  returns structured nonzero results for cache or budget problems. The fresh packed consumer
+  checks the public API/runtime helpers and installed adoption command with unavailable provider
+  and adapter modules; its dry run selects the committed source without storage writes.
+
+These are public deterministic fixtures, including an injected Codex runner, not live model
+extractions or private consumer acceptance. Existing full SHACL and fresh snapshot publication
+remain required after cache reuse. Hosted checks and source merge are recorded after completion;
+published packages remain at 0.3.0 at this checkpoint. T04 timeout diagnostics and the remaining
+1.0 work are separate increments.
+
 ## Weftlet 0.3.0 preview and SHACL performance release, 2026-10-26
 
 T02 and the focused cold-validation portion of T05 shipped ahead of the remaining 1.0 work.

@@ -3,7 +3,8 @@
 Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.3.0 publication.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
 genuine consumer acceptance remains pending. T02 and T05's focused cold-validation optimization
-shipped in 0.3.0. Broader T05 follow-ups and T03, T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
+shipped in 0.3.0. T03 is implemented in development source after that release. Broader T05
+follow-ups and T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
 without expanding the consumer's migration. An official 1.0
 follows this work and genuine consumer acceptance, with its exact release scope reviewed when
 the evidence is available.
@@ -35,7 +36,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | --- | --- | --- | --- |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
-| **T03** | Artifact reuse across operational configuration changes | Planned efficiency work | Preserve T01's semantic identity separation; keep snapshot/config identity distinct from reusable artifact identity |
+| **T03** | Artifact reuse across operational configuration changes | Local publication checks passed; hosted checks/release pending | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
 | **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
@@ -120,6 +121,19 @@ Acceptance:
 
 ## T03 — Reuse valid artifacts after operational changes
 
+Implemented after 0.3.0; this source checkpoint does not claim npm publication.
+[ADR 018](ADR-018-operational-semantic-cache.md) separates built-in Codex user artifacts from
+full snapshot profiles. Timeout, retry, concurrency and document/byte limits can change without
+hiding completed artifacts. Model/policy/authentication descriptors and unknown fields remain
+identity inputs; custom providers retain their full configuration contract. Workspace cache
+paths and existing 0.2.1/0.3.0 artifact identities remain unchanged.
+
+Planning reads the exact compatible legacy profile without writing. Hydration can retain a
+validated copy atomically. Explicit `cache adopt --from-config` and its read-only `--dry-run`
+recover expected committed-source keys after settings were already changed; no unrelated profiles
+are scanned and no providers or snapshots are initialized. Agent scope and budget/coverage
+reporting match the hydration preview. Current-diff checks still reject old-configuration snapshots.
+
 The consumer reported that changing only a timeout selected a different cache profile and made
 completed extractions unavailable for reuse. Investigate both storage-location selection and
 artifact key construction. Separate operational controls from semantic-output identity, while
@@ -136,7 +150,9 @@ Acceptance:
 - Preserve force-extraction semantics, concurrent-writer safety, isolation between consumers,
   credentials and private cache contents. Record reuse and reasons for a miss without secrets.
 - Test interrupted work followed by a changed timeout: valid completed artifacts are reused,
-  incomplete/invalid ones are re-extracted, and source provenance remains correct.
+  missing/incomplete artifacts are extracted, and source provenance remains correct. Corrupt
+  complete artifacts stay intact and require explicit forced refresh or operator repair;
+  they are not silently overwritten or treated as misses.
 
 ## T04 — Explain timeouts and recovery
 

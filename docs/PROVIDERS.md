@@ -96,6 +96,29 @@ digest/stable ID, extractor/adapter/ontology versions, confidence threshold and 
 Unchanged artifacts are reused; forced revisions are separate. Failures never replace a valid
 snapshot. Progress shows phase and counts on stderr, with no document text or paths.
 
+The development increment after 0.3.0 separates built-in Codex semantic artifacts from user
+snapshot profiles. Changing `timeoutMs`, `retries`, `concurrency`, `maxDocuments` or
+`maxSourceBytes` can reuse completed artifacts; selection budgets are still enforced. Snapshot
+configuration digests remain complete and saved snapshots are not accepted as current merely
+because their artifacts were reused. Workspace cache paths and custom-provider identities remain
+unchanged. See [ADR 018](ADR-018-operational-semantic-cache.md) for exact isolation and recovery rules.
+
+If an older user-cache run was interrupted and its configuration has already changed, retain an
+exact copy of the previous configuration in its original directory. Its original `repositoryRoot`
+must still resolve to the same checkout; editing that field changes the old profile identity.
+From this development checkout:
+
+```sh
+pnpm weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD --dry-run
+pnpm weftlet cache adopt --config /path/to/project/context-graph.config.json --from-config /path/to/project/previous-context-graph.config.json --ref HEAD
+```
+
+For an agent-scoped run, supply the same `--owner-doc`, `--task` or `--capability` selection used
+for hydration. The JSON report shows what was retained and what still needs extraction. Adoption
+makes no model calls and changes no snapshots or source files. Incompatible configurations are
+refused; unrelated cache profiles are never scanned. Corrupt/conflicting artifacts are reported
+and retained. This command is not present in published 0.3.0.
+
 For a trusted local provider module, set `provider: "module"`, `providerModule` to a local path
 (relative to the repository root) or installed package, and `providerIdentity` to its exact
 declared version. Packages resolve from the consumer repository using ESM import conditions.

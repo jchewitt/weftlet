@@ -15,7 +15,8 @@ import { OpenCaesarOntologyCompiler, DirectRdfOntologyCompiler } from "../extrac
 import { SnapshotImpactQueryService } from "../graph/query.js";
 import { SemanticHydrator } from "../extraction/semantic.js";
 import { createSemanticExtractor } from "../extraction/providers.js";
-import { SemanticArtifactStore, FileSnapshotStore } from "../storage/storage.js";
+import { FileSnapshotStore } from "../storage/storage.js";
+import { createSemanticArtifactStore } from './semantic-artifact-store.js';
 import {
   RepositoryContractExtractor,
   RepositoryFileExtractor,
@@ -63,7 +64,7 @@ export async function createContextGraphApplication(configPath: string) {
   const repository = new GitRepository(repositoryRoot);
   const adapter = await loadContextGraphAdapterModule(config.adapter, repository, repositoryRoot);
   const snapshotStore = new FileSnapshotStore(storageRoot);
-  const artifactStore = new SemanticArtifactStore(storageRoot);
+  const artifactStore = createSemanticArtifactStore(repositoryRoot, config);
   const semanticExtractor = createSemanticExtractor(config.semantic, repositoryRoot);
   const semanticHydrator = new SemanticHydrator(config.semantic, artifactStore, semanticExtractor);
   const staticIndexer = new ScipTypeScriptIndexer(config.scip, storageRoot);

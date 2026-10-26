@@ -1,14 +1,14 @@
 import type { ImpactScanRequest, SemanticSource } from '@weftlet/core';
 import { loadConfig, type ContextGraphConfig } from '../configuration/config.js';
-import { resolveStorageRoot } from '../configuration/cache.js';
 import { GitRepository } from '../repository/git.js';
 import { matchesRepositoryGlob } from '../repository/glob.js';
-import { SemanticArtifactStore } from '../storage/storage.js';
+import type { SemanticArtifactStore } from '../storage/storage.js';
+import { createSemanticArtifactStore } from './semantic-artifact-store.js';
 import { inspectSemanticCache, type SemanticCacheInspection } from '../extraction/semantic-cache.js';
 import { semanticProviderIdentity } from '../extraction/semantic-identity.js';
 import { selectSemanticInputs, type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
-import { AgentSemanticScopeResolver } from './agent-context.js';
+import { resolveSemanticScope, type SemanticScope } from './semantic-scope.js';
 
 export interface HydrationPlanOptions {
   readonly ref?: string;
@@ -38,15 +38,7 @@ export interface HydrationPlan {
   readonly commitSha: string;
   readonly configurationDigest: string;
   readonly ready: boolean;
-  readonly scope: {
-    readonly mode: 'configured' | 'agent';
-    readonly selectors: readonly string[];
-    readonly digest: string;
-    readonly headName: string;
-    readonly complete: boolean;
-    readonly omittedDocuments: readonly string[];
-    readonly ignoredSearchTerms: number;
-  };
+  readonly scope: SemanticScope & { readonly complete: boolean };
   readonly documents: readonly HydrationPlanDocument[];
   readonly selections: readonly SemanticSelection[];
   readonly budgets: { readonly maxDocuments: number; readonly maxSourceBytes: number;
@@ -73,24 +65,13 @@ async function describeDocument(source: SemanticSource, selections: readonly Sem
     extractionReview: 'unreviewed', cache };
 }
 
-async function resolvePlanningScope(config: ContextGraphConfig, repository: GitRepository,
-  commitSha: string, request: ImpactScanRequest = {}): Promise<Omit<HydrationPlan['scope'], 'complete'>> {
-  const agent = config.agentContext
-    ? await new AgentSemanticScopeResolver(config, repository).resolve(request, commitSha)
-    : undefined;
-  const selectors = agent?.semanticSources ?? config.semanticSources;
-  return { mode: agent ? 'agent' : 'configured', selectors, digest: sha256(stableJson(selectors)),
-    headName: agent?.headName ?? 'default', omittedDocuments: agent?.omittedDocuments ?? [],
-    ignoredSearchTerms: agent?.ignoredSearchTerms ?? 0 };
-}
-
 /** Inspect only committed source objects, config and existing artifacts; never initialize a provider or adapter. */
 export async function planHydration(configPath: string, options: HydrationPlanOptions = {}): Promise<HydrationPlan> {
   const { config, repositoryRoot } = await loadConfig(configPath);
   const repository = new GitRepository(repositoryRoot);
   const ref = options.ref ?? 'HEAD';
   const commitSha = await repository.resolveRef(ref);
-  const scope = await resolvePlanningScope(config, repository, commitSha, options.request);
+  const scope = await resolveSemanticScope(config, repository, commitSha, options.request);
   const selection = await selectSemanticInputs(repository, commitSha, scope.selectors, config.semantic);
   const issues = [...selection.issues];
   const { omittedDocuments, ignoredSearchTerms } = scope;
@@ -99,7 +80,7 @@ export async function planHydration(configPath: string, options: HydrationPlanOp
   if (limited) issues.push({ code: 'selection-limited', severity: 'warning',
     message: `Existing agent selection limits omitted ${omittedDocuments.length} documents and ${ignoredSearchTerms} search terms; this plan describes only the selected scope.`,
     paths: omittedDocuments });
-  const store = new SemanticArtifactStore(resolveStorageRoot(repositoryRoot, config));
+  const store = createSemanticArtifactStore(repositoryRoot, config);
   const evidencePaths = new Set(await repository.listFilesAt(commitSha, config.evidenceRoots));
   const documents: HydrationPlanDocument[] = [];
   for (const source of selection.sources) {

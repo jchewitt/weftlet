@@ -83,7 +83,9 @@ try {
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
-        'dist/application/hydration-plan.js', 'dist/extraction/semantic-identity.js',
+        'dist/application/hydration-plan.js', 'dist/application/cache-adoption.js',
+        'dist/application/semantic-artifact-store.js', 'dist/application/semantic-scope.js',
+        'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
         'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
@@ -387,6 +389,13 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   }
   const publicApi = await import(toolkitModule);
   if (typeof publicApi.planHydration !== 'function') throw new Error('Missing public hydration planner export');
+  if (typeof publicApi.adoptSemanticCache !== 'function') throw new Error('Missing public cache adoption export');
+  const adoption = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'),
+    'cache', 'adopt', '--config', 'preview.config.json', '--from-config', 'preview.config.json', '--dry-run'], consumer));
+  if (!adoption.ready || !adoption.dryRun || adoption.records.length !== 1 || adoption.counts.missing !== 1 ||
+      adoption.scope.selectors.join(',') !== 'intent.md' || (await readdir(consumer)).includes('.context-graph')) {
+    throw new Error('Installed cache adoption must inspect expected committed keys without providers, adapters or writes');
+  }
   run(process.execPath, ['smoke.mjs'], consumer);
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
@@ -415,7 +424,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
+  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

@@ -407,7 +407,13 @@ export class SemanticHydrator {
     options.signal?.throwIfAborted();
     const key = semanticArtifactKey(this.config, source, this.extractor.identity, forceRevision);
     const cached = await inspectSemanticCache(this.store, this.config, source, this.extractor.identity, forceRevision);
-    if (cached.status === 'hit') return { artifact: cached.artifact!, reused: true };
+    if (cached.status === 'hit') {
+      // Planning remains read-only. Execution can copy an inspected legacy hit
+      // atomically without rewriting its original artifact or extraction identity.
+      const artifact = cached.origin === 'legacy'
+        ? await this.promoteLegacy(source, cached.artifact!, forceRevision) : cached.artifact!;
+      return { artifact, reused: true };
+    }
     if (cached.status !== 'miss') throw new Error(cached.reason);
 
     const extraction = await this.extractor.extract(source, context, options);
@@ -500,5 +506,18 @@ export class SemanticHydrator {
     };
     await this.store.write(artifact);
     return { artifact, reused: false };
+  }
+
+  private async promoteLegacy(source: SemanticSource, artifact: SemanticArtifact,
+    forceRevision?: string): Promise<SemanticArtifact> {
+    await this.store.write(artifact);
+    // A concurrent winner must satisfy the full contract, not merely expose the
+    // same outputDigest field. Never publish using an invalid retained artifact.
+    const retained = await inspectSemanticCache(this.store, this.config, source, this.extractor.identity, forceRevision);
+    if (retained.status !== 'hit') throw new Error(retained.reason);
+    if (retained.origin !== 'primary' || retained.artifact!.outputDigest !== artifact.outputDigest) {
+      throw new Error('Concurrent semantic artifact changed during legacy promotion; inspect cache integrity before retrying.');
+    }
+    return retained.artifact!;
   }
 }
