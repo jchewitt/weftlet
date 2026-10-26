@@ -8,6 +8,46 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T04 semantic failure diagnostics, 2026-10-26
+
+Implemented in development source after 0.3.0; no new npm publication is claimed.
+[ADR 019](ADR-019-semantic-failure-diagnostics.md) records the safe failure envelope, opaque
+source correlation, settled progress and recovery boundaries. T04 does not change prompts,
+artifact keys, source/assertion authority, timeout defaults or graph validation.
+
+- Local `pnpm context-graph:publication-check` passed: 351 deterministic tests (1 core,
+  350 toolkit), one optional OML skip, inventory, licenses and fresh packed-consumer checks.
+- 20 new application cases use committed public fixtures and real artifact/snapshot storage.
+  They cover retained completed work, resumed reuse, cache hits, timeout/root-cause ordering,
+  synchronous sibling cancellation, late provider results, in-flight writes, late storage failure,
+  cancellation between sources and final completed/remaining counts. The previous snapshot/head
+  remains intact after failure. An injected Codex runner verifies elapsed time across retries
+  is separate from the configured per-attempt limit; no real model is called.
+- Unknown provider messages, private abort reasons and unrecognized error codes are excluded
+  from public reports. Missing infrastructure, invalid output, unresolved mappings, low confidence
+  and cache problems retain distinct safe diagnoses. The existing RDF regression now checks the
+  typed unresolved-policy error and unchanged prior head; its positive, missing-link, contradiction
+  and full SHACL checks remain in place.
+- Four CLI subprocess cases cover actual module timeouts, unknown module errors, missing provider
+  infrastructure, source-ID mapping through local preview, progress/error privacy, empty failure
+  stdout, JSON-only stderr with `--quiet`, and preserved previous snapshot bytes. The installed
+  consumer verifies public error/helper exports, required runtime assets, matching preview IDs and
+  safe structured failure from an unavailable provider. Existing installed CLI/npx, real SCIP,
+  RDF/SPARQL/SHACL, viewer and MCP initialization/missing-snapshot checks pass.
+- Governance reports 13 advisory findings: the 12 prior findings plus a new `semantic.ts` size
+  signal (510 nonblank/noncomment lines against the 500-line threshold). Independent review
+  considered the addition; scheduling/reporting is separated into its own module. The warning
+  remains visible. No rule, baseline or exception was changed; line count is not proof of
+  modularity or a product violation.
+- Independent review found no remaining blocker. All 79 original source path/hash pairs are
+  unchanged. Hosted checks and source merge will be recorded after completion.
+
+These checks use public deterministic fixtures and local child processes, not live models or
+private consumer data. Genuine consumer acceptance remains separate. Native Windows is covered
+by the hosted workflow once recorded; the local run is Linux/Node 24.19.0/pnpm 10.18.2.
+Published packages remain at 0.3.0 at this checkpoint. Broader T05, T06 and T07 remain separate
+1.0 increments.
+
 ## T03 operational semantic-cache reuse, 2026-10-26
 
 Implemented in development source after 0.3.0; no new npm publication is claimed here.

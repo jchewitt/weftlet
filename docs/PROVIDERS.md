@@ -83,7 +83,7 @@ continue using their ChatGPT login; this change does not provision or copy accou
 ## Limits and reuse
 
 Defaults are at most 8 documents per hydration, 64 KiB per source, a 120-second timeout per
-request, no retries, and the configured concurrency (validated at 1–4). Source budgets are checked
+Codex attempt (or module execution), no retries, and the configured concurrency (validated at 1–4). Source budgets are checked
 before any model call. `maxDocuments`, `maxSourceBytes`, `timeoutMs`, and `retries` may be configured
 within validated limits. Review scope and cost before raising them; these byte/document limits
 are not dollar or token estimates. Ask the operator before substantial paid runs.
@@ -95,6 +95,33 @@ Cache identity includes provider/model/reasoning effort, prompt and contract ver
 digest/stable ID, extractor/adapter/ontology versions, confidence threshold and unresolved policy.
 Unchanged artifacts are reused; forced revisions are separate. Failures never replace a valid
 snapshot. Progress shows phase and counts on stderr, with no document text or paths.
+
+The development T04 increment adds opaque source IDs, source elapsed times and structured semantic
+failure reports; it is not present in published 0.3.0. Run the following from the development
+checkout, retaining the same committed ref and any agent scope options as the failed run:
+
+```sh
+pnpm weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --plan --json
+pnpm weftlet hydrate --config /path/to/project/context-graph.config.json --ref <commit> --json --quiet
+```
+
+The first command makes no model calls and maps each `sourceId` to its local document path. Review
+that preview before sharing it. The second performs hydration: semantic failures exit nonzero,
+leave stdout empty and emit JSON on stderr. Omit `--quiet` for progress; omit `--json` for a safe
+human failure summary. Successful hydration still prints its result on stdout. JSON failure
+reporting covers semantic processing, not every configuration/indexing/validation failure.
+
+Reports distinguish timeout, cancellation, unavailable infrastructure, provider failure, invalid
+output, unresolved mappings, low confidence and cache problems. Completed/extracted/reused counts include active writes that finished
+before workers settled. `remaining` includes failed, cancelled and not-started sources; consult
+preview for future extraction estimates. Cancellation between sources has no failed `sourceId`.
+Source elapsed time includes cache checks and retries and may exceed the per-attempt limit;
+module timeout includes import/factory/extraction. No defaults or retry rules change.
+
+For a timeout, review `semantic.timeoutMs` and preview again before retrying without
+`--force-semantic`. Completed forced revisions remain stored but are not automatically reused by
+an ordinary rerun or a new forced run. Custom provider configuration changes remain conservative.
+See [ADR 019](ADR-019-semantic-failure-diagnostics.md) for reporting and privacy boundaries.
 
 The development increment after 0.3.0 separates built-in Codex semantic artifacts from user
 snapshot profiles. Changing `timeoutMs`, `retries`, `concurrency`, `maxDocuments` or

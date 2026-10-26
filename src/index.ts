@@ -12,3 +12,5 @@ export * from "./graph/rdf.js";
 export * from "./extraction/providers.js";
 export * from './application/hydration-plan.js';
 export * from './application/cache-adoption.js';
+export * from './application/hydration-failure.js';
+export * from './extraction/semantic-diagnostics.js';

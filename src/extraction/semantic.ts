@@ -26,6 +26,7 @@ import { sha256, stableJson } from "../infrastructure/util.js";
 import { canonicalizeRepositoryDocumentNode } from './repository-nodes.js';
 import { semanticArtifactKey, semanticArtifactOutputDigest, semanticProviderIdentity } from './semantic-identity.js';
 import { inspectSemanticCache } from './semantic-cache.js';
+import { SemanticPolicyError, type SemanticHydrationPhase } from './semantic-diagnostics.js';
 import {
   assertSemanticCitation,
   numberedSemanticSource,
@@ -402,21 +403,33 @@ export class SemanticHydrator {
     source: SemanticSource,
     context: ExtractionContext,
     forceRevision?: string,
-    options: SemanticRunOptions = {},
+    options: SemanticRunOptions & { readonly onPhase?: (phase: SemanticHydrationPhase) => void } = {},
   ): Promise<{ artifact: SemanticArtifact; reused: boolean }> {
-    options.signal?.throwIfAborted();
+    const checkpoint = () => {
+      if (options.signal?.aborted) throw new SemanticProviderError('cancelled', 'Semantic extraction cancelled');
+    };
+    checkpoint();
+    options.onPhase?.('semantic-cache-read');
     const key = semanticArtifactKey(this.config, source, this.extractor.identity, forceRevision);
     const cached = await inspectSemanticCache(this.store, this.config, source, this.extractor.identity, forceRevision);
     if (cached.status === 'hit') {
       // Planning remains read-only. Execution can copy an inspected legacy hit
       // atomically without rewriting its original artifact or extraction identity.
+      checkpoint();
+      if (cached.origin === 'legacy') options.onPhase?.('semantic-cache-write');
       const artifact = cached.origin === 'legacy'
         ? await this.promoteLegacy(source, cached.artifact!, forceRevision) : cached.artifact!;
       return { artifact, reused: true };
     }
     if (cached.status !== 'miss') throw new Error(cached.reason);
 
-    const extraction = await this.extractor.extract(source, context, options);
+    checkpoint();
+    options.onPhase?.('semantic-extract');
+    // Phase observation belongs to hydration, not the provider extension contract.
+    const extraction = await this.extractor.extract(source, context,
+      { signal: options.signal, timeoutMs: options.timeoutMs });
+    checkpoint();
+    options.onPhase?.('semantic-validate');
     assertSemanticOutput(extraction.parsed, source);
     if (typeof extraction.rawModelOutput !== 'string' || Buffer.byteLength(extraction.rawModelOutput) > 2 * 1024 * 1024) {
       throw new SemanticProviderError('invalid-output', 'Invalid or oversized raw semantic output');
@@ -426,7 +439,7 @@ export class SemanticHydrator {
     const facts: Omit<GraphFact, 'snapshotId'>[] = output.assertions.map((assertion, index) => {
       assertSemanticCitation(assertion.citation, source.path, lineCount, `assertion[${index}]`);
       if (assertion.confidence < this.config.minimumConfidence) {
-        throw new Error(`Low-confidence semantic assertion for ${source.path}`);
+        throw new SemanticPolicyError('low-confidence', `Low-confidence semantic assertion for ${source.path}`);
       }
       const provenance = {
         path: source.path,
@@ -475,7 +488,7 @@ export class SemanticHydrator {
     });
     const unresolvedMappings = output.unresolvedMappings ?? [];
     if (this.config.failOnUnresolved && (unresolvedMappings.length > 0 || diagnostics.length > 0)) {
-      throw new Error(
+      throw new SemanticPolicyError('unresolved',
         `Unresolved semantic mappings for ${source.path}: ${[...unresolvedMappings, ...diagnostics.map((item) => item.reason)].join('; ')}`,
       );
     }
@@ -504,6 +517,8 @@ export class SemanticHydrator {
       rawModelOutput: extraction.rawModelOutput,
       outputDigest,
     };
+    checkpoint();
+    options.onPhase?.('semantic-cache-write');
     await this.store.write(artifact);
     return { artifact, reused: false };
   }

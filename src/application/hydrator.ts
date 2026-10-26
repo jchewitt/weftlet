@@ -25,10 +25,13 @@ import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
+import { SemanticProviderError } from '../extraction/semantic-process.js';
+import { hydrateSemanticSources, type HydrationProgressEvent } from './semantic-run.js';
+export type { HydrationProgressEvent } from './semantic-run.js';
 
 export interface HydrationOptions {
   readonly signal?: AbortSignal;
-  readonly onProgress?: (event: { phase: string; completed?: number; total?: number }) => void;
+  readonly onProgress?: (event: HydrationProgressEvent) => void;
   readonly ref: string;
   readonly headName: string;
   readonly forceSemantic?: boolean;
@@ -62,28 +65,6 @@ export interface HydratorDependencies {
   readonly invariantEvaluators: readonly InvariantEvaluator[];
 }
 
-async function concurrentMap<T, R>(
-  values: readonly T[],
-  concurrency: number,
-  worker: (value: T, index: number) => Promise<R>,
-): Promise<readonly R[]> {
-  const results = new Array<R>(values.length);
-  let cursor = 0;
-  let failure: unknown;
-  let failed = false;
-  await Promise.all(
-    Array.from({ length: Math.max(1, Math.min(concurrency, values.length)) }, async () => {
-      while (!failed && cursor < values.length) {
-        const index = cursor++;
-        try { results[index] = await worker(values[index] as T, index); }
-        catch (error) { failed = true; failure ??= error; }
-      }
-    }),
-  );
-  if (failed) throw failure;
-  return results;
-}
-
 export class ContextGraphHydrator {
   constructor(private readonly dependencies: HydratorDependencies) {}
 
@@ -110,7 +91,10 @@ export class ContextGraphHydrator {
   }
 
   async hydrate(options: HydrationOptions): Promise<HydrationResult> {
-    options.signal?.throwIfAborted();
+    const checkpoint = () => {
+      if (options.signal?.aborted) throw new SemanticProviderError('cancelled', 'Hydration cancelled');
+    };
+    checkpoint();
     options.onProgress?.({ phase: 'resolve-committed-sources' });
     const { config, repository, snapshotStore } = this.dependencies;
     const commitSha = await repository.resolveRef(options.ref);
@@ -173,20 +157,10 @@ export class ContextGraphHydrator {
     };
     // Validate committed routing inputs before invoking any provider or indexer.
     const routing = await extractRoutingDeclarations(repository, context, config.routingSources ?? []);
-    let semanticExtracted = 0;
-    let semanticReused = 0;
-    const controller = new AbortController();
-    const signal = AbortSignal.any([controller.signal, ...(options.signal ? [options.signal] : [])]);
-    const hydrated = await concurrentMap(sources, config.semantic.concurrency, async (source) => {
-      let result;
-      try {
-        result = await this.dependencies.semanticHydrator.hydrate(source, context, forceRevision, { signal });
-      } catch (error) { controller.abort(); throw error; }
-      if (result.reused) semanticReused += 1;
-      else semanticExtracted += 1;
-      options.onProgress?.({ phase: result.reused ? 'semantic-cache-hit' : 'semantic-extracted',
-        completed: semanticReused + semanticExtracted, total: sources.length });
-      return { source, ...result };
+    const { hydrated, semanticExtracted, semanticReused } = await hydrateSemanticSources({
+      sources, context, config: config.semantic, configurationDigest,
+      hydrator: this.dependencies.semanticHydrator, forceRevision,
+      signal: options.signal, onProgress: options.onProgress,
     });
     const artifacts = hydrated.map((result) => result.artifact);
     const diagnostics: GraphDiagnostic[] = hydrated.flatMap(({ source, artifact }) =>
@@ -218,7 +192,7 @@ export class ContextGraphHydrator {
           matchesRepositoryGlob(source.path, pattern)) ? 'declared' : 'inferred') as 'declared' | 'inferred',
       })),
     );
-    options.signal?.throwIfAborted();
+    checkpoint();
     options.onProgress?.({ phase: 'index-typescript' });
     const scip = await this.dependencies.staticIndexer.index(context);
     const extractorFacts = (
@@ -244,7 +218,7 @@ export class ContextGraphHydrator {
         matchesRepositoryGlob(source.path, pattern))).map((source) => source.path));
     diagnostics.push(...documents.diagnostics);
     diagnostics.push(...routing.diagnostics);
-    options.signal?.throwIfAborted();
+    checkpoint();
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
     const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
@@ -328,12 +302,13 @@ export class ContextGraphHydrator {
       unresolved,
       diagnostics,
     };
-    options.signal?.throwIfAborted();
+    checkpoint();
     options.onProgress?.({ phase: 'validate-shacl' });
     const validation = await new RdfEvidenceGraph(snapshot).validate();
     if (!validation.conforms) {
       throw new Error(`Graph extraction failed SHACL validation: ${JSON.stringify(validation.issues)}`);
     }
+    checkpoint();
     options.onProgress?.({ phase: 'publish-snapshot' });
     await snapshotStore.write(snapshot);
     await snapshotStore.updateHead(options.headName, snapshotId);

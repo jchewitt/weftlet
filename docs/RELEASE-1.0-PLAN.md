@@ -3,8 +3,8 @@
 Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.3.0 publication.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
 genuine consumer acceptance remains pending. T02 and T05's focused cold-validation optimization
-shipped in 0.3.0. T03 is implemented in development source after that release. Broader T05
-follow-ups and T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
+shipped in 0.3.0. T03 and T04 are implemented in development source after that release. Broader T05
+follow-ups and T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
 without expanding the consumer's migration. An official 1.0
 follows this work and genuine consumer acceptance, with its exact release scope reviewed when
 the evidence is available.
@@ -37,7 +37,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
-| **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
+| **T04** | Actionable, privacy-safe timeout diagnostics | Local publication checks passed; hosted checks pending; unreleased | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
@@ -156,6 +156,15 @@ Acceptance:
   they are not silently overwritten or treated as misses.
 
 ## T04 — Explain timeouts and recovery
+
+Implemented after 0.3.0; this development checkpoint does not claim npm publication.
+[ADR 019](ADR-019-semantic-failure-diagnostics.md) records opaque source IDs and explicit local
+preview mapping, final counts after active workers settle, safe typed errors and recovery.
+Concurrent sibling cancellation preserves the initiating failure. Completed writes stay counted
+as completed; cancellation between sources reports no failing source. The CLI supports semantic
+failure JSON on stderr with `hydrate --json --quiet`, leaving protocol/success stdout untouched.
+Provider loading problems and unknown provider errors are distinct. Timeout defaults, extraction
+identities, cache formulas, saved queries and full graph validation remain unchanged.
 
 Report a privacy-safe source identifier, phase, elapsed time, configured limit and completed/
 remaining counts when extraction times out. Explain which completed artifacts can be retained
