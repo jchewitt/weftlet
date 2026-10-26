@@ -2,8 +2,9 @@
 
 Status: maintainer-directed work, recorded on 2026-10-26 from a consumer integration report.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
-genuine consumer acceptance remains pending. T02–T07 remain open and improve setup, reuse,
-diagnostics and document coverage without expanding the consumer's migration. An official 1.0
+genuine consumer acceptance remains pending. T02 is implemented in development source and awaits
+release; T03–T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
+without expanding the consumer's migration. An official 1.0
 follows this work and genuine consumer acceptance, with its exact release scope reviewed when
 the evidence is available.
 
@@ -33,15 +34,17 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
-| **T02** | No-model hydration/setup preview | Planned usability work | Shares selection/cache identity with hydration; extend it with T07 traversal coverage |
+| **T02** | No-model hydration/setup preview | Implemented in source; not published in 0.2.1 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Planned efficiency work | Preserve T01's semantic identity separation; keep snapshot/config identity distinct from reusable artifact identity |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
-| **T05** | Early identity checks and validation progress/profiling | Planned correctness/observability work | Build on T01; profile latency independently before selecting optimizations |
+| **T05** | Early identity checks and validation progress/profiling | **Adoption blocker; next release after T02** | Consumer reports validation pushing generation past a 30-minute timeout; fix cold validation before waiting for the rest of 1.0 |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
-T02–T07 can now ship in independently useful increments. Keep them separate from the optional
-platform work. Normal required release checks still apply to every shipped increment.
+T02 passes the local publication checks. Prioritize a separate T05 performance release following
+the maintainer's reported timeout; do not wait for the remaining 1.0 features. T03, T04, T06 and T07 remain independently useful increments. Keep them
+separate from the optional platform work. Publication follows the normal release process; no new
+npm release is claimed for T02. Normal release checks apply to every shipped increment.
 
 ## T01 — Resolve repository-document identity conflicts
 
@@ -87,10 +90,19 @@ separate full-graph validation latency observation.
 
 ## T02 — Preview scope and work without calling a model
 
-Add a no-model preview command, tentatively `hydrate --plan`; the CLI spelling is not implemented
-by this plan. Use the same source-selection and identity logic as hydration to avoid preview drift.
-Report selected sources and sizes, inclusion reasons, role/approval classification, expected
-artifact hits/misses and extraction count, plus document/byte limits and any violations.
+Implemented in development source: `hydrate --plan` renders a human summary and `--json` returns
+the structured plan. This feature is not in published 0.2.1. Shared source selection and identity
+logic report selected documents and sizes, inclusion reasons, configured role/source approval,
+unreviewed assertion status, artifact reuse/extraction estimates and document/per-source byte limits.
+See [ADR 016](ADR-016-hydration-preview.md) and [validation](VALIDATION.md).
+
+Missing or unsupported-only selectors and bounded agent omissions remain visible as warnings;
+incomplete plans need review and exit 1. They do not introduce new hydration gates that would
+break deletion of the last document. Budget, duplicate-ID and corrupt/unavailable cache errors
+block planning checks without truncating selected sources. An explicit empty source list selects
+none. Requested refs now govern agent scope; corrected snapshots use graph-v6 while valid 0.2.1
+semantic artifacts remain reusable. T03's operational cache changes and T07's traversal/default
+validation-document separation remain separate work.
 
 Acceptance:
 
@@ -141,9 +153,21 @@ Acceptance:
 
 ## T05 — Detect inexpensive conflicts early and explain validation work
 
-Add inexpensive graph-assembly checks for incompatible identities before expensive validation.
-Keep the full conformance requirement. Separately instrument and profile large RDF/SHACL
-validation to determine where time is spent before choosing optimizations.
+Prioritize this task after T02. The current implementation uses JavaScript on Node:
+`rdf-validate-shacl` validates an in-memory N3 dataset. Hydration constructs and validates the
+entire assembled graph, including when semantic artifacts were reused. There is no persistent
+GraphDB backend or incremental validation. Querying a saved snapshot does not rerun SHACL.
+
+The maintainer reports that validation pushes the consumer's overall generation beyond its
+30-minute timeout, preventing snapshot publication and making adoption unusable. This is now
+a release blocker, not an optional observability improvement. Upstream has not yet measured
+that consumer graph or established the bottleneck. Ship a focused performance release as soon
+as its correctness and improvement are demonstrated, ahead of the remaining 1.0 tasks.
+
+Add inexpensive identity checks and instrument RDF construction and SHACL validation separately.
+Keep the full conformance requirement and measure large public graphs before selecting changes.
+The reported consumer delay remains an observation, not a diagnosed validator/backend defect.
+Native code or a database does not by itself establish faster or correct incremental SHACL.
 
 Acceptance:
 
@@ -153,7 +177,21 @@ Acceptance:
 - Report elapsed time and honest phase/heartbeat progress for long validation. Do not display a
   fabricated completion percentage when the validator exposes no meaningful denominator.
 - Record reproducible public-fixture sizes, fact/node counts, runtime versions, wall time and
-  resource observations. Separate measured bottlenecks from hypotheses.
+  resource observations for construction and validation separately. Separate measured bottlenecks
+  from hypotheses; include repeated identical input and small changed-input cases.
+- Demonstrate improved cold full-graph validation, because reusing a previous validation result
+  cannot unblock a first graph that has never completed. Keep private consumer acceptance and
+  the overall generation timeout separate from synthetic validator-only benchmarks.
+- Evaluate reuse of a successful conformance result only when validated graph content, shapes,
+  validator version and applicable policy/semantics match. This reuse must not make historical
+  evidence satisfy current-diff freshness, scope or provenance requirements.
+- Evaluate dependency-aware incremental validation with insertions, updates, deletions, renames,
+  affected relationships and global constraints. Revalidate the complete affected scope or fall
+  back to full validation when it cannot be bounded safely; changed nodes alone are insufficient.
+- Benchmark a suitable native/Rust-backed validator or optional persistent graph database if
+  measurements justify a candidate. Compare supported SHACL behavior, positive/negative parity,
+  installation, licensing, portability and maintenance cost. T02 adds no backend migration, and
+  this evaluation does not commit the standalone toolkit to a mandatory service.
 - Any optimized validation/projection path has equivalence tests, including negative cases;
   failure must preserve the prior snapshot. Keep model-independent profiling separate from live
   extraction performance and from the reported two-fact correctness defect.

@@ -42,7 +42,7 @@ export class GitRepository {
 
   async workingChanges(): Promise<readonly string[]> {
     const prefix = await this.run(['rev-parse', '--show-prefix']);
-    const output = await this.execute(['status', '--porcelain=v1', '-z', '--untracked-files=all'], false);
+    const output = await this.execute(['--no-optional-locks', 'status', '--porcelain=v1', '-z', '--untracked-files=all'], false);
     const records = output.split('\0');
     const paths = new Set<string>();
     for (let index = 0; index < records.length; index++) {
@@ -83,6 +83,7 @@ export class GitRepository {
   }
 
   async listFilesAt(commitSha: string, roots: readonly string[]): Promise<readonly string[]> {
+    if (roots.length === 0) return [];
     const output = await this.run(['ls-tree', '-r', '--name-only', commitSha, '--', ...roots]);
     return output.split('\n').filter(Boolean).sort();
   }
@@ -132,6 +133,7 @@ export class GitRepository {
     headSha: string,
     roots: readonly string[],
   ): Promise<GitDelta> {
+    if (roots.length === 0) return { changedPaths: [], deletedPaths: [], renamedPaths: {} };
     if (!baseSha) {
       return {
         changedPaths: await this.listFilesAt(headSha, roots),
@@ -172,7 +174,7 @@ export class GitRepository {
   }
 
   async semanticSources(
-    context: ExtractionContext,
+    context: Pick<ExtractionContext, 'commitSha'>,
     roots: readonly string[],
   ): Promise<readonly SemanticSource[]> {
     const paths = (await this.listFilesAt(context.commitSha, roots)).filter((path) =>

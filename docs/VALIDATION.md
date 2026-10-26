@@ -8,6 +8,42 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T02 no-model hydration preview, 2026-10-26
+
+Implemented in development source; published npm packages remain 0.2.1. See
+[ADR-016](ADR-016-hydration-preview.md) for source, cache and readiness semantics.
+
+- Local `pnpm context-graph:publication-check` passed: 239 deterministic tests (1 core,
+  238 toolkit), one optional OML skip, 12 advisory architecture findings, inventory, licenses
+  and fresh packed-consumer checks. No additional architecture baseline or exception was added.
+- Ten independent-repository planner cases cover exact committed bytes despite dirty/untracked
+  files, unchanged Git index and filesystem hashes, approved sources versus unreviewed assertions,
+  explicit evidence-root classification, empty selection, cold/warm/forced cache, malformed or
+  unreadable artifacts, output-digest corruption, budgets, duplicate IDs, missing selectors and
+  historical agent selection with explicit omissions. The warm test independently checks the
+  literal released 0.2.1 key formula, then verifies actual SemanticHydrator reuse.
+- Two real-process CLI cases cover human/JSON output, blocked and warning-only exit codes,
+  historical refs and force preview. Side-effecting provider/adapter modules are never imported;
+  unavailable Codex/SCIP/OML configuration does not prevent planning. Source bodies/raw provider
+  output are excluded from the plan. No snapshot or artifact directory is created by preview.
+- Existing hydration rename/delete tests still pass, including removal of the last document.
+  Explicit empty semantic scope now performs zero semantic extraction even with committed docs
+  present. New graph-v6 snapshots remain distinct from old assemblies; valid semantic cache keys
+  and output digests retain the 0.2.1 contract.
+- A fresh packed consumer exercises installed `hydrate --plan --json` with absent provider and
+  repository adapter modules, selects its committed document, reports one expected extraction,
+  and creates no graph storage. The public planner export and every runtime helper are present.
+  The remaining installed smoke covers real SCIP, RDF/SPARQL/SHACL, visualization and MCP.
+- Independent review found and resolved an initial selector-gating regression: unmatched selectors
+  are warnings, preserving deletion behavior. Incomplete preview scope needs review and exits 1;
+  it does not establish a new execution policy. No blocking review finding remains.
+
+No paid/live model call, npm publication or private source-application change was made for T02.
+Recursive document coverage and operational-config cache reuse remain separate. This increment
+does not optimize SHACL. The maintainer's report that validation pushes generation past a
+30-minute timeout makes [T05](RELEASE-1.0-PLAN.md#t05--detect-inexpensive-conflicts-early-and-explain-validation-work)
+the next focused release priority; no consumer timing diagnosis is claimed here.
+
 ## Weftlet 0.2.1 document identity patch, 2026-10-26
 
 The public reproduction confirms the reported 0.2.0 defect: two unchanged semantic

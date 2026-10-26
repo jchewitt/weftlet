@@ -67,6 +67,40 @@ the archive-byte, snapshot replacement and MCP startup regression suite also pas
 Windows CI. Full native Windows release preparation remains separately unvalidated.
 See the [validation record](docs/VALIDATION.md).
 
+## Preview hydration before model work
+
+`hydrate --plan` is implemented in the development source and is **not included in the
+published 0.2.1 packages**. From a development checkout, inspect a project's committed inputs:
+
+```sh
+pnpm weftlet hydrate --plan --config /path/to/project/context-graph.config.json --ref HEAD
+pnpm weftlet hydrate --plan --json --config /path/to/project/context-graph.config.json --ref HEAD
+```
+
+The human summary and JSON identify the resolved commit, current local configuration, selected
+documents and inclusion reasons, UTF-8 byte sizes, source approval, expected cache reuse and
+extraction counts, budget violations, and working changes excluded from the committed input.
+Selection uses configured repository file/directory paths; `approvedIntentSources` uses its
+separate glob matcher. An explicit empty semantic source list selects no documents, fixing the
+earlier accidental expansion to the whole repository.
+
+Planning reads Git objects and existing artifacts without loading a model provider or repository
+adapter, indexing code, collecting runtime evidence, validating the graph or writing snapshots.
+It does not check credentials or estimate tokens or dollars. Cache hits depend on unchanged
+inputs; corrupt or unreadable entries are reported separately from misses. `--force-semantic`
+shows planned re-extraction without allocating or writing a forced revision.
+
+A plan exits 0 when its source/cache/budget checks are ready. It exits 1 with the full plan when
+errors block those checks or incomplete selection needs review. Missing/no-document selectors
+and existing agent-selection limits are warnings; they do not add a new hydration gate that
+would prevent removing the last document and invalidating its relationships. All selected
+documents remain visible when budgets are exceeded.
+
+Source approval does not approve model assertions. Validation-document labels reflect configured
+evidence roots; selected validation documents still undergo semantic extraction today. Recursive
+SOT traversal and default validation-document separation remain T07 work. See
+[ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
+
 ## Development
 
 The development source is organized by responsibility; see

@@ -1,7 +1,7 @@
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { CodexCliSemanticExtractor, SemanticProviderError, type SemanticExtractor, type SemanticRunOptions } from "./semantic.js";
-import { sha256, stableJson } from "../infrastructure/util.js";
+import { semanticProviderIdentity } from './semantic-identity.js';
 import { resolveConsumerModule } from "../infrastructure/module-resolution.js";
 
 export interface SemanticProviderModule {
@@ -13,7 +13,7 @@ export interface SemanticProviderModule {
 export function createSemanticExtractor(config: ContextGraphConfig['semantic'], repositoryRoot: string): SemanticExtractor {
   if (config.provider === 'codex-cli') return new CodexCliSemanticExtractor(config);
   const modulePath = config.providerModule!;
-  const identity = `${config.providerIdentity}:${sha256(stableJson(config))}:contract-v2`;
+  const identity = semanticProviderIdentity(config);
   let extractor: SemanticExtractor | undefined;
   return {
     identity,

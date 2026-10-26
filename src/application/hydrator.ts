@@ -20,6 +20,7 @@ import { repositoryFileExtractorIdentity } from '../extraction/static.js';
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { repositoryNodeIdentityVersion } from '../extraction/repository-nodes.js';
+import { selectSemanticInputs } from '../extraction/semantic-sources.js';
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
@@ -114,13 +115,18 @@ export class ContextGraphHydrator {
     const { config, repository, snapshotStore } = this.dependencies;
     const commitSha = await repository.resolveRef(options.ref);
     if (options.requireClean === true) await repository.requireExactCleanCommit(commitSha);
+    const selectedSemanticSources = options.semanticSources ?? config.semanticSources;
+    const selection = await selectSemanticInputs(repository, commitSha, selectedSemanticSources, config.semantic);
+    if (selection.issues.some((issue) => issue.severity === 'error')) {
+      throw new Error(selection.issues.map((issue) => issue.message).join('\n'));
+    }
+    const { sources } = selection;
     await this.dependencies.ontologyCompiler.checkReady?.();
     const prior = await snapshotStore.readHead(options.headName);
     const baseSha =
       prior?.manifest.commitSha === commitSha
         ? prior.manifest.baseSha
         : (prior?.manifest.commitSha ?? (await repository.firstParent(commitSha)));
-    const selectedSemanticSources = options.semanticSources ?? config.semanticSources;
     const allRoots = [
       ...new Set([
         ...selectedSemanticSources,
@@ -149,7 +155,7 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v5', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
+    const effectiveSuffix = ['graph-v6', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
       ...(config.routingSources?.length ? [`routes-${routingExtractorIdentity.version}`] : []),
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
@@ -167,18 +173,6 @@ export class ContextGraphHydrator {
     };
     // Validate committed routing inputs before invoking any provider or indexer.
     const routing = await extractRoutingDeclarations(repository, context, config.routingSources ?? []);
-    const sources = await repository.semanticSources(context, selectedSemanticSources);
-    if (sources.length > (config.semantic.maxDocuments ?? 8) ||
-      sources.some((source) => Buffer.byteLength(source.content) > (config.semantic.maxSourceBytes ?? 65_536))) {
-      throw new Error('Semantic source budget exceeded before extraction; narrow scope or explicitly review configured limits');
-    }
-    const ids = new Set<string>();
-    for (const source of sources) {
-      if (ids.has(source.stableSemanticId)) {
-        throw new Error(`Duplicate stable semantic ID: ${source.stableSemanticId}`);
-      }
-      ids.add(source.stableSemanticId);
-    }
     let semanticExtracted = 0;
     let semanticReused = 0;
     const controller = new AbortController();
@@ -306,7 +300,7 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
-          assembly: 'standalone-graph-v5',
+          assembly: 'standalone-graph-v6',
           'repository-node-identity': String(repositoryNodeIdentityVersion),
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           ...(config.routingSources?.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}),
