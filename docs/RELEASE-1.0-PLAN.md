@@ -1,10 +1,9 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: maintainer-directed work; source checkpoint on 2026-10-26 before the planned 0.3.0 release.
+Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.3.0 publication.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
-genuine consumer acceptance remains pending. T02 is merged and awaits release. T05's focused
-cold-validation optimization is implemented in development source, with validation/release pending;
-its broader follow-ups and T03, T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
+genuine consumer acceptance remains pending. T02 and T05's focused cold-validation optimization
+shipped in 0.3.0. Broader T05 follow-ups and T03, T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
 without expanding the consumer's migration. An official 1.0
 follows this work and genuine consumer acceptance, with its exact release scope reviewed when
 the evidence is available.
@@ -35,19 +34,19 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
-| **T02** | No-model hydration/setup preview | Merged in PR #18; not published in 0.2.1 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
+| **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Planned efficiency work | Preserve T01's semantic identity separation; keep snapshot/config identity distinct from reusable artifact identity |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
-| **T05** | Early identity checks and validation progress/profiling | **Adoption blocker; cold-validation fix in source** | Validate and release union-projection optimization now; early checks, detailed progress and validation reuse remain open |
+| **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
-T02 passed the local publication checks and hosted Ubuntu/Windows checks before
-[PR #18](https://github.com/jchewitt/weftlet/pull/18) merged. Prioritize the focused T05 performance
-release following the maintainer's reported timeout; do not wait for the remaining 1.0 features.
-T03, T04, T06 and T07 remain independently useful increments. Keep them
-separate from the optional platform work. Publication follows the normal release process; no new
-npm release is claimed for T02. Normal release checks apply to every shipped increment.
+T02 and the focused T05 fix passed local publication checks and hosted Ubuntu/Windows checks,
+then shipped in [0.3.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.3.0).
+Registry archives match the independently reviewed export; source commit, provenance and release
+tags are recorded in [validation](VALIDATION.md). T03, T04, T06 and T07 remain independently
+useful increments, separate from the optional platform work. A genuine consumer hydration and
+repeat against the current release remain required; upstream fixtures do not establish that result.
 
 ## T01 — Resolve repository-document identity conflicts
 
@@ -87,13 +86,14 @@ Upstream completion evidence:
   snapshot identity/content on artifact reuse, without live model calls. See the detailed
   [validation record](VALIDATION.md) for commits, checks and result boundaries.
 
-The private consumer has not yet supplied a successful full hydration/repeat against 0.2.1.
+The private consumer has not yet supplied a successful full hydration/repeat with the identity
+patch. Use the current 0.3.0 release, which also includes the cold-validation improvement.
 Upstream publication and regression success do not close that acceptance gate or diagnose the
 separate full-graph validation latency observation.
 
 ## T02 — Preview scope and work without calling a model
 
-Implemented in development source: `hydrate --plan` renders a human summary and `--json` returns
+Shipped in 0.3.0: `hydrate --plan` renders a human summary and `--json` returns
 the structured plan. This feature is not in published 0.2.1. Shared source selection and identity
 logic report selected documents and sizes, inclusion reasons, configured role/source approval,
 unreviewed assertion status, artifact reuse/extraction estimates and document/per-source byte limits.
@@ -162,11 +162,11 @@ entire assembled graph, including when semantic artifacts were reused. There is 
 GraphDB backend or incremental validation. Querying a saved snapshot does not rerun SHACL.
 
 The maintainer reports that validation pushes the consumer's overall generation beyond its
-30-minute timeout, preventing snapshot publication and making adoption unusable. This is now
-a release blocker, not an optional observability improvement. Upstream has measured a specific
+30-minute timeout, preventing snapshot publication and making adoption unusable. That report made
+cold validation a release priority ahead of the remaining 1.0 work. Upstream has measured a specific
 named-graph lookup cost in public synthetic fixtures, but has not measured that consumer graph or
-diagnosed its complete timeout. Ship the focused performance release once its correctness and
-improvement are demonstrated, ahead of the remaining 1.0 tasks.
+diagnosed its complete timeout. The focused cold-validation fix shipped in 0.3.0, ahead of the
+remaining 1.0 tasks. Consumer acceptance remains pending; broader T05 items stay open.
 
 [ADR 017](ADR-017-shacl-validation-union.md) records the implemented cold-validation optimization:
 build a temporary union of every SPO triple for the same validator/shapes, while keeping original

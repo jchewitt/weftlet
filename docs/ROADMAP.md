@@ -1,7 +1,7 @@
 # Delivery roadmap
 
-Source checkpoint: 2026-10-26, before the planned 0.3.0 release. Publication evidence is
-recorded separately in [validation](VALIDATION.md); this roadmap is not a live registry status.
+Release checkpoint: 2026-10-26, after verified 0.3.0 publication. Evidence is recorded in
+[validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
@@ -9,18 +9,18 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the published packages are 0.2.1. The received consumer findings are tracked in the
+the verified release at this checkpoint is 0.3.0. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
-no-model preview is implemented in development source but is not in published 0.2.1. Cache reuse,
+no-model preview and T05's cold-validation improvement shipped in 0.3.0. Operational cache reuse,
 diagnostics and document coverage remain open before official 1.0 acceptance.
 The 2.0 plan distinguishes proposed work from delivered capability.
 
-T05 now blocks adoption: the maintainer reports SHACL pushing generation past a 30-minute
-timeout before graph publication. T02 merged in [PR #18](https://github.com/jchewitt/weftlet/pull/18)
-after local and hosted Ubuntu/Windows checks. The focused T05 cold-validation optimization is
-implemented in development source, awaiting validation/release; the other 1.0 features must not
-delay it. Neither increment is in the published 0.2.1 packages.
+The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
+publication. T02 and the focused T05 optimization shipped together in 0.3.0 through
+[release PR #19](https://github.com/jchewitt/weftlet/pull/19), following local and hosted
+Ubuntu/Windows checks and independent source/archive review. A genuine consumer re-run is
+still required; the remaining 1.0 features did not delay this performance release.
 
 [Hydration planning](ADR-016-hydration-preview.md) shares committed selection and semantic cache
 identity with execution, reports human/JSON scope and work estimates, and preserves source versus
@@ -29,7 +29,8 @@ still checks the complete in-memory N3 graph on each hydration; saved queries do
 validation. [The T05 union optimization](ADR-017-shacl-validation-union.md) indexes all SPO triples
 in one temporary validation graph, preserving the same shapes and canonical named evidence.
 Bounded public experiments measured substantial cold-path improvement, alongside about 1.3 GiB
-RSS at 10,000 unique-node facts. They do not reproduce the private consumer's overall timeout.
+RSS in the prototype at 10,000 unique-node facts; the production harness including serialization
+peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
 Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
 engine, graph database or validation-result cache is introduced by this focused release.
 
@@ -119,7 +120,7 @@ preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
-`@weftlet/toolkit` are published at 0.2.1 through GitHub OIDC; the publication and verification
+`@weftlet/toolkit` are published at 0.3.0 through GitHub OIDC; the publication and verification
 record is in [validation](VALIDATION.md). Changesets prepares reviewed version PRs for the fixed package group;
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).

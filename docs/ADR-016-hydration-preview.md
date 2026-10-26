@@ -1,6 +1,6 @@
 # ADR-016: Read-only hydration planning
 
-Status: accepted and implemented for the 0.3.0 release plan; absent from 0.2.1.
+Status: accepted and implemented in 0.3.0; absent from 0.2.1.
 See [validation](VALIDATION.md) for recorded publication evidence.
 
 ## Problem
