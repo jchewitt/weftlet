@@ -59,6 +59,7 @@
     "release:publish": "node scripts/release.mjs --publish",
     "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json",
     "evaluate:impact": "tsx scripts/evaluation/run.ts",
+    "benchmark:shacl": "node scripts/benchmark-shacl.mjs",
     "weftlet": "tsx src/cli.ts",
     "changeset": "changeset",
     "release:version": "node scripts/version-packages.mjs"

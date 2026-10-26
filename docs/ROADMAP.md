@@ -1,5 +1,8 @@
 # Delivery roadmap
 
+Source checkpoint: 2026-10-26, before the planned 0.3.0 release. Publication evidence is
+recorded separately in [validation](VALIDATION.md); this roadmap is not a live registry status.
+
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
@@ -14,17 +17,21 @@ diagnostics and document coverage remain open before official 1.0 acceptance.
 The 2.0 plan distinguishes proposed work from delivered capability.
 
 T05 now blocks adoption: the maintainer reports SHACL pushing generation past a 30-minute
-timeout before graph publication. After the T02 preview increment, prioritize a focused validation
-performance release; the other 1.0 features must not delay that fix.
+timeout before graph publication. T02 merged in [PR #18](https://github.com/jchewitt/weftlet/pull/18)
+after local and hosted Ubuntu/Windows checks. The focused T05 cold-validation optimization is
+implemented in development source, awaiting validation/release; the other 1.0 features must not
+delay it. Neither increment is in the published 0.2.1 packages.
 
 [Hydration planning](ADR-016-hydration-preview.md) shares committed selection and semantic cache
 identity with execution, reports human/JSON scope and work estimates, and preserves source versus
-assertion authority. It performs no model work or graph writes. Complete its validation, then
-prioritize T05's SHACL performance investigation; npm publication remains separate. The current JavaScript validator
-checks the complete in-memory N3 graph on each hydration; saved queries do not repeat validation.
-T05 will measure graph construction and validation separately, assess safe result reuse and
-incremental validation, and benchmark native/database alternatives when justified. No performance
-diagnosis or backend migration is claimed by the preview increment.
+assertion authority. It performs no model work or graph writes. The current JavaScript validator
+still checks the complete in-memory N3 graph on each hydration; saved queries do not repeat
+validation. [The T05 union optimization](ADR-017-shacl-validation-union.md) indexes all SPO triples
+in one temporary validation graph, preserving the same shapes and canonical named evidence.
+Bounded public experiments measured substantial cold-path improvement, alongside about 1.3 GiB
+RSS at 10,000 unique-node facts. They do not reproduce the private consumer's overall timeout.
+Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
+engine, graph database or validation-result cache is introduced by this focused release.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |

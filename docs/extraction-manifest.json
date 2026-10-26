@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "897f14e438ff7e639f8a906c21fa8e436285180ef05dc6f3c5f73bb94c586ed6"
+      "destinationSha256": "7bec3db8308738f9ba7a0fd45f721af026092825012505e1b8528a59740ba9dc"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "5b5d4c4715f453ef0f5bb4c9640cf3dd5e8a3c6075197b6dcdd25c801cbf0f73"
+      "destinationSha256": "5d68e9efc168600f8daaef5e1f34911990257972acc100e91875dcb194ef7cc2"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/accelerate-full-shacl-validation.md",
     ".changeset/config.json",
     ".changeset/preview-semantic-hydration.md",
     ".changeset/release-plan.json",
@@ -610,6 +611,7 @@
     "docs/ADR-014-routing-declarations.md",
     "docs/ADR-015-repository-document-identity.md",
     "docs/ADR-016-hydration-preview.md",
+    "docs/ADR-017-shacl-validation-union.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -702,6 +704,7 @@
     "reviewed-licenses.json",
     "runtime-check.d.mts",
     "runtime-check.mjs",
+    "scripts/benchmark-shacl.mjs",
     "scripts/check-release-plan.mjs",
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
@@ -766,6 +769,7 @@
     "src/graph/ranking.test.ts",
     "src/graph/ranking.ts",
     "src/graph/rdf.ts",
+    "src/graph/shacl-shapes.ts",
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/doctor.ts",
     "src/interfaces/hydration-plan.test.ts",
@@ -787,6 +791,7 @@
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
     "tests/semantic-identity.test.ts",
+    "tests/shacl-validation.test.ts",
     "tests/snapshot-lifecycle.test.ts"
   ],
   "publicationAuthorization": {
