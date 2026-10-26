@@ -41,8 +41,9 @@ artifacts can survive changes to timeout/retry/concurrency/document/byte limits 
 retain their full configuration identity. Exact legacy reads and explicit no-model adoption
 preserve prior artifacts; custom providers remain conservative.
 [T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) add safe failure reports, opaque source
-mapping and accurate settled progress without changing extraction/cache identity. T04 validation
-is recorded separately before merge or release. Broader T05 and T06/T07 work remain open.
+mapping and accurate settled progress without changing extraction/cache identity. T04 is merged
+with local and hosted Ubuntu/Windows checks passing; release remains pending. Broader T05 and
+T06/T07 work remain open.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |

@@ -40,11 +40,17 @@ artifact keys, source/assertion authority, timeout defaults or graph validation.
   remains visible. No rule, baseline or exception was changed; line count is not proof of
   modularity or a product violation.
 - Independent review found no remaining blocker. All 79 original source path/hash pairs are
-  unchanged. Hosted checks and source merge will be recorded after completion.
+  unchanged. [PR 25](https://github.com/jchewitt/weftlet/pull/25) merged at
+  `a919b82eab35808985d5c497bbe59ccfcba8bfcb`. Exact feature head
+  `a755dcdd2c0f97a7507f02f64b907a231162bf78` passed hosted Ubuntu and native Windows checks
+  in [push run 40417172248](https://github.com/jchewitt/weftlet/actions/runs/40417172248)
+  and [PR run 40417209468](https://github.com/jchewitt/weftlet/actions/runs/40417209468).
+  Both runs completed successfully; the Windows suite includes the new application/CLI failure
+  tests and existing provider/process tests, plus inventory and license checks.
 
 These checks use public deterministic fixtures and local child processes, not live models or
 private consumer data. Genuine consumer acceptance remains separate. Native Windows is covered
-by the hosted workflow once recorded; the local run is Linux/Node 24.19.0/pnpm 10.18.2.
+by the hosted runs above; the local run is Linux/Node 24.19.0/pnpm 10.18.2.
 Published packages remain at 0.3.0 at this checkpoint. Broader T05, T06 and T07 remain separate
 1.0 increments.
 
