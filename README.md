@@ -9,6 +9,7 @@ boundaries. See the [roadmap](docs/ROADMAP.md) and [validation](docs/VALIDATION.
 supported capabilities and limitations.
 For a first real-project evaluation, use the [private consumer trial](docs/CONSUMER-TRIAL.md)
 to retain reproducible queries, logs and human-reviewed findings.
+Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
 
 ## Set up a project
 
