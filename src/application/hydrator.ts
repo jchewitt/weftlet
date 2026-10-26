@@ -16,7 +16,7 @@ import { contractPatternRoots } from "../repository/glob.js";
 import type { OntologyCompiler } from "../extraction/ontology.js";
 import type { SemanticHydrator } from "../extraction/semantic.js";
 import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
-import { repositoryFileExtractorIdentity } from '../extraction/static.js';
+import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from '../extraction/static.js';
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { repositoryNodeIdentityVersion } from '../extraction/repository-nodes.js';
@@ -28,6 +28,7 @@ import { extractRoutingDeclarations, routingExtractorIdentity } from '../extract
 import { SemanticProviderError } from '../extraction/semantic-process.js';
 import { hydrateSemanticSources, type HydrationProgressEvent } from './semantic-run.js';
 export type { HydrationProgressEvent } from './semantic-run.js';
+import { graphAssemblyVersion, graphAssemblyIdentity } from './extraction-identity.js';
 
 export interface HydrationOptions {
   readonly signal?: AbortSignal;
@@ -139,7 +140,9 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v6', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
+    const effectiveSuffix = [`graph-v${graphAssemblyVersion}`, `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
+      `contracts-${repositoryContractExtractorIdentity.version}`,
+      `symbols-${scipSymbolExtractorIdentity.version}`,
       ...(config.routingSources?.length ? [`routes-${routingExtractorIdentity.version}`] : []),
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
@@ -274,7 +277,9 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
-          assembly: 'standalone-graph-v6',
+          assembly: graphAssemblyIdentity,
+          [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
+          [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
           'repository-node-identity': String(repositoryNodeIdentityVersion),
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           ...(config.routingSources?.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}),

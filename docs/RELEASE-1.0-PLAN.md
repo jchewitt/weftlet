@@ -1,6 +1,8 @@
 # Consumer hardening and the 1.0 release plan
 
 Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.3.0 publication.
+**New adoption blocker: T08, deterministic physical-file kind conflicts.** This takes release
+priority over the remaining planned increments; T04 was completed first as requested.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
 genuine consumer acceptance remains pending. T02 and T05's focused cold-validation optimization
 shipped in 0.3.0. T03 and T04 are implemented in development source after that release. Broader T05
@@ -34,6 +36,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
+| **T08** | Canonical physical-file kinds and public adapter factory | **Blocking fix passes local publication checks; hosted checks/release pending** | Neutral contract consumers conflict with test Evidence; consumer framework migration remains separately required |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
@@ -48,6 +51,25 @@ Registry archives match the independently reviewed export; source commit, proven
 tags are recorded in [validation](VALIDATION.md). T03, T04, T06 and T07 remain independently
 useful increments, separate from the optional platform work. A genuine consumer hydration and
 repeat against the current release remain required; upstream fixtures do not establish that result.
+
+## T08 — Resolve deterministic physical-file kind conflicts
+
+The consumer reports 120 IDs reproduced by actual 0.3.0 deterministic producers: 34 neutral
+contract-only, 57 local-framework-only and 29 overlapping. This is separate from T01's repository
+document identity defect and does not diagnose semantic-cache corruption or business-rule drift.
+
+[ADR 020](ADR-020-canonical-physical-file-producers.md) records the public core factory, producer
+audit, deterministic version changes and preserved semantic-cache boundary. The upstream fix
+routes physical-file producers through one policy, preserves strict SHACL/provenance/authority,
+and distinguishes historical graph versions from current validation. Public tests include real
+SCIP and actual extractor composition, plus negative overlay validation without routing.
+
+Release requires local publication checks, hosted Ubuntu/Windows checks, reviewed archives and
+fresh installed-package verification. Consumer acceptance then requires the published packages
+plus its own framework adapter migration and composed Prisma/DI/decorator spec/test regressions,
+followed by full hydration and repeat reuse. Neither an upstream-only release nor a local-only
+adapter patch closes both ownership boundaries. Do not rewrite semantic caches or force model
+work to work around the proven deterministic defect.
 
 ## T01 — Resolve repository-document identity conflicts
 

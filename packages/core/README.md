@@ -8,4 +8,22 @@ AI development agents.
 The core package has no runtime dependencies. Install `@weftlet/toolkit` for the CLI,
 MCP server, extraction, storage and graph queries.
 
+Repository adapters should construct physical-file nodes with the public factory:
+
+```ts
+import { repositoryFileNode } from '@weftlet/core';
+
+const file = repositoryFileNode('src/worker.spec.ts');
+// { id: 'component:file:src/worker.spec.ts', label: 'src/worker.spec.ts', kind: 'Evidence' }
+```
+
+Markdown/MDX/text documents use `document:<path>` and `Document`; `.spec.<extension>` and
+`.test.<extension>` files use `component:file:<path>` and `Evidence`; other files use that
+file prefix and `Component`. Extension matching ignores case, while path spelling is retained.
+Supply a repository-relative path using the repository's canonical spelling. This pure mapping
+does not resolve paths, read files, detect every testing convention or approve product intent.
+Keep business-concept identities separate. Adapters can add attributes without changing the
+factory's `id` or `kind`; use the same node for mocked/DI/decorator-bearing tests and production
+sources. This API is introduced after 0.3.0; it is absent from that release.
+
 Licensed under Apache-2.0; see LICENSE and NOTICE for attribution.

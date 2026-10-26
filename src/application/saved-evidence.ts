@@ -3,6 +3,7 @@ import type { GitRepository } from "../repository/git.js";
 import { MarkdownContextPackRenderer } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
 import { sha256 } from "../infrastructure/util.js";
+import { incompatibleSnapshotExtractors } from './extraction-identity.js';
 
 /** Read-side metadata; never calls an indexer, model, compiler, or refresh operation. */
 export class SavedEvidenceQueryService implements ImpactQueryService {
@@ -10,6 +11,7 @@ export class SavedEvidenceQueryService implements ImpactQueryService {
     private readonly queries: ImpactQueryService,
     private readonly repository: GitRepository,
     private readonly configurationDigest: string,
+    private readonly expectedExtractors?: Readonly<Record<string, string>>,
   ) {}
 
   async scan(request: ImpactScanRequest) {
@@ -41,12 +43,15 @@ export class SavedEvidenceQueryService implements ImpactQueryService {
       }
     }
     const excludedWorkingChanges = workingChanges.filter((path) => !capturedWorkingChanges.includes(path));
+    const incompatibleExtractors = this.expectedExtractors
+      ? incompatibleSnapshotExtractors(pack.snapshot.extractorVersions, this.expectedExtractors) : undefined;
     const evidenceState = {
       currentCommit,
       excludedWorkingChanges,
       ...(overlayFreshness ? { overlayFreshness, capturedWorkingChanges, changedSinceCapture: [...changedSinceCapture].sort() } : {}),
       stale: currentCommit !== pack.snapshot.commitSha || (overlayFreshness !== undefined && overlayFreshness !== 'current'),
       configurationMatches: pack.snapshot.configurationDigest === this.configurationDigest,
+      ...(incompatibleExtractors ? { extractionCompatible: incompatibleExtractors.length === 0, incompatibleExtractors } : {}),
       eligibleForCurrentDiffValidation: false as const,
     };
     const result = { ...pack, evidenceState };

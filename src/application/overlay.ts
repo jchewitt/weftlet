@@ -9,12 +9,13 @@ import { GitRepository } from "../repository/git.js";
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { FileSnapshotStore } from "../storage/storage.js";
 import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer,
-  repositoryFileExtractorIdentity } from "../extraction/static.js";
+  repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from "../extraction/static.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { contextPackEvidenceAuthority } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
 import { RdfEvidenceGraph } from '../graph/rdf.js';
+import { graphAssemblyIdentity } from './extraction-identity.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
@@ -67,7 +68,10 @@ export async function buildWorkingOverlay(
   // identity also binds the extractor so rebuilding an old base cannot replace an old overlay.
   const snapshotId = `${head}-overlay-${sha256(stableJson({
     baseContentDigest: base.manifest.contentDigest, overlayDigest,
+    assembly: graphAssemblyIdentity,
     repositoryFileExtractor: repositoryFileExtractorIdentity,
+    repositoryContractExtractor: repositoryContractExtractorIdentity,
+    scipSymbolExtractor: scipSymbolExtractorIdentity,
     ...(routingSources.length ? { routingExtractor: routingExtractorIdentity } : {}),
   })).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
@@ -136,7 +140,10 @@ export async function buildWorkingOverlay(
     manifest: {
       ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
       extractorVersions: { ...base.manifest.extractorVersions,
+        assembly: graphAssemblyIdentity,
         [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version,
+        [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
+        [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
         ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
       generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(routingSources.length
         ? { facts: allFacts, diagnostics: extracted.diagnostics } : allFacts)),
@@ -152,8 +159,8 @@ export async function buildWorkingOverlay(
     ],
     diagnostics: extracted.diagnostics,
   };
-  if (routingSources.length && !(await new RdfEvidenceGraph(overlay).validate()).conforms) {
-    throw new Error('Draft routing overlay failed SHACL validation; saved evidence was preserved');
+  if (!(await new RdfEvidenceGraph(overlay).validate()).conforms) {
+    throw new Error('Draft overlay failed SHACL validation; saved evidence was preserved');
   }
   if (await repository.resolveRef('HEAD') !== head) throw new Error('HEAD changed during overlay capture; retry');
   await store.write(overlay);

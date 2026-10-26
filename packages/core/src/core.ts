@@ -223,7 +223,8 @@ export interface ImpactScanRequest {
 }
 
 export interface ContextPack {
-  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest' | 'overlayCapture'>;
+  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest' | 'overlayCapture'> &
+    Partial<Pick<SnapshotManifest, 'extractorVersions'>>;
   readonly evidenceState?: {
     readonly currentCommit?: string;
     readonly excludedWorkingChanges: readonly string[];
@@ -232,6 +233,8 @@ export interface ContextPack {
     readonly overlayFreshness?: 'current' | 'stale' | 'unknown';
     readonly stale: boolean;
     readonly configurationMatches: boolean;
+    readonly extractionCompatible?: boolean;
+    readonly incompatibleExtractors?: readonly string[];
     readonly eligibleForCurrentDiffValidation: false;
   };
   readonly capabilities: readonly GraphNode[];

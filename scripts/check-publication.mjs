@@ -86,6 +86,7 @@ try {
         'dist/application/hydration-plan.js', 'dist/application/cache-adoption.js',
         'dist/application/semantic-artifact-store.js', 'dist/application/semantic-scope.js',
         'dist/application/semantic-run.js', 'dist/application/hydration-failure.js',
+        'dist/application/extraction-identity.js',
         'dist/extraction/semantic-diagnostics.js',
         'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
@@ -98,6 +99,10 @@ try {
       ]) {
         if (!entries.includes(`package/${asset}`)) throw new Error(`Missing runtime asset: ${asset}`);
       }
+    }
+    if (expectedName === '@weftlet/core' && (!entries.includes('package/dist/repository-nodes.js') ||
+      !entries.includes('package/dist/repository-nodes.d.ts') || Object.keys(manifest.dependencies ?? {}).length)) {
+      throw new Error('Core must include the public physical-file factory without runtime package dependencies');
     }
     if (entries.some((entry) => /(?:^|\/)(?:\.git|\.env|\.context-graph|node_modules)(?:\/|$)/.test(entry))) {
       throw new Error('Archive contains forbidden local state');
@@ -237,19 +242,29 @@ try {
   const toolkitModule = pathToFileURL(
     join(consumer, 'node_modules', '@weftlet', 'toolkit', 'dist', 'index.js'),
   ).href;
+  await writeFile(join(consumer, 'adapter-core.mjs'),
+    "import { repositoryFileNode } from '@weftlet/core';\nexport const adapterFileNode = path => ({ ...repositoryFileNode(path), attributes: { adapter: 'public-fixture' } });\n");
   await writeFile(
     join(consumer, 'smoke.mjs'),
     `import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor } from ${JSON.stringify(staticModule)};
+import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor, RepositoryContractExtractor } from ${JSON.stringify(staticModule)};
+import { repositoryFileNode } from '@weftlet/core';
+import { adapterFileNode } from './adapter-core.mjs';
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
+if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
+    repositoryFileNode('src/consumer.ts').kind !== 'Component' ||
+    repositoryFileNode('intent.md').id !== 'document:intent.md' ||
+    adapterFileNode('test/contract.test.ts').kind !== 'Evidence') {
+  throw new Error('Installed public core factory must preserve adapter/neutral physical-file identity');
+}
 const context = {
   repositoryRoot: root,
   repositoryId: 'publication-smoke',
@@ -306,7 +321,14 @@ if (routing.facts.length !== 2 || routing.diagnostics.length ||
     routing.facts.some((fact) => fact.authority !== 'inferred' || fact.extractionReview !== 'deterministic')) {
   throw new Error('Installed routing declarations did not retain explicit bindings and evidence authority');
 }
-const facts = [...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts];
+const contractFacts = await new RepositoryContractExtractor(new GitRepository(root), ['src/contract.ts'],
+  ['src', 'test'], { 'src/contract.ts': ['@fixture/contracts', './contract.js'] }).extract(context);
+const testConsumer = contractFacts.find(fact => fact.predicate === 'consumes' && fact.provenance.path === 'test/contract.test.ts');
+if (testConsumer?.subject.id !== adapterFileNode('test/contract.test.ts').id ||
+    testConsumer.subject.kind !== 'Evidence' || testConsumer.extractor.version !== '1.2.0') {
+  throw new Error('Installed neutral contract consumer and public adapter factory must agree on test Evidence');
+}
+const facts = [...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
 const graph = new RdfEvidenceGraph(snapshot);
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');

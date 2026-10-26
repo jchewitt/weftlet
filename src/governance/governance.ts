@@ -3,10 +3,13 @@ import { tmpdir } from 'node:os';
 import { isAbsolute, join, relative, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import type { GraphFact, GraphSnapshot } from "@weftlet/core";
+import { repositoryFileNode } from '@weftlet/core';
 import { GitRepository } from "../repository/git.js";
 import { RdfEvidenceGraph, CG, nodeIri } from "../graph/rdf.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { runProcess } from "../infrastructure/process.js";
+
+const architectureAnalyzerVersion = '3';
 
 export interface ArchitecturePolicy {
   schemaVersion: 1;
@@ -104,11 +107,11 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
         const lines = content.split('\n');
         facts.push({
           id: sha256(stableJson({ from: module.source, to: dependency.resolved, digest: inputs[module.source] })),
-          subject: { id: `component:file:${module.source}`, kind: 'Component', label: module.source,
+          subject: { ...repositoryFileNode(module.source),
             attributes: membership[0] ? { domain: membership[0].domain, layer: membership[0].layer,
               module: membership[0].id, adapter: Boolean(membership[0].adapter) } : {} },
           predicate: 'consumes',
-          object: { id: `component:file:${dependency.resolved}`, kind: 'Component', label: dependency.resolved },
+          object: repositoryFileNode(dependency.resolved),
           provenance: { path: module.source, startLine: 1, endLine: lines.length, digest: inputs[module.source]!, commitSha },
           extractor: { id: 'dependency-cruiser', version: '18.7.0' }, confidence: 1,
           authority: dirtyPaths.has(module.source) ? 'draft' : 'implemented', snapshotId: 'pending',
@@ -145,7 +148,7 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
       attributes: { domain: module.domain, layer: module.layer, adapter: Boolean(module.adapter) } };
     addPolicyFact(node, 'governedBy', { id: `layer:${module.layer}`, kind: 'Scope', label: module.layer });
     for (const path of Object.keys(inputs).filter((path) => new RegExp(module.path).test(path))) {
-      addPolicyFact(node, 'contains', { id: `component:file:${path}`, kind: 'Component', label: path });
+      addPolicyFact(node, 'contains', repositoryFileNode(path));
     }
   }
   for (const contract of policy.contracts ?? []) {
@@ -154,14 +157,16 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
   }
   if (!Object.keys(inputs).length) add('extraction-gap', 'source-coverage', '', '', 'No source files were analyzed');
   const contentDigest = sha256(stableJson({ inputs, policyDigest, commitSha, dirtyPaths: [...dirtyPaths].sort(),
-    tools: { dependencyCruiser: '18.7.0', eslint: '10.13.0', jscpd: '5.4.1', analyzer: '2' } }));
+    tools: { dependencyCruiser: '18.7.0', eslint: '10.13.0', jscpd: '5.4.1', analyzer: architectureAnalyzerVersion } }));
   const snapshotId = `architecture-${contentDigest}`;
   const snapshot: GraphSnapshot = {
     manifest: {
       schemaVersion: 1, repositoryId: 'architecture-analysis', ref: 'HEAD', commitSha, snapshotId,
       configurationDigest: policyDigest, scope: policy.roots, contentDigest,
       ...(dirtyPaths.size ? { baseSha: commitSha, overlayDigest: contentDigest } : {}),
-      ontologyVersion: 'architecture-v1', extractorVersions: { 'dependency-cruiser': '18.7.0' },
+      ontologyVersion: 'architecture-v1', extractorVersions: {
+        'dependency-cruiser': '18.7.0', 'architecture-analyzer': architectureAnalyzerVersion,
+      },
       semanticModel: 'none', semanticPromptVersion: 'none', generatedAt: new Date().toISOString(),
       semanticArtifactKeys: [], scipIndexDigest: '', rdfDigest: '',
     },
@@ -174,8 +179,8 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
     }`, 100_000);
     if (result.truncated) add('extraction-gap', rule.id, '', '', 'Transitive dependency query truncated');
     for (const row of result.rows) {
-      const from = modules.find((m) => nodeIri(`component:file:${m.source}`) === row.from)?.source;
-      const to = modules.find((m) => nodeIri(`component:file:${m.source}`) === row.to)?.source;
+      const from = modules.find((m) => nodeIri(repositoryFileNode(m.source).id) === row.from)?.source;
+      const to = modules.find((m) => nodeIri(repositoryFileNode(m.source).id) === row.to)?.source;
       if (from && to && new RegExp(rule.from!).test(from) && new RegExp(rule.to!).test(to)) {
         add(rule.approved ? 'rule-violation' : 'advisory', rule.id, from, to,
           'Transitive dependency inferred by SPARQL property path from source import evidence');

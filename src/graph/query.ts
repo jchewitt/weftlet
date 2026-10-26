@@ -143,6 +143,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       ] : []),
       ...(pack.evidenceState ? [
         `Stale relative to checkout: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
+        `Extraction compatibility: ${pack.evidenceState.extractionCompatible === undefined ? 'not assessed' : pack.evidenceState.extractionCompatible ? 'current' : `refresh required (${pack.evidenceState.incompatibleExtractors?.join(', ') || 'unknown versions'})`}`,
         `Excluded working changes: ${pack.evidenceState.excludedWorkingChanges.join(', ') || '(none)'}`,
         ...(pack.evidenceState.overlayFreshness ? [
           `Overlay freshness: ${pack.evidenceState.overlayFreshness}`,
@@ -365,6 +366,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         baseSha: snapshot.manifest.baseSha,
         overlayDigest: snapshot.manifest.overlayDigest,
         overlayCapture: snapshot.manifest.overlayCapture,
+        extractorVersions: snapshot.manifest.extractorVersions,
       },
       capabilities,
       facts,

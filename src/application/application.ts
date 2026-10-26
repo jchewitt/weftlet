@@ -27,6 +27,7 @@ import {
 import { OtlpJsonRuntimeEvidenceProvider } from "../extraction/telemetry.js";
 import { SnapshotChecks } from "./snapshot-checks.js";
 import { resolveConsumerModule } from "../infrastructure/module-resolution.js";
+import { requiredSnapshotExtractorVersions } from './extraction-identity.js';
 
 const emptyAdapter: ContextGraphAdapter = {
   factExtractors: [],
@@ -106,7 +107,8 @@ export async function createContextGraphApplication(configPath: string) {
   const rawQueryService = scopeResolver
     ? new PreparedImpactQueryService(snapshotStore, hydrator, scopeResolver)
     : new SnapshotImpactQueryService(snapshotStore, headName);
-  const queryService = new SavedEvidenceQueryService(rawQueryService, repository, sha256(stableJson(config)));
+  const expectedExtractors = requiredSnapshotExtractorVersions(config);
+  const queryService = new SavedEvidenceQueryService(rawQueryService, repository, sha256(stableJson(config)), expectedExtractors);
   return {
     ...loaded,
     storageRoot,
@@ -115,7 +117,7 @@ export async function createContextGraphApplication(configPath: string) {
     ontologyCompiler,
     hydrator,
     queryService,
-    snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver, sha256(stableJson(config))),
+    snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver, sha256(stableJson(config)), expectedExtractors),
     scopeResolver,
     headName,
   };

@@ -518,6 +518,7 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
     <strong>${pack.snapshot.overlayDigest ? 'DRAFT overlay' : pack.evidenceState?.stale ? 'HISTORICAL evidence' : pack.evidenceState ? 'Saved evidence at current commit' : 'Saved evidence — current checkout not assessed'}</strong>
     <p>Configuration: ${escapeXml(pack.snapshot.configurationDigest ?? 'unknown')}; ${pack.evidenceState ? (pack.evidenceState.configurationMatches ? 'matches current configuration' : 'configuration mismatch') : 'configuration match unknown'}.
     Scope: ${escapeXml(pack.snapshot.scope?.join(', ') ?? 'unknown')}.
+    Extraction compatibility: ${pack.evidenceState?.extractionCompatible === undefined ? 'not assessed' : pack.evidenceState.extractionCompatible ? 'current' : `refresh required (${escapeXml(pack.evidenceState.incompatibleExtractors?.join(', ') ?? 'unknown versions')})`}.
     Excluded working paths: ${pack.evidenceState?.excludedWorkingChanges.length ?? 'unknown'}.
     ${pack.snapshot.overlayDigest ? `Overlay freshness: ${escapeXml(pack.evidenceState?.overlayFreshness ?? 'unknown')}.` : ''}
     This view does not validate the current diff.</p>
