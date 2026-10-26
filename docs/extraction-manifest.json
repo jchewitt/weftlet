@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "1cb03b2eb415ac35ef7a4405d3cbb415c59717fe6d088968533e3ac51658f7fb"
+      "destinationSha256": "abdee46af5297ed708e30e3bf505f2ecca48d5467b16d85843b581b539610dbb"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "0287d0640f2ff078da19be1439d02fcab22998262562d4af7b5f26ddca0839f4"
+      "destinationSha256": "00550f6cc7a8caa4120337ebc73e443b988bfdb72d05a2f828c88db502606fe3"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
-      "modified": false,
-      "destinationSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05"
+      "modified": true,
+      "destinationSha256": "d4edc3853d65cf55cd9b12ab17e3af2607f87f6d654556a25ac5253f975292ac"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "98121ce947342c73ebfa26f7d048a481669c15ba96883b146679da23f85a2037"
+      "destinationSha256": "2b92ad80a6a193b4628d4caec2bd29b6fbf3c6c97066bda2fe91ceb173d06158"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "13146dde21f8da54f98b78bc7c1a3e9bbadad0f9bd381f4088f17c63e08065bf"
+      "destinationSha256": "e163e5ec862dcceea43d8351c3c0a4d0626e870b718fc1107627ebad10874628"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -283,7 +283,7 @@
       "destinationPath": "src/extraction/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
       "modified": true,
-      "destinationSha256": "0235abe0e2a7a0cb06495027c5dc240cf5b0658faabbdc01d0006fa3b456432c"
+      "destinationSha256": "1e9a5db4bf04455fa202d48fb20ac1de268d74179034cfcfa24d845cb4736bb3"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "d3c3e4e18adb571d7b9ef5232f10173344c1f6ae126ba76e50c2e32584782709"
+      "destinationSha256": "e32e0af9596cbf036570e08033503c053a25ed401c3c999c48dab7b106274710"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "609d2a235947606245dda9f7889556d13303fd787249b443f2f57266148fa9ae"
+      "destinationSha256": "1833e788ca0c162947c626ff611f724d53f349b8d1dc019f204bd433726f9be9"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253"
+      "destinationSha256": "0cf5bf085aa71180447e7d5b35a19eba6b3e8d87cef550b8bcb996022a7618d8"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -458,14 +458,14 @@
       "destinationPath": "src/application/snapshot-checks.test.ts",
       "sourceSha256": "a16c1676f3168fcc87c1fe095c4cb164c0a8738cc3610f1a92bb54ea75267400",
       "modified": true,
-      "destinationSha256": "68853d4560c45eb34c866fb520f12e0ad15a7179df09aeb972a310c9c73f897d"
+      "destinationSha256": "c6921040f8adcea8b9c8456a8be626cdaaaa5b45fa74cde1bfc3c312f1b9e05c"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.ts",
       "destinationPath": "src/application/snapshot-checks.ts",
       "sourceSha256": "3c8e01b886d49ce8323b6275019fd503ec3bbbb21671808e228880cc0f853d07",
       "modified": true,
-      "destinationSha256": "a12370053d346ec3d4afb2afb70192d14765922b9efb1e76d9daff65291f2409"
+      "destinationSha256": "db0d088932820a3e34af3b71e3722e0b6e4bd1e0b7d04534bd806ff79cd0811f"
     },
     {
       "sourcePath": "tools/context-graph/src/static.test.ts",
@@ -479,7 +479,7 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "94190f11651b21372b2c3a834e30cde5d333893bfad0b66755e5f698608d2fdb"
+      "destinationSha256": "99147784d567ff9ccf2619a5452824fb13dc7b8061fc269c1fc90b36cdd96851"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "4ab2aecae28174b79fd8a0069540da0b091dc078be1075ebde51985089d36753"
+      "destinationSha256": "e55328ba9957201c2152fcf036c8cd3eb9ce96fcbbdb93408ded2f5becd2f268"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/canonical-physical-files.md",
     ".changeset/config.json",
     ".changeset/explain-semantic-failures.md",
     ".changeset/release-plan.json",
@@ -614,6 +615,7 @@
     "docs/ADR-017-shacl-validation-union.md",
     "docs/ADR-018-operational-semantic-cache.md",
     "docs/ADR-019-semantic-failure-diagnostics.md",
+    "docs/ADR-020-canonical-physical-file-producers.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -701,6 +703,8 @@
     "examples/pipeline/tsconfig.json",
     "mcp-launcher.mjs",
     "packages/core/CHANGELOG.md",
+    "packages/core/src/repository-nodes.test.ts",
+    "packages/core/src/repository-nodes.ts",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
     "reviewed-licenses.json",
@@ -739,6 +743,7 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/extraction-identity.ts",
     "src/application/hydration-failure.ts",
     "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
@@ -774,6 +779,7 @@
     "src/extraction/semantic-sources.ts",
     "src/governance/governance.test.ts",
     "src/governance/governance.ts",
+    "src/governance/physical-file-kinds.test.ts",
     "src/graph/authority.ts",
     "src/graph/ranking.test.ts",
     "src/graph/ranking.ts",
@@ -796,9 +802,11 @@
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/extractor-compatibility.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/module-boundaries.test.ts",
+    "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf.test.ts",
     "tests/routing.test.ts",

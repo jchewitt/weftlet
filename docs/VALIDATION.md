@@ -8,6 +8,51 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T08 deterministic physical-file kinds, 2026-10-26
+
+Implemented after 0.3.0; this checkpoint does not claim npm publication or private consumer
+acceptance. [ADR 020](ADR-020-canonical-physical-file-producers.md) separates the neutral fix from
+the consumer-owned framework adapter migration. The reported 120-ID partition is consumer
+evidence; the upstream tests below are independent public reproductions, not that private replay.
+
+- Local `pnpm context-graph:publication-check` passed: 384 deterministic tests (17 core,
+  367 toolkit), one optional OML skip, 13 advisory architecture findings, inventory, licenses and
+  fresh packed-consumer checks. No rule, baseline, exception or SHACL shape was relaxed.
+- Sixteen new core cases verify the exported pure physical-file mapping, exact path spelling,
+  document/test/production distinctions and absence of inferred existence or intent. The package
+  retains no runtime package dependencies. Its public JS/declaration assets are required in the archive.
+- Three public composition cases use actual file and contract extraction from committed Prisma
+  schema/production/spec/test/Markdown consumers, actual bundled SCIP indexing and document links.
+  They assert exact retained citations/digests, confidence, authority and conceptual contract IDs.
+  A kind-only historical control restores the old Component label on an actual test-consumer fact
+  and fails strict SHACL; unchanged current producer output conforms. This control is not claimed
+  as execution of the installed 0.3.0 package. A public adapter-shaped fixture imports only core's
+  factory for its physical nodes; it is not the private framework implementation.
+- The overlay case reindexes real source changes without routing configured, retains canonical
+  kinds/draft authority, and proves its new identity differs from the frozen 0.3.0 formula.
+  A separately labeled retained-inference fixture still fails strict SHACL when incompatible;
+  previous heads, snapshots and assertion bytes remain intact. It is neither rewritten nor suppressed.
+- Routing and governance regressions compose real producer facts with neutral extraction and
+  strict SHACL. They retain routing binding IDs, provenance/authority and architectural attributes;
+  document endpoints join canonical Document identities, test files remain Evidence, and business
+  module/contract identities stay separate. Governance analyzer 3 differs from the frozen prior ID.
+- Twelve compatibility cases reject old/missing assembly, contract, SCIP-fact and configured
+  routing metadata for current validation. Production application tests still query historical
+  facts unchanged at the same commit/configuration, label extraction incompatibility separately
+  from checkout staleness, and invoke no provider, indexer, hydration or graph refresh.
+- Existing hydration/reuse/rename/delete tests pass with graph-v7 and preserve older snapshot
+  records. Semantic artifact/provider/prompt identity stays unchanged; no model call or private
+  cache rewrite is required by this deterministic fix. Non-document model kinds remain unreviewed
+  assertions and can still fail strict SHACL; this increment does not silently reinterpret them.
+- Fresh packed installation checks a public `@weftlet/core` adapter import against actual neutral
+  contract test-consumer facts, strict SHACL, real SCIP, RDF/SPARQL projection, CLI/npx and MCP.
+  Independent review found no remaining blocker. All 79 original source path/hash pairs are intact.
+
+Hosted checks, merge and publication are recorded after completion. No private application files
+or installed consumer packages were modified. The consumer must upgrade both released packages,
+migrate/version its framework extractor, run composed adapter tests, then complete full hydration
+and repeat acceptance before its adoption blocker can be declared resolved.
+
 ## T04 semantic failure diagnostics, 2026-10-26
 
 Implemented in development source after 0.3.0; no new npm publication is claimed.

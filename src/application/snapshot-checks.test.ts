@@ -3,10 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { GraphSnapshot } from "@weftlet/core";
 import { SnapshotChecks } from "./snapshot-checks.js";
+import { requiredSnapshotExtractorVersions } from './extraction-identity.js';
 
 function fixture({ agent = true, stale = false, missing = false } = {}) {
   const snapshot = {
-    manifest: { commitSha: stale ? 'old' : 'head' },
+    manifest: { commitSha: stale ? 'old' : 'head', extractorVersions: requiredSnapshotExtractorVersions() },
     invariants: [],
   } as unknown as GraphSnapshot;
   const readHead = vi.fn(async () => (missing ? undefined : snapshot));

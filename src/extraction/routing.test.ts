@@ -4,10 +4,13 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { promisify } from 'node:util';
 import { describe, expect, it } from 'vitest';
-import type { ExtractionContext } from '@weftlet/core';
+import type { ExtractionContext, GraphSnapshot, SemanticArtifact } from '@weftlet/core';
 import { GitRepository } from '../repository/git.js';
-import { sha256 } from '../infrastructure/util.js';
+import { sha256, stableJson } from '../infrastructure/util.js';
 import { extractRoutingDeclarations, routingExtractorIdentity } from './routing.js';
+import { RepositoryFileExtractor } from './static.js';
+import { linkSemanticDocuments } from './document.js';
+import { CG, nodeIri, RdfEvidenceGraph } from '../graph/rdf.js';
 
 const route = { id: 'archive', scope: 'parcel/dev', channel: 'dispatch.completed.v1',
   producer: 'src/executor.ts', consumer: 'services/archive.ts' };
@@ -42,6 +45,67 @@ async function withRepository(
 }
 
 describe('committed routing declarations', () => {
+  it('joins document, test and production endpoints with actual neutral file and document facts', async () => {
+    const documentPath = 'docs/dispatch.md';
+    const documentContent = '# Dispatch\n[Spec](../tests/archive.spec.ts)\n[Worker](../src/executor.ts)\n';
+    const routes = [
+      { ...route, id: 'handbook', producer: documentPath, consumer: 'src/executor.ts' },
+      { ...route, id: 'spec', consumer: 'tests/archive.spec.ts' },
+      { ...route, id: 'test', producer: 'tests/archive.test.ts', consumer: documentPath },
+    ];
+    const content = manifest(routes);
+    await withRepository({ 'routing.json': content, [documentPath]: documentContent,
+      'tests/archive.spec.ts': 'export const specification = true;\n',
+      'tests/archive.test.ts': 'export const test = true;\n',
+    }, async (repository, context) => {
+      const routing = await extractRoutingDeclarations(repository, context, ['routing.json']);
+      const files = await new RepositoryFileExtractor(repository, ['src', 'services', 'tests'], 'fixture-index').extract(context);
+      const source = { path: documentPath, content: documentContent, digest: sha256(documentContent), stableSemanticId: documentPath };
+      const sourceSpan = { path: documentPath, startLine: 1, endLine: 4, digest: source.digest, commitSha: context.commitSha };
+      const artifact: SemanticArtifact = { key: 'empty-public-artifact', stableSemanticId: source.stableSemanticId,
+        source: sourceSpan, sourceDigest: source.digest, promptVersion: 'none', extractorVersion: 'none',
+        modelIdentity: 'none', adapterVersion: 'none', ontologyVersion: 'none', facts: [], oml: '',
+        unresolvedMappings: [], rawModelOutput: '{}', outputDigest: sha256('{}') };
+      const documents = linkSemanticDocuments(context, [{ source, artifact }], await repository.listAllFilesAt(context.commitSha));
+      const facts = [...routing.facts, ...files, ...documents.facts];
+      expect(routing.diagnostics).toEqual([]);
+      expect(routing.facts).toHaveLength(6);
+      expect(documents.facts).toHaveLength(2);
+      for (const [id, kind] of [['document:docs/dispatch.md', 'Document'],
+        ['component:file:tests/archive.spec.ts', 'Evidence'], ['component:file:tests/archive.test.ts', 'Evidence'],
+        ['component:file:src/executor.ts', 'Component']] as const) {
+        const matching = facts.flatMap((fact) => [fact.subject, fact.object]).filter((node) => node.id === id);
+        expect(matching.length).toBeGreaterThan(1);
+        expect(new Set(matching.map((node) => node.kind))).toEqual(new Set([kind]));
+      }
+      expect(facts.flatMap((fact) => [fact.subject.id, fact.object.id])).not.toContain('component:file:docs/dispatch.md');
+      const bindingIds = routing.facts.filter((fact) => fact.predicate === 'emits').map((fact) => fact.object.id).sort();
+      expect(bindingIds).toEqual(routes.map((item) => `workflow:routing:${sha256(stableJson({
+        repositoryId: context.repositoryId, scope: item.scope, id: item.id,
+      }))}`).sort());
+      for (const fact of routing.facts) expect(fact).toMatchObject({
+        extractor: { id: 'routing-declaration-extractor', version: '1.1.0' }, confidence: 1,
+        authority: 'inferred', sourceAuthority: 'inferred', extractionReview: 'deterministic',
+        provenance: { path: 'routing.json', startLine: 1, endLine: content.split('\n').length,
+          digest: sha256(content), commitSha: context.commitSha },
+      });
+      const snapshot: GraphSnapshot = { manifest: { schemaVersion: 1, repositoryId: context.repositoryId,
+        commitSha: context.commitSha, ref: context.ref, snapshotId: context.snapshotId,
+        contentDigest: sha256(stableJson(facts)), ontologyVersion: 'rdf-v1', extractorVersions: {},
+        semanticModel: 'none', semanticPromptVersion: 'none', generatedAt: '2026-01-01T00:00:00Z',
+        semanticArtifactKeys: [], scipIndexDigest: '', rdfDigest: '' }, facts,
+        invariants: [], runtimeEvidence: [], unresolved: [] };
+      const graph = new RdfEvidenceGraph(snapshot);
+      expect(await graph.validate()).toMatchObject({ conforms: true, issues: [] });
+      expect(await graph.facts()).toEqual(facts);
+      const joined = await graph.select(`SELECT ?endpoint WHERE {
+        <${nodeIri('document:docs/dispatch.md')}> <${CG}references> <${nodeIri('component:file:tests/archive.spec.ts')}>;
+          <${CG}emits>/<${CG}routesThrough> ?endpoint
+      }`);
+      expect(joined.rows).toEqual([{ endpoint: nodeIri('component:file:src/executor.ts') }]);
+    });
+  });
+
   it('extracts exact cited bindings with inferred authority while ignoring dirty declarations', async () => {
     const content = manifest([route]);
     await withRepository({ 'routing.json': content }, async (repository, context) => {
@@ -196,7 +260,7 @@ describe('committed routing declarations', () => {
       expect(draft.facts).toEqual([]);
       expect(draft.referencedPaths).toEqual([]);
       expect(draft.diagnostics).toEqual([expect.objectContaining({ kind: 'implementationGaps', provenance: [],
-        relatedNodeIds: ['document:missing.json'], reason: expect.stringContaining('absent from this draft') })]);
+        relatedNodeIds: ['component:file:missing.json'], reason: expect.stringContaining('absent from this draft') })]);
       expect(await extractRoutingDeclarations(new GitRepository('/not-a-repository'), context, [])).toEqual({
         facts: [], diagnostics: [], referencedPaths: [],
       });

@@ -4,7 +4,7 @@ import type {
 } from '@weftlet/core';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { documentReferences, resolveDocumentReference } from './document-references.js';
-import { repositoryFileNode as fileNode } from './repository-nodes.js';
+import { repositoryFileNode as fileNode } from '@weftlet/core';
 
 export const documentLinkerIdentity = { id: 'document-linker', version: '2.0.0' } as const;
 

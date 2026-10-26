@@ -45,6 +45,12 @@ mapping and accurate settled progress without changing extraction/cache identity
 with local and hosted Ubuntu/Windows checks passing; release remains pending. Broader T05 and
 T06/T07 work remain open.
 
+A subsequent 0.3.0 consumer report makes [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md)
+the next release priority. Its neutral contract consumer fix and public core factory are implemented
+with deterministic producer adoption and version guards; validation/publication are recorded
+separately. The consumer's framework adapter migration and full acceptance remain consumer-owned.
+This fix preserves semantic artifacts and does not reinterpret model assertions to hide conflicts.
+
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
 | 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |

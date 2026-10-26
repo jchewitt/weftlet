@@ -63,6 +63,8 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   expect(first.facts.some((fact) => fact.provenance.path === 'src/contract.ts')).toBe(true);
   expect(first.manifest.extractorVersions).toEqual({
     'repository-file-extractor': '2.0.0', 'fixture-source': 'original',
+    assembly: 'standalone-graph-v7', 'repository-contract-extractor': '1.2.0',
+    'scip-symbol-extractor': '1.1.0',
   });
   if (!sourceProject) {
     const imports = first.facts.filter((fact) => fact.extractor.id === 'repository-file-extractor' &&
@@ -76,6 +78,11 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   // must coexist with a current extraction, including when the base advertises version 1.
   const priorOverlayId = `${sha}-overlay-${sha256(base.manifest.contentDigest + first.manifest.overlayDigest).slice(0, 32)}`;
   expect(first.manifest.snapshotId).not.toBe(priorOverlayId);
+  const version03OverlayId = `${sha}-overlay-${sha256(stableJson({
+    baseContentDigest: base.manifest.contentDigest, overlayDigest: first.manifest.overlayDigest,
+    repositoryFileExtractor: { id: 'repository-file-extractor', version: '2.0.0' },
+  })).slice(0, 32)}`;
+  expect(first.manifest.snapshotId).not.toBe(version03OverlayId);
   expect(first.manifest.overlayDigest).toBe(sha256(stableJson({ version: 2, ...first.manifest.overlayCapture })));
   const priorOverlay: GraphSnapshot = { ...first,
     manifest: { ...first.manifest, snapshotId: priorOverlayId, contentDigest: 'prior-overlay',

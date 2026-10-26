@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ExtractionContext, FactExtractor, GraphFact } from "@weftlet/core";
+import { repositoryFileNode, type ExtractionContext, type FactExtractor, type GraphFact, type GraphNode } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { assertScipSourceProject, assertSourceProjectInvocation } from '../configuration/scip-project.js';
 import { prepareScipSourceProject } from './scip-project.js';
@@ -143,11 +143,7 @@ interface ScipSite {
   readonly path: string;
   readonly line: number;
   readonly digest: string;
-  readonly component: {
-    readonly id: string;
-    readonly kind: 'Evidence' | 'Component';
-    readonly label: string;
-  };
+  readonly component: GraphNode;
 }
 
 interface ScipSymbolSites {
@@ -155,8 +151,10 @@ interface ScipSymbolSites {
   readonly references: Map<string, ScipSite>;
 }
 
+export const scipSymbolExtractorIdentity = { id: 'scip-symbol-extractor', version: '1.1.0' } as const;
+
 export class ScipSymbolExtractor implements FactExtractor {
-  readonly identity = { id: 'scip-symbol-extractor', version: '1.0.0' };
+  readonly identity = scipSymbolExtractorIdentity;
 
   constructor(
     private readonly repository: GitRepository,
@@ -170,13 +168,7 @@ export class ScipSymbolExtractor implements FactExtractor {
       const path = document.relative_path.replace(/\\/g, '/');
       const content = await this.repository.readFileAt(context.commitSha, path);
       const digest = sha256(content);
-      const component = {
-        id: `component:file:${path}`,
-        kind: (/\.(spec|test)\.[^.]+$/i.test(path) ? 'Evidence' : 'Component') as
-          | 'Evidence'
-          | 'Component',
-        label: path,
-      };
+      const component = repositoryFileNode(path);
       for (const occurrence of document.occurrences) {
         if (!occurrence.symbol || occurrence.symbol.startsWith('local ')) continue;
         const definition = (occurrence.symbol_roles & 1) === 1;
@@ -263,11 +255,7 @@ export class RepositoryFileExtractor implements FactExtractor {
       const content = await this.repository.readFileAt(context.commitSha, path);
       const digest = sha256(content);
       const component = {
-        id: `component:file:${path}`,
-        kind: (/\.(spec|test)\.[^.]+$/i.test(path) ? 'Evidence' : 'Component') as
-          | 'Evidence'
-          | 'Component',
-        label: path,
+        ...repositoryFileNode(path),
         attributes: { scipIndexDigest: this.scipDigest },
       };
       const provenance = {
@@ -309,8 +297,10 @@ export class RepositoryFileExtractor implements FactExtractor {
   }
 }
 
+export const repositoryContractExtractorIdentity = { id: 'repository-contract-extractor', version: '1.2.0' } as const;
+
 export class RepositoryContractExtractor implements FactExtractor {
-  readonly identity = { id: 'repository-contract-extractor', version: '1.1.0' };
+  readonly identity = repositoryContractExtractorIdentity;
 
   constructor(
     private readonly repository: GitRepository,
@@ -386,11 +376,7 @@ export class RepositoryContractExtractor implements FactExtractor {
           digest: sha256(consumerContent),
           commitSha: context.commitSha,
         };
-        const consumer = {
-          id: `component:file:${match.path}`,
-          kind: 'Component' as const,
-          label: match.path,
-        };
+        const consumer = repositoryFileNode(match.path);
         facts.push({
           id: sha256(stableJson({ consumer, contract, consumerProvenance })),
           subject: consumer,

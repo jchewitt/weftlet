@@ -1,9 +1,10 @@
 import { posix } from 'node:path';
 import type { ExtractionContext, GraphDiagnostic, GraphFact, GraphNode, SourceSpan } from '@weftlet/core';
+import { repositoryFileNode as fileNode } from '@weftlet/core';
 import type { GitRepository } from '../repository/git.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
 
-export const routingExtractorIdentity = { id: 'routing-declaration-extractor', version: '1.0.0' } as const;
+export const routingExtractorIdentity = { id: 'routing-declaration-extractor', version: '1.1.0' } as const;
 
 interface RoutingDeclaration {
   readonly id: string;
@@ -73,11 +74,6 @@ function parseRoutes(content: string, path: string): readonly RoutingDeclaration
   });
 }
 
-function fileNode(path: string): GraphNode {
-  return { id: `component:file:${path}`, label: path,
-    kind: /\.(spec|test)\.[^.]+$/i.test(path) ? 'Evidence' : 'Component' };
-}
-
 /** Reads explicit mapping declarations, never infers routing from matching topic text. */
 export async function extractRoutingDeclarations(
   repository: GitRepository,
@@ -113,7 +109,7 @@ export async function extractRoutingDeclarations(
     if (!tracked.has(path)) {
       if (!options.allowMissingSources) throw new Error(`Routing source ${path} is not a committed file at ${context.commitSha}`);
       addDiagnostic(`Routing source ${path} is absent from this draft; no bindings from that source were retained.`,
-        [], [`document:${path}`]);
+        [], [fileNode(path).id]);
       continue;
     }
     if (!regular.has(path)) throw new Error(`Routing source ${path} is not a regular committed file at ${context.commitSha}`);
