@@ -3,22 +3,16 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.2.0",
-      "previousVersion": "0.1.2"
+      "version": "0.2.1",
+      "previousVersion": "0.2.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.2.0",
-      "previousVersion": "0.1.2"
+      "version": "0.2.1",
+      "previousVersion": "0.2.0"
     }
   ],
   "changesets": [
-    "cited-document-links.md",
-    "committed-source-indexing.md",
-    "explicit-routing-declarations.md",
-    "impact-evaluation-baseline.md",
-    "proximity-impact-ranking.md",
-    "relative-module-requests.md",
-    "windows-consumer-reliability.md"
+    "canonical-document-identities.md"
   ]
 }
