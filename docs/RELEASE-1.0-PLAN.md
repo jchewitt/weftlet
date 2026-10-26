@@ -1,15 +1,16 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.3.0 publication.
-**New adoption blocker: T08, deterministic physical-file kind conflicts.** This takes release
-priority over the remaining planned increments; T04 was completed first as requested.
-The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
-genuine consumer acceptance remains pending. T02 and T05's focused cold-validation optimization
-shipped in 0.3.0. T03 and T04 are implemented in development source after that release. Broader T05
-follow-ups and T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
-without expanding the consumer's migration. An official 1.0
-follows this work and genuine consumer acceptance, with its exact release scope reviewed when
-the evidence is available.
+Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.4.0 publication.
+**T08's upstream deterministic physical-file fix has shipped; consumer acceptance remains blocked
+on its framework adapter migration and genuine full hydration/repeat.** T04 was completed before
+the T08 fix as requested.
+
+The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
+shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
+T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
+shipped in 0.4.0. Broader T05 follow-ups, T06 documentation consistency and T07 document coverage
+remain open. Official 1.0 follows the agreed remaining scope and genuine consumer acceptance,
+with its exact release scope reviewed when the evidence is available.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
 remains a separate future direction for generation, approvals, a companion website and hosted
@@ -36,21 +37,22 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T08** | Canonical physical-file kinds and public adapter factory | **Merged; local and hosted Ubuntu/Windows checks passed; release pending** | Neutral contract consumers conflict with test Evidence; consumer framework migration remains separately required |
+| **T08** | Canonical physical-file kinds and public adapter factory | **Upstream fix shipped in 0.4.0; consumer adapter migration/acceptance pending** | Public core factory and neutral producers agree; consumer framework call sites and composed tests remain required |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
-| **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
-| **T04** | Actionable, privacy-safe timeout diagnostics | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
+| **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
+| **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
-T02 and the focused T05 fix passed local publication checks and hosted Ubuntu/Windows checks,
-then shipped in [0.3.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.3.0).
-Registry archives match the independently reviewed export; source commit, provenance and release
-tags are recorded in [validation](VALIDATION.md). T03, T04, T06 and T07 remain independently
-useful increments, separate from the optional platform work. A genuine consumer hydration and
-repeat against the current release remain required; upstream fixtures do not establish that result.
+T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
+[0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
+local/hosted checks, independent archive review and fresh packed/public-registry installation.
+Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
+Broader T05, T06 and T07 remain bounded follow-ups.
+The consumer must migrate its framework adapter to the public core factory, then complete full
+hydration and repeat reuse; upstream fixtures do not establish that result.
 
 ## T08 — Resolve deterministic physical-file kind conflicts
 
@@ -64,12 +66,12 @@ routes physical-file producers through one policy, preserves strict SHACL/proven
 and distinguishes historical graph versions from current validation. Public tests include real
 SCIP and actual extractor composition, plus negative overlay validation without routing.
 
-Release requires local publication checks, hosted Ubuntu/Windows checks, reviewed archives and
-fresh installed-package verification. Consumer acceptance then requires the published packages
-plus its own framework adapter migration and composed Prisma/DI/decorator spec/test regressions,
-followed by full hydration and repeat reuse. Neither an upstream-only release nor a local-only
-adapter patch closes both ownership boundaries. Do not rewrite semantic caches or force model
-work to work around the proven deterministic defect.
+The 0.4.0 release passed local publication checks, hosted Ubuntu/Windows checks, independent archive
+review and fresh packed/public-registry installation. Consumer acceptance still requires the
+published packages plus its own framework adapter migration and composed Prisma/DI/decorator
+spec/test regressions, followed by full hydration and repeat reuse.
+Neither an upstream-only release nor a local-only adapter patch closes both ownership boundaries.
+Do not rewrite semantic caches or force model work to work around the proven deterministic defect.
 
 ## T01 — Resolve repository-document identity conflicts
 
@@ -110,7 +112,8 @@ Upstream completion evidence:
   [validation record](VALIDATION.md) for commits, checks and result boundaries.
 
 The private consumer has not yet supplied a successful full hydration/repeat with the identity
-patch. Use the current 0.3.0 release, which also includes the cold-validation improvement.
+patch. Use both 0.4.0 packages and migrate the framework adapter to the public core factory;
+this release retains the cold-validation improvement and adds the T08 deterministic producer fix.
 Upstream publication and regression success do not close that acceptance gate or diagnose the
 separate full-graph validation latency observation.
 
@@ -126,9 +129,9 @@ Missing or unsupported-only selectors and bounded agent omissions remain visible
 incomplete plans need review and exit 1. They do not introduce new hydration gates that would
 break deletion of the last document. Budget, duplicate-ID and corrupt/unavailable cache errors
 block planning checks without truncating selected sources. An explicit empty source list selects
-none. Requested refs now govern agent scope; corrected snapshots use graph-v6 while valid 0.2.1
-semantic artifacts remain reusable. T03's operational cache changes and T07's traversal/default
-validation-document separation remain separate work.
+none. Requested refs govern agent scope. Release 0.3.0 introduced graph-v6; 0.4.0 advances assembly
+to graph-v7 for T08 while compatible semantic artifacts remain reusable. T03 operational cache
+reuse shipped in 0.4.0; T07 traversal/default validation-document separation remains open.
 
 Acceptance:
 
@@ -143,8 +146,8 @@ Acceptance:
 
 ## T03 — Reuse valid artifacts after operational changes
 
-Merged in [PR 22](https://github.com/jchewitt/weftlet/pull/22) after 0.3.0, with local publication
-and hosted Ubuntu/Windows checks passing. This source checkpoint does not claim npm publication.
+Shipped in 0.4.0 after merging [PR 22](https://github.com/jchewitt/weftlet/pull/22) and passing
+local publication and hosted Ubuntu/Windows checks; release evidence is in [validation](VALIDATION.md).
 [ADR 018](ADR-018-operational-semantic-cache.md) separates built-in Codex user artifacts from
 full snapshot profiles. Timeout, retry, concurrency and document/byte limits can change without
 hiding completed artifacts. Model/policy/authentication descriptors and unknown fields remain
@@ -179,8 +182,8 @@ Acceptance:
 
 ## T04 — Explain timeouts and recovery
 
-Merged in [PR 25](https://github.com/jchewitt/weftlet/pull/25) after 0.3.0, with local publication
-and hosted Ubuntu/Windows checks passing. This development checkpoint does not claim npm publication.
+Shipped in 0.4.0 after merging [PR 25](https://github.com/jchewitt/weftlet/pull/25) and passing
+local publication and hosted Ubuntu/Windows checks; release evidence is in [validation](VALIDATION.md).
 [ADR 019](ADR-019-semantic-failure-diagnostics.md) records opaque source IDs and explicit local
 preview mapping, final counts after active workers settle, safe typed errors and recovery.
 Concurrent sibling cancellation preserves the initiating failure. Completed writes stay counted

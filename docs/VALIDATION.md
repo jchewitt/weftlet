@@ -8,6 +8,62 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## 0.4.0 publication and installed-package checks, 2026-10-26
+
+`@weftlet/core@0.4.0` and `@weftlet/toolkit@0.4.0` ship T03 operational cache reuse,
+T04 semantic failure diagnostics and T08 canonical physical-file kinds. This is an upstream
+release; private consumer adapter migration and full hydration acceptance remain pending.
+
+[Release PR 23](https://github.com/jchewitt/weftlet/pull/23) merged at
+`9c6c2625ce2f5d3a28d2be40610130c745b416d4`. Trusted publishing
+[run 40421791942](https://github.com/jchewitt/weftlet/actions/runs/40421791942)
+completed preparation, publication and release records on attempt 1. Both versions are public
+and tagged `latest`; downloaded registry archives are byte-identical to the independently
+reviewed archives. npm provenance identifies that merge commit and workflow attempt. The
+[core](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/core%400.4.0) and
+[toolkit](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0)
+package tags and GitHub Releases resolve to the same commit.
+
+- Exact reviewed version head `8ea26c7f538202b4acb67ceeda6adbf220a85e93` passed
+  `pnpm release:prepare`: 384 deterministic tests (17 core, 367 toolkit), one optional OML skip,
+  13 advisory architecture findings, inventory, licenses and fresh packed-consumer checks.
+  Hosted Ubuntu and native Windows checks passed in
+  [run 40421253221](https://github.com/jchewitt/weftlet/actions/runs/40421253221).
+- Independent source/archive review found no release blocker. Core contains 13 files/8,212 bytes;
+  toolkit contains 213 files/244,424 bytes. Archive digests match the reviewed manifest; all
+  non-manifest files match the reviewed checkout. Public exports, CLI/runtime assets, Apache-2.0
+  licenses and attribution are present. Core has no runtime dependencies; toolkit requires
+  core `^0.4.0`. No forbidden local-state entries or credential-signature matches were found.
+  All 79 original extraction source path/hash pairs are unchanged.
+- A separate offline rehearsal installed those exact archives with lifecycle scripts disabled.
+  Its public fixture produced 54 facts, including four contract consumers, 24 SCIP facts and two
+  public adapter facts. Strict SHACL, immutable repeat reuse and provider-unavailable saved reads
+  passed. This rehearsal is distinct from public-registry acceptance.
+- Fresh public-registry installation passed on Linux/Node 24.19.0 with lifecycle scripts disabled.
+  Its lockfile registry URLs and SHA-512 values match the reviewed archives. The committed public
+  fixture produced 54 total facts, including two semantic facts, four contract consumers, 24 real SCIP facts,
+  two public adapter facts and nine document facts; the impact query returned 53 facts.
+  Cold hydration extracted two artifacts; repeat hydration extracted zero and reused both with
+  identical snapshot identity, content digest and stored bytes. Removing the provider module
+  preserved no-model preview and saved queries, with no additional provider invocations.
+  Fixture commit: `41d0c4fa68f7a358d52471dbbd2a6186adb22fa5`; content digest:
+  `f5a8fbde346d070074164edf970bfd98246c4e34718b43f5850757501daf50ca`.
+
+The installed-package fixture uses a deterministic public provider, actual contract/document
+extractors, real TypeScript SCIP and a public adapter that imports only the core file factory.
+It checks retained citations, digests and authority, strict RDF/SHACL, projection/query results,
+repeat artifact reuse and unchanged snapshot bytes. It makes no live model calls and does not
+establish private adapter correctness, semantic quality or the consumer's full-graph performance.
+The T03/T04 test checkpoints below remain the evidence for operational Codex cache partitioning
+and structured failure handling; ordinary fixture reuse is not a substitute for those tests.
+
+Reviewed and public archive integrity:
+
+| Package | SHA-512 integrity |
+| --- | --- |
+| `@weftlet/core@0.4.0` | `sha512-hNiLpfFaL/o+uQJlRdW+jN/cdMIY8QxTAgwTA7F1kN8f1KhHWH8qsxc4RgC8mP+4huLsWLk8m0v14xrq5prMdA==` |
+| `@weftlet/toolkit@0.4.0` | `sha512-UrHRBuz3v7Olfqk0iaSyvZ1+9xnCHMAjh0ZGj+HWde4zAR0M2zEHjeOxkyC2B2d63gPAqttlQ5kzpauRdfd0Jg==` |
+
 ## T08 deterministic physical-file kinds, 2026-10-26
 
 Implemented after 0.3.0; this checkpoint does not claim npm publication or private consumer

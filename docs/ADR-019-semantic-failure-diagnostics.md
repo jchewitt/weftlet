@@ -1,7 +1,7 @@
 # ADR-019: Safe semantic failure diagnostics and settled progress
 
-Status: implemented in development source after 0.3.0; validation and publication are recorded
-separately in [validation](VALIDATION.md). This decision does not change extraction identity.
+Status: shipped in 0.4.0; validation and publication are recorded in [validation](VALIDATION.md).
+This decision does not change extraction identity.
 
 ## Problem
 

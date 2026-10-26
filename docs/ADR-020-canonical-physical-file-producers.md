@@ -1,7 +1,7 @@
 # ADR-020: One physical-file policy for deterministic producers and adapters
 
-Status: implemented in development source after 0.3.0; release/consumer acceptance is recorded
-separately in [validation](VALIDATION.md).
+Status: upstream fix shipped in 0.4.0; release evidence and pending consumer adapter/hydration
+acceptance are recorded separately in [validation](VALIDATION.md).
 
 ## Reported defect and ownership
 
