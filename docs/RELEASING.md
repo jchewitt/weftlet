@@ -1,6 +1,17 @@
 # Weftlet npm releases
 
-`@weftlet/core@0.2.0` and `@weftlet/toolkit@0.2.0` are published through GitHub OIDC.
+`@weftlet/core@0.2.1` and `@weftlet/toolkit@0.2.1` are published through GitHub OIDC.
+[Run 40382864083](https://github.com/jchewitt/weftlet/actions/runs/40382864083) completed
+preparation, publication and release records on its first attempt at commit
+`5d1db91bf19ed493a20849b2d0f92d3aeac35dfe`. Registry archives match the reviewed archives;
+provenance and package tags identify that commit. A fresh public-registry installation passes
+the identity regression, real SCIP/RDF/SHACL, querying and repeat artifact reuse without live
+model calls. [Fix PR #15](https://github.com/jchewitt/weftlet/pull/15) and
+[release PR #16](https://github.com/jchewitt/weftlet/pull/16) record the change. Genuine consumer
+acceptance remains pending in the [1.0 plan](RELEASE-1.0-PLAN.md); detailed upstream evidence
+is in [validation](VALIDATION.md).
+
+The earlier 0.2.0 release also used GitHub OIDC.
 [Run 40344526047](https://github.com/jchewitt/weftlet/actions/runs/40344526047) completed at
 commit `ffe7f1d81f0421b35220bd7ba5b1555246c7a0e1`, including registry integrity checks,
 package tags and GitHub Releases. The first attempt published core, then toolkit publication
@@ -34,8 +45,8 @@ preparation route; native Windows has focused CI coverage. See [validation](VALI
    **before** npm publication. Do not manually bump manifests or edit the generated plan.
 4. The plan change triggers **Weftlet release**. It validates and prepares both archives, publishes
    core followed by toolkit using npm trusted publishing, then verifies registry integrity.
-5. After both versions are verified, a separate job creates tags such as `@weftlet/core@0.2.0`
-   and `@weftlet/toolkit@0.2.0`, plus corresponding GitHub Releases, at that exact source commit.
+5. After both versions are verified, a separate job creates tags such as `@weftlet/core@0.2.1`
+   and `@weftlet/toolkit@0.2.1`, plus corresponding GitHub Releases, at that exact source commit.
    Existing tags are never moved. The publication job does not commit back to main.
 
 The bot uses GitHub's built-in token, not a personal access token. GitHub may require Settings →
@@ -148,7 +159,7 @@ Package-specific tags identify the exact published source, for example:
 
 ```sh
 git fetch --tags
-git switch --detach '@weftlet/toolkit@0.2.0'
+git switch --detach '@weftlet/toolkit@0.2.1'
 ```
 
 Tags support inspection and reproduction, not mutation of npm history. To roll a consumer back,
@@ -158,8 +169,8 @@ Verify a new public release in a fresh disposable project, substituting its vers
 
 ```sh
 npm init -y
-npx --yes @weftlet/toolkit@0.2.0 init --yes
-npx --yes @weftlet/toolkit@0.2.0 config validate
+npx --yes @weftlet/toolkit@0.2.1 init --yes
+npx --yes @weftlet/toolkit@0.2.1 config validate
 ```
 
 Check registry hashes, transitive core resolution and provenance. Deprecating the previous

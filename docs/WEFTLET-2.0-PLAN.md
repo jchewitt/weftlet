@@ -1,7 +1,8 @@
 # Weftlet 2.0 product plan
 
 Status: proposed direction captured at the maintainer's request on 2026-10-26.
-Baseline: published `@weftlet/core` and `@weftlet/toolkit` **0.2.0**, with release evidence in
+Planning baseline: published `@weftlet/core` and `@weftlet/toolkit` **0.2.0**. The consumer
+identity fix has since shipped in **0.2.1**, with release evidence in
 [VALIDATION.md](VALIDATION.md). **“2.0” names this product plan; it does not announce npm
 version 2.0.0, a delivery date, or a single large release.** Changes should ship through small,
 reviewed milestones using the existing Changesets workflow.
@@ -48,15 +49,15 @@ Existing gap reports do not establish completeness of a project's business requi
 
 The maintainer supplied a consumer integration report on 2026-10-26. The
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md) records its seven items and acceptance
-criteria. First ship the blocking repository-document identity/kind fix as an isolated patch;
-then work through the other improvements toward an official 1.0. Ordinary reliability fixes
-ship independently of the companion platform described here.
+criteria. The repository-document identity/kind patch shipped in 0.2.1 and passes upstream
+regressions; genuine consumer acceptance remains pending. Work through the other improvements
+toward an official 1.0 independently of the companion platform described here.
 
 | Intake item | Status | Next action |
 | --- | --- | --- |
 | Consumer integration report | Received; task list recorded | Preserve private evidence with the consumer and use public-safe upstream reproductions |
-| Reproduction and severity | Identity/kind defect is the reported adoption blocker | Reproduce two-document conflict upstream; keep validation latency a separate investigation |
-| Fix/release mapping | Blocker patch in progress; remaining tasks planned | Release T01 first, then T02–T07 and genuine consumer acceptance before official 1.0 |
+| Reproduction and severity | Reported identity/kind blocker has a passing upstream regression | Obtain the genuine consumer re-run; keep validation latency a separate investigation |
+| Fix/release mapping | T01 upstream patch published in 0.2.1; T02–T07 remain open | Complete bounded follow-ups and genuine consumer acceptance before official 1.0 |
 
 For each finding, retain toolkit/version, repository SHA, relevant configuration and scope,
 exact command or MCP request, expected/actual behavior, logs/exit status, snapshot identity,
@@ -127,7 +128,7 @@ explicit migration ADR.
 
 | Milestone | Depends on | Deliverable and completion evidence |
 | --- | --- | --- |
-| **M0 — Consumer hardening** | Received report; [1.0 task list](RELEASE-1.0-PLAN.md) | Ship the identity/kind blocker patch first, then bounded setup/reuse/diagnostics/coverage improvements and genuine consumer acceptance. Release independently of the companion platform. |
+| **M0 — Consumer hardening** | Identity patch 0.2.1 shipped; [1.0 task list](RELEASE-1.0-PLAN.md) | Complete bounded setup/reuse/diagnostics/coverage improvements and genuine consumer acceptance. Release independently of the companion platform. |
 | **M1 — Claims, lineage and approvals** | M0 triage | Versioned records, durable derivation, revision-scoped approvals, actor trust and explicit legacy handling. Prove generated documents cannot acquire approval through paths or repeated extraction. Verify persistence/RDF/projection/query equivalence and old-snapshot readability. |
 | **M2 — Code-derived drafts** | M1 | Opt-in generation for selected TypeScript modules using existing local Codex first; structured candidate claims and Markdown rendered from those claims. Demonstrate no-doc and partial-doc fixtures with citations, unknown rationale, bounded cost, cache reuse and rename/delete invalidation. |
 | **M3 — Decisions and reconciliation** | M1–M2 | Capture explicit accepted requirements/decisions, compare changes from code and documents, distinguish scope differences from conflicts, and propose focused amendments. Demonstrate a resolved documentation disagreement with a remaining implementation gap. |
@@ -273,7 +274,7 @@ Resolve these decisions in small ADRs as their milestones approach:
 
 ## Next handoff
 
-1. Resolve and publish the identity/kind blocker patch under M0, then obtain a genuine consumer re-run.
+1. Obtain a genuine consumer re-run of the published 0.2.1 identity/kind patch under M0.
 2. Complete the remaining [1.0 tasks](RELEASE-1.0-PLAN.md) and review acceptance without waiting for the website or managed AI.
 3. Design M1's minimal records and compatibility rules, then implement M2 on bounded public fixtures.
 4. Review real extraction/review results before committing to hosted scope, paid operation or more adapters.
