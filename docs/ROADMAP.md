@@ -3,6 +3,12 @@
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
+Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
+consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
+review website, source publication, managed AI and guided setup. “2.0” is a planning label;
+the published packages remain 0.2.0. Incoming consumer integration findings take priority
+before feature implementation. The plan distinguishes proposed work from delivered capability.
+
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
 | 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |
