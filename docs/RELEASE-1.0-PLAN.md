@@ -37,7 +37,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
-| **T04** | Actionable, privacy-safe timeout diagnostics | Local publication checks passed; hosted checks pending; unreleased | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
+| **T04** | Actionable, privacy-safe timeout diagnostics | Merged; local and hosted Ubuntu/Windows checks passed; unreleased | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
@@ -157,7 +157,8 @@ Acceptance:
 
 ## T04 — Explain timeouts and recovery
 
-Implemented after 0.3.0; this development checkpoint does not claim npm publication.
+Merged in [PR 25](https://github.com/jchewitt/weftlet/pull/25) after 0.3.0, with local publication
+and hosted Ubuntu/Windows checks passing. This development checkpoint does not claim npm publication.
 [ADR 019](ADR-019-semantic-failure-diagnostics.md) records opaque source IDs and explicit local
 preview mapping, final counts after active workers settle, safe typed errors and recovery.
 Concurrent sibling cancellation preserves the initiating failure. Completed writes stay counted
