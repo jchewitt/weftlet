@@ -149,7 +149,10 @@ describe('unified evidence graph', () => {
     expect(missing.snapshot.diagnostics?.some((item) =>
       item.kind === 'implementationGaps' && item.reason.includes('src/absent.ts'))).toBe(true);
     await changeProse('# Ambiguous intent\nThe owner is ambiguous between Team A and Team B.\n');
-    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('Unresolved semantic mappings');
+    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toMatchObject({
+      code: 'unresolved', report: { category: 'extraction-gap', phase: 'semantic-validate' },
+    });
+    expect((await store.readHead('default'))?.manifest.snapshotId).toBe(missing.snapshot.manifest.snapshotId);
     await changeProse('# Contradictory identity\nThe discovery stage is classified as Contract.\n');
     await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('SHACL');
     expect((await store.readHead('default'))?.manifest.snapshotId).toBe(missing.snapshot.manifest.snapshotId);

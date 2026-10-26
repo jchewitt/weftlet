@@ -37,13 +37,18 @@ export function createSemanticExtractor(config: ContextGraphConfig['semantic'], 
           Promise.resolve().then(async () => {
             checkpoint();
             if (!extractor) {
-              const module = await import(resolveConsumerModule(modulePath, repositoryRoot)) as Partial<SemanticProviderModule>;
+              let module: Partial<SemanticProviderModule>;
+              try { module = await import(resolveConsumerModule(modulePath, repositoryRoot)) as Partial<SemanticProviderModule>; }
+              catch {
+                checkpoint();
+                throw new SemanticProviderError('unavailable', 'Semantic provider module could not be loaded');
+              }
               checkpoint();
-              if (typeof module.createSemanticExtractor !== 'function') throw new Error('Provider module must export createSemanticExtractor(config)');
+              if (typeof module.createSemanticExtractor !== 'function') throw new SemanticProviderError('unavailable', 'Provider module must export createSemanticExtractor(config)');
               const candidate = await module.createSemanticExtractor(config, { ...options, signal });
               checkpoint();
               if (candidate?.identity !== config.providerIdentity || typeof candidate.extract !== 'function') {
-                throw new Error('Provider identity/contract does not match configuration');
+                throw new SemanticProviderError('unavailable', 'Provider identity/contract does not match configuration');
               }
               extractor = candidate;
             }

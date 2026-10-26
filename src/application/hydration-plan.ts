@@ -9,6 +9,7 @@ import { semanticProviderIdentity } from '../extraction/semantic-identity.js';
 import { selectSemanticInputs, type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { resolveSemanticScope, type SemanticScope } from './semantic-scope.js';
+import { semanticSourceId } from '../extraction/semantic-diagnostics.js';
 
 export interface HydrationPlanOptions {
   readonly ref?: string;
@@ -18,6 +19,8 @@ export interface HydrationPlanOptions {
 
 export interface HydrationPlanDocument {
   readonly path: string;
+  /** Local mapping for opaque IDs in semantic progress and failure reports. */
+  readonly sourceId: string;
   readonly stableSemanticId: string;
   readonly sourceDigest: string;
   readonly bytes: number;
@@ -57,7 +60,8 @@ async function describeDocument(source: SemanticSource, selections: readonly Sem
     : await inspectSemanticCache(store, config.semantic, source, semanticProviderIdentity(config.semantic));
   const { artifact: _artifact, ...cache } = inspection;
   const approvedBy = (config.approvedIntentSources ?? []).filter((pattern) => matchesRepositoryGlob(source.path, pattern));
-  return { path: source.path, stableSemanticId: source.stableSemanticId, sourceDigest: source.digest,
+  return { path: source.path, sourceId: semanticSourceId(config.repositoryId, source),
+    stableSemanticId: source.stableSemanticId, sourceDigest: source.digest,
     bytes: Buffer.byteLength(source.content), lines: source.content.split('\n').length,
     selectedBy: selections.filter((item) => item.paths.includes(source.path)).map((item) => item.selector),
     role: evidencePaths.has(source.path) ? 'validation-evidence' : 'semantic-document',

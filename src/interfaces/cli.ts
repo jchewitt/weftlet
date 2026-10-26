@@ -20,6 +20,7 @@ import { runInit } from "./init.js";
 import { loadConfig } from "../configuration/config.js";
 import { planHydration, type HydrationPlan } from '../application/hydration-plan.js';
 import { adoptSemanticCache } from '../application/cache-adoption.js';
+import { SemanticHydrationError } from '../application/hydration-failure.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -67,7 +68,7 @@ function formatHydrationPlan(plan: HydrationPlan): string {
     `Source/cache/budget checks: ${readiness}`,
   ];
   for (const document of plan.documents) {
-    lines.push(`- ${JSON.stringify(document.path)}: ${document.bytes} bytes, ${document.lines} lines; ${document.role}; source ${document.sourceAuthority}, extraction ${document.extractionReview}; cache ${document.cache.status}; selected by ${document.selectedBy.map((selector) => JSON.stringify(selector)).join(', ')}`);
+    lines.push(`- ${JSON.stringify(document.path)} [${document.sourceId}]: ${document.bytes} bytes, ${document.lines} lines; ${document.role}; source ${document.sourceAuthority}, extraction ${document.extractionReview}; cache ${document.cache.status}; selected by ${document.selectedBy.map((selector) => JSON.stringify(selector)).join(', ')}`);
   }
   for (const selection of plan.selections.filter((item) => item.status !== 'matched')) {
     lines.push(`Selection ${JSON.stringify(selection.selector)}: ${selection.status}`);
@@ -87,7 +88,7 @@ function formatHydrationPlan(plan: HydrationPlan): string {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|cache adopt|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\ncache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run] returns JSON and copies only validated compatible artifacts, without model calls or snapshot writes. --dry-run performs no cache writes. Agent configurations accept the same --owner-doc, --task and --capability selection as hydrate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|cache adopt|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\nhydrate --json --quiet emits structured semantic failures on stderr with no progress lines; failure stdout stays empty. hydrate --plan maps opaque source IDs to local document paths.\ncache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run] returns JSON and copies only validated compatible artifacts, without model calls or snapshot writes. --dry-run performs no cache writes. Agent configurations accept the same --owner-doc, --task and --capability selection as hydrate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
     return;
   }
   if (args[0] === 'init') {
@@ -174,31 +175,35 @@ async function main(): Promise<void> {
     const controller = new AbortController();
     const cancel = () => controller.abort();
     process.once('SIGINT', cancel);
-    const ref = valueAfter(args, '--ref') ?? 'HEAD';
-    const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args), ref);
-    const result = await application.hydrator.hydrate({
-      ref: scope?.commitSha ?? ref,
-      headName: scope?.headName ?? application.headName,
-      semanticSources: scope?.semanticSources,
-      forceSemantic: args.includes('--force-semantic'),
-      signal: controller.signal,
-      onProgress: args.includes('--quiet') ? undefined : (event) =>
-        process.stderr.write(`[context-graph] ${event.phase}${event.total === undefined ? '' : ` ${event.completed}/${event.total}`}\n`),
-    });
-    process.removeListener('SIGINT', cancel);
-    process.stdout.write(
-      `${JSON.stringify(
-        {
-          snapshotId: result.snapshot.manifest.snapshotId,
-          commitSha: result.snapshot.manifest.commitSha,
-          contentDigest: result.snapshot.manifest.contentDigest,
-          semanticExtracted: result.semanticExtracted,
-          semanticReused: result.semanticReused,
-        },
-        null,
-        2,
-      )}\n`,
-    );
+    try {
+      const ref = valueAfter(args, '--ref') ?? 'HEAD';
+      const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args), ref);
+      const result = await application.hydrator.hydrate({
+        ref: scope?.commitSha ?? ref,
+        headName: scope?.headName ?? application.headName,
+        semanticSources: scope?.semanticSources,
+        forceSemantic: args.includes('--force-semantic'),
+        signal: controller.signal,
+        onProgress: args.includes('--quiet') ? undefined : (event) =>
+          process.stderr.write(`[context-graph] ${event.phase}${event.total === undefined ? '' : ` ${event.completed}/${event.total}`}` +
+            `${event.sourceId === undefined ? '' : ` ${event.sourceId}`}${event.elapsedMs === undefined ? '' : ` ${event.elapsedMs} ms`}\n`),
+      });
+      process.stdout.write(
+        `${JSON.stringify(
+          {
+            snapshotId: result.snapshot.manifest.snapshotId,
+            commitSha: result.snapshot.manifest.commitSha,
+            contentDigest: result.snapshot.manifest.contentDigest,
+            semanticExtracted: result.semanticExtracted,
+            semanticReused: result.semanticReused,
+          },
+          null,
+          2,
+        )}\n`,
+      );
+    } finally {
+      process.removeListener('SIGINT', cancel);
+    }
     return;
   }
   if (command === 'clean-compare') {
@@ -279,7 +284,9 @@ async function main(): Promise<void> {
 
 main().catch((error: unknown) => {
   process.stderr.write(
-    `${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
+    `${error instanceof SemanticHydrationError
+      ? process.argv.includes('--json') ? JSON.stringify(error.report, null, 2) : error.message
+      : error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
   );
   process.exitCode = 1;
 });

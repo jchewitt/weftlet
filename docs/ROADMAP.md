@@ -12,8 +12,9 @@ review website, source publication, managed AI and guided setup. “2.0” is a 
 the verified release at this checkpoint is 0.3.0. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
-no-model preview and T05's cold-validation improvement shipped in 0.3.0. Operational cache reuse,
-diagnostics and document coverage remain open before official 1.0 acceptance.
+no-model preview and T05's cold-validation improvement shipped in 0.3.0. Operational cache reuse
+and timeout diagnostics are development increments; document coverage and other acceptance work
+remain open before official 1.0.
 The 2.0 plan distinguishes proposed work from delivered capability.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
@@ -34,12 +35,14 @@ peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeou
 Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
 engine, graph database or validation-result cache is introduced by this focused release.
 
-The next bounded increment, [T03 operational cache reuse](ADR-018-operational-semantic-cache.md),
-is implemented in development source and is not part of published 0.3.0. Built-in Codex user
+[T03 operational cache reuse](ADR-018-operational-semantic-cache.md) is merged with local and
+hosted checks passing and is not part of published 0.3.0. Built-in Codex user
 artifacts can survive changes to timeout/retry/concurrency/document/byte limits while snapshots
 retain their full configuration identity. Exact legacy reads and explicit no-model adoption
-preserve prior artifacts; custom providers remain conservative. Validation is recorded separately
-before this increment is merged or released. T04 diagnostics and T06/T07 work remain open.
+preserve prior artifacts; custom providers remain conservative.
+[T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) add safe failure reports, opaque source
+mapping and accurate settled progress without changing extraction/cache identity. T04 validation
+is recorded separately before merge or release. Broader T05 and T06/T07 work remain open.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |

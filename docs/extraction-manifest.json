@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "cc748024bc52793ca8878e09ff2ac2dc755af262e6358b72d8101aa30c15432c"
+      "destinationSha256": "98121ce947342c73ebfa26f7d048a481669c15ba96883b146679da23f85a2037"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "02616a30d6fbd86227cc77b472f8cc192a8d653ea4959eeac7612b566fbcf65e"
+      "destinationSha256": "c333051df80a274410351b0ba1eef1a1e004f790fa457fd3ebb7909197c4ca29"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "1bb8c8481706590f1d994baf6d48818dc76dec014d9e583ee3ae5b5c9aaa265f"
+      "destinationSha256": "609d2a235947606245dda9f7889556d13303fd787249b443f2f57266148fa9ae"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "ddc11abecf7e7e4151a1ea7c253bba8cdea92858cf8e051c540a638cbf199d4d"
+      "destinationSha256": "2dff4c9bca049dc1607cce7cf709494aae24a7f27b05fcb9353dd19de4546fac"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "0eb4c55e45c56bf23f64a0c053ac6348353f830f79fe234282bd81b85b6f9c64"
+      "destinationSha256": "aaac083e8eea8e9b6a7303b73f8beea3014c10711eb4afc0b0dd9d81424d5437"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/explain-semantic-failures.md",
     ".changeset/release-plan.json",
     ".changeset/retain-operational-cache.md",
     ".github/workflows/check.yml",
@@ -612,6 +613,7 @@
     "docs/ADR-016-hydration-preview.md",
     "docs/ADR-017-shacl-validation-union.md",
     "docs/ADR-018-operational-semantic-cache.md",
+    "docs/ADR-019-semantic-failure-diagnostics.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -737,11 +739,13 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/hydration-failure.ts",
     "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
     "src/application/semantic-artifact-store.ts",
+    "src/application/semantic-run.ts",
     "src/application/semantic-scope.ts",
     "src/cli.ts",
     "src/configuration/cache.test.ts",
@@ -763,6 +767,7 @@
     "src/extraction/scip-project.test.ts",
     "src/extraction/scip-project.ts",
     "src/extraction/semantic-cache.ts",
+    "src/extraction/semantic-diagnostics.ts",
     "src/extraction/semantic-identity.ts",
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
@@ -777,6 +782,7 @@
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
+    "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/init.test.ts",
     "src/interfaces/init.ts",
@@ -790,6 +796,7 @@
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/rdf-ontology.test.ts",

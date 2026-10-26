@@ -85,6 +85,8 @@ try {
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
         'dist/application/hydration-plan.js', 'dist/application/cache-adoption.js',
         'dist/application/semantic-artifact-store.js', 'dist/application/semantic-scope.js',
+        'dist/application/semantic-run.js', 'dist/application/hydration-failure.js',
+        'dist/extraction/semantic-diagnostics.js',
         'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
         'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
@@ -390,11 +392,27 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   const publicApi = await import(toolkitModule);
   if (typeof publicApi.planHydration !== 'function') throw new Error('Missing public hydration planner export');
   if (typeof publicApi.adoptSemanticCache !== 'function') throw new Error('Missing public cache adoption export');
+  if (typeof publicApi.SemanticHydrationError !== 'function' ||
+      typeof publicApi.semanticSourceId !== 'function' ||
+      plan.documents[0].sourceId !== publicApi.semanticSourceId(plan.repositoryId, plan.documents[0])) {
+    throw new Error('Installed diagnostics must export the safe error and match the local preview source ID');
+  }
   const adoption = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'),
     'cache', 'adopt', '--config', 'preview.config.json', '--from-config', 'preview.config.json', '--dry-run'], consumer));
   if (!adoption.ready || !adoption.dryRun || adoption.records.length !== 1 || adoption.counts.missing !== 1 ||
       adoption.scope.selectors.join(',') !== 'intent.md' || (await readdir(consumer)).includes('.context-graph')) {
     throw new Error('Installed cache adoption must inspect expected committed keys without providers, adapters or writes');
+  }
+  await writeFile(join(consumer, 'failure.config.json'), JSON.stringify({ ...previewConfig, adapter: undefined }));
+  const failure = spawnSync(process.execPath, [join(installedRoot, 'dist/cli.js'), 'hydrate',
+    '--config', 'failure.config.json', '--json', '--quiet'], { cwd: consumer, encoding: 'utf8', timeout: 20_000 });
+  if (failure.status !== 1 || failure.stdout !== '') throw new Error('Installed failed hydration must leave stdout clean');
+  const failureReport = JSON.parse(failure.stderr);
+  if (failureReport.code !== 'unavailable' || failureReport.category !== 'infrastructure' ||
+      failureReport.sourceId !== plan.documents[0].sourceId || failureReport.progress.failed !== 1 ||
+      failureReport.progress.completed !== 0 || failure.stderr.includes('intent.md') ||
+      failure.stderr.includes(consumer) || failure.stderr.includes('missing-preview-provider')) {
+    throw new Error('Installed hydration must safely report the unavailable provider and source mapping');
   }
   run(process.execPath, ['smoke.mjs'], consumer);
   const config = JSON.parse(await readFile(
