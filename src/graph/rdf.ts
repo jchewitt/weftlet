@@ -1,44 +1,20 @@
 import { QueryEngine } from '@comunica/query-sparql';
-import { DataFactory, Parser, Store, Writer } from 'n3';
+import { DataFactory, Store, Writer } from 'n3';
 import SHACLValidator from 'rdf-validate-shacl';
 import type { GraphFact, GraphSnapshot } from "@weftlet/core";
 import { contextPackEvidenceAuthority } from "./authority.js";
 import { stableJson } from "../infrastructure/util.js";
 import { createRequire } from 'node:module';
+import { CG, RDF, XSD, evidenceShapes } from './shacl-shapes.js';
 
-const { namedNode: iri, literal, quad } = DataFactory;
-export const CG = 'https://context-graph.dev/record#';
-const RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-const XSD = 'http://www.w3.org/2001/XMLSchema#';
+const { namedNode: iri, literal } = DataFactory;
+export { CG } from './shacl-shapes.js';
 export const nodeIri = (id: string) => `urn:context-graph:node:${encodeURIComponent(id)}`;
 export const factIri = (id: string) => `urn:context-graph:fact:${encodeURIComponent(id)}`;
 const engine = new QueryEngine();
 const SparqlParser = (createRequire(import.meta.url)('sparqljs') as {
   Parser: new () => { parse(query: string): { type: string; queryType?: string; from?: unknown } };
 }).Parser;
-
-const shapes = new Parser().parse(`
-@prefix cg: <${CG}>.
-@prefix rdf: <${RDF}>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix xsd: <${XSD}>.
-cg:FactShape a sh:NodeShape; sh:targetClass rdf:Statement;
- sh:property [ sh:path cg:record; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string ];
- sh:property [ sh:path rdf:subject; sh:minCount 1; sh:maxCount 1; sh:nodeKind sh:IRI ];
- sh:property [ sh:path rdf:predicate; sh:minCount 1; sh:maxCount 1; sh:nodeKind sh:IRI ];
- sh:property [ sh:path rdf:object; sh:minCount 1; sh:maxCount 1; sh:nodeKind sh:IRI ];
- sh:property [ sh:path cg:authority; sh:minCount 1; sh:maxCount 1;
-   sh:in ("declared" "implemented" "validated" "observed" "inferred" "draft") ];
- sh:property [ sh:path cg:path; sh:minCount 1; sh:datatype xsd:string; sh:minLength 1 ];
- sh:property [ sh:path cg:commit; sh:minCount 1; sh:datatype xsd:string; sh:minLength 1 ];
- sh:property [ sh:path cg:sourceDigest; sh:minCount 1; sh:datatype xsd:string; sh:minLength 1 ];
- sh:property [ sh:path cg:startLine; sh:minCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ];
- sh:property [ sh:path cg:endLine; sh:minCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ];
- sh:property [ sh:path cg:confidence; sh:minCount 1; sh:datatype xsd:decimal; sh:minInclusive 0; sh:maxInclusive 1 ];
- sh:property [ sh:path cg:extractor; sh:minCount 1; sh:datatype xsd:string; sh:minLength 1 ].
-cg:NodeShape a sh:NodeShape; sh:targetClass cg:Node;
- sh:property [ sh:path cg:kind; sh:minCount 1; sh:maxCount 1 ].
-`);
 
 /** Lossless RDF dataset: one named graph per cited assertion, with provenance in the default graph. */
 export class RdfEvidenceGraph {
@@ -93,7 +69,15 @@ export class RdfEvidenceGraph {
   }
 
   async validate() {
-    const report = await new SHACLValidator(new Store(shapes)).validate(this.dataset);
+    // These graph-independent shapes already read the dataset as a union. Index
+    // that union once so every property lookup avoids scanning one graph per fact.
+    // Keep every triple; the original named dataset retains assertion provenance
+    // and remains the source for queries and serialization.
+    const validationGraph = new Store();
+    for (const { subject, predicate, object } of this.dataset) {
+      validationGraph.addQuad(subject, predicate, object);
+    }
+    const report = await new SHACLValidator(new Store(evidenceShapes)).validate(validationGraph);
     const issues = report.results.map((result) => ({
       category: 'extraction-gap' as const,
       focus: result.focusNode?.value,

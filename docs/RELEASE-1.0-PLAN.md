@@ -2,8 +2,9 @@
 
 Status: maintainer-directed work, recorded on 2026-10-26 from a consumer integration report.
 The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
-genuine consumer acceptance remains pending. T02 is implemented in development source and awaits
-release; T03–T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
+genuine consumer acceptance remains pending. T02 is merged and awaits release. T05's focused
+cold-validation optimization is implemented in development source, with validation/release pending;
+its broader follow-ups and T03, T04, T06 and T07 remain open. These tasks improve setup, reuse, diagnostics and document coverage
 without expanding the consumer's migration. An official 1.0
 follows this work and genuine consumer acceptance, with its exact release scope reviewed when
 the evidence is available.
@@ -34,15 +35,17 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
-| **T02** | No-model hydration/setup preview | Implemented in source; not published in 0.2.1 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
+| **T02** | No-model hydration/setup preview | Merged in PR #18; not published in 0.2.1 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Planned efficiency work | Preserve T01's semantic identity separation; keep snapshot/config identity distinct from reusable artifact identity |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
-| **T05** | Early identity checks and validation progress/profiling | **Adoption blocker; next release after T02** | Consumer reports validation pushing generation past a 30-minute timeout; fix cold validation before waiting for the rest of 1.0 |
+| **T05** | Early identity checks and validation progress/profiling | **Adoption blocker; cold-validation fix in source** | Validate and release union-projection optimization now; early checks, detailed progress and validation reuse remain open |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
-T02 passes the local publication checks. Prioritize a separate T05 performance release following
-the maintainer's reported timeout; do not wait for the remaining 1.0 features. T03, T04, T06 and T07 remain independently useful increments. Keep them
+T02 passed the local publication checks and hosted Ubuntu/Windows checks before
+[PR #18](https://github.com/jchewitt/weftlet/pull/18) merged. Prioritize the focused T05 performance
+release following the maintainer's reported timeout; do not wait for the remaining 1.0 features.
+T03, T04, T06 and T07 remain independently useful increments. Keep them
 separate from the optional platform work. Publication follows the normal release process; no new
 npm release is claimed for T02. Normal release checks apply to every shipped increment.
 
@@ -153,29 +156,40 @@ Acceptance:
 
 ## T05 — Detect inexpensive conflicts early and explain validation work
 
-Prioritize this task after T02. The current implementation uses JavaScript on Node:
+The implementation uses JavaScript on Node:
 `rdf-validate-shacl` validates an in-memory N3 dataset. Hydration constructs and validates the
 entire assembled graph, including when semantic artifacts were reused. There is no persistent
 GraphDB backend or incremental validation. Querying a saved snapshot does not rerun SHACL.
 
 The maintainer reports that validation pushes the consumer's overall generation beyond its
 30-minute timeout, preventing snapshot publication and making adoption unusable. This is now
-a release blocker, not an optional observability improvement. Upstream has not yet measured
-that consumer graph or established the bottleneck. Ship a focused performance release as soon
-as its correctness and improvement are demonstrated, ahead of the remaining 1.0 tasks.
+a release blocker, not an optional observability improvement. Upstream has measured a specific
+named-graph lookup cost in public synthetic fixtures, but has not measured that consumer graph or
+diagnosed its complete timeout. Ship the focused performance release once its correctness and
+improvement are demonstrated, ahead of the remaining 1.0 tasks.
 
-Add inexpensive identity checks and instrument RDF construction and SHACL validation separately.
-Keep the full conformance requirement and measure large public graphs before selecting changes.
-The reported consumer delay remains an observation, not a diagnosed validator/backend defect.
-Native code or a database does not by itself establish faster or correct incremental SHACL.
+[ADR 017](ADR-017-shacl-validation-union.md) records the implemented cold-validation optimization:
+build a temporary union of every SPO triple for the same validator/shapes, while keeping original
+named assertion graphs canonical for queries and serialization. It removes repeated wildcard
+lookups across one graph per fact. In a bounded single-run public 2,000-fact unique-node case,
+the original SHACL path took 31.502 seconds; union construction took 0.153 seconds and SHACL
+took 0.467 seconds. A 10,000-fact unique-node union case used about 1.3 GiB process RSS. These
+are synthetic phase measurements, not a private consumer reproduction or end-to-end guarantee.
+
+The focused change still validates the whole graph each time. It does not add Rust, GraphDB,
+incremental validation or a validation-result cache. Early checks and broader observability/reuse
+remain follow-ups rather than reasons to delay the cold-path fix. Native code or a database does
+not by itself establish faster or correct incremental SHACL.
 
 Acceptance:
 
 - Early errors identify the conflicting identity/kinds and relevant evidence using the configured
   privacy policy. Preserve all underlying assertions for diagnosis; early checks are not a
   substitute for RDF/SHACL validation.
-- Report elapsed time and honest phase/heartbeat progress for long validation. Do not display a
-  fabricated completion percentage when the validator exposes no meaningful denominator.
+- Report elapsed time and honest progress for long validation. Current phase boundaries remain
+  the supported progress signal: the synchronous validator blocks same-thread timers. Evaluate
+  bounded worker execution before promising an in-phase heartbeat or cancellation; never display
+  a fabricated completion percentage when the validator exposes no meaningful denominator.
 - Record reproducible public-fixture sizes, fact/node counts, runtime versions, wall time and
   resource observations for construction and validation separately. Separate measured bottlenecks
   from hypotheses; include repeated identical input and small changed-input cases.

@@ -8,10 +8,68 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T05 cold SHACL validation improvement, 2026-10-26
+
+Implemented in development source following the T02 preview merge. Published npm packages
+remain 0.2.1 until a separately recorded release succeeds. [ADR 017](ADR-017-shacl-validation-union.md)
+records the measured graph-wildcard lookup cost and the temporary all-triples union used by the
+unchanged JavaScript SHACL validator. The canonical named dataset and every assertion remain intact.
+
+Public synthetic production measurements use Linux/Node 24.19.0, N3 2.7.2 and
+rdf-validate-shacl 0.6.5. Each case ran once in a fresh child process with a 45-second hard deadline:
+
+| Facts / topology | Nodes / original quads | Canonical construction | Production validation, including union | Whole-process maximum RSS |
+| --- | --- | ---: | ---: | ---: |
+| 2,000 unique | 4,000 / 56,003 | 0.194 s | 0.779 s | 490 MiB |
+| 10,000 unique | 20,000 / 280,003 | 1.091 s | 2.920 s | 1,638 MiB |
+
+Both production cases conform and retain the exact before/after serialized dataset digest.
+The original-path public experiment measured 31.502 seconds of SHACL for the 2,000-fact unique
+case; its 5,000-fact shared case produced no verdict before the 45-second process deadline.
+The ADR records those separate prototype measurements and their boundaries. These are single-run
+measurements, not latency guarantees or a reproduction of the consumer's complete 30-minute run.
+Memory includes libraries, fixture generation and before/after serialization; the production
+harness peaked near 1.6 GiB at 10,000 unique facts. Its legacy comparison also reparses a second
+named store, so its RSS must not be treated as an old-versus-new production memory comparison.
+
+Reproduce from a built source checkout with
+`pnpm benchmark:shacl --counts 2000,10000 --topologies unique --modes optimized`.
+The bounded harness records runtime, build hashes, sizes, phase timings, conformance and
+serialization preservation. It exercises the public production validator; no private-store mutation,
+provider call or private consumer data is used. A small paired legacy/optimized smoke agreed;
+a 1 ms deadline probe killed the children and correctly reported no verdict.
+
+Local `pnpm context-graph:publication-check` passes: 264 deterministic tests (1 core,
+263 toolkit), one optional OML skip, 12 existing advisory architecture findings, source inventory,
+licenses and fresh packed-consumer CLI/npx/MCP, preview, real SCIP, RDF/SPARQL/SHACL and viewer
+checks. All 79 original source path/hash pairs remain unchanged. No architecture baseline or
+exception was added. The new internal shape module is required in the packed runtime inventory.
+
+The 25 new regressions compare complete normalized diagnostics with direct validation of the
+original named dataset. Cases cover empty/duplicate input, kinds, authorities, confidence and
+citation bounds/types/order, empty provenance fields and colliding fact IDs. Separate assertions
+preserve exact serialization, named-graph attributes/citations/review state and `facts()` through
+repeated validation. A 2,200-fact case detects the invalid final assertion without timing gates.
+The existing full hydration integration still verifies that failed SHACL preserves the last head.
+The shape Turtle is byte-for-byte unchanged from the T02 merge; no shape or assertion was dropped.
+
+Hosted checks and release status remain pending at this source checkpoint.
+Early identity preflight, in-phase progress, validation-result reuse and incremental validation
+remain separate work. Each hydration still performs full SHACL before publishing; saved queries
+do not repeat validation. Private consumer full hydration/repeat acceptance remains pending.
+
 ## T02 no-model hydration preview, 2026-10-26
 
 Implemented in development source; published npm packages remain 0.2.1. See
 [ADR-016](ADR-016-hydration-preview.md) for source, cache and readiness semantics.
+
+[PR 18](https://github.com/jchewitt/weftlet/pull/18) merged at
+`63c70f85b26a6cc60f8bc0615a86f6042a61ecd0`. Its final head
+`6711362f9ff234d65ac3101dcf3ec0b0033519ec` passed hosted Ubuntu and Windows checks in
+[run 40400487168](https://github.com/jchewitt/weftlet/actions/runs/40400487168) and
+[run 40400478490](https://github.com/jchewitt/weftlet/actions/runs/40400478490).
+An earlier Ubuntu run exposed a temporary-fixture cleanup race; disabling automatic Git
+maintenance in that fixture and bounded cleanup retries resolved it before merge.
 
 - Local `pnpm context-graph:publication-check` passed: 239 deterministic tests (1 core,
   238 toolkit), one optional OML skip, 12 advisory architecture findings, inventory, licenses

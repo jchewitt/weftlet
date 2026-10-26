@@ -85,7 +85,7 @@ try {
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
         'dist/application/hydration-plan.js', 'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
-        'dist/graph/ranking.js',
+        'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',

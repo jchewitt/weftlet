@@ -101,6 +101,37 @@ evidence roots; selected validation documents still undergo semantic extraction 
 SOT traversal and default validation-document separation remain T07 work. See
 [ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
 
+## SHACL validation and performance
+
+The development source includes a cold-validation optimization that is **not included in the
+published 0.2.1 packages**. The toolkit still uses JavaScript `rdf-validate-shacl` and an in-memory
+N3 store. Each hydration validates the complete graph; semantic artifact reuse does not make
+validation incremental, and there is no validation-result cache, Rust engine or GraphDB service.
+Saved queries do not rerun SHACL.
+
+The current shapes use subject/predicate/object values independently of graph names. Validation
+now builds one temporary union graph so repeated property lookups avoid scanning every named
+assertion graph. The same shapes and validator run against that union. The original named dataset,
+assertion records and provenance remain the source for SPARQL, queries and serialization.
+
+In bounded, single-run public experiments, 2,000 facts with unique subject/object nodes took
+31.50 seconds in the original SHACL path, compared with 0.153 seconds to build the union and
+0.467 seconds for SHACL on that union. A 10,000-fact union case used about 1.3 GiB process RSS;
+the extra projection has a memory cost. These measurements do not reproduce the private consumer's
+full generation run or guarantee a production duration. See [ADR 017](docs/ADR-017-shacl-validation-union.md)
+for methodology, parity boundaries and remaining work. To run the bounded public benchmark from
+a development checkout:
+
+```sh
+pnpm build
+pnpm benchmark:shacl
+```
+
+Current hydration progress reports phase boundaries. The validator performs synchronous work,
+so an ordinary timer cannot provide an honest heartbeat while that work blocks Node's main
+thread. Worker-based progress, early identity checks, validation-result reuse and incremental
+validation remain separate T05 work; they do not delay the focused cold-validation release.
+
 ## Development
 
 The development source is organized by responsibility; see
