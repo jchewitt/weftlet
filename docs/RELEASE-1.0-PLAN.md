@@ -1,10 +1,11 @@
 # Consumer hardening and the 1.0 release plan
 
 Status: maintainer-directed work, recorded on 2026-10-26 from a consumer integration report.
-The starting release is `@weftlet/toolkit@0.2.0`. **Ship a patch for T01 first.** The remaining
-items improve setup, reuse, diagnostics and document coverage; they do not block that patch
-or justify expanding the consumer's migration. An official 1.0 follows this work and genuine
-consumer acceptance, with its exact release scope reviewed when the evidence is available.
+The report concerned `@weftlet/toolkit@0.2.0`. **T01's upstream patch shipped in 0.2.1**;
+genuine consumer acceptance remains pending. T02–T07 remain open and improve setup, reuse,
+diagnostics and document coverage without expanding the consumer's migration. An official 1.0
+follows this work and genuine consumer acceptance, with its exact release scope reviewed when
+the evidence is available.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
 remains a separate future direction for generation, approvals, a companion website and hosted
@@ -31,17 +32,16 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T01** | Coherent repository-document identity and kind | **Adoption blocker; patch work in progress** | First isolated patch; preserve SHACL and all assertions |
+| **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Planned usability work | Shares selection/cache identity with hydration; extend it with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Planned efficiency work | Preserve T01's semantic identity separation; keep snapshot/config identity distinct from reusable artifact identity |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Planned diagnostics work | Use stable source identifiers and run progress; document recovery with T02/T03 |
 | **T05** | Early identity checks and validation progress/profiling | Planned correctness/observability work | Build on T01; profile latency independently before selecting optimizations |
-| **T06** | Packaged release-documentation consistency | Planned release tooling work | Check the actual release archives; does not require a runtime architecture change |
+| **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
-T02–T07 can ship in independently useful increments after the blocker patch. Do not combine
-all seven into one diff or delay T01 for the optional platform work. Normal required release
-checks still apply to every shipped increment.
+T02–T07 can now ship in independently useful increments. Keep them separate from the optional
+platform work. Normal required release checks still apply to every shipped increment.
 
 ## T01 — Resolve repository-document identity conflicts
 
@@ -66,9 +66,24 @@ Acceptance:
   the patch, then request a genuine consumer re-run against the recorded inputs; do not infer
   consumer acceptance from the upstream fixture.
 
-Completion evidence will link the implementation PR, tested source commit, validation record,
-published patch and subsequent consumer result. No patch publication or consumer pass is claimed
-by this task list yet.
+Upstream completion evidence:
+
+- [Fix PR #15](https://github.com/jchewitt/weftlet/pull/15) implements the policy in
+  [ADR 015](ADR-015-repository-document-identity.md), with public cross-document regressions and
+  fresh/cache-reuse coverage. [Release PR #16](https://github.com/jchewitt/weftlet/pull/16)
+  advances the fixed core/toolkit group to 0.2.1.
+- [Release run 40382864083](https://github.com/jchewitt/weftlet/actions/runs/40382864083)
+  completed preparation, publication and release records on its first attempt at commit
+  `5d1db91bf19ed493a20849b2d0f92d3aeac35dfe`. Required checks included 227 deterministic tests,
+  12 advisory architecture findings, fresh packed-consumer checks and hosted Ubuntu/Windows CI.
+- Registry archives, provenance and tags match the reviewed release. A fresh public-registry
+  consumer passes the two-document regression, real SCIP, RDF/SHACL, queries and unchanged
+  snapshot identity/content on artifact reuse, without live model calls. See the detailed
+  [validation record](VALIDATION.md) for commits, checks and result boundaries.
+
+The private consumer has not yet supplied a successful full hydration/repeat against 0.2.1.
+Upstream publication and regression success do not close that acceptance gate or diagnose the
+separate full-graph validation latency observation.
 
 ## T02 — Preview scope and work without calling a model
 
@@ -146,9 +161,9 @@ Acceptance:
 ## T06 — Keep packaged documentation consistent with the release
 
 The consumer installed 0.2.0 while its packaged README still named 0.1.2 and some archive examples
-used 0.1.1. Source documentation has since been updated, but immutable published archives retain
-their original text. Add a repeatable release-documentation check rather than relying on a
-post-publication source edit.
+used 0.1.1. Release 0.2.1 removes the README version pins; immutable 0.2.0 archives retain their
+original text. The automated release-documentation consistency check remains open. Add that
+repeatable check rather than relying on manual edits alone.
 
 Acceptance:
 
@@ -194,7 +209,7 @@ Acceptance:
 
 ## Official 1.0 acceptance
 
-After T01's patch is available, work through T02–T07 in bounded increments and record implementation
+With T01's upstream patch published, work through T02–T07 in bounded increments and record implementation
 PRs and validation evidence here or in the linked validation record. Review the exact 1.0 scope
 against completed evidence; any deferral needs an explicit maintainer decision and must remain
 visible rather than being treated as done. The companion website, hosted AI and broader 2.0

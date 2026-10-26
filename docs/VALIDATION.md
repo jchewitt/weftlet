@@ -8,13 +8,30 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
-## Repository document identity patch, 2026-10-26
+## Weftlet 0.2.1 document identity patch, 2026-10-26
 
 The public reproduction confirms the reported 0.2.0 defect: two unchanged semantic
 assertions give one repository document ID different kinds and fail single-kind SHACL.
 [ADR-015](ADR-015-repository-document-identity.md) records the canonical identity policy,
 cache contract and immutable snapshot migration. The consumer follow-ups are tracked in
 the [1.0 plan](RELEASE-1.0-PLAN.md).
+
+[Fix PR 15](https://github.com/jchewitt/weftlet/pull/15) was validated at
+`42ba9b79dc0562a412cd5a048e42b77234530d94` by both hosted Ubuntu/Windows runs
+[40381728487](https://github.com/jchewitt/weftlet/actions/runs/40381728487) and
+[40381772577](https://github.com/jchewitt/weftlet/actions/runs/40381772577).
+[Release PR 16](https://github.com/jchewitt/weftlet/pull/16) advanced both package versions
+to 0.2.1. Its exact head `da07772110d4c762e3178a7345b426263e14a22f` passed local
+`pnpm release:prepare` and the explicitly dispatched
+[Ubuntu/Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40382270147).
+The bot PR's separate automatic run required GitHub approval; the dispatched run tested
+that same commit and completed successfully.
+
+[Trusted-publishing run 40382864083](https://github.com/jchewitt/weftlet/actions/runs/40382864083)
+completed on attempt 1 at merged commit `5d1db91bf19ed493a20849b2d0f92d3aeac35dfe`.
+Both public npm `latest` tags resolve to 0.2.1. Package tags `@weftlet/core@0.2.1`
+and `@weftlet/toolkit@0.2.1`, plus their GitHub Releases, identify that exact commit.
+Main's package versions match the publication.
 
 - Local `pnpm context-graph:publication-check` passed: 227 deterministic tests (1 core,
   226 toolkit), one optional OML skip, 12 advisory architecture findings, inventory,
@@ -31,12 +48,31 @@ the [1.0 plan](RELEASE-1.0-PLAN.md).
   mentioned in plain prose retains a cited implementation-gap diagnostic.
 - Independent review found and resolved that missing-path diagnostic regression. No blocking
   findings remained. All 79 original imported source paths and source hashes are preserved.
+- Independent release review inspected the actual core/toolkit archives (11/184 file entries),
+  generated versions, changelogs and plan. Runtime assets, public examples and licenses/notices
+  are present; no Git history, credentials, caches or private consumer report data were included.
+  The packed toolkit dependency is `@weftlet/core: ^0.2.1`.
+- Public npm archives match the hosted prepared archives and locally reviewed archives byte
+  for byte. Public SLSA provenance subjects match the SHA-512 archive hashes and identify this
+  source commit, repository, `publish.yml` and workflow attempt. This checks provenance content
+  and source identity, not a separate cryptographic signature audit.
+- A fresh Linux/Node 24.19.0 public-registry consumer installed only toolkit 0.2.1 directly
+  (`npm install --ignore-scripts`); core resolved transitively to 0.2.1. Both package-lock
+  registry URLs and integrity hashes matched the reviewed archives. The installed CLI
+  initialized and validated an independent public fixture with two source documents. A
+  deterministic provider reproduced the legacy conflicting classifications: hydration retained
+  2 semantic facts within 17 total facts, including 4 real SCIP facts, and SHACL conformed.
+  Cold hydration extracted 2/reused 0; the repeat extracted 0/reused 2 with unchanged snapshot
+  identity, content digest and bytes. Impact returned 17 facts and SPARQL returned the four
+  canonical document references. Saved queries still worked after the provider was disabled.
+  No live model call was made.
 
 These are deterministic upstream checks, not live semantic-quality or private consumer
 acceptance results. The consumer's full hydration was stopped after its isolated reproduction;
 no complete consumer SHACL verdict or published snapshot is claimed. Full-graph validation
-latency remains a separate investigation. Release and hosted-check evidence will be recorded
-after the patch completes the normal publishing workflow.
+latency remains a separate investigation. The first refresh requires new semantic extraction;
+historical cache/snapshot files should be retained. T01's upstream patch is published, while
+genuine consumer acceptance and the remaining T02–T07 work are still pending.
 
 ## Weftlet 0.2.0 publication, 2026-10-26
 

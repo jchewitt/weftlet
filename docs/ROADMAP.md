@@ -6,10 +6,11 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the published packages remain 0.2.0. The received consumer findings are tracked in the
-[consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): first release the blocking
-document-identity patch, then address setup, reuse, diagnostics and document coverage before
-official 1.0 acceptance. The 2.0 plan distinguishes proposed work from delivered capability.
+the published packages are 0.2.1. The received consumer findings are tracked in the
+[consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
+published and passes upstream checks; genuine consumer acceptance remains pending. Setup,
+reuse, diagnostics and document coverage remain open before official 1.0 acceptance.
+The 2.0 plan distinguishes proposed work from delivered capability.
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
@@ -97,7 +98,7 @@ preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
-`@weftlet/toolkit` are published at 0.2.0 through GitHub OIDC; the publication and verification
+`@weftlet/toolkit` are published at 0.2.1 through GitHub OIDC; the publication and verification
 record is in [validation](VALIDATION.md). Changesets prepares reviewed version PRs for the fixed package group;
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).
