@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { expect, it } from 'vitest';
 import { checkReleasePlan, validateReleasePlan } from './release-plan.mjs';
+import { checkReleaseDocumentation, updateReleaseDocumentation } from './release-documentation.mjs';
 
 const execute = promisify(execFile);
 const original = resolve(import.meta.dirname, '..');
@@ -22,7 +23,9 @@ it.each([
     await mkdir(join(root, 'docs'), { recursive: true });
     await mkdir(join(root, 'node_modules/@changesets'), { recursive: true });
     for (const path of ['package.json', 'packages/core/package.json', 'pnpm-workspace.yaml',
-      'pnpm-lock.yaml', '.changeset/config.json', 'scripts/update-inventory.mjs', 'scripts/git-content.mjs']) {
+      'pnpm-lock.yaml', '.changeset/config.json', 'scripts/update-inventory.mjs', 'scripts/git-content.mjs',
+      'README.md', 'packages/core/README.md', 'docs/RELEASING.md', 'docs/MIGRATING-TO-WEFTLET.md',
+      'docs/CONSUMER-TRIAL.md']) {
       await cp(join(original, path), join(root, path));
     }
     // Keep this fixture independent of future package version bumps.
@@ -31,6 +34,9 @@ it.each([
       pkg.version = '0.1.1';
       await writeFile(join(root, path), JSON.stringify(pkg, null, 2) + '\n');
     }
+    await updateReleaseDocumentation(root);
+    const historicalGuide = (await readFile(join(root, 'docs/RELEASING.md'), 'utf8'))
+      .split('<!-- weftlet:release:start -->')[0];
     await symlink(await realpath(join(original, 'node_modules/@changesets/cli')),
       join(root, 'node_modules/@changesets/cli'), process.platform === 'win32' ? 'junction' : 'dir');
     await writeFile(join(root, '.gitignore'), 'node_modules/\n.release/\n');
@@ -46,6 +52,11 @@ it.each([
     const plan = await checkReleasePlan(root);
     expect(plan.packages.map((pkg: { version: string }) => pkg.version)).toEqual([version, version]);
     expect(plan.changesets).toEqual(['fixture.md']);
+    const examples = await checkReleaseDocumentation(root);
+    expect(examples.npxCommands[0]).toEqual([`@weftlet/toolkit@${version}`, 'init', '--yes']);
+    expect(examples.archiveNames).toEqual([`weftlet-core-${version}.tgz`, `weftlet-toolkit-${version}.tgz`]);
+    expect((await readFile(join(root, 'docs/RELEASING.md'), 'utf8'))
+      .split('<!-- weftlet:release:start -->')[0]).toBe(historicalGuide);
     for (const path of ['package.json', 'packages/core/package.json']) {
       expect(JSON.parse(await readFile(join(root, path), 'utf8')).version).toBe(version);
     }

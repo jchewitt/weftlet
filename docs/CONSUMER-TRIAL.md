@@ -6,7 +6,7 @@ development workspace. Saved evidence queries work without a model login. Hydrat
 prose uses the configured provider; an OAuth failure may block new extraction but does not
 remove an already published snapshot.
 
-Use a pinned, reviewed toolkit version and its matching documentation. npm `0.2.0` includes
+Use a pinned, reviewed toolkit version and its matching documentation. Release `0.2.0` introduced
 explicit routing declarations, committed TypeScript source projects, document linkage and
 the improved impact ranking. To evaluate a newer, unreleased commit, use both locally prepared
 package archives from that same reviewed commit; see [release preparation](RELEASING.md).

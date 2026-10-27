@@ -1,6 +1,10 @@
 <!-- Modified for standalone extraction; see docs/extraction-manifest.json. -->
 # `@weftlet/core`
 
+<!-- weftlet:release:start -->
+Package version in this checkout/archive: `@weftlet/core@0.5.0`. The matching toolkit is `@weftlet/toolkit@0.5.0`.
+<!-- weftlet:release:end -->
+
 Graph records, provider and adapter contracts, and deterministic keying utilities for
 [Weftlet](https://github.com/jchewitt/weftlet), an evidence-backed context-graph toolkit for
 AI development agents.

@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "3e56a3b6a6200e15f684bb490360f2aec0d305dc6c475a176971b188ac5b725d"
+      "destinationSha256": "7ad30de17e04589fc90ca67c165885b23371bdf128a39cfed90626455d0b02f2"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "c929bd90f5d2bae73554df2dcd0af0ad1bfd45d0843cd7940bde90c42b1266b9"
+      "destinationSha256": "d6f34cf5a92de99478e9b9264867d900820db27023cef86cfc9726ba8b0c451c"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "6cc62cdbd4bed65d8eff4749fba7003b3fa59c2e5ddcf8e333950468c40986bf"
+      "destinationSha256": "7b3334d9984aa15dcdd1735d22ebfca0625bf44d4c17403e23d6e4f540d83d1e"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/check-release-documentation.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -614,6 +615,7 @@
     "docs/ADR-019-semantic-failure-diagnostics.md",
     "docs/ADR-020-canonical-physical-file-producers.md",
     "docs/ADR-021-identity-preflight-and-validation-timing.md",
+    "docs/ADR-022-release-documentation.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -732,6 +734,8 @@
     "scripts/record-release.mjs",
     "scripts/registry-publication.mjs",
     "scripts/registry-publication.test.ts",
+    "scripts/release-documentation.mjs",
+    "scripts/release-documentation.test.ts",
     "scripts/release-plan.mjs",
     "scripts/release-records.mjs",
     "scripts/release-records.test.ts",

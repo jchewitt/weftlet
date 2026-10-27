@@ -12,8 +12,8 @@ The consumer's approved ten-minute retry has not run; that outcome remains separ
 The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
 shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
-shipped in 0.4.0. T09 and T05a shipped in 0.5.0. Broader T05 follow-ups,
-T06 documentation consistency and T07 document coverage remain open. Official 1.0 follows
+shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
+for the next release; broader T05 follow-ups and T07 document coverage remain open. Official 1.0 follows
 the agreed remaining scope and genuine consumer acceptance,
 with its exact release scope reviewed when the evidence is available.
 
@@ -49,7 +49,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
-| **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
+| **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
@@ -58,7 +58,7 @@ local/hosted checks, independent archive review and fresh packed/public-registry
 T09 timeout support and T05a identity preflight/phase timing shipped in
 [0.5.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0).
 Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
-Broader T05, T06 and T07 remain bounded follow-ups.
+Broader T05 and T07 remain bounded follow-ups; T06 implementation evidence is recorded below.
 The consumer must migrate its framework adapter to the public core factory, then complete full
 hydration and repeat reuse; upstream fixtures do not establish that result.
 
@@ -300,10 +300,16 @@ Acceptance:
 
 ## T06 — Keep packaged documentation consistent with the release
 
-The consumer installed 0.2.0 while its packaged README still named 0.1.2 and some archive examples
-used 0.1.1. Release 0.2.1 removes the README version pins; immutable 0.2.0 archives retain their
-original text. The automated release-documentation consistency check remains open. Add that
-repeatable check rather than relying on manual edits alone.
+Implemented after 0.5.0, with [ADR 022](ADR-022-release-documentation.md) defining the checked
+scope. Changesets regenerates current-version sections in both READMEs and the release guide.
+The dependency-free checker verifies source instructions and both actual tarballs before
+publication; the fresh-consumer smoke exercises the checked pinned commands and archive pair
+with an isolated npm/npx cache. Historical records and feature-introduction versions stay intact.
+Source validation is recorded in [validation](VALIDATION.md); no new npm release is claimed here.
+
+The original consumer installed 0.2.0 while its README still named 0.1.2 and some archive examples
+used 0.1.1. Release 0.2.1 removed README version pins. T06 adds automation and replaces the release
+guide's stale 0.2.1 current-install example. Immutable earlier archives retain their original text.
 
 Acceptance:
 

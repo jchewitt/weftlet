@@ -20,6 +20,8 @@ published and passes upstream checks; genuine consumer acceptance remains pendin
 no-model preview and T05's cold-validation improvement shipped in 0.3.0. T03 operational cache
 reuse, T04 timeout diagnostics and T08 deterministic physical-file consistency shipped in 0.4.0.
 T09 timeout support and T05a identity preflight/phase timing shipped in 0.5.0.
+T06 [release-documentation consistency](ADR-022-release-documentation.md) is implemented for the
+next release: generated current examples, actual archive checks and fresh documented installation.
 Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
 before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
 
@@ -49,7 +51,7 @@ snapshots retain their full configuration identity. Exact legacy reads and expli
 adoption preserve prior artifacts; custom providers remain conservative.
 [T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) shipped in the same release, adding
 safe failure reports, opaque source mapping and settled progress without changing extraction/cache
-identity. Broader T05 and T06/T07 work remain open.
+identity. Broader T05 and T07 work remain open; T06 is implemented with publication pending.
 
 [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
 0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and

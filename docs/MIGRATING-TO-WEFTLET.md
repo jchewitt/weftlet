@@ -1,7 +1,7 @@
 # Migrating from Tently to Weftlet
 
 The project is now Weftlet. LaunchEcho remains the maintainer; the GitHub repository remains
-[jchewitt/weftlet](https://github.com/jchewitt/weftlet). Both new package names are published
+[jchewitt/weftlet](https://github.com/jchewitt/weftlet). Both new package names were first published
 at 0.1.0; see [release status](RELEASING.md) for subsequent releases.
 
 | Previous package / command | Replacement |
