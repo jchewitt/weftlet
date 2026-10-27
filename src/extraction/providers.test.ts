@@ -2,7 +2,7 @@ import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { assertSemanticOutput, CodexCliSemanticExtractor, SemanticProviderError } from "./semantic.js";
 import { runSemanticProcess } from "./semantic-process.js";
 import { createSemanticExtractor } from "./providers.js";
@@ -84,6 +84,74 @@ it('retries only explicit transient failures and includes reasoning settings in 
   } }, async () => 'chatgpt');
   await expect(failing.extract(source, context)).rejects.toThrow('Not transient');
   expect(calls).toBe(3);
+});
+
+it('passes the configured ten-minute timeout and cancellation signal to every permitted Codex attempt', async () => {
+  const controller = new AbortController();
+  let calls = 0;
+  const extractor = new CodexCliSemanticExtractor({ ...config, timeoutMs: 600_000, retries: 2 }, {
+    async run(_command, args, _cwd, _prompt, _env, options) {
+      expect(options?.timeoutMs).toBe(600_000);
+      expect(options?.signal).toBe(controller.signal);
+      if (++calls < 3) throw new SemanticProviderError('exit', 'Public transient fixture', true);
+      await writeFile(args[args.indexOf('--output-last-message') + 1]!, '{"assertions":[],"diagnostics":[],"oml":""}');
+    },
+  }, async () => 'chatgpt');
+  expect((await extractor.extract(source, context, { signal: controller.signal })).parsed.assertions).toEqual([]);
+  expect(calls).toBe(3);
+});
+
+it('preserves explicit timeout overrides and stops retries after cancellation with ten-minute configuration', async () => {
+  const controller = new AbortController();
+  let calls = 0;
+  const extractor = new CodexCliSemanticExtractor({ ...config, timeoutMs: 600_000, retries: 2 }, {
+    async run(_command, _args, _cwd, _prompt, _env, options) {
+      calls++;
+      expect(options?.timeoutMs).toBe(45_000);
+      expect(options?.signal).toBe(controller.signal);
+      controller.abort();
+      throw new SemanticProviderError('exit', 'Public transient fixture cancelled by caller', true);
+    },
+  }, async () => 'chatgpt');
+  await expect(extractor.extract(source, context, { signal: controller.signal, timeoutMs: 45_000 }))
+    .rejects.toMatchObject({ code: 'exit', retryable: true });
+  expect(calls).toBe(1);
+});
+
+it('keeps a ten-minute module deadline cancellable without waiting for it to expire', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'provider-ten-minute-'));
+  await writeFile(join(root, 'provider.mjs'), `
+    let notify;
+    export const started = new Promise(resolve => { notify = resolve; });
+    export let configuredTimeout, factorySignal, extractionSignal;
+    export const createSemanticExtractor = (config, options) => {
+      configuredTimeout = config.timeoutMs;
+      factorySignal = options.signal;
+      return { identity: 'ten-minute-fixture:1', extract: async (_source, _context, options) => {
+        extractionSignal = options.signal;
+        notify();
+        return new Promise(() => {});
+      } };
+    };
+  `);
+  const fixture = await import(pathToFileURL(join(root, 'provider.mjs')).href);
+  const provider = createSemanticExtractor({ ...config, provider: 'module', providerModule: './provider.mjs',
+    providerIdentity: 'ten-minute-fixture:1', timeoutMs: 600_000 }, root);
+  const controller = new AbortController();
+  const timer = vi.spyOn(globalThis, 'setTimeout');
+  try {
+    const pending = provider.extract(source, context, { signal: controller.signal });
+    await fixture.started;
+    expect(fixture.configuredTimeout).toBe(600_000);
+    expect(timer.mock.calls.some(([, delay]) => delay === 600_000)).toBe(true);
+    expect(fixture.factorySignal).toBe(fixture.extractionSignal);
+    controller.abort();
+    await expect(pending).rejects.toMatchObject({ code: 'cancelled' });
+    expect(fixture.extractionSignal.aborted).toBe(true);
+  } finally {
+    controller.abort();
+    timer.mockRestore();
+  }
 });
 
 it('rejects malformed provider data independent of the model schema', () => {

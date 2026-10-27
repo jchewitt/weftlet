@@ -109,11 +109,15 @@ for preview, retry and explicit legacy-cache adoption instructions.
 
 ## SHACL validation and performance
 
-The development increment after **0.4.0** adds an identity preflight before ontology/RDF work.
+Starting with **0.5.0**, identity preflight runs before ontology/RDF work.
 `hydrate --json --quiet` reports conflicts using opaque references; `--validation-details` explicitly
 includes local identities, producer versions and citations. Validation emits phase-boundary times
 and graph counts, without a percentage or live heartbeat. Full SHACL remains required after a
 passing preflight. See [ADR 021](docs/ADR-021-identity-preflight-and-validation-timing.md).
+
+Version 0.5.0 also accepts `semantic.timeoutMs: 600000` for an approved ten-minute extraction
+attempt; the default remains two minutes. See [provider limits and reuse](docs/PROVIDERS.md#limits-and-reuse)
+before retrying with compatible cached artifacts.
 
 Starting with 0.3.0, the toolkit indexes a temporary union to accelerate cold validation.
 The toolkit uses JavaScript `rdf-validate-shacl` and an in-memory

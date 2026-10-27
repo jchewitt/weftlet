@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "ca0b3a50004c4eab36f8e1cbb52a7d312cab490ba2c1aa06061e2691996394d9"
+      "destinationSha256": "6cc62cdbd4bed65d8eff4749fba7003b3fa59c2e5ddcf8e333950468c40986bf"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -248,14 +248,14 @@
       "destinationPath": "src/configuration/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
       "modified": true,
-      "destinationSha256": "ff4d15018ec35d21a95c589cf2c74bce2e340f9042b2d3ecaabca5889609e3aa"
+      "destinationSha256": "f9bedfd754d937023f7d06ff9a0fb8e9e4c9d122178446d2e70ac6914e184156"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "5e34e4dfa38219570bd6f13239609b432830e76162f44a768a929895f66dc02a"
+      "destinationSha256": "7c79bcd696102f89d3dcadaf01ab2311f68b37172b54b21a667de7f15bdec69a"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/allow-ten-minute-timeout.md",
     ".changeset/config.json",
     ".changeset/explain-identity-conflicts.md",
     ".changeset/release-plan.json",

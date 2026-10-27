@@ -8,6 +8,28 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Ten-minute timeout blocker, 2026-10-27
+
+The maintainer reports that published 0.4.0 rejects the approved `semantic.timeoutMs: 600000`.
+The consumer's ten-minute retry has **not run**. This is a configuration ceiling defect, separate
+from the corrected physical-file kinds and earlier positive consumer update below.
+
+The source patch raises only the accepted maximum from 300000 to 600000 ms. Omitted timeout
+still defaults to 120000; finite positive integer validation, retries, cancellation and the
+separate authentication/discovery limits are unchanged. No provider/prompt/artifact identity
+changes or forced model re-extraction are introduced.
+
+Focused checks pass: config acceptance/boundary rejection, Codex propagation across retries,
+per-call override/cancellation, a cancellable module deadline, and real artifact reuse/preview
+after an interrupted run switches to 600000. The provider tests use an injected runner/local
+module and finish immediately; they are not a live ten-minute extraction. Independent review
+found no blocker. Local `pnpm context-graph:publication-check` passed: 408 deterministic tests
+(17 core, 391 toolkit), one optional OML skip, 13 unchanged advisory architecture findings,
+inventory, licenses and fresh packed-consumer checks. The installed CLI accepts 600000 in
+no-model preview and reports the same limit on an immediate missing-provider failure.
+All 79 original source path/hash pairs remain intact. Hosted checks and publication are recorded
+after completion; the consumer's live ten-minute retry remains unrun.
+
 ## Consumer update after 0.4.0, 2026-10-27
 
 The maintainer reports that the consumer updated and appears to be working. This is positive

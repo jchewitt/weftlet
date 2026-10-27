@@ -5,6 +5,10 @@ Status: maintainer-directed work; release checkpoint on 2026-10-26 after verifie
 updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.
 
+**Release priority T09:** 0.4.0 rejects the approved ten-minute extraction timeout. Support for
+`semantic.timeoutMs: 600000` is implemented for the next release alongside ready T05a work;
+the consumer's ten-minute retry has not run. This bounded blocker precedes T06/T07.
+
 The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
 shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
@@ -37,6 +41,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
+| **T09** | Accept the approved ten-minute extraction timeout | **Source fix implemented; release pending** | Raise only the config ceiling to 600000; preserve defaults/cache/retry behavior; consumer retry has not run |
 | **T08** | Canonical physical-file kinds and public adapter factory | **Shipped in 0.4.0; consumer reported working; detailed acceptance pending** | Public core factory and neutral producers agree; record consumer commit, adapter tests and full hydration/repeat evidence |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |

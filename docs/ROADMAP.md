@@ -6,6 +6,10 @@ Release checkpoint: 2026-10-26, after verified 0.4.0 publication. Evidence is re
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
+Current release priority: the consumer's approved ten-minute retry is blocked by 0.4.0's
+five-minute configuration ceiling. T09 raises the accepted timeout to 600000 ms and will ship
+with ready T05a work. The actual consumer retry has not run; this does not change default limits.
+
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
