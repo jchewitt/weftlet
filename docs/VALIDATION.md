@@ -58,7 +58,7 @@ Completed upstream checks:
 - Fresh public-registry installation passed on Linux/Node 24.19.0 with lifecycle scripts disabled.
   Both lockfile registry URLs and SHA-512 values match the reviewed archives. The installed CLI
   accepted 600000 and the deterministic module verified receiving it. The committed public fixture
-  produced 54 total facts: two semantic facts, four contract consumers, 24 real SCIP facts and
+  produced 54 total facts, including two semantic facts, four contract consumers, 24 real SCIP facts and
   two public adapter facts; the impact query returned 53 facts. Cold hydration extracted two
   artifacts; repeat hydration extracted zero and reused both with identical snapshot identity,
   content digest and stored bytes. Positive/negative preflight and full SHACL, exact attribution
