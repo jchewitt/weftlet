@@ -29,6 +29,7 @@ const withSemantic = (change: Partial<ContextGraphConfig['semantic']>): ContextG
 const operationalChanges: [string, Partial<ContextGraphConfig['semantic']>][] = [
   ['timeout default made explicit', { timeoutMs: 120_000 }],
   ['longer timeout', { timeoutMs: 240_000 }],
+  ['approved ten-minute timeout', { timeoutMs: 600_000 }],
   ['retry default made explicit', { retries: 0 }],
   ['more retries', { retries: 2 }],
   ['more workers', { concurrency: 4 }],

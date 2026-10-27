@@ -271,7 +271,7 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
           'semantic.auth.apiKeyEnv must name an environment variable', absolutePath);
       }
     }
-    for (const [field, max] of [['timeoutMs', 300_000], ['retries', 2], ['maxDocuments', 1000], ['maxSourceBytes', 1_048_576]] as const) {
+    for (const [field, max] of [['timeoutMs', 600_000], ['retries', 2], ['maxDocuments', 1000], ['maxSourceBytes', 1_048_576]] as const) {
       const item = value.semantic[field];
       if (item !== undefined) requireConfig(Number.isInteger(item) && Number(item) >= (field === 'retries' ? 0 : 1) && Number(item) <= max,
         `semantic.${field} exceeds supported bounds`, absolutePath);

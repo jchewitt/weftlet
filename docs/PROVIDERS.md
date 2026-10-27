@@ -87,6 +87,13 @@ Codex attempt (or module execution), no retries, and the configured concurrency 
 before any model call. `maxDocuments`, `maxSourceBytes`, `timeoutMs`, and `retries` may be configured
 within validated limits. Review scope and cost before raising them; these byte/document limits
 are not dollar or token estimates. Ask the operator before substantial paid runs.
+Starting with 0.5.0, `semantic.timeoutMs` accepts integer values from 1 through **600000**
+(ten minutes); 0.4.0 and earlier reject values above 300000. The default remains 120000.
+For the approved ten-minute retry, set `"timeoutMs": 600000` inside the existing `semantic`
+configuration, preview reuse with `hydrate --plan`, then rerun hydration without forcing
+re-extraction. The limit applies to each Codex attempt, or the whole module execution, rather
+than the entire hydration. Codex authentication/discovery checks retain their separate five-second
+bounds. This setting does not raise a CI job's overall timeout or change retry policy.
 Only explicit transient exit status 75 is retryable, at most twice; authentication, invalid
 output, cancellation and ambiguous failures are not retried. Ctrl-C cancels live CLI extraction.
 Indexing cancellation is checked between phases, not inside the indexer process.

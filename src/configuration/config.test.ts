@@ -44,6 +44,19 @@ function withoutPath(path: string): object {
 }
 
 describe('loadConfig', () => {
+  it('accepts ten-minute extraction timeouts and retains finite positive integer bounds', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-config-timeout-'));
+    const path = join(root, 'config.json');
+    for (const timeoutMs of [undefined, 1, 120_000, 300_000, 600_000]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, semantic: { ...validConfig.semantic, timeoutMs } }));
+      expect((await loadConfig(path)).config.semantic.timeoutMs).toBe(timeoutMs);
+    }
+    for (const timeoutMs of [0, -1, 1.5, 600_001, 2_147_483_648, '600000', null]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, semantic: { ...validConfig.semantic, timeoutMs } }));
+      await expect(loadConfig(path)).rejects.toThrow('semantic.timeoutMs');
+    }
+  });
+
   it('accepts opt-in routing declarations and rejects ambiguous or escaping source selections', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-config-routing-'));
     const path = join(root, 'config.json');

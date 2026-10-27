@@ -434,7 +434,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   Object.assign(previewConfig, { semanticSources: ['intent.md'], approvedIntentSources: [],
     adapter: './missing-preview-adapter.mjs',
     semantic: { ...previewConfig.semantic, provider: 'module', providerIdentity: 'publication-preview:1',
-      providerModule: './missing-preview-provider.mjs' } });
+      providerModule: './missing-preview-provider.mjs', timeoutMs: 600_000 } });
   delete previewConfig.semantic.auth;
   await writeFile(join(consumer, 'preview.config.json'), JSON.stringify(previewConfig));
   const plan = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'),
@@ -442,7 +442,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   if (!plan.ready || plan.documents.length !== 1 || plan.documents[0].path !== 'intent.md' ||
       plan.documents[0].cache.status !== 'miss' || plan.estimates.extractions !== 1 ||
       (await readdir(consumer)).includes('.context-graph')) {
-    throw new Error('Installed hydration preview must select committed inputs without adapters, providers or graph writes');
+    throw new Error('Installed hydration preview must accept a ten-minute timeout without adapters, providers or graph writes');
   }
   const publicApi = await import(toolkitModule);
   if (typeof publicApi.planHydration !== 'function') throw new Error('Missing public hydration planner export');
@@ -464,6 +464,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   if (failure.status !== 1 || failure.stdout !== '') throw new Error('Installed failed hydration must leave stdout clean');
   const failureReport = JSON.parse(failure.stderr);
   if (failureReport.code !== 'unavailable' || failureReport.category !== 'infrastructure' ||
+      failureReport.timeoutMs !== 600_000 ||
       failureReport.sourceId !== plan.documents[0].sourceId || failureReport.progress.failed !== 1 ||
       failureReport.progress.completed !== 0 || failure.stderr.includes('intent.md') ||
       failure.stderr.includes(consumer) || failure.stderr.includes('missing-preview-provider')) {

@@ -157,7 +157,7 @@ describe('operational-setting semantic artifact reuse', () => {
       .not.toBe(resolveSemanticStorageRoots(f.root, module).primary);
   });
 
-  it('reuses completed work after interruption and a changed timeout, while requiring a fresh current-config snapshot', async () => {
+  it('reuses completed work after interruption and a ten-minute timeout, while requiring a fresh current-config snapshot', async () => {
     const f = await fixture();
     const calls: Calls = [];
     const first = application(f, f.config, calls, 'docs/b.md');
@@ -169,7 +169,7 @@ describe('operational-setting semantic artifact reuse', () => {
     const completed = await readdir(join(pool, 'artifacts/semantic'));
     expect(completed).toHaveLength(1);
     const completedBytes = await readFile(join(pool, 'artifacts/semantic', completed[0]!));
-    const updated = changedSemantic(f.config, { timeoutMs: 200 });
+    const updated = changedSemantic(f.config, { timeoutMs: 600_000 });
     await f.save(updated);
     const planned = await planHydration(f.configPath);
     expect(planned.estimates).toEqual({ reusableArtifacts: 1, extractions: 1, unknownArtifacts: 0 });
@@ -182,7 +182,7 @@ describe('operational-setting semantic artifact reuse', () => {
     expect(saved.evidenceState).toMatchObject({ configurationMatches: false, eligibleForCurrentDiffValidation: false });
     const result = await retry.hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(result).toMatchObject({ semanticExtracted: 1, semanticReused: 1 });
-    expect(calls.at(-1)).toEqual({ path: 'docs/b.md', timeoutMs: 200 });
+    expect(calls.at(-1)).toEqual({ path: 'docs/b.md', timeoutMs: 600_000 });
     expect(calls).toHaveLength(3);
     expect(result.snapshot.manifest.configurationDigest).toBe(sha256(stableJson(updated)));
     expect(result.snapshot.manifest.snapshotId).not.toBe(baseline.snapshot.manifest.snapshotId);
