@@ -352,8 +352,17 @@ Delivery increments:
 [ADR 023](ADR-023-document-coverage-preview.md) records the T07a public API and `documents plan`
 command. Entry points, document roots and read limits are operation arguments, with existing
 semantic budgets used only for comparison. No configuration/cache identity or hydration selection
-is changed. Source validation is recorded in [validation](VALIDATION.md); no npm publication is
-claimed by implementation status.
+is changed. [PR 38](https://github.com/jchewitt/weftlet/pull/38) merged T07a with hosted Ubuntu
+and native Windows checks; exact source validation is recorded in [validation](VALIDATION.md).
+No npm publication is claimed by implementation status.
+
+T07b's next boundary is a shared classification contract and deterministic document-evidence
+extractor. Keep document identities/kinds intact and represent validation sources even without
+semantic artifacts or outgoing links. Carry explicit source roles through RDF, query projections
+and visualization; a filename or a cited link must not imply a successful test or approved rule.
+Keep source approval, owner mappings and assertion review separate, with missing/ambiguous
+ownership reported as evidence gaps. Classification/extractor APIs can ship before T07c activates
+them in hydration; preserve current direct-source behavior and historical facts during that step.
 
 Acceptance:
 
