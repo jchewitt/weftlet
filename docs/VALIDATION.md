@@ -30,12 +30,22 @@ The installed CLI/API produced matching prospective coverage digests and explici
 frontiers while the configured provider and adapter were unavailable. Existing real TypeScript
 SCIP, RDF/SPARQL/SHACL, visualization and MCP checks also passed. All 79 original source
 path/hash pairs are intact. Independent review found a `./` evidence-root labeling edge case;
-the fix and both `.`/`./` regressions pass. Hosted results will be recorded separately.
+the fix and both `.`/`./` regressions pass.
 
 The first hosted Windows attempt passed 412 checks and failed one fixture setup: Git for Windows
 rejects tab/newline paths even through `update-index`. The fixture now writes those nested Git
 tree/commit objects directly, preserving unusual-path coverage without checkout or safety-setting
 changes. All seven focused Git tests pass locally after this fixture-only correction.
+
+[PR 38](https://github.com/jchewitt/weftlet/pull/38) merged at
+`35de52e42b51728af43d9bb74cb9b338cf3c1ece`. Final feature head
+`0969e109409aa6fb86827cb6a70ffdd0bcc34bc7` passed hosted Ubuntu and native Windows in
+[run 40537179020](https://github.com/jchewitt/weftlet/actions/runs/40537179020) and the
+[PR run](https://github.com/jchewitt/weftlet/actions/runs/40537186133).
+Ubuntu passed all 537 deterministic tests and the full publication gate, with one optional OML
+skip and 13 advisory findings. Windows passed all 413 selected tests, inventory and license checks,
+including the corrected whitespace-path fixture. T07a is merged with a minor changeset;
+the verified npm release remains 0.5.0.
 
 A no-model self-repository probe started from `docs/RELEASE-1.0-PLAN.md` at committed source
 `6a6a19cd8ba8c22c64c4158e38e0a3a57f350ab2`, with root `.` and the evaluation configuration.
