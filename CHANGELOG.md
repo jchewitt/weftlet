@@ -1,5 +1,18 @@
 # @weftlet/toolkit
 
+## 0.5.0
+
+### Minor Changes
+
+- c8db1f0: Detect conflicting node kinds before ontology compilation and RDF construction, with complete producer/evidence attribution and opaque default diagnostics. Add explicit local `--validation-details` and public preflight helpers without modifying facts, authority or semantic artifacts.
+  
+  Report elapsed times and graph counts at validation phase boundaries while retaining full SHACL and existing conformance verdicts. Preserve previous snapshots and completed artifacts on failure. Phase timing is not a live heartbeat, incremental validation or a conformance cache.
+
+### Patch Changes
+
+- 795c67a: Accept `semantic.timeoutMs: 600000` for approved ten-minute extraction attempts. Raise the configuration ceiling from five to ten minutes while keeping the two-minute default, finite positive integer validation, cancellation and retry limits unchanged. Compatible Codex artifacts remain reusable after this operational change; the snapshot configuration identity still changes.
+- @weftlet/core@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes

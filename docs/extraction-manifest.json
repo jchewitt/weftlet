@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "1e5ae982ffbb2cb02071bbf6c4f8040836dcc451c5e478f10b07cc5646f0e1eb"
+      "destinationSha256": "3e56a3b6a6200e15f684bb490360f2aec0d305dc6c475a176971b188ac5b725d"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "090d8d90cbf775e6edf1656215d75200f9961009ef75f2ab4de55fe5603814ea"
+      "destinationSha256": "cde075a193be99f3d50895d9f764e8fd5848f54a2e5acb0155ce69f454bf8623"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -578,9 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
-    ".changeset/allow-ten-minute-timeout.md",
     ".changeset/config.json",
-    ".changeset/explain-identity-conflicts.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",

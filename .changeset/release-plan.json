@@ -3,18 +3,17 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.4.0",
-      "previousVersion": "0.3.0"
+      "version": "0.5.0",
+      "previousVersion": "0.4.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.4.0",
-      "previousVersion": "0.3.0"
+      "version": "0.5.0",
+      "previousVersion": "0.4.0"
     }
   ],
   "changesets": [
-    "canonical-physical-files.md",
-    "explain-semantic-failures.md",
-    "retain-operational-cache.md"
+    "allow-ten-minute-timeout.md",
+    "explain-identity-conflicts.md"
   ]
 }
