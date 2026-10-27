@@ -43,7 +43,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T10** | Correct implementation coverage for returned code relationships | **Implemented after T07a; validation/publication pending** | Separate evidence counts from display groups; preserve facts, authority, ranking and saved snapshots; scope gaps to returned page |
+| **T10** | Correct implementation coverage for returned code relationships | **Merged after T07a; local/hosted checks passed; publication pending** | Separate evidence counts from display groups; preserve facts, authority, ranking and saved snapshots; scope gaps to returned page |
 | **T09** | Accept the approved ten-minute extraction timeout | **Shipped in 0.5.0; consumer ten-minute retry unrun** | Raise only the config ceiling to 600000; preserve defaults/cache/retry behavior; consumer retry has not run |
 | **T08** | Canonical physical-file kinds and public adapter factory | **Shipped in 0.4.0; consumer reported working; detailed acceptance pending** | Public core factory and neutral producers agree; record consumer commit, adapter tests and full hydration/repeat evidence |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
@@ -73,7 +73,9 @@ retains evidence authority and scopes absence to the returned page. Existing sna
 with the fix without hydration or model work. The exact consumer package/output was requested;
 the public reproduction does not claim a completed private consumer acceptance run.
 
-Validation and release status are recorded in [validation](VALIDATION.md). T07b/T07c and broader T05
+The fix merged in [PR 40](https://github.com/jchewitt/weftlet/pull/40), with local publication checks
+and hosted Ubuntu/native Windows validation. Exact evidence and release status are recorded in
+[validation](VALIDATION.md). T07b/T07c and broader T05
 work remain separate; this reporting correction does not activate document traversal in hydration.
 
 ## T09 — Accept the approved ten-minute extraction timeout
