@@ -10,6 +10,7 @@ fact's subject and object identity for multiple kinds. The scan covers semantic,
 static, adapter, routing and runtime facts, including conceptual identities. Working overlays
 run the same check over retained and newly extracted facts before RDF construction/publication.
 No fact, kind, ID, citation or authority is changed or discarded by the check.
+This runs after semantic/static extraction; it is separate from no-model `hydrate --plan`.
 
 `inspectGraphIdentities(facts, { repositoryId, includeDetails? })` returns a report;
 `assertGraphIdentities` throws `GraphIdentityConflictError` on conflicts. Both are public toolkit

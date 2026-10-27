@@ -33,8 +33,9 @@ Bounded public experiments measured substantial cold-path improvement, alongside
 RSS in the prototype at 10,000 unique-node facts; the production harness including serialization
 peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
 T05a adds [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
-in development source after 0.4.0. Full validation remains mandatory. In-phase worker progress,
-result reuse and incremental validation remain open; no Rust engine, graph database or
+after 0.4.0, merged with local/hosted checks passing and publication pending. Full validation
+remains mandatory. In-phase worker progress, result reuse and incremental validation remain
+open; no Rust engine, graph database or
 validation-result cache is introduced by these increments.
 
 [T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in

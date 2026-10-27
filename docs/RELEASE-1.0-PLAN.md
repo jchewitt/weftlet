@@ -42,7 +42,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
-| **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; T05a preflight/timing implemented in development** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
+| **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a merged with local/hosted checks passing, unreleased** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
@@ -209,8 +209,9 @@ Acceptance:
 ## T05 — Detect inexpensive conflicts early and explain validation work
 
 T05a implements [early identity attribution and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
-in development source after 0.4.0. Hydration and overlays reject all conflicting subject/object
-kinds before RDF construction; opaque default reports have explicit local detail opt-in.
+after 0.4.0, merged with local and hosted Ubuntu/Windows checks passing but not yet published.
+Hydration and overlays reject all conflicting subject/object kinds before RDF construction;
+opaque default reports have explicit local detail opt-in.
 Completed semantic artifacts and prior snapshots remain intact. Valid preflight results still
 require full SHACL. Timings report actual phase boundaries, not in-phase heartbeat or percentage.
 This does not close the broader evaluation/reuse/backend items below or claim publication.

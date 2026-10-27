@@ -43,7 +43,14 @@ and elapsed phase boundaries. Full SHACL shapes, accepted facts and cache identi
   preserves exact opt-in citations, reports phase timing and still rejects the same pair under
   full SHACL. All 79 original extraction source path/hash pairs remain intact.
 - Independent runtime/test review found no blocker. No live model or private consumer
-  performance result is implied. Hosted checks and merge are recorded separately.
+  performance result is implied.
+
+[PR 30](https://github.com/jchewitt/weftlet/pull/30) merged at
+`c8db1f0b871f5e6f3d1d2e9eda1b045aa45469df`. Exact feature head
+`dc01421aa3953963e411430266b9035f2852cfd8` passed hosted Ubuntu and native Windows checks
+in [push run 40451305862](https://github.com/jchewitt/weftlet/actions/runs/40451305862) and
+[PR run 40451332221](https://github.com/jchewitt/weftlet/actions/runs/40451332221).
+T05a is merged but unpublished; npm 0.4.0 remains the verified public release.
 
 A bounded public profile ran the unique-node fixture in three fresh processes: 500 facts,
 the same 500 facts again, then 501 facts. Command: `node scripts/benchmark-shacl.mjs --counts 500
