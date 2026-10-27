@@ -98,6 +98,9 @@ try {
         'dist/graph/identity-preflight.js', 'dist/graph/validation-progress.js',
         'dist/application/document-coverage.js', 'dist/extraction/document-traversal.js',
         'dist/extraction/canonical-document-links.js', 'dist/interfaces/document-coverage.js',
+        'dist/extraction/document-classification.js', 'dist/extraction/document-classification.d.ts',
+        'dist/extraction/document-evidence.js', 'dist/extraction/document-evidence.d.ts',
+        'dist/graph/document-role-description.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -255,6 +258,12 @@ try {
     writeFile(join(consumer, 'intent.md'), '# Greeting\nSee [implementation](src/consumer.ts) and [checks](test/contract.test.ts).\n'),
     writeFile(join(consumer, 'coverage.md'), '# Public coverage\nSee [notes](notes.md) and [intent](intent.md).\n'),
     writeFile(join(consumer, 'notes.md'), '# Public notes\nReturn to [coverage](coverage.md).\n'),
+    writeFile(join(consumer, 'role-owner.md'), '# Public owner\n[Draft](draft-plan.md), [review](document-review.md), [empty review](empty-review.md).\n'),
+    writeFile(join(consumer, 'draft-plan.md'), '# Unapproved plan\n[Implementation](src/consumer.ts).\n'),
+    writeFile(join(consumer, 'document-review.md'), '# Review\nPASS is a reported checklist, not a test execution claim.\n[Checks](test/contract.test.ts).\n'),
+    writeFile(join(consumer, 'empty-review.md'), ''),
+    ...['provider', 'adapter'].map(name => writeFile(join(consumer, `document-preview-${name}.mjs`),
+      `import { writeFileSync } from 'node:fs';\nwriteFileSync(new URL('./unexpected-document-import', import.meta.url), '${name}');\nthrow Error('Document preview must not initialize ${name}');\n`)),
     writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
       join(consumer, 'src', 'consumer.ts'),
@@ -485,6 +494,88 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
       JSON.parse(limitedCoverage.stdout).coverage.unvisited.length !== 2) {
     throw new Error('Installed document coverage must report an incomplete frontier when a read limit is reached');
   }
+  for (const name of ['parseDocumentClassificationPolicy', 'classifyDocumentSources', 'extractDocumentEvidence']) {
+    if (typeof publicApi[name] !== 'function') throw new Error(`Missing public document evidence export: ${name}`);
+  }
+  const documentPolicy = publicApi.parseDocumentClassificationPolicy({ schemaVersion: 1,
+    roles: [{ id: 'draft-role', pattern: 'draft-plan.md', role: 'plan' },
+      { id: 'review-role', pattern: '*-review.md', role: 'validation' }],
+    owners: [{ id: 'owner-self', pattern: 'role-owner.md', ownerDocument: 'role-owner.md' },
+      { id: 'draft-owner', pattern: 'draft-plan.md', ownerDocument: 'role-owner.md' }] });
+  const documentConfig = { ...previewConfig, approvedIntentSources: ['role-owner.md', '*-review.md'],
+    evidenceRoots: ['legacy-evidence'], adapter: './document-preview-adapter.mjs',
+    semantic: { ...previewConfig.semantic, providerModule: './document-preview-provider.mjs' } };
+  await writeFile(join(consumer, 'document-preview.config.json'), JSON.stringify(documentConfig));
+  await writeFile(join(consumer, 'document-policy.json'), JSON.stringify(documentPolicy));
+  const unchangedHydration = await publicApi.planHydration(join(consumer, 'preview.config.json'));
+  const unchangedIndex = await readFile(join(consumer, '.git/index'));
+  const documentPaths = ['role-owner.md', 'draft-plan.md', 'document-review.md', 'empty-review.md'];
+  const unchangedDocuments = await Promise.all(documentPaths.map(path => readFile(join(consumer, path))));
+  const policyCoverage = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'), 'documents', 'plan',
+    '--entry', 'role-owner.md', '--document-policy', 'document-policy.json', '--json',
+    '--config', 'document-preview.config.json'], consumer));
+  const documentOptions = { entryPoints: ['role-owner.md'], documentPolicy,
+    approvedIntentSources: documentConfig.approvedIntentSources, evidenceRoots: documentConfig.evidenceRoots };
+  const apiPolicyCoverage = await publicApi.planDocumentCoverage(join(consumer, 'document-preview.config.json'), documentOptions);
+  if (!policyCoverage.ready || !policyCoverage.classification.complete || policyCoverage.documents.length !== 4 ||
+      policyCoverage.coverageDigest !== apiPolicyCoverage.coverageDigest ||
+      policyCoverage.documents.find(document => document.path === 'document-review.md')?.sourceRole !== 'validation' ||
+      policyCoverage.documents.find(document => document.path === 'document-review.md')?.sourceAuthority !== 'declared' ||
+      policyCoverage.documents.find(document => document.path === 'draft-plan.md')?.sourceAuthority !== 'inferred' ||
+      policyCoverage.documents.find(document => document.path === 'draft-plan.md')?.ownership.status !== 'resolved') {
+    throw new Error('Installed documents plan must load explicit policy without promoting approved validation or linked drafts');
+  }
+  const documentContext = { repositoryRoot: consumer, repositoryId: 'publication-document-evidence', ref: 'HEAD',
+    commitSha: policyCoverage.commitSha, snapshotId: 'publication-document-evidence', changedPaths: [], deletedPaths: [], renamedPaths: {} };
+  const documentEvidence = await publicApi.extractDocumentEvidence(new publicApi.GitRepository(consumer), documentContext, documentOptions);
+  const classified = publicApi.classifyDocumentSources(documentPaths, { approvedIntentSources: documentConfig.approvedIntentSources,
+    evidenceRoots: documentConfig.evidenceRoots, availableDocuments: documentPaths }, documentPolicy);
+  if (!documentEvidence.classification.complete || documentEvidence.diagnostics.length ||
+      publicApi.stableJson(documentEvidence.classification) !== publicApi.stableJson(classified) ||
+      !documentEvidence.facts.some(fact => fact.provenance.path === 'empty-review.md' && fact.predicate === 'contains' &&
+        fact.object.kind === 'Document' && fact.provenance.digest === publicApi.sha256('')) ||
+      documentEvidence.facts.some(fact => fact.authority !== 'inferred' || fact.extractionReview !== 'deterministic' ||
+        fact.predicate === 'verifiedBy' || fact.sourcePolicyDigest !== classified.policyDigest)) {
+    throw new Error('Installed deterministic document extraction must preserve policy, empty documents and unreviewed business authority');
+  }
+  for (const fact of documentEvidence.facts) {
+    const committed = await new publicApi.GitRepository(consumer).readFileAt(documentContext.commitSha, fact.provenance.path);
+    if (fact.provenance.commitSha !== documentContext.commitSha || fact.provenance.digest !== publicApi.sha256(committed)) {
+      throw new Error('Installed document evidence lost its exact committed provenance');
+    }
+  }
+  const documentSnapshot = { manifest: { schemaVersion: 1, repositoryId: documentContext.repositoryId, ref: 'HEAD',
+    commitSha: documentContext.commitSha, snapshotId: documentContext.snapshotId,
+    contentDigest: publicApi.sha256(publicApi.stableJson(documentEvidence.facts)), generatedAt: '2026-01-01',
+    ontologyVersion: 'rdf-v1', extractorVersions: {}, semanticModel: 'none', semanticPromptVersion: 'none',
+    semanticArtifactKeys: [], scipIndexDigest: '', rdfDigest: '' },
+    facts: documentEvidence.facts, invariants: [], runtimeEvidence: [], unresolved: [] };
+  const documentGraph = new publicApi.RdfEvidenceGraph(documentSnapshot);
+  const documentRows = await documentGraph.select('SELECT ?fact WHERE { ?fact <' + publicApi.CG + 'sourceRole> ?role; <' +
+    publicApi.CG + 'ownershipStatus> ?status; <' + publicApi.CG + 'sourcePolicyDigest> ?policy }');
+  if (!(await documentGraph.validate()).conforms || documentRows.rows.length !== documentEvidence.facts.length ||
+      publicApi.stableJson(await documentGraph.facts()) !== publicApi.stableJson(documentEvidence.facts)) {
+    throw new Error('Installed document metadata must survive strict SHACL and exact RDF projection');
+  }
+  const documentQuery = new publicApi.SnapshotImpactQueryService({ read: async () => documentSnapshot,
+    readHead: async () => documentSnapshot, write: async () => {}, updateHead: async () => {} }, 'default');
+  const documentPack = await documentQuery.scan({ ownerDocument: 'role-owner.md', maxFacts: 100 });
+  const documentHtml = publicApi.renderContextPackVisualization(documentPack, 'html');
+  if (publicApi.stableJson([...documentPack.facts].sort((a, b) => a.id.localeCompare(b.id))) !==
+      publicApi.stableJson([...documentEvidence.facts].sort((a, b) => a.id.localeCompare(b.id))) ||
+      documentPack.coverage.counts.implementationAndConsumers !== 0 || documentPack.coverage.counts.validationEvidence < 3 ||
+      !documentPack.markdown.includes('source role validation; ownership not-required') ||
+      !documentPack.markdown.includes('source role plan; ownership resolved; owner documents role-owner.md') ||
+      !documentHtml.includes('class="visual-node column-evidence" data-visual-node="true" data-node-id="document:document-review.md"') ||
+      !documentHtml.includes('source role validation; ownership not-required')) {
+    throw new Error('Installed query and viewer must expose exact source roles and ownership without retyping Document nodes');
+  }
+  if (publicApi.stableJson(await publicApi.planHydration(join(consumer, 'preview.config.json'))) !== publicApi.stableJson(unchangedHydration) ||
+      !(await readFile(join(consumer, '.git/index'))).equals(unchangedIndex) ||
+      (await Promise.all(documentPaths.map(path => readFile(join(consumer, path))))).some((bytes, index) => !bytes.equals(unchangedDocuments[index])) ||
+      (await readdir(consumer)).some(path => ['.context-graph', 'unexpected-document-import'].includes(path))) {
+    throw new Error('Installed document policy/extraction must leave hydration inputs, checkout, index and provider/adapter initialization unchanged');
+  }
   if (typeof publicApi.SemanticHydrationError !== 'function' ||
       typeof publicApi.semanticSourceId !== 'function' ||
       plan.documents[0].sourceId !== publicApi.semanticSourceId(plan.repositoryId, plan.documents[0])) {
@@ -536,7 +627,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
+  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, document policy and deterministic evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

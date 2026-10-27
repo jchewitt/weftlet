@@ -140,3 +140,76 @@ it('rejects missing, unknown and misplaced traversal arguments before applicatio
     await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
   }
 });
+
+it('loads an operation policy and reports source classification separately without changing hydration inputs', async () => {
+  const { root, configPath, git, run } = await fixture();
+  const policy = { schemaVersion: 1, roles: ['roadmap', 'queue', 'draft'].map(name => ({
+    id: `plan-${name}`, pattern: `docs/${name}.md`, role: 'plan',
+  })), owners: [{ id: 'public-owner', pattern: 'docs/*.md', ownerDocument: 'docs/owner.md' }] };
+  await writeFile(join(root, 'documents.policy.json'), JSON.stringify(policy));
+  const before = JSON.parse((await run('hydrate', '--plan', '--json')).stdout);
+  const configBytes = await readFile(configPath);
+  const index = await readFile(join(root, '.git/index'));
+  const status = await git('status', '--porcelain=v1');
+  const saved = await readFile(join(root, '.context-graph/retained.json'));
+  const args = ['documents', 'plan', '--entry', 'docs/owner.md', '--document-policy', 'documents.policy.json'];
+  const plan = JSON.parse((await run(...args, '--json')).stdout);
+  expect(plan).toMatchObject({ ready: true, classification: { complete: true }, changesHydrationSelection: false });
+  expect(plan.documents.find((document: { path: string }) => document.path === 'docs/draft.md')).toMatchObject({
+    sourceRole: 'plan', sourceAuthority: 'inferred', extractionReview: 'unreviewed',
+    ownership: { status: 'resolved', ownerDocuments: ['docs/owner.md'], mappingIds: ['public-owner'] },
+  });
+  expect(plan.documents.find((document: { path: string }) => document.path === 'docs/validation/check.md')).toMatchObject({
+    sourceRole: 'validation', role: 'validation-evidence', ownership: { status: 'not-required' },
+  });
+  const human = (await run(...args)).stdout;
+  expect(human).toContain('Source classification: complete');
+  expect(human).toContain('separate from traversal/budget readiness');
+  expect(human).toContain('owner resolved "docs/owner.md"');
+  const after = JSON.parse((await run('hydrate', '--plan', '--json')).stdout);
+  expect(after).toEqual(before);
+  expect(await readFile(configPath)).toEqual(configBytes);
+  expect(await readFile(join(root, '.git/index'))).toEqual(index);
+  expect(await git('status', '--porcelain=v1')).toBe(status);
+  expect(await readFile(join(root, '.context-graph/retained.json'))).toEqual(saved);
+  await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
+});
+
+it('keeps ambiguous roles and ineligible owners visible when traversal and budgets pass', async () => {
+  const { root, run } = await fixture();
+  await writeFile(join(root, 'documents.policy.json'), JSON.stringify({ schemaVersion: 1,
+    roles: [{ id: 'owner-is-validation', pattern: 'docs/owner.md', role: 'validation' },
+      { id: 'draft-plan', pattern: 'docs/draft.md', role: 'plan' },
+      { id: 'draft-reference', pattern: 'docs/draft.md', role: 'reference' }],
+    owners: [{ id: 'public-owner', pattern: 'docs/*.md', ownerDocument: 'docs/owner.md' }],
+  }));
+  const args = ['documents', 'plan', '--entry', 'docs/owner.md', '--document-policy', 'documents.policy.json'];
+  const plan = JSON.parse((await run(...args, '--json')).stdout);
+  expect(plan).toMatchObject({ ready: true, coverage: { complete: true }, classification: { complete: false } });
+  expect(plan.documents.find((document: { path: string }) => document.path === 'docs/draft.md')).toMatchObject({
+    sourceRole: 'unclassified', roleStatus: 'ambiguous', sourceAuthority: 'inferred', ownership: { status: 'ineligible' },
+  });
+  const human = (await run(...args)).stdout;
+  expect(human).toContain('Source classification: gaps');
+  expect(human).toContain('CLASSIFICATION');
+  expect(human).toContain('role unclassified (ambiguous)');
+  expect(human).not.toContain('PUBLIC_BODY_MUST_NOT_APPEAR');
+  await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
+});
+
+it('rejects malformed, oversized and misplaced document policy before execution starts', async () => {
+  const { root, run } = await fixture();
+  const args = ['documents', 'plan', '--entry', 'docs/owner.md', '--document-policy', 'bad.policy.json'];
+  for (const content of ['{"schemaVersion":', '{"schemaVersion":1,"unknown":"PRIVATE_POLICY_TEXT"}',
+    'PRIVATE_POLICY_TEXT'.repeat(5000)]) {
+    await writeFile(join(root, 'bad.policy.json'), content);
+    const result = await failed(run, ...args);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toMatch(/policy|JSON|65536/i);
+    expect(result.stderr).not.toContain('PRIVATE_POLICY_TEXT');
+  }
+  const misplaced = await failed(run, 'hydrate', '--document-policy', 'bad.policy.json');
+  expect(misplaced.stdout).toBe('');
+  expect(misplaced.stderr).toContain('documents plan');
+  await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
+});

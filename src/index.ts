@@ -18,3 +18,5 @@ export * from './graph/identity-preflight.js';
 export * from './graph/validation-progress.js';
 export * from './application/document-coverage.js';
 export * from './extraction/document-traversal.js';
+export * from './extraction/document-classification.js';
+export * from './extraction/document-evidence.js';

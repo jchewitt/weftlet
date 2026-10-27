@@ -135,7 +135,42 @@ documents. Independent read limits (`--max-read-documents`, `--max-read-bytes`,
 exceeded extraction budgets return a report with exit status 1, without model calls or graph writes.
 The preview follows only supported local links; complete coverage is not a claim of complete
 product knowledge. See [ADR 023](docs/ADR-023-document-coverage-preview.md) for limits and the
-remaining classification/hydration work.
+remaining hydration work.
+
+The preview also accepts an optional JSON source policy:
+
+```sh
+pnpm exec weftlet documents plan --entry docs/sot.md --root docs --document-policy document-policy.json --json
+```
+
+```json
+{
+  "schemaVersion": 1,
+  "roles": [
+    { "id": "intent", "pattern": "docs/sot.md", "role": "intent" },
+    { "id": "plans", "pattern": "docs/plans/**", "role": "plan" },
+    { "id": "checks", "pattern": "docs/validation/**", "role": "validation" }
+  ],
+  "owners": [
+    { "id": "sot-owner", "pattern": "docs/**", "ownerDocument": "docs/sot.md" }
+  ]
+}
+```
+
+Roles are `intent`, `plan`, `validation` or `reference`; unmatched sources are `unclassified`
+unless configured evidence roots or approved intent sources provide a default. The owner must
+be read within the selected coverage, match `approvedIntentSources`, and have an unambiguous
+intent role. Owner mappings and links never transfer approval to another source or approve an
+assertion. Conflicting mappings remain explicit gaps.
+
+This file is an operation input, separate from `context-graph.config.json`. `ready` and the
+exit status still describe traversal and budget checks; inspect `classification.complete` and
+its issues for role/ownership gaps. The policy does not change current hydration or cache inputs.
+The public `extractDocumentEvidence` API separately emits cited document-presence and reference
+facts, including empty validation documents, without interpreting prose or treating a written
+“PASS” as proof that a test ran. Queries, RDF/SHACL and the viewer preserve its source metadata.
+Connecting these APIs to hydration is the next increment. See
+[ADR 025](docs/ADR-025-document-classification.md) for the contract and limits.
 
 ## SHACL validation and performance
 

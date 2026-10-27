@@ -4,6 +4,8 @@ export function contextPackEvidenceAuthority(
   fact: GraphFact,
 ): 'declared' | 'implemented' | 'observed' | 'validated' | 'inferred' | 'draft' {
   if (fact.authority) return fact.authority;
+  // A document's role describes its source, not whether its claims were checked.
+  if (fact.sourceRole !== undefined) return 'inferred';
   if (fact.extractor.id === 'otlp-runtime-evidence') return 'observed';
   if (fact.extractor.id.startsWith('codex-cli:')) return 'inferred';
   if (fact.subject.kind === 'Evidence' || fact.object.kind === 'Evidence' ||

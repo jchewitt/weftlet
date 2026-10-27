@@ -14,9 +14,11 @@ shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
 shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
 for the next release. T07a prospective coverage is implemented separately from hydration;
-broader T05 follow-ups and T07b/T07c classification and hydration remain open. Official 1.0 follows
-the agreed remaining scope and genuine consumer acceptance,
-with its exact release scope reviewed when the evidence is available.
+T07b classification and deterministic document evidence passed the local full gate and independent
+review; hosted checks and merge are pending. Two engineering workstreams remain: T07c
+hydration/cache integration and T05 performance/validation closeout. Finish that scope, publish a
+reviewed minor candidate, validate it in TradePilot, then review and publish official 1.0. These
+release/consumer gates are separate from the engineering count; none is already accepted.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
 remains a separate future direction for generation, approvals, a companion website and hosted
@@ -52,7 +54,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a implemented; T07b/T07c open; publication pending** | Prospective committed coverage only; preserve validation evidence/classification before connecting traversal to hydration/cache selection |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b local gate/review passed, hosted checks/merge pending; T07c open** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -314,6 +316,14 @@ Acceptance:
   failure must preserve the prior snapshot. Keep model-independent profiling separate from live
   extraction performance and from the reported two-fact correctness defect.
 
+The bounded 1.0 closeout must finish representative cold/repeated/changed-input measurements and
+record decisions on worker execution, successful-result reuse and dependency-aware incremental
+validation. Retaining direct full validation can be the evidence-backed result of those evaluations;
+it does not mean cache, worker or incremental capabilities were delivered. Native/backend benchmarks
+remain conditional on measurements justifying a candidate. Do not silently defer the promised
+measurements/evaluations or consumer performance acceptance; any scope deferral requires an explicit
+maintainer decision recorded with its remaining limitation.
+
 ## T06 — Keep packaged documentation consistent with the release
 
 Implemented after 0.5.0, with [ADR 022](ADR-022-release-documentation.md) defining the checked
@@ -357,9 +367,10 @@ Delivery increments:
    Label this as prospective coverage until it drives hydration; existing hydration-plan documents
    and cache estimates must continue to describe actual execution inputs. The current graph linker
    also recognizes bare/code paths and is not itself a canonical traversal policy.
-2. **T07b planned:** explicit roles/ownership and separate deterministic validation-document evidence. Reaching a
-   document cannot approve it; excluding validation prose from intent extraction must not remove
-   its citations and relationships from the graph. Preserve direct-source configurations.
+2. **T07b local gate/review passed, hosted checks/merge pending:** explicit roles/ownership and separate
+   deterministic document presence/reference evidence. Optional per-fact metadata survives RDF,
+   query and viewer projection without changing canonical Document identities. Reaching an owner
+   does not approve a child or assertion; direct-source hydration remains unchanged.
 3. **T07c planned:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
    delete/rename handling and positive/negative real-extractor fixtures. Coverage failures stop
    new model work without discarding completed artifacts or the last valid snapshot.
@@ -371,13 +382,15 @@ is changed. [PR 38](https://github.com/jchewitt/weftlet/pull/38) merged T07a wit
 and native Windows checks; exact source validation is recorded in [validation](VALIDATION.md).
 No npm publication is claimed by implementation status.
 
-T07b's next boundary is a shared classification contract and deterministic document-evidence
-extractor. Keep document identities/kinds intact and represent validation sources even without
-semantic artifacts or outgoing links. Carry explicit source roles through RDF, query projections
-and visualization; a filename or a cited link must not imply a successful test or approved rule.
-Keep source approval, owner mappings and assertion review separate, with missing/ambiguous
-ownership reported as evidence gaps. Classification/extractor APIs can ship before T07c activates
-them in hydration; preserve current direct-source behavior and historical facts during that step.
+[ADR 025](ADR-025-document-classification.md) records T07b's shared classification contract
+and standalone deterministic document-evidence API. `documents plan --document-policy <json-file>`
+reads an operation-time sidecar; it adds no hydration configuration. The top-level `ready` checks
+traversal/budgets, while `classification.complete` independently reports role/ownership gaps.
+A resolved owner must be available, approved and an unambiguous intent source; an approved
+validation/plan/reference or ambiguous-role owner is ineligible. Neither ownership nor links
+transfer approval. Presence and references retain validation documents even without semantic
+artifacts or outgoing links, without asserting test success. These APIs are not yet invoked by
+hydration/overlays; T07c must preserve that evidence when changing semantic source selection.
 
 Acceptance:
 
@@ -422,6 +435,27 @@ Before calling the consumer migration accepted or publishing 1.0:
    Existing untested environments or deferred capabilities remain explicitly labeled.
 5. Review the changelog, compatibility/migration guidance and remaining known issues, then use the
    normal reviewed version PR and trusted-publishing workflow. No 1.0 publication is claimed now.
+
+For the reviewed minor candidate, retain a private consumer bundle and share only a sanitized
+summary using the [consumer trial](CONSUMER-TRIAL.md):
+
+- Record both package versions, consumer/adapter SHA, platform/provider/model, configuration and
+  source scope; verify the no-model plan's roles, ownership, exclusions and budgets match execution.
+- Complete genuine full hydration and SHACL publication with the approved timeout, then repeat
+  unchanged inputs: zero new extraction, expected reuse and unchanged snapshot identity/content.
+  Record total and phase timing; the ten-minute extraction limit does not extend an outer job deadline.
+- Retain actual MCP requests/responses and continuations for predeclared changes, including a queue
+  boundary. Review downstream consumers, contracts, implementations/tests and page-scoped coverage;
+  a display group or a missing returned fact must not be mistaken for complete repository coverage.
+- Independently inspect citations and semantic usefulness: misses, irrelevant results, conflicting
+  claims, ownership gaps and misleading authority. Structural conformance is not a semantic-quality pass.
+- Check browser interaction against the same JSON pack/snapshot using the
+  [browser checklist](ENVIRONMENT-VALIDATION.md#browser-run-through-browser-mcp); keep deferred or
+  untested environments explicit. Preserve saved queries and prior snapshots during a failed refresh.
+
+Keep raw snapshots, artifacts, configuration and transcripts with the private consumer; do not
+export credentials or private product content. Upstream fixtures and a published candidate do not
+replace these consumer results or authorize an automatic 1.0 release.
 
 The patch's upstream pass is necessary but does not replace consumer acceptance. Track follow-up
 results without auditing or refactoring the source application's business logic from this repository.

@@ -9,6 +9,10 @@ export const contextPackLanes: readonly ContextPackLane[] = [
 ];
 
 function isValidationFact(fact: GraphFact): boolean {
+  if (fact.sourceRole !== undefined) {
+    return fact.sourceRole === 'validation' || fact.subject.kind === 'Evidence' ||
+      fact.object.kind === 'Evidence' || fact.predicate === 'verifiedBy';
+  }
   const path = fact.provenance.path.toLowerCase();
   return (
     fact.subject.kind === 'Evidence' ||
@@ -20,11 +24,13 @@ function isValidationFact(fact: GraphFact): boolean {
 }
 
 export function isDeclaredFact(fact: GraphFact): boolean {
+  if (fact.sourceRole !== undefined && fact.sourceRole !== 'intent') return false;
   if (fact.authority) return fact.authority === 'declared' && !isValidationFact(fact);
   return false;
 }
 
 export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undefined {
+  if (fact.sourceRole === 'validation') return 'validationEvidence';
   if (fact.extractor.id === 'otlp-runtime-evidence') return undefined;
   const kinds = new Set([fact.subject.kind, fact.object.kind]);
   if (isValidationFact(fact)) {
@@ -39,6 +45,7 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
     return 'contractsAndInvariants';
   }
   if (
+    (fact.sourceRole === undefined || fact.sourceRole === 'intent') &&
     (isDeclaredFact(fact) || fact.sourceAuthority === 'declared') &&
     (kinds.has('Document') ||
       kinds.has('Capability') ||
@@ -58,7 +65,7 @@ export function coverageDescription(coverage: ContextPackCoverage): string {
 
 /** Reporting only: never changes a fact's authority, identity, primary lane or stored bytes. */
 export function isImplementationEvidence(fact: GraphFact): boolean {
-  if (isValidationFact(fact) || fact.extractor.id === 'otlp-runtime-evidence' ||
+  if (fact.sourceRole !== undefined || isValidationFact(fact) || fact.extractor.id === 'otlp-runtime-evidence' ||
       fact.extractionReview === 'unreviewed' || contextPackEvidenceAuthority(fact) !== 'implemented') return false;
   const path = fact.provenance.path;
   if (!path || /(?:^|\/)(?:test|tests|testing|validation|evidence|__tests__|__mocks__)(?:\/|$)/i.test(path.replaceAll('\\', '/'))) return false;
