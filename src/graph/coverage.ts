@@ -90,4 +90,3 @@ export function coverageForFacts(facts: readonly GraphFact[]): ContextPackCovera
     ],
   };
 }
-
