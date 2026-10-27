@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "7b3334d9984aa15dcdd1735d22ebfca0625bf44d4c17403e23d6e4f540d83d1e"
+      "destinationSha256": "622656df7a8fddc84500e0049a4b4fae9a0546504d30f7a72354b2a0bc8e789f"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "21cdbc817983e788a5aac48ea8b32c55a7dda98868eb48b5df470c8d99eea44a"
+      "destinationSha256": "7a0ce5a1ef6861d8c59d76cb7ae4db76301f90995950194e5861880923e6d43c"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -297,7 +297,7 @@
       "destinationPath": "src/repository/git.ts",
       "sourceSha256": "484d3986633bb32ccc3b665f2144007a213c303df51b375c1d653729921d6d2c",
       "modified": true,
-      "destinationSha256": "2557d47d1c54a6bbefc61d16eac4a4d16f995adadb480130ea39f558ce3522f1"
+      "destinationSha256": "769428b7dd480d7d288d7a04c1bea17628c58591ccb01e0f204e2d6f05a3ed6e"
     },
     {
       "sourcePath": "tools/context-graph/src/glob.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "b185467e660715806fc914bef5db068e90199ee32b0226452d4adb4c09991d8b"
+      "destinationSha256": "8c65422c8705416d004f5d8b13ef25b3757c8e8c0a1ded4305602bc5c3e0a142"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/check-release-documentation.md",
     ".changeset/config.json",
+    ".changeset/preview-document-coverage.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -616,6 +617,7 @@
     "docs/ADR-020-canonical-physical-file-producers.md",
     "docs/ADR-021-identity-preflight-and-validation-timing.md",
     "docs/ADR-022-release-documentation.md",
+    "docs/ADR-023-document-coverage-preview.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -745,6 +747,7 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/document-coverage.ts",
     "src/application/extraction-identity.ts",
     "src/application/hydration-failure.ts",
     "src/application/hydration-plan.ts",
@@ -757,11 +760,15 @@
     "src/cli.ts",
     "src/configuration/cache.test.ts",
     "src/configuration/scip-project.ts",
+    "src/extraction/canonical-document-links.test.ts",
+    "src/extraction/canonical-document-links.ts",
     "src/extraction/codex-auth.test.ts",
     "src/extraction/codex-auth.ts",
     "src/extraction/codex-command.test.ts",
     "src/extraction/codex-command.ts",
     "src/extraction/document-references.ts",
+    "src/extraction/document-traversal.test.ts",
+    "src/extraction/document-traversal.ts",
     "src/extraction/document.test.ts",
     "src/extraction/module-request.test.ts",
     "src/extraction/module-request.ts",
@@ -793,6 +800,8 @@
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
+    "src/interfaces/document-coverage.test.ts",
+    "src/interfaces/document-coverage.ts",
     "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/identity-preflight.test.ts",
@@ -800,6 +809,7 @@
     "src/interfaces/init.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
+    "src/repository/git-entries.test.ts",
     "src/repository/working-content.test.ts",
     "src/repository/working-content.ts",
     "src/storage/atomic-rename.test.ts",
@@ -808,6 +818,7 @@
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/document-coverage.test.ts",
     "tests/extractor-compatibility.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",

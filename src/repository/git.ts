@@ -2,6 +2,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { posix } from 'node:path';
+import { isUtf8 } from 'node:buffer';
 
 import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { sha256, slug } from "../infrastructure/util.js";
@@ -17,6 +18,16 @@ export interface GitDelta {
 export interface GitTextMatch {
   readonly path: string;
   readonly line: number;
+}
+
+/** Exact committed entries, relative to the configured repository root. */
+export interface GitTreeEntry {
+  readonly path: string;
+  readonly mode: string;
+  readonly type: 'blob' | 'tree' | 'commit';
+  readonly objectId: string;
+  /** Git blob size in bytes; directories and gitlinks have no size. */
+  readonly size?: number;
 }
 
 export class GitRepository {
@@ -90,6 +101,41 @@ export class GitRepository {
 
   listAllFilesAt(commitSha: string): Promise<readonly string[]> {
     return this.listFilesAt(commitSha, ['.']);
+  }
+
+  /** Read tree metadata without Git's quoted/newline path formatting or checkout access. */
+  async listEntriesAt(commitSha: string): Promise<readonly GitTreeEntry[]> {
+    const commit = await this.resolveRef(commitSha);
+    // :./ selects the committed subtree at cwd; --full-tree makes output relative to
+    // that subtree rather than applying cwd's prefix a second time in a nested project.
+    const { stdout } = await execFileAsync('git',
+      ['ls-tree', '-r', '-t', '-l', '-z', '--full-tree', `${commit}:./`], {
+        cwd: this.root, encoding: 'buffer', maxBuffer: 64 * 1024 * 1024, windowsHide: true,
+      });
+    if (!isUtf8(stdout)) throw new Error('Git tree entry paths are not valid UTF-8');
+    const output = stdout.toString('utf8');
+    if (!output) return [];
+    if (!output.endsWith('\0')) throw new Error('Malformed NUL-delimited Git tree listing');
+    const seen = new Set<string>();
+    const entries = output.slice(0, -1).split('\0').map((record): GitTreeEntry => {
+      const match = /^([0-7]{6}) (blob|tree|commit) ([a-f0-9]{40}|[a-f0-9]{64}) +([0-9]+|-)\t([\s\S]+)$/.exec(record);
+      if (!match) throw new Error('Malformed Git tree entry metadata');
+      const mode = match[1]!;
+      const type = match[2] as GitTreeEntry['type'];
+      const objectId = match[3]!;
+      const rawSize = match[4]!;
+      const path = match[5]!;
+      const size = rawSize === '-' ? undefined : Number(rawSize);
+      const validMode = type === 'blob' ? ['100644', '100755', '120000'].includes(mode)
+        : mode === (type === 'tree' ? '040000' : '160000');
+      if (!validMode || (type === 'blob' ? size === undefined || !Number.isSafeInteger(size) || size < 0 : size !== undefined) ||
+          path.startsWith('/') || path.split('/').some(part => !part || part === '.' || part === '..') || seen.has(path)) {
+        throw new Error('Malformed Git tree entry mode, size or path');
+      }
+      seen.add(path);
+      return { path, mode, type, objectId, ...(size === undefined ? {} : { size }) };
+    });
+    return entries.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
   }
 
   readFileAt(commitSha: string, path: string): Promise<string> {

@@ -101,8 +101,9 @@ would prevent removing the last document and invalidating its relationships. All
 documents remain visible when budgets are exceeded.
 
 Source approval does not approve model assertions. Validation-document labels reflect configured
-evidence roots; selected validation documents still undergo semantic extraction today. Recursive
-SOT traversal and default validation-document separation remain T07 work. See
+evidence roots; selected validation documents still undergo semantic extraction today.
+Traversal-driven hydration and default validation-document separation remain T07 work; the
+prospective coverage preview below is separate. See
 [ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
 
 Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
@@ -110,6 +111,31 @@ failures report completed/remaining work and recovery guidance; `hydrate --json 
 their structured report on stderr. Built-in Codex can reuse completed artifacts after supported
 operational changes such as increasing a timeout. See [provider recovery](docs/PROVIDERS.md#limits-and-reuse)
 for preview, retry and explicit legacy-cache adoption instructions.
+
+## Preview linked document coverage
+
+This checkout/archive includes a separate prospective preview. npm 0.5.0 does not include this command:
+
+```sh
+pnpm exec weftlet documents plan --entry docs/sot.md --entry docs/roadmap.md --root docs --ref HEAD
+pnpm exec weftlet documents plan --entry docs/sot.md --root docs --ref HEAD --json
+```
+
+Use your repository's exact committed entry paths. `--root` may repeat and defaults to the
+repository root. The operation follows supported Markdown links with cycle protection and
+deduplication, records citations and exclusions, and reports missing/ambiguous targets. Paths,
+approval matches and validation-evidence labels remain explicit; following a link never approves
+its contents. Git objects supply the input even while the checkout is dirty.
+
+This reports prospective coverage and **does not change hydration inputs or estimate cache/model
+work**. Continue using `hydrate --plan` for the current execution plan. No config fields are added.
+Existing semantic document/byte budgets are compared after traversal, including validation
+documents. Independent read limits (`--max-read-documents`, `--max-read-bytes`,
+`--max-document-bytes`) leave an explicit unread frontier if reached. Incomplete coverage or
+exceeded extraction budgets return a report with exit status 1, without model calls or graph writes.
+The preview follows only supported local links; complete coverage is not a claim of complete
+product knowledge. See [ADR 023](docs/ADR-023-document-coverage-preview.md) for limits and the
+remaining classification/hydration work.
 
 ## SHACL validation and performance
 

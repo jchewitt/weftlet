@@ -22,6 +22,10 @@ reuse, T04 timeout diagnostics and T08 deterministic physical-file consistency s
 T09 timeout support and T05a identity preflight/phase timing shipped in 0.5.0.
 T06 [release-documentation consistency](ADR-022-release-documentation.md) is implemented for the
 next release: generated current examples, actual archive checks and fresh documented installation.
+T07a [prospective document coverage](ADR-023-document-coverage-preview.md) is implemented separately
+from hydration. It follows committed Markdown links and reports coverage/budget gaps without
+model calls or graph writes. T07b validation-evidence/authority handling and T07c hydration/cache
+integration remain open.
 Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
 before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
 

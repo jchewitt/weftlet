@@ -96,6 +96,8 @@ try {
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
         'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
         'dist/graph/identity-preflight.js', 'dist/graph/validation-progress.js',
+        'dist/application/document-coverage.js', 'dist/extraction/document-traversal.js',
+        'dist/extraction/canonical-document-links.js', 'dist/interfaces/document-coverage.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -251,6 +253,8 @@ try {
       producer: 'src/consumer.ts', consumer: 'src/archive.ts',
     }] }) + '\n'),
     writeFile(join(consumer, 'intent.md'), '# Greeting\nSee [implementation](src/consumer.ts) and [checks](test/contract.test.ts).\n'),
+    writeFile(join(consumer, 'coverage.md'), '# Public coverage\nSee [notes](notes.md) and [intent](intent.md).\n'),
+    writeFile(join(consumer, 'notes.md'), '# Public notes\nReturn to [coverage](coverage.md).\n'),
     writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
       join(consumer, 'src', 'consumer.ts'),
@@ -468,6 +472,25 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   const publicApi = await import(toolkitModule);
   if (typeof publicApi.planHydration !== 'function') throw new Error('Missing public hydration planner export');
   if (typeof publicApi.adoptSemanticCache !== 'function') throw new Error('Missing public cache adoption export');
+  if (typeof publicApi.planDocumentCoverage !== 'function' || typeof publicApi.traverseDocuments !== 'function') {
+    throw new Error('Missing public prospective document coverage exports');
+  }
+  const coverage = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'),
+    'documents', 'plan', '--entry', 'coverage.md', '--json', '--config', 'preview.config.json'], consumer));
+  const publicCoverage = await publicApi.planDocumentCoverage(join(consumer, 'preview.config.json'), { entryPoints: ['coverage.md'] });
+  if (!coverage.ready || coverage.mode !== 'prospective' || coverage.changesHydrationSelection !== false ||
+      coverage.documents.length !== 3 || coverage.coverageDigest !== publicCoverage.coverageDigest ||
+      coverage.documents.some((document) => document.status !== 'read') || 'estimates' in coverage ||
+      (await readdir(consumer)).includes('.context-graph')) {
+    throw new Error('Installed document coverage must traverse committed links without changing hydration or writing evidence');
+  }
+  const limitedCoverage = spawnSync(process.execPath, [join(installedRoot, 'dist/cli.js'), 'documents', 'plan',
+    '--entry', 'coverage.md', '--max-read-documents', '1', '--json', '--config', 'preview.config.json'],
+  { cwd: consumer, encoding: 'utf8', timeout: 20_000 });
+  if (limitedCoverage.status !== 1 || limitedCoverage.stderr !== '' ||
+      JSON.parse(limitedCoverage.stdout).coverage.unvisited.length !== 2) {
+    throw new Error('Installed document coverage must report an incomplete frontier when a read limit is reached');
+  }
   if (typeof publicApi.SemanticHydrationError !== 'function' ||
       typeof publicApi.semanticSourceId !== 'function' ||
       plan.documents[0].sourceId !== publicApi.semanticSourceId(plan.repositoryId, plan.documents[0])) {

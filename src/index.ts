@@ -16,3 +16,5 @@ export * from './application/hydration-failure.js';
 export * from './extraction/semantic-diagnostics.js';
 export * from './graph/identity-preflight.js';
 export * from './graph/validation-progress.js';
+export * from './application/document-coverage.js';
+export * from './extraction/document-traversal.js';
