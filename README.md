@@ -13,6 +13,10 @@ Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs
 
 ## Set up a project
 
+<!-- weftlet:release:start -->
+Package versions in this checkout/archive: `@weftlet/toolkit@0.5.0` and `@weftlet/core@0.5.0`.
+<!-- weftlet:release:end -->
+
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
 automatically. Both packages are available on npm.
 See [release status](docs/RELEASING.md). Existing Tently users should follow
@@ -214,12 +218,9 @@ Each committed JSON record names a scoped binding and exact producer/consumer fi
 are cited candidate dependencies; they do not assert an approved policy or observed delivery.
 
 Install the locally packed core and toolkit tarballs together. The installed commands are
-`weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release, replace `<version>` with the version in `.release/manifest.json`:
-
-```sh
-npm install --save-dev "/path/to/weftlet/.release/weftlet-core-<version>.tgz" "/path/to/weftlet/.release/weftlet-toolkit-<version>.tgz"
-npx weftlet init
-```
+`weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases.
+Use the [versioned installation examples](docs/RELEASING.md#inspecting-and-consuming-releases)
+generated for this checkout/archive; then run `npx weftlet init`.
 
 Pass `--config /absolute/path/context-graph.config.json`
 to the CLI or set `CONTEXT_GRAPH_CONFIG` for MCP. No launcher rebuild is required for installed

@@ -9,6 +9,7 @@ import { npmAuthOptions, releaseAuthentication } from './npm-auth.mjs';
 import { runNpm, validatePublishInspection } from './npm-command.mjs';
 import { publishAndVerify } from './registry-publication.mjs';
 import { checkReleasePlan } from './release-plan.mjs';
+import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const destination = join(root, '.release');
@@ -69,6 +70,7 @@ async function main() {
   }
   const commit = git('rev-parse', 'HEAD');
   const releasePlan = await checkReleasePlan(root);
+  await checkReleaseDocumentation(root);
   const npmCli = await npmCliPath();
   const npm = (...args) => runNpm(npmCli, [...args, `--registry=${registry}`, ...authentication.args], root);
   if (mode === '--prepare') {
@@ -88,14 +90,17 @@ async function main() {
       const archive = join(destination, filename);
       const pkg = { name, version: manifest.version, filename,
         integrity: `sha512-${digest(await readFile(archive))}` };
+      packages.push(pkg);
+    }
+    await checkPackedReleaseDocumentation(root, packages.map((pkg) => ({ ...pkg, path: join(destination, pkg.filename) })));
+    for (const pkg of packages) {
       const existing = registryIntegrity(npmCli, pkg);
       if (existing !== null) {
-        if (existing !== pkg.integrity) throw new Error(`${name}@${pkg.version} already exists with different bytes`);
-        console.log(`Prepared archive matches existing release: ${name}@${pkg.version}`);
+        if (existing !== pkg.integrity) throw new Error(`${pkg.name}@${pkg.version} already exists with different bytes`);
+        console.log(`Prepared archive matches existing release: ${pkg.name}@${pkg.version}`);
       } else {
-        validatePublishInspection(npm('publish', archive, '--dry-run', '--json', '--provenance=false'), pkg);
+        validatePublishInspection(npm('publish', join(destination, pkg.filename), '--dry-run', '--json', '--provenance=false'), pkg);
       }
-      packages.push(pkg);
     }
     const manifest = { commit, registry, packages };
     await writeFile(join(destination, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
@@ -116,6 +121,7 @@ async function main() {
       throw new Error('Release archive identity or integrity mismatch');
     }
   }
+  await checkPackedReleaseDocumentation(root, manifest.packages.map((pkg) => ({ ...pkg, path: join(destination, pkg.filename) })));
   const auth = releaseAuthentication(authArgument?.slice('--auth='.length) ?? 'login', npm('--version'));
   // OIDC is scoped to publish; whoami cannot establish trusted-publisher permission.
   authentication = await npmAuthOptions(undefined, { isolate: auth.isolate });

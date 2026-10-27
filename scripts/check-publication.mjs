@@ -10,6 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { pnpmInvocation } from './package-manager.mjs';
+import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
 
 const toolkitRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const packages = [
@@ -46,9 +47,11 @@ async function npmCliPath() {
   throw new Error('npm CLI not found beside Node; install Node with npm to run the npx smoke test');
 }
 
+await checkReleaseDocumentation(toolkitRoot);
 const destination = await mkdtemp(join(tmpdir(), 'context-graph-pack-'));
 try {
   const archives = new Map();
+  const preparedPackages = [];
   for (const [expectedName, directory] of packages) {
     const manifest = JSON.parse(await readFile(join(directory, 'package.json'), 'utf8'));
     if (manifest.name !== expectedName || manifest.private === true) {
@@ -63,6 +66,7 @@ try {
     if (!archiveName) throw new Error(`${expectedName} did not produce a package archive`);
     const archivePath = join(destination, archiveName);
     archives.set(expectedName, archivePath);
+    preparedPackages.push({ name: expectedName, version: manifest.version, filename: archiveName, path: archivePath });
     const entries = run('tar', ['-tf', archivePath], directory).split(/\r?\n/);
     for (const required of [
       'package/package.json',
@@ -124,8 +128,9 @@ try {
     }
   }
 
-  const coreArchive = archives.get('@weftlet/core');
-  const toolkitArchive = archives.get('@weftlet/toolkit');
+  const documented = await checkPackedReleaseDocumentation(toolkitRoot, preparedPackages);
+  // Only validated, constrained examples are used; never evaluate Markdown as shell code.
+  const [coreArchive, toolkitArchive] = documented.archiveNames.map((filename) => join(destination, filename));
   if (!coreArchive || !toolkitArchive) throw new Error('Publication smoke archives are incomplete');
   const freshProject = join(destination, 'fresh-project');
   await mkdir(join(freshProject, 'src'), { recursive: true });
@@ -133,6 +138,7 @@ try {
   // Serve only these scoped packages from a disposable registry. This verifies one-package
   // npx inference and automatic core dependency installation before any public publish.
   const registryPackages = new Map();
+  const servedArchives = new Set();
   for (const [name, directory] of packages) {
     const manifest = JSON.parse(run('tar', ['-xOf', archives.get(name), 'package/package.json'], directory));
     registryPackages.set(name, { manifest, bytes: await readFile(archives.get(name)) });
@@ -144,7 +150,7 @@ try {
     const name = path.slice(1).replace(/\.tgz$/, '');
     const item = registryPackages.get(name);
     if (!item) { response.writeHead(404); response.end(); return; }
-    if (tarball) { response.end(item.bytes); return; }
+    if (tarball) { servedArchives.add(name); response.end(item.bytes); return; }
     const { manifest, bytes } = item;
     response.setHeader('content-type', 'application/json');
     response.end(JSON.stringify({ name, 'dist-tags': { latest: manifest.version }, versions: {
@@ -160,21 +166,36 @@ try {
     registryUrl = `http://127.0.0.1:${registry.address().port}`;
     await writeFile(join(freshProject, '.npmrc'), `@weftlet:registry=${registryUrl}\n`);
     const npmCli = await npmCliPath();
-    const version = registryPackages.get('@weftlet/toolkit').manifest.version;
+    const npmCache = join(destination, 'npm-cache');
     const npx = async (...args) => (await promisify(execFile)(process.execPath,
-      [npmCli, 'exec', '--yes', '--', `@weftlet/toolkit@${version}`, ...args],
+      [npmCli, '--cache', npmCache, 'exec', '--yes', '--', ...args],
       { cwd: freshProject, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 })).stdout;
-    const setup = await npx('init', '--yes', '--semantic-source', 'docs/intent');
+    const setup = await npx(...documented.npxCommands[0]);
     if (!setup.includes('Setup made no model requests')) throw new Error('Packed npx initialization failed');
     const initialized = JSON.parse(await readFile(join(freshProject, 'context-graph.config.json'), 'utf8'));
     if (initialized.repositoryId !== 'fresh-npx-project' || initialized.approvedIntentSources.length ||
-        initialized.semanticSources.join(',') !== 'docs/intent') throw new Error('Unexpected generated config');
-    if (!JSON.parse(await npx('config', 'validate')).valid) throw new Error('Generated config is invalid');
-    if (JSON.parse(await npx('config', 'show')).repositoryId !== 'fresh-npx-project') {
+        initialized.semanticSources.length) throw new Error('Unexpected generated config');
+    if (!JSON.parse(await npx(...documented.npxCommands[1])).valid) throw new Error('Generated config is invalid');
+    if (JSON.parse(await npx(documented.npxCommands[0][0], 'config', 'show')).repositoryId !== 'fresh-npx-project') {
       throw new Error('Packed config show failed');
     }
     if (!(await readFile(join(freshProject, '.gitignore'), 'utf8')).includes('.context-graph/')) {
       throw new Error('Setup did not exclude generated evidence from Git');
+    }
+    if (packages.some(([name]) => !servedArchives.has(name))) {
+      throw new Error('Fresh npx setup did not fetch both prepared archives from the disposable registry');
+    }
+    // Exercise the documented npm archive pair as well as the pinned npx commands.
+    await promisify(execFile)(process.execPath,
+      [npmCli, '--cache', npmCache, 'install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', coreArchive, toolkitArchive],
+      { cwd: freshProject, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 });
+    const installed = JSON.parse(await readFile(join(freshProject, 'package-lock.json'), 'utf8'));
+    for (const [name, archive] of [['@weftlet/core', coreArchive], ['@weftlet/toolkit', toolkitArchive]]) {
+      const dependency = installed.packages[`node_modules/${name}`];
+      if (dependency?.version !== registryPackages.get(name).manifest.version ||
+          dependency.integrity !== `sha512-${createHash('sha512').update(await readFile(archive)).digest('base64')}`) {
+        throw new Error(`Documented archive installation did not install reviewed ${name} bytes`);
+      }
     }
   } finally {
     registry.closeAllConnections();

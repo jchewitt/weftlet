@@ -4,6 +4,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { pnpmInvocation } from './package-manager.mjs';
 import { packageVersions, pendingChangesets, validateReleasePlan } from './release-plan.mjs';
+import { updateReleaseDocumentation, checkReleaseDocumentation } from './release-documentation.mjs';
 
 export async function versionPackages(root) {
   const previous = await packageVersions(root);
@@ -14,6 +15,8 @@ export async function versionPackages(root) {
     execFileSync(invocation.command, invocation.args, { cwd: root, stdio: 'inherit' });
   };
   pnpm(['exec', 'changeset', 'version']);
+  await updateReleaseDocumentation(root);
+  await checkReleaseDocumentation(root);
   const versions = await packageVersions(root);
   const plan = {
     schemaVersion: 1,

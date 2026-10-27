@@ -41,14 +41,14 @@ preparation route; native Windows has focused CI coverage. See [validation](VALI
    need an npm release can omit a changeset.
 2. On main pushes, **Release version PR** opens or updates a bot PR. Core and toolkit are a fixed
    release group: a release of either advances both to the same version. The PR contains package
-   versions, dependency/lockfile updates, changelogs, a generated `.changeset/release-plan.json`,
+   versions, dependency/lockfile updates, changelogs, generated current-version documentation, a `.changeset/release-plan.json`,
    and an updated extraction inventory. Original source hashes remain unchanged.
 3. Review the version PR and its checks, then merge it. This commits the versions to `main`
    **before** npm publication. Do not manually bump manifests or edit the generated plan.
 4. The plan change triggers **Weftlet release**. It validates and prepares both archives, publishes
    core followed by toolkit using npm trusted publishing, then verifies registry integrity.
-5. After both versions are verified, a separate job creates tags such as `@weftlet/core@0.2.1`
-   and `@weftlet/toolkit@0.2.1`, plus corresponding GitHub Releases, at that exact source commit.
+5. After both versions are verified, a separate job creates package-specific version tags
+   and corresponding GitHub Releases at that exact source commit.
    Existing tags are never moved. The publication job does not commit back to main.
 
 The bot uses GitHub's built-in token, not a personal access token. GitHub may require Settings →
@@ -95,7 +95,7 @@ pnpm install --frozen-lockfile
 pnpm context-graph:publication-check
 ```
 
-It runs build, deterministic tests, architecture, inventory, licenses and a fresh packed-consumer
+It runs release-documentation checks, build, deterministic tests, architecture, inventory, licenses and a fresh packed-consumer
 smoke. The smoke exercises setup/config, automatic core installation, real TypeScript SCIP,
 RDF/SHACL, visualization and MCP. No live model or public npm upload is invoked.
 
@@ -104,6 +104,8 @@ resolves workspace ranges, dry-runs unpublished versions and records source comm
 SHA-512 integrity in `.release/manifest.json`. Review the manifest, tarball file lists and extraction
 inventory. Preparation refuses pending changesets and stale release plans. It requires a clean
 checkout. An existing npm version must match exactly; different bytes stop the release.
+Both actual archives must also pass the documentation checks before preparation completes and
+again before publication starts.
 
 Actions → **Weftlet release** → **Run workflow** remains available on main. Leave **publish**
 unchecked for preparation only, or select it for an intentional release of the committed plan.
@@ -117,6 +119,31 @@ repository, main, a push/manual trigger, hosted runner and OIDC request variable
 tokens are rejected and npm configuration is isolated. `npm whoami` is skipped because it cannot
 validate trusted publishing. npm verifies the identity and creates provenance. There is no token
 fallback. JavaScript pnpm and standalone `@pnpm/exe` are supported for local tooling.
+
+## Keeping installation documentation current
+
+The manifests own versions for this checkout/archive; registry publication is a separate fact.
+Changesets versioning regenerates the sections between `weftlet:release:start` and
+`weftlet:release:end` in both package READMEs and this guide. Do not edit those sections by hand.
+To check them or regenerate after a deliberate template change:
+
+```sh
+pnpm docs:release:check
+pnpm docs:release:update
+pnpm inventory:update
+```
+
+The checker also covers active installation examples in these files, the migration guide and
+the consumer-trial guide. Keep current explicit pins in sync; unpinned setup remains supported.
+An intentionally historical installation example uses a fenced block with info
+`sh weftlet-history` and explanatory historical prose. Feature-introduction versions and
+validation/changelog history do not become current version requirements.
+
+The publication gate checks actual packed manifests and documentation, including required
+documents and the toolkit/core version relationship. Its fresh-consumer smoke installs the
+documented archive pair and runs checked setup/validation argument arrays; Markdown is never
+executed as shell code. See [ADR 022](ADR-022-release-documentation.md) for the checked scope
+and limits. This does not establish that a prepared version is already on npm.
 
 ## Delayed visibility and failed releases
 
@@ -157,7 +184,8 @@ record job is the normal route.
 
 ## Inspecting and consuming releases
 
-Package-specific tags identify the exact published source, for example:
+Package-specific tags identify the exact published source. This historical inspection example
+selects the earlier 0.2.1 release:
 
 ```sh
 git fetch --tags
@@ -167,13 +195,23 @@ git switch --detach '@weftlet/toolkit@0.2.1'
 Tags support inspection and reproduction, not mutation of npm history. To roll a consumer back,
 install an earlier published version; fixes to a release need a new changeset/version.
 
-Verify a new public release in a fresh disposable project, substituting its version:
+<!-- weftlet:release:start -->
+These instructions use the package versions in this checkout/archive, not a claim about npm's latest tag.
+
+Verify the matching public version in a fresh disposable project after publication:
 
 ```sh
 npm init -y
-npx --yes @weftlet/toolkit@0.2.1 init --yes
-npx --yes @weftlet/toolkit@0.2.1 config validate
+npx --yes @weftlet/toolkit@0.5.0 init --yes
+npx --yes @weftlet/toolkit@0.5.0 config validate
 ```
+
+For local installation, use both prepared archives from the same reviewed release:
+
+```sh
+npm install --save-dev "/path/to/weftlet/.release/weftlet-core-0.5.0.tgz" "/path/to/weftlet/.release/weftlet-toolkit-0.5.0.tgz"
+```
+<!-- weftlet:release:end -->
 
 Check registry hashes, transitive core resolution and provenance. Deprecating the previous
 `@launch-echo` names is a separate action after replacement verification; never unpublish them.

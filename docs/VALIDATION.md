@@ -8,6 +8,32 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T06 release-documentation consistency, 2026-10-27
+
+Implemented after 0.5.0; publication remains separate. [ADR 022](ADR-022-release-documentation.md)
+records the generated sections and explicit operational-document scope. The source/packed checks
+use Node built-ins and run before publishing either package. Historical records, feature versions,
+graph semantics, extraction identities and consumer caches are unchanged.
+
+Focused checks passed: 33 release-documentation cases and three existing release-version cases.
+They cover stale source/packed instructions, wrong package/archive/dependency versions, missing
+documents, malformed markers, historical and CRLF preservation, multiline/inline examples,
+dependency-free CLI operation from another cwd, and real Changesets patch/minor regeneration.
+The actual release guide's marker-name explanation has its own regression. Independent review
+also identified shared npx-cache reuse in the old smoke; the updated smoke isolates its npm cache,
+requires both archive endpoints to be fetched, installs the documented archive pair and verifies
+the resulting lockfile SHA-512 values against the prepared bytes.
+
+Local `pnpm context-graph:publication-check` passed: 441 deterministic tests (17 core,
+424 toolkit), one optional OML skip, 13 unchanged advisory architecture findings, source and
+packed documentation, inventory, licenses and fresh packed-consumer checks. The smoke fetched
+both prepared packages through its isolated npm/npx cache, ran the checked setup/config commands,
+and installed the documented archive pair with matching lockfile versions and SHA-512 values.
+Existing real TypeScript SCIP, RDF/SPARQL/SHACL, visualization and MCP checks also passed.
+Independent implementation/integration review found no remaining blocker. All 79 original
+source path/hash pairs are intact. Hosted results are recorded when available. No model/provider
+request, private consumer run or public npm publication is claimed by this checkpoint.
+
 ## 0.5.0 publication and installed-package acceptance, 2026-10-27
 
 Published `@weftlet/core@0.5.0` and `@weftlet/toolkit@0.5.0` include T09
