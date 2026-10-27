@@ -11,6 +11,9 @@ export interface HydrationProgressEvent {
   readonly total?: number;
   readonly sourceId?: string;
   readonly elapsedMs?: number;
+  readonly status?: 'started' | 'completed' | 'failed';
+  readonly factCount?: number;
+  readonly nodeCount?: number;
 }
 
 async function concurrentMap<T, R>(

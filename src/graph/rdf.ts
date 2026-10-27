@@ -6,6 +6,7 @@ import { contextPackEvidenceAuthority } from "./authority.js";
 import { stableJson } from "../infrastructure/util.js";
 import { createRequire } from 'node:module';
 import { CG, RDF, XSD, evidenceShapes } from './shacl-shapes.js';
+import { measureValidationPhase, type GraphValidationProgress } from './validation-progress.js';
 
 const { namedNode: iri, literal } = DataFactory;
 export { CG } from './shacl-shapes.js';
@@ -68,16 +69,19 @@ export class RdfEvidenceGraph {
     }
   }
 
-  async validate() {
+  async validate(options: { readonly onProgress?: (event: GraphValidationProgress) => void } = {}) {
     // These graph-independent shapes already read the dataset as a union. Index
     // that union once so every property lookup avoids scanning one graph per fact.
     // Keep every triple; the original named dataset retains assertion provenance
     // and remains the source for queries and serialization.
-    const validationGraph = new Store();
-    for (const { subject, predicate, object } of this.dataset) {
-      validationGraph.addQuad(subject, predicate, object);
-    }
-    const report = await new SHACLValidator(new Store(evidenceShapes)).validate(validationGraph);
+    const counts = { factCount: this.snapshot.facts.length };
+    const validationGraph = await measureValidationPhase('build-validation-union', counts, options.onProgress, () => {
+      const union = new Store();
+      for (const { subject, predicate, object } of this.dataset) union.addQuad(subject, predicate, object);
+      return union;
+    });
+    const report = await measureValidationPhase('validate-shacl', counts, options.onProgress,
+      () => new SHACLValidator(new Store(evidenceShapes)).validate(validationGraph));
     const issues = report.results.map((result) => ({
       category: 'extraction-gap' as const,
       focus: result.focusNode?.value,

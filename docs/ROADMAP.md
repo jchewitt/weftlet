@@ -32,8 +32,10 @@ in one temporary validation graph, preserving the same shapes and canonical name
 Bounded public experiments measured substantial cold-path improvement, alongside about 1.3 GiB
 RSS in the prototype at 10,000 unique-node facts; the production harness including serialization
 peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
-Early checks, in-phase progress, result reuse and incremental validation remain open; no Rust
-engine, graph database or validation-result cache is introduced by this focused release.
+T05a adds [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
+in development source after 0.4.0. Full validation remains mandatory. In-phase worker progress,
+result reuse and incremental validation remain open; no Rust engine, graph database or
+validation-result cache is introduced by these increments.
 
 [T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in
 Codex user artifacts can survive changes to timeout/retry/concurrency/document/byte limits while
@@ -46,9 +48,9 @@ identity. Broader T05 and T06/T07 work remain open.
 [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
 0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and
 public-registry installation. The public core factory and deterministic producers share one policy
-under strict SHACL. Historical snapshots
-remain queryable, with version guards for current validation. The consumer's framework adapter
-migration and full acceptance remain consumer-owned. This fix preserves semantic artifacts and
+under strict SHACL. Historical snapshots remain queryable, with version guards for current validation.
+On 2026-10-27 the maintainer reported the consumer updated and working; exact adapter and full
+hydration/repeat evidence remain unrecorded. This fix preserves semantic artifacts and
 does not reinterpret model assertions to hide conflicts.
 
 | Milestone | Delivered and checked | Remaining limits |

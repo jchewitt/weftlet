@@ -91,6 +91,7 @@ try {
         'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
         'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
+        'dist/graph/identity-preflight.js', 'dist/graph/validation-progress.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -256,7 +257,8 @@ import { adapterFileNode } from './adapter-core.mjs';
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
-import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService } from ${JSON.stringify(toolkitModule)};
+import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
+  inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
@@ -329,9 +331,40 @@ if (testConsumer?.subject.id !== adapterFileNode('test/contract.test.ts').id ||
   throw new Error('Installed neutral contract consumer and public adapter factory must agree on test Evidence');
 }
 const facts = [...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
+const preflight = assertGraphIdentities(facts, { repositoryId: context.repositoryId });
+if (!preflight.passed || preflight.shaclValidated || preflight.factCount !== facts.length) {
+  throw new Error('Installed identity preflight must remain separate from full SHACL validation');
+}
+const conflicting = { ...testConsumer, id: 'public-preflight-conflict',
+  subject: { ...testConsumer.subject, kind: 'Component' } };
+const badFacts = [...facts, conflicting];
+const beforePreflight = JSON.stringify(badFacts);
+let identityFailure;
+try { assertGraphIdentities(badFacts, { repositoryId: context.repositoryId }); }
+catch (error) { identityFailure = error; }
+if (!(identityFailure instanceof GraphIdentityConflictError) || identityFailure.report.conflictCount !== 1 ||
+    JSON.stringify(identityFailure.report).includes('test/contract.test.ts') ||
+    JSON.stringify(identityFailure.report).includes(conflicting.id)) {
+  throw new Error('Installed identity failure must be typed and opaque by default');
+}
+const localReport = inspectGraphIdentities(badFacts, { repositoryId: context.repositoryId, includeDetails: true });
+const attributed = localReport.conflicts.flatMap(item => item.occurrences)
+  .find(item => item.details?.factId === conflicting.id);
+if (JSON.stringify(attributed?.details?.provenance) !== JSON.stringify(conflicting.provenance) ||
+    JSON.stringify(badFacts) !== beforePreflight) {
+  throw new Error('Installed explicit identity attribution must preserve all source evidence');
+}
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
 const graph = new RdfEvidenceGraph(snapshot);
-if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
+const validationProgress = [];
+if (!(await graph.validate({ onProgress: event => validationProgress.push(event) })).conforms ||
+    validationProgress.map(event => event.phase + ':' + event.status).join(',') !==
+    'build-validation-union:started,build-validation-union:completed,validate-shacl:started,validate-shacl:completed') {
+  throw new Error('Installed full SHACL validation and phase timing failed');
+}
+if ((await new RdfEvidenceGraph({ ...snapshot, facts: badFacts }).validate()).conforms) {
+  throw new Error('Installed full SHACL must still reject the preflight kind conflict');
+}
 const selected = await graph.select('SELECT ?record WHERE { ?record <' + CG + 'authority> ?authority }');
 if (selected.rows.length !== facts.length || (await graph.facts()).length !== facts.length) throw new Error('Installed RDF projection/query mismatch');
 const query = new SnapshotImpactQueryService({ read: async () => snapshot, readHead: async () => snapshot,

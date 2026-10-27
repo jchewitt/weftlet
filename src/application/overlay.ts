@@ -16,6 +16,7 @@ import { inWorkingScope, readWorkingContent } from "../repository/working-conten
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
 import { RdfEvidenceGraph } from '../graph/rdf.js';
 import { graphAssemblyIdentity } from './extraction-identity.js';
+import { assertGraphIdentities } from '../graph/identity-preflight.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
@@ -31,6 +32,7 @@ export async function buildWorkingOverlay(
   storageRoot: string,
   baseSnapshotId: string,
   agent = 'default',
+  options: { readonly validationDetails?: boolean } = {},
 ): Promise<GraphSnapshot> {
   const base = await store.read(baseSnapshotId);
   if (!base || base.manifest.overlayDigest) throw new Error('Overlay requires a committed base snapshot');
@@ -135,6 +137,7 @@ export async function buildWorkingOverlay(
     )),
   ).map((fact) => ({ ...fact, snapshotId }));
   const allFacts = [...retained, ...extracted.facts].sort((a, b) => a.id.localeCompare(b.id));
+  assertGraphIdentities(allFacts, { repositoryId: config.repositoryId, includeDetails: options.validationDetails });
   const overlay: GraphSnapshot = {
     ...base,
     manifest: {

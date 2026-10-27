@@ -36,13 +36,17 @@ function fixture(count, topology) {
 }
 
 async function worker({ count, topology, mode }) {
-  const { RdfEvidenceGraph } = await import('../dist/index.js');
+  const { RdfEvidenceGraph, inspectGraphIdentities } = await import('../dist/index.js');
   const { Parser, Store } = await import('n3');
   const { default: SHACLValidator } = await import('rdf-validate-shacl');
   const { evidenceShapes } = await import('../dist/graph/shacl-shapes.js');
   const started = performance.now();
   const snapshot = fixture(count, topology);
   const fixtureMs = performance.now() - started;
+  const preflightStarted = performance.now();
+  const preflight = inspectGraphIdentities(snapshot.facts, { repositoryId: snapshot.manifest.repositoryId });
+  const preflightMs = performance.now() - preflightStarted;
+  assert(preflight.passed && !preflight.shaclValidated, 'Preflight is not a full conformance verdict');
   const constructionStarted = performance.now();
   const graph = new RdfEvidenceGraph(snapshot);
   const constructionMs = performance.now() - constructionStarted;
@@ -58,13 +62,14 @@ async function worker({ count, topology, mode }) {
     ? new Store(new Parser({ format: 'N-Quads' }).parse(before)) : undefined;
   const legacyPreparationMs = performance.now() - preparationStarted;
   const details = { count, topology, mode, nodeCount, quadCount, namedGraphCount: count,
-    fixtureMs, constructionMs, serializationBeforeMs, legacyPreparationMs, serializationDigest };
+    fixtureMs, preflightMs, constructionMs, serializationBeforeMs, legacyPreparationMs, serializationDigest };
   emit({ phase: 'validating', ...details });
   const validationStarted = performance.now();
   const cpuStarted = process.cpuUsage();
+  const validationPhases = [];
   const report = mode === 'legacy'
     ? await new SHACLValidator(new Store(evidenceShapes)).validate(legacy)
-    : await graph.validate();
+    : await graph.validate({ onProgress: event => validationPhases.push(event) });
   const validationMs = performance.now() - validationStarted;
   const validationCpu = process.cpuUsage(cpuStarted);
   const serializationAfterStarted = performance.now();
@@ -74,7 +79,7 @@ async function worker({ count, topology, mode }) {
   assert.equal(report.conforms, true, 'Public positive fixture failed validation');
   emit({ phase: 'complete', ...details, conforms: report.conforms,
     issueCount: (report.issues ?? report.results).length, serializationPreserved: true,
-    serializationAfterDigest, serializationAfterMs, validationMs,
+    serializationAfterDigest, serializationAfterMs, validationMs, validationPhases,
     validationCpuMs: (validationCpu.user + validationCpu.system) / 1000,
     workerMeasuredMs: performance.now() - started, rssAfterBytes: process.memoryUsage().rss,
     maxRssKiB: process.resourceUsage().maxRSS || null });

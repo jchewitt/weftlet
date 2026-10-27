@@ -1,8 +1,8 @@
 # Consumer hardening and the 1.0 release plan
 
 Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.4.0 publication.
-**T08's upstream deterministic physical-file fix has shipped; consumer acceptance remains blocked
-on its framework adapter migration and genuine full hydration/repeat.** T04 was completed before
+**T08's upstream deterministic physical-file fix has shipped; the maintainer reports the consumer
+updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.
 
 The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
@@ -37,12 +37,12 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T08** | Canonical physical-file kinds and public adapter factory | **Upstream fix shipped in 0.4.0; consumer adapter migration/acceptance pending** | Public core factory and neutral producers agree; consumer framework call sites and composed tests remain required |
+| **T08** | Canonical physical-file kinds and public adapter factory | **Shipped in 0.4.0; consumer reported working; detailed acceptance pending** | Public core factory and neutral producers agree; record consumer commit, adapter tests and full hydration/repeat evidence |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
-| **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; consumer acceptance pending** | Full validation preserved; early checks, detailed progress and validation reuse remain open |
+| **T05** | Early identity checks and validation progress/profiling | **Cold-validation fix shipped in 0.3.0; T05a preflight/timing implemented in development** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
@@ -208,17 +208,25 @@ Acceptance:
 
 ## T05 — Detect inexpensive conflicts early and explain validation work
 
+T05a implements [early identity attribution and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
+in development source after 0.4.0. Hydration and overlays reject all conflicting subject/object
+kinds before RDF construction; opaque default reports have explicit local detail opt-in.
+Completed semantic artifacts and prior snapshots remain intact. Valid preflight results still
+require full SHACL. Timings report actual phase boundaries, not in-phase heartbeat or percentage.
+This does not close the broader evaluation/reuse/backend items below or claim publication.
+
 The implementation uses JavaScript on Node:
 `rdf-validate-shacl` validates an in-memory N3 dataset. Hydration constructs and validates the
 entire assembled graph, including when semantic artifacts were reused. There is no persistent
 GraphDB backend or incremental validation. Querying a saved snapshot does not rerun SHACL.
 
-The maintainer reports that validation pushes the consumer's overall generation beyond its
+The maintainer originally reported that validation pushed the consumer's overall generation beyond its
 30-minute timeout, preventing snapshot publication and making adoption unusable. That report made
 cold validation a release priority ahead of the remaining 1.0 work. Upstream has measured a specific
 named-graph lookup cost in public synthetic fixtures, but has not measured that consumer graph or
 diagnosed its complete timeout. The focused cold-validation fix shipped in 0.3.0, ahead of the
-remaining 1.0 tasks. Consumer acceptance remains pending; broader T05 items stay open.
+remaining 1.0 tasks. The consumer is now reported working after 0.4.0; exact performance and
+repeat-hydration acceptance evidence remains unrecorded. Broader T05 items stay open.
 
 [ADR 017](ADR-017-shacl-validation-union.md) records the implemented cold-validation optimization:
 build a temporary union of every SPO triple for the same validator/shapes, while keeping original
@@ -229,15 +237,15 @@ took 0.467 seconds. A 10,000-fact unique-node union case used about 1.3 GiB proc
 are synthetic phase measurements, not a private consumer reproduction or end-to-end guarantee.
 
 The focused change still validates the whole graph each time. It does not add Rust, GraphDB,
-incremental validation or a validation-result cache. Early checks and broader observability/reuse
-remain follow-ups rather than reasons to delay the cold-path fix. Native code or a database does
+incremental validation or a validation-result cache. T05a now adds early checks and phase timing;
+worker progress and broader observability/reuse remain follow-ups. Native code or a database does
 not by itself establish faster or correct incremental SHACL.
 
 Acceptance:
 
-- Early errors identify the conflicting identity/kinds and relevant evidence using the configured
-  privacy policy. Preserve all underlying assertions for diagnosis; early checks are not a
-  substitute for RDF/SHACL validation.
+- Early errors identify the conflicting identity/kinds and relevant evidence through opaque
+  defaults and explicit local detail opt-in. Preserve all underlying assertions for diagnosis;
+  early checks are not a substitute for RDF/SHACL validation.
 - Report elapsed time and honest progress for long validation. Current phase boundaries remain
   the supported progress signal: the synchronous validator blocks same-thread timers. Evaluate
   bounded worker execution before promising an in-phase heartbeat or cancellation; never display
