@@ -33,20 +33,35 @@ async function fixture() {
 }
 
 it('lists exact nested-relative directories, Unicode and whitespace paths with committed byte sizes', async () => {
-  const { root, git, input, commit } = await fixture();
+  const { root, input } = await fixture();
   const nested = join(root, 'apps', 'public');
   await mkdir(join(nested, 'docs', 'owner space'), { recursive: true });
   const content = '# Public café\r\n\r\nExact bytes.  \r\n';
   const path = 'docs/owner space/café notes.md';
   await writeFile(join(nested, path), content);
   await writeFile(join(root, 'outside.md'), '# Outside nested scope\n');
-  await git('add', '.');
-  const blob = await input(['hash-object', '-w', '--stdin'], 'Public indexed-only source\n');
-  // Index plumbing avoids creating Windows-incompatible filesystem names or needing a checkout.
-  for (const name of ['tab\tname.md', 'line\nname.md']) {
-    await git('update-index', '--add', '--cacheinfo', `100644,${blob},apps/public/docs/${name}`);
-  }
-  const sha = await commit();
+  const blob = await input(['hash-object', '-w', '--stdin'], 'Public object-only source\n');
+  const sourceBlob = await input(['hash-object', '-w', '--stdin'], content);
+  const outsideBlob = await input(['hash-object', '-w', '--stdin'], '# Outside nested scope\n');
+  // Windows rejects tab/newline paths even in update-index --cacheinfo. Store raw tree
+  // objects instead, without touching the index, creating those OS paths or weakening
+  // core.protectNTFS. Entries below are explicitly ordered as Git tree records.
+  const tree = (entries: readonly [string, string, string][]) => input(
+    ['hash-object', '--literally', '-t', 'tree', '-w', '--stdin'],
+    Buffer.concat(entries.map(([mode, name, objectId]) => Buffer.concat([
+      Buffer.from(`${mode} ${name}\0`), Buffer.from(objectId, 'hex'),
+    ]))),
+  );
+  const owner = await tree([['100644', 'café notes.md', sourceBlob]]);
+  const docs = await tree([
+    ['100644', 'line\nname.md', blob], ['40000', 'owner space', owner], ['100644', 'tab\tname.md', blob],
+  ]);
+  const project = await tree([['40000', 'docs', docs]]);
+  const apps = await tree([['40000', 'public', project]]);
+  const rootTree = await tree([['40000', 'apps', apps], ['100644', 'outside.md', outsideBlob]]);
+  const sha = await input(['hash-object', '-t', 'commit', '-w', '--stdin'],
+    `tree ${rootTree}\nauthor Fixture <fixture@example.invalid> 1 +0000\n` +
+    'committer Fixture <fixture@example.invalid> 1 +0000\n\nPublic whitespace-path tree fixture\n');
   const repository = new GitRepository(nested);
   const entries = await repository.listEntriesAt(sha);
   expect(entries.map(entry => entry.path)).toEqual([
@@ -61,7 +76,7 @@ it('lists exact nested-relative directories, Unicode and whitespace paths with c
   expect(source).toMatchObject({ mode: '100644', type: 'blob', size: Buffer.byteLength(content) });
   expect(source.objectId).toMatch(/^[a-f0-9]{40,64}$/);
   expect(entries.find(entry => entry.path === 'docs/tab\tname.md')).toMatchObject({
-    objectId: blob, size: Buffer.byteLength('Public indexed-only source\n'),
+    objectId: blob, size: Buffer.byteLength('Public object-only source\n'),
   });
   expect(await repository.readFileAt(sha, path)).toBe(content);
   const whole = await new GitRepository(root).listEntriesAt(sha);
