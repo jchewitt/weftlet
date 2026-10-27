@@ -334,6 +334,20 @@ traversal. Classify sources/claims explicitly; flag rules without clear SOT owne
 their inferred/unreviewed state. Validation documents are excluded from product-intent extraction
 by default and retained through a separately classified validation-evidence path.
 
+Planned delivery increments:
+
+1. Committed Markdown-link selection and an opt-in, no-model coverage preview: canonical targets,
+   cycles/deduplication, ambiguous or unresolved links, exclusions and explicit budget status.
+   Label this as prospective coverage until it drives hydration; existing hydration-plan documents
+   and cache estimates must continue to describe actual execution inputs. The current graph linker
+   also recognizes bare/code paths and is not itself a canonical traversal policy.
+2. Explicit roles/ownership and separate deterministic validation-document evidence. Reaching a
+   document cannot approve it; excluding validation prose from intent extraction must not remove
+   its citations and relationships from the graph. Preserve direct-source configurations.
+3. Opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
+   delete/rename handling and positive/negative real-extractor fixtures. Coverage failures stop
+   new model work without discarding completed artifacts or the last valid snapshot.
+
 Acceptance:
 
 - Split delivery into canonical selection/traversal, role/ownership classification and semantic

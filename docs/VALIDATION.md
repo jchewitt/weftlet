@@ -31,8 +31,15 @@ both prepared packages through its isolated npm/npx cache, ran the checked setup
 and installed the documented archive pair with matching lockfile versions and SHA-512 values.
 Existing real TypeScript SCIP, RDF/SPARQL/SHACL, visualization and MCP checks also passed.
 Independent implementation/integration review found no remaining blocker. All 79 original
-source path/hash pairs are intact. Hosted results are recorded when available. No model/provider
-request, private consumer run or public npm publication is claimed by this checkpoint.
+source path/hash pairs are intact. No model/provider request, private consumer run or public npm
+publication is claimed by this checkpoint.
+
+[PR 35](https://github.com/jchewitt/weftlet/pull/35) merged at
+`eb7a234479801ac3bca0b27974b8f729aff1c13a`. Exact feature head
+`33b9cd38355e483c11f7fec1fcaf02dfd222da38` passed hosted Ubuntu and native Windows checks in
+[run 40528744057](https://github.com/jchewitt/weftlet/actions/runs/40528744057).
+Windows includes the new documentation regressions; the full packed-consumer gate ran on Ubuntu.
+T06 is merged with a patch changeset; the verified npm release remains 0.5.0.
 
 ## 0.5.0 publication and installed-package acceptance, 2026-10-27
 
