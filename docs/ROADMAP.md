@@ -26,6 +26,9 @@ T07a [prospective document coverage](ADR-023-document-coverage-preview.md) is im
 from hydration. It follows committed Markdown links and reports coverage/budget gaps without
 model calls or graph writes. T07b validation-evidence/authority handling and T07c hydration/cache
 integration remain open.
+T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
+release: actual code relationships can count as both contract and implementation evidence while
+display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
 Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
 before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
 

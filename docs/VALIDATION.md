@@ -20,8 +20,23 @@ and leaves snapshot bytes, extraction/cache identities, evidence authority and r
 Focused public regressions cover real Git/extractors, strict SHACL, exact fact/provenance/authority
 round trips, API/MCP/Markdown/HTML consistency, pagination and retained source diagnostics. Negative
 cases distinguish document/model/test/runtime/draft facts from production implementation evidence.
-Full gate and hosted results will be recorded after completion. No npm publication or private
-consumer acceptance is claimed by implementation status.
+
+Local `pnpm context-graph:publication-check` passed: 563 deterministic tests (17 core, 546 toolkit),
+including 26 new coverage regressions, one optional OML skip, 13 existing advisory findings,
+release documentation, inventory, licenses and fresh packed-consumer checks. The installed query
+counts real SCIP production facts in both implementation and contract coverage; visualization uses
+the same actual Context Pack. All 79 original source path/hash pairs are intact. Independent review
+found no remaining blocker; Markdown and HTML share the coverage explanation and page-scoped wording.
+
+[PR 40](https://github.com/jchewitt/weftlet/pull/40) merged at
+`d3fe532f3c10869eee72a023c4682601559f0f9e`. Exact feature head
+`d324a1c56a40d069dca3f5201ceb12b55fceecc2` passed hosted Ubuntu/native Windows in
+[run 40541223960](https://github.com/jchewitt/weftlet/actions/runs/40541223960) and the
+[PR run](https://github.com/jchewitt/weftlet/actions/runs/40541230905).
+Ubuntu passed the full publication gate and all 563 deterministic tests. Windows passed all 439
+selected tests plus inventory and licenses, including real SCIP and the new reporting regressions.
+T10 is merged with patch changesets; npm publication remains separate. No private consumer
+acceptance or model/provider request is claimed.
 
 ## T07a prospective document coverage, 2026-10-27
 
