@@ -12,6 +12,7 @@ import type {
   GraphFact,
 } from "@weftlet/core";
 import { contextPackEvidenceAuthority, contextPackLaneForFact } from "../graph/query.js";
+import { coverageDescription } from '../graph/coverage.js';
 import { viewerScript } from "./viewer-interaction.js";
 import { diagnosticSummary } from "../graph/diagnostics.js";
 
@@ -534,10 +535,11 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
       <section class="panel"><h2>Runtime references</h2>${detailList(pack.runtimeEvidence.map(reference => `${reference.serviceName}: ${reference.operation ?? 'observation'} · ${reference.sourcePath} · ${reference.observedAt ?? 'time unknown'}`), 'None in this page.')}<p>Edges are only the facts returned by the agent query. References do not create extra relationships.</p></section>
       <section class="panel">
         <h2>Coverage</h2>
+        <p>${escapeXml(coverageDescription(pack.coverage))}</p>
         ${Object.entries(pack.coverage.counts)
           .map(([lane, count]) => `<span class="metric">${escapeXml(lane)}: ${count}</span>`)
           .join('')}
-        ${detailList(pack.coverage.gaps, 'No Context Pack lane gaps detected.')}
+        ${detailList(pack.coverage.gaps, 'No coverage gaps detected on this returned page.')}
       </section>
       <section class="panel">
         <h2>Governing invariants</h2>

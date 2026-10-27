@@ -264,6 +264,10 @@ export type ContextPackLane =
   | 'validationEvidence';
 
 export interface ContextPackCoverage {
+  /** Absent in older packs, whose counts described exclusive display lanes. */
+  readonly scope?: 'returned-page';
+  /** One returned relationship can support both implementation and contract coverage. */
+  readonly countsAreNonExclusive?: true;
   readonly counts: Readonly<Record<ContextPackLane, number>>;
   readonly gaps: readonly string[];
 }

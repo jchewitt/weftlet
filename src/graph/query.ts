@@ -4,7 +4,6 @@ import { RdfEvidenceGraph } from "./rdf.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import type {
   ContextPack,
-  ContextPackLane,
   ContextPackRenderer,
   GraphFact,
   GraphDiagnostic,
@@ -14,70 +13,23 @@ import type {
 } from "@weftlet/core";
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
 import { factSearchText, IMPACT_RANKING_VERSION, rankImpactFacts } from './ranking.js';
+import { contextPackLanes, contextPackLaneForFact, isDeclaredFact, coverageForFacts, coverageDescription } from './coverage.js';
+export { contextPackLaneForFact } from './coverage.js';
 
 export const DEFAULT_CONTEXT_PACK_FACTS = 60;
 export const MAX_CONTEXT_PACK_FACTS = 200;
-const contextPackLanes: readonly ContextPackLane[] = [
-  'productIntent',
-  'contractsAndInvariants',
-  'implementationAndConsumers',
-  'validationEvidence',
-];
-
-function isValidationFact(fact: GraphFact): boolean {
-  const path = fact.provenance.path.toLowerCase();
-  return (
-    fact.subject.kind === 'Evidence' ||
-    fact.object.kind === 'Evidence' ||
-    fact.predicate === 'verifiedBy' ||
-    /(?:^|\/)(?:test|tests|testing|validation|evidence)(?:\/|$)/.test(path) ||
-    /\.(?:spec|test)\.[cm]?[jt]sx?$/.test(path)
-  );
-}
-
-function isDeclaredFact(fact: GraphFact): boolean {
-  if (fact.authority) return fact.authority === 'declared' && !isValidationFact(fact);
-  return false;
-}
-
-export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undefined {
-  if (fact.extractor.id === 'otlp-runtime-evidence') return undefined;
-  const kinds = new Set([fact.subject.kind, fact.object.kind]);
-  if (isValidationFact(fact)) {
-    return 'validationEvidence';
-  }
-  if (
-    kinds.has('Contract') ||
-    kinds.has('Invariant') ||
-    kinds.has('PersistenceModel') ||
-    ['governedBy', 'definedBy', 'persistsTo', 'authorizedBy'].includes(fact.predicate)
-  ) {
-    return 'contractsAndInvariants';
-  }
-  if (
-    (isDeclaredFact(fact) || fact.sourceAuthority === 'declared') &&
-    (kinds.has('Document') ||
-      kinds.has('Capability') ||
-      kinds.has('Workflow') ||
-      ['decisionAuthority', 'operationallyOwnedBy', 'references'].includes(fact.predicate))
-  ) {
-    return 'productIntent';
-  }
-  return 'implementationAndConsumers';
-}
-
 export { contextPackEvidenceAuthority } from "./authority.js";
 
 function selectBalancedFacts(
   ranked: readonly GraphFact[],
   maxFacts: number,
-): { facts: readonly GraphFact[]; counts: Record<ContextPackLane, number> } {
+): readonly GraphFact[] {
   const queues = Object.fromEntries(
     contextPackLanes.map((lane) => [
       lane,
       ranked.filter((fact) => contextPackLaneForFact(fact) === lane),
     ]),
-  ) as Record<ContextPackLane, GraphFact[]>;
+  ) as Record<(typeof contextPackLanes)[number], GraphFact[]>;
   const facts: GraphFact[] = [];
   while (facts.length < maxFacts && contextPackLanes.some((lane) => queues[lane].length > 0)) {
     for (const lane of contextPackLanes) {
@@ -86,13 +38,7 @@ function selectBalancedFacts(
       if (facts.length === maxFacts) break;
     }
   }
-  const counts = Object.fromEntries(
-    contextPackLanes.map((lane) => [
-      lane,
-      facts.filter((fact) => contextPackLaneForFact(fact) === lane).length,
-    ]),
-  ) as Record<ContextPackLane, number>;
-  return { facts, counts };
+  return facts;
 }
 
 const searchStopWords = new Set([
@@ -160,10 +106,11 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       ...pack.invariants.map((item) => `- ${item.status}: ${item.message}`),
       '',
       '## Coverage',
+      coverageDescription(pack.coverage),
       ...contextPackLanes.map((lane) => `- ${lane}: ${pack.coverage.counts[lane]} relationships`),
       ...(pack.coverage.gaps.length
         ? pack.coverage.gaps.map((gap) => `- GAP: ${gap}`)
-        : ['- No Context Pack lane gaps detected.']),
+        : ['- No coverage gaps detected on this returned page.']),
       ...contextPackLanes.flatMap((lane) => [
         '',
         `## ${lane}`,
@@ -261,7 +208,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     }
     // Balance evidence lanes among similarly ranked facts, not across unrelated distance tiers.
     const allBalanced = [...tiers.values()].flatMap((tier) => [
-      ...selectBalancedFacts(tier, tier.length).facts,
+      ...selectBalancedFacts(tier, tier.length),
       ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
     ]);
     const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
@@ -282,7 +229,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       offset = token.offset;
     }
     const facts = allBalanced.slice(offset, offset + maxFacts);
-    const balanced = selectBalancedFacts(facts, facts.length);
+    const coverage = coverageForFacts(facts);
     const nextOffset = offset + facts.length;
     const continuation = nextOffset < allBalanced.length ? Buffer.from(JSON.stringify({
       snapshot: snapshot.manifest.snapshotId, digest: snapshot.manifest.contentDigest,
@@ -332,13 +279,13 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     for (const [kind, missing, reason] of [
       [
         'missingIntent',
-        balanced.counts.productIntent === 0,
-        'No declared intent matched this query. Inspect the owner and philosophy sources before concluding a requirement is missing.',
+        coverage.counts.productIntent === 0,
+        'No product-intent relationships appear on this returned page. Inspect continuation, scope and owner sources before concluding a requirement is missing.',
       ],
       [
         'implementationGaps',
-        balanced.counts.implementationAndConsumers === 0,
-        'No implementation relationships matched this query. Inspect code before concluding behavior is missing.',
+        coverage.counts.implementationAndConsumers === 0,
+        'No production implementation evidence appears on this returned page. Inspect continuation, scope and code before concluding behavior is missing.',
       ],
       [
         'runtimeGaps',
@@ -375,14 +322,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       ),
       runtimeEvidence,
       suggestedFiles,
-      coverage: {
-        counts: balanced.counts,
-        gaps: [...contextPackLanes
-          .filter((lane) => balanced.counts[lane] === 0)
-          .map((lane) => `No ${lane} evidence matched this request.`),
-          ...(facts.some((fact) => fact.sourceAuthority === 'declared' && fact.extractionReview === 'unreviewed')
-            ? ['Approved-source extraction remains unreviewed; verify cited intent before using it as a rule or gate.'] : [])],
-      },
+      coverage,
       diagnostics: selectDiagnostics(snapshot, request, facts, focus, queryDiagnostics),
       exploration: {
         rankingVersion: IMPACT_RANKING_VERSION,

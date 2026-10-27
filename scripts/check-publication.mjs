@@ -94,7 +94,7 @@ try {
         'dist/extraction/semantic-diagnostics.js',
         'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
-        'dist/graph/ranking.js', 'dist/graph/shacl-shapes.js',
+        'dist/graph/ranking.js', 'dist/graph/coverage.js', 'dist/graph/shacl-shapes.js',
         'dist/graph/identity-preflight.js', 'dist/graph/validation-progress.js',
         'dist/application/document-coverage.js', 'dist/extraction/document-traversal.js',
         'dist/extraction/canonical-document-links.js', 'dist/interfaces/document-coverage.js',
@@ -404,29 +404,23 @@ while (page.exploration?.continuation) {
 if (!page.exploration?.rankingVersion || new Set(returned.map((fact) => fact.id)).size !== facts.length || returned.length !== facts.length) {
   throw new Error('Installed ranked query lost or repeated reachable evidence');
 }
-const pack = {
-  snapshot: { snapshotId: context.snapshotId, commitSha: context.commitSha, contentDigest: index.digest },
-  capabilities: [],
-  facts,
-  invariants: [],
-  runtimeEvidence: [],
-  suggestedFiles: ['src/contract.ts', 'src/consumer.ts'],
-  coverage: {
-    counts: {
-      productIntent: 0,
-      contractsAndInvariants: 0,
-      implementationAndConsumers: facts.length,
-      validationEvidence: 0,
-    },
-    gaps: ['No product intent is expected in this implementation-only smoke fixture.'],
-  },
-  diagnostics: {
-    ...Object.fromEntries(['missingIntent', 'ambiguousIntent', 'implementationGaps', 'runtimeGaps', 'drift']
-      .map((kind) => [kind, { items: [], omittedRelevant: 0, omittedUnrelated: 0 }])),
-    unclassifiedLegacyCount: 0,
-  },
-  markdown: '# Context Pack',
-};
+const scipSnapshot = { ...snapshot, facts: sourceFacts };
+const scipQuery = new SnapshotImpactQueryService({ read: async () => scipSnapshot, readHead: async () => scipSnapshot,
+  write: async () => {}, updateHead: async () => {} }, 'default');
+const scipPack = await scipQuery.scan({ maxFacts: 200 });
+const productionFacts = sourceFacts.filter(fact => fact.subject.kind === 'Component');
+if (!productionFacts.length || scipPack.coverage.scope !== 'returned-page' ||
+    scipPack.coverage.countsAreNonExclusive !== true ||
+    scipPack.coverage.counts.implementationAndConsumers !== productionFacts.length ||
+    scipPack.coverage.counts.contractsAndInvariants !== productionFacts.length ||
+    scipPack.diagnostics.implementationGaps.items.length ||
+    JSON.stringify(scipSnapshot.facts) !== JSON.stringify(sourceFacts)) {
+  throw new Error('Installed SCIP consumers must count as implementation and contracts without rewriting evidence');
+}
+const pack = await query.scan({ maxFacts: 200 });
+if (pack.facts.length !== facts.length || !renderContextPackVisualization(pack, 'html').includes('may overlap')) {
+  throw new Error('Installed viewer must explain the same returned-page evidence coverage as agent queries');
+}
 for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph ContextPack'], ['svg', '<svg']]) {
   if (!renderContextPackVisualization(pack, format).includes(marker)) {
     throw new Error('Installed toolkit did not render the ' + format + ' Context Pack visualization');
