@@ -8,6 +8,21 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T10 implementation coverage reporting, 2026-10-27
+
+The consumer reports returned code relationships with zero implementation coverage. The exact
+installed version/output was requested; no private source or artifact was accessed. Public
+regressions reproduced the defect with actual contract extraction (one production consumer counted
+as zero) and real SCIP (eight production relationships counted as zero). [ADR 024](ADR-024-implementation-coverage.md)
+records the reporting correction and metadata compatibility. It requires no hydration/model call
+and leaves snapshot bytes, extraction/cache identities, evidence authority and ranking unchanged.
+
+Focused public regressions cover real Git/extractors, strict SHACL, exact fact/provenance/authority
+round trips, API/MCP/Markdown/HTML consistency, pagination and retained source diagnostics. Negative
+cases distinguish document/model/test/runtime/draft facts from production implementation evidence.
+Full gate and hosted results will be recorded after completion. No npm publication or private
+consumer acceptance is claimed by implementation status.
+
 ## T07a prospective document coverage, 2026-10-27
 
 Implemented after T06; no npm publication is claimed here. [ADR 023](ADR-023-document-coverage-preview.md)

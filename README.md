@@ -275,6 +275,13 @@ ahead of repeated detail and shared-import context. Ranking changes ordering, no
 the reachable scope. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
 
+This source includes a [coverage reporting correction](docs/ADR-024-implementation-coverage.md)
+for the next release: code relationships displayed under contracts also count as implementation
+evidence. New reports identify `coverage.scope: "returned-page"` and `countsAreNonExclusive: true`.
+Counts can overlap and describe returned evidence; they are not completeness percentages or proof
+that behavior is correct. Document/model claims and test-only evidence do not establish production
+implementation. The reporting fix works with saved snapshots without another hydration.
+
 [Relative import evidence](docs/ADR-013-relative-module-requests.md) now scopes module requests
 to the importing directory. An explicit refresh applies this extraction fix; saved snapshots
 keep their original facts. These requests remain unresolved evidence, while SCIP supplies

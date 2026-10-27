@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "00550f6cc7a8caa4120337ebc73e443b988bfdb72d05a2f828c88db502606fe3"
+      "destinationSha256": "5688d323cddd71ea50de4e9e437c621eca443a02a4f9c637b407c3559c897b75"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "622656df7a8fddc84500e0049a4b4fae9a0546504d30f7a72354b2a0bc8e789f"
+      "destinationSha256": "be851d4e36db558016fd371557002571b4b0efec380dbe2902e3fc6ed79d7f93"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -388,14 +388,14 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "68d7405765dec5975370f79caaf8708db42dd3dd464a7ec9c3919c796ee81b79"
+      "destinationSha256": "7b6653f767c2e7445ec19f0cafc9d3fe97494ae139835ec63d335a7210e62c6c"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "0cf5bf085aa71180447e7d5b35a19eba6b3e8d87cef550b8bcb996022a7618d8"
+      "destinationSha256": "bb326562a6cb101892802bcc55b02ed21933cc74bcf47628b3bffb49e434faa8"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "e55328ba9957201c2152fcf036c8cd3eb9ce96fcbbdb93408ded2f5becd2f268"
+      "destinationSha256": "1becccf72026cc700a2aedb0392c72c7561022e2e9b035916f5a8b8832ccc63c"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -582,6 +582,7 @@
     ".changeset/config.json",
     ".changeset/preview-document-coverage.md",
     ".changeset/release-plan.json",
+    ".changeset/report-implementation-evidence.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -618,6 +619,7 @@
     "docs/ADR-021-identity-preflight-and-validation-timing.md",
     "docs/ADR-022-release-documentation.md",
     "docs/ADR-023-document-coverage-preview.md",
+    "docs/ADR-024-implementation-coverage.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -790,6 +792,8 @@
     "src/governance/governance.ts",
     "src/governance/physical-file-kinds.test.ts",
     "src/graph/authority.ts",
+    "src/graph/coverage.test.ts",
+    "src/graph/coverage.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
     "src/graph/ranking.test.ts",
@@ -823,6 +827,7 @@
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",
+    "tests/implementation-coverage.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",

@@ -571,7 +571,7 @@ describe('impact scan facade', () => {
     expect(declared.coverage.counts.productIntent).toBe(1);
     expect(declared.coverage.counts.implementationAndConsumers).toBe(0);
     expect(declared.coverage.gaps).toContain(
-      'No implementationAndConsumers evidence matched this request.',
+      'No implementationAndConsumers evidence appears on this returned page.',
     );
     expect(declared.diagnostics.drift.items).toEqual([]);
 
@@ -596,6 +596,6 @@ describe('impact scan facade', () => {
       sourceDigest: 'runtime-unknown',
     });
     expect(unmapped.coverage.counts.productIntent).toBe(0);
-    expect(unmapped.coverage.gaps).toContain('No productIntent evidence matched this request.');
+    expect(unmapped.coverage.gaps).toContain('No productIntent evidence appears on this returned page.');
   });
 });
