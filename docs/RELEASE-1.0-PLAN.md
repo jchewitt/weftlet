@@ -13,7 +13,8 @@ The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-
 shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
 shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
-for the next release; broader T05 follow-ups and T07 document coverage remain open. Official 1.0 follows
+for the next release. T07a prospective coverage is implemented separately from hydration;
+broader T05 follow-ups and T07b/T07c classification and hydration remain open. Official 1.0 follows
 the agreed remaining scope and genuine consumer acceptance,
 with its exact release scope reviewed when the evidence is available.
 
@@ -50,7 +51,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a implemented; T07b/T07c open; publication pending** | Prospective committed coverage only; preserve validation evidence/classification before connecting traversal to hydration/cache selection |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -334,19 +335,25 @@ traversal. Classify sources/claims explicitly; flag rules without clear SOT owne
 their inferred/unreviewed state. Validation documents are excluded from product-intent extraction
 by default and retained through a separately classified validation-evidence path.
 
-Planned delivery increments:
+Delivery increments:
 
-1. Committed Markdown-link selection and an opt-in, no-model coverage preview: canonical targets,
+1. **T07a implemented:** committed Markdown-link selection and an opt-in, no-model coverage preview: canonical targets,
    cycles/deduplication, ambiguous or unresolved links, exclusions and explicit budget status.
    Label this as prospective coverage until it drives hydration; existing hydration-plan documents
    and cache estimates must continue to describe actual execution inputs. The current graph linker
    also recognizes bare/code paths and is not itself a canonical traversal policy.
-2. Explicit roles/ownership and separate deterministic validation-document evidence. Reaching a
+2. **T07b planned:** explicit roles/ownership and separate deterministic validation-document evidence. Reaching a
    document cannot approve it; excluding validation prose from intent extraction must not remove
    its citations and relationships from the graph. Preserve direct-source configurations.
-3. Opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
+3. **T07c planned:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
    delete/rename handling and positive/negative real-extractor fixtures. Coverage failures stop
    new model work without discarding completed artifacts or the last valid snapshot.
+
+[ADR 023](ADR-023-document-coverage-preview.md) records the T07a public API and `documents plan`
+command. Entry points, document roots and read limits are operation arguments, with existing
+semantic budgets used only for comparison. No configuration/cache identity or hydration selection
+is changed. Source validation is recorded in [validation](VALIDATION.md); no npm publication is
+claimed by implementation status.
 
 Acceptance:
 

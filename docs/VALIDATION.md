@@ -8,6 +8,46 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T07a prospective document coverage, 2026-10-27
+
+Implemented after T06; no npm publication is claimed here. [ADR 023](ADR-023-document-coverage-preview.md)
+records the standalone `documents plan` command/API, committed-link coverage and limits. Current
+hydration selection, cache estimates and configuration/extractor/assembly identities are unchanged.
+
+Focused tests exercise actual Markdown, Git objects and a public ten-document discovery → analysis
+→ admission → planning → execution → outcomes flow, with shared queue-contract links, cycles,
+unapproved drafts and validation references. They distinguish prospective coverage from the actual
+hydration plan, retain exact committed digests/citations, preserve authority, and verify no source
+bodies, provider/adapter imports, cache/snapshot writes or checkout/index changes. Rename/delete
+and historical refs, duplicate definitions, scope boundaries, unsafe paths, symlinks/submodules,
+read-limit frontiers and complete closure above extraction budgets are covered. Native file
+symlink privileges are not required by the Git boundary fixtures.
+
+Local `pnpm context-graph:publication-check` passed: 537 deterministic tests (17 core,
+520 toolkit), including 96 new coverage cases, one optional OML skip, 13 unchanged advisory
+architecture findings, release documentation, inventory, licenses and fresh packed-consumer checks.
+The installed CLI/API produced matching prospective coverage digests and explicit read-limit
+frontiers while the configured provider and adapter were unavailable. Existing real TypeScript
+SCIP, RDF/SPARQL/SHACL, visualization and MCP checks also passed. All 79 original source
+path/hash pairs are intact. Independent review found a `./` evidence-root labeling edge case;
+the fix and both `.`/`./` regressions pass. Hosted results will be recorded separately.
+
+The first hosted Windows attempt passed 412 checks and failed one fixture setup: Git for Windows
+rejects tab/newline paths even through `update-index`. The fixture now writes those nested Git
+tree/commit objects directly, preserving unusual-path coverage without checkout or safety-setting
+changes. All seven focused Git tests pass locally after this fixture-only correction.
+
+A no-model self-repository probe started from `docs/RELEASE-1.0-PLAN.md` at committed source
+`6a6a19cd8ba8c22c64c4158e38e0a3a57f350ab2`, with root `.` and the evaluation configuration.
+It read the complete supported closure: 28 documents, 332,658 bytes and 208 link occurrences.
+It correctly reported `ready: false`: all 28 candidates exceed the six-document budget, and
+`docs/VALIDATION.md` exceeds the 65,536-byte per-source budget. No candidate was silently dropped.
+
+This is document selection/coverage evidence, not extracted business-rule quality or new graph
+relationships. Validation documents remain candidates in this preview; their separate deterministic
+evidence path and traversal-driven extraction remain T07b/T07c. No model/provider request or npm
+publication is claimed; the consumer's live ten-minute retry remains unrun.
+
 ## T06 release-documentation consistency, 2026-10-27
 
 Implemented after 0.5.0; publication remains separate. [ADR 022](ADR-022-release-documentation.md)
