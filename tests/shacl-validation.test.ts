@@ -5,6 +5,7 @@ import type { GraphFact, GraphSnapshot } from '@weftlet/core';
 import { CG, factIri, nodeIri, RdfEvidenceGraph } from '../src/graph/rdf.js';
 import { evidenceShapes } from '../src/graph/shacl-shapes.js';
 import { sha256, stableJson } from '../src/infrastructure/util.js';
+import type { GraphValidationProgress } from '../src/graph/validation-progress.js';
 
 const RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 const subjectId = 'workflow:public-dispatch';
@@ -107,6 +108,25 @@ const cases: { name: string; facts: readonly GraphFact[]; conforms: boolean; pat
 ];
 
 describe('SHACL validation projection parity', () => {
+  it('reports phase boundaries and elapsed time without changing a negative full-validation verdict', async () => {
+    const graph = new RdfEvidenceGraph(snapshot([fact(0, { confidence: 1.5 })]));
+    const before = await graph.serialize();
+    const progress: GraphValidationProgress[] = [];
+    const report = await graph.validate({ onProgress: event => progress.push(event) });
+    expect(report).toEqual(await graph.validate());
+    expect(report.conforms).toBe(false);
+    expect(progress.map(event => [event.phase, event.status])).toEqual([
+      ['build-validation-union', 'started'], ['build-validation-union', 'completed'],
+      ['validate-shacl', 'started'], ['validate-shacl', 'completed'],
+    ]);
+    for (const event of progress) {
+      expect(event.factCount).toBe(1);
+      expect(event.elapsedMs).toBeGreaterThanOrEqual(0);
+      expect(Object.keys(event).sort()).toEqual(['elapsedMs', 'factCount', 'phase', 'status']);
+    }
+    expect(await graph.serialize()).toBe(before);
+  });
+
   it.each(cases)('matches the original dataset for $name', async ({ facts, conforms, paths = [] }) => {
     const value = snapshot(facts);
     const graph = new RdfEvidenceGraph(value);

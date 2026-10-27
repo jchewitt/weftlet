@@ -14,3 +14,5 @@ export * from './application/hydration-plan.js';
 export * from './application/cache-adoption.js';
 export * from './application/hydration-failure.js';
 export * from './extraction/semantic-diagnostics.js';
+export * from './graph/identity-preflight.js';
+export * from './graph/validation-progress.js';

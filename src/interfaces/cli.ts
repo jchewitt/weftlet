@@ -21,6 +21,7 @@ import { loadConfig } from "../configuration/config.js";
 import { planHydration, type HydrationPlan } from '../application/hydration-plan.js';
 import { adoptSemanticCache } from '../application/cache-adoption.js';
 import { SemanticHydrationError } from '../application/hydration-failure.js';
+import { GraphIdentityConflictError } from '../graph/identity-preflight.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -88,7 +89,7 @@ function formatHydrationPlan(plan: HydrationPlan): string {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|cache adopt|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\nhydrate --json --quiet emits structured semantic failures on stderr with no progress lines; failure stdout stays empty. hydrate --plan maps opaque source IDs to local document paths.\ncache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run] returns JSON and copies only validated compatible artifacts, without model calls or snapshot writes. --dry-run performs no cache writes. Agent configurations accept the same --owner-doc, --task and --capability selection as hydrate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|cache adopt|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\nhydrate --plan [--json] [--ref <commit>] [--force-semantic] previews scope, cache and budgets without model calls or graph writes. Preview readiness is advisory and does not add a hydration gate.\nhydrate --json --quiet emits structured semantic failures on stderr with no progress lines; failure stdout stays empty. hydrate --plan maps opaque source IDs to local document paths.\nhydrate|overlay --validation-details explicitly includes local node/fact identities, extractor names and source citations in identity-conflict errors; default reports use opaque references. This flag writes no diagnostic file. Use --json --quiet for structured identity-conflict stderr and empty failure stdout. Validation timings report phase boundaries, not a live heartbeat or percentage.\ncache adopt --from-config <previous.json> [--config <current.json>] [--ref <commit>] [--dry-run] returns JSON and copies only validated compatible artifacts, without model calls or snapshot writes. --dry-run performs no cache writes. Agent configurations accept the same --owner-doc, --task and --capability selection as hydrate.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
     return;
   }
   if (args[0] === 'init') {
@@ -167,7 +168,8 @@ async function main(): Promise<void> {
     const base = valueAfter(args, '--base-snapshot');
     if (!base) throw new Error('overlay requires --base-snapshot <committed snapshot ID>');
     const result = await buildWorkingOverlay(application.repository, application.config,
-      application.snapshotStore, application.storageRoot, base, valueAfter(args, '--agent'));
+      application.snapshotStore, application.storageRoot, base, valueAfter(args, '--agent'),
+      { validationDetails: args.includes('--validation-details') });
     process.stdout.write(`${JSON.stringify(result.manifest, null, 2)}\n`);
     return;
   }
@@ -183,9 +185,12 @@ async function main(): Promise<void> {
         headName: scope?.headName ?? application.headName,
         semanticSources: scope?.semanticSources,
         forceSemantic: args.includes('--force-semantic'),
+        validationDetails: args.includes('--validation-details'),
         signal: controller.signal,
         onProgress: args.includes('--quiet') ? undefined : (event) =>
           process.stderr.write(`[context-graph] ${event.phase}${event.total === undefined ? '' : ` ${event.completed}/${event.total}`}` +
+            `${event.status === undefined ? '' : ` ${event.status}`}` +
+            `${event.factCount === undefined ? '' : ` facts=${event.factCount}`}${event.nodeCount === undefined ? '' : ` nodes=${event.nodeCount}`}` +
             `${event.sourceId === undefined ? '' : ` ${event.sourceId}`}${event.elapsedMs === undefined ? '' : ` ${event.elapsedMs} ms`}\n`),
       });
       process.stdout.write(
@@ -284,7 +289,10 @@ async function main(): Promise<void> {
 
 main().catch((error: unknown) => {
   process.stderr.write(
-    `${error instanceof SemanticHydrationError
+    `${error instanceof GraphIdentityConflictError
+      ? process.argv.includes('--json') || process.argv.includes('--validation-details')
+        ? JSON.stringify(error.report, null, 2) : error.message
+      : error instanceof SemanticHydrationError
       ? process.argv.includes('--json') ? JSON.stringify(error.report, null, 2) : error.message
       : error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
   );

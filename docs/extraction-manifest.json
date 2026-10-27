@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "2b92ad80a6a193b4628d4caec2bd29b6fbf3c6c97066bda2fe91ceb173d06158"
+      "destinationSha256": "ca0b3a50004c4eab36f8e1cbb52a7d312cab490ba2c1aa06061e2691996394d9"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "c333051df80a274410351b0ba1eef1a1e004f790fa457fd3ebb7909197c4ca29"
+      "destinationSha256": "21cdbc817983e788a5aac48ea8b32c55a7dda98868eb48b5df470c8d99eea44a"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "1833e788ca0c162947c626ff611f724d53f349b8d1dc019f204bd433726f9be9"
+      "destinationSha256": "ef6e21f322915b3bf25589d748f379becea5a0ef188bf875caaca10cc479cd2c"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "2dff4c9bca049dc1607cce7cf709494aae24a7f27b05fcb9353dd19de4546fac"
+      "destinationSha256": "b185467e660715806fc914bef5db068e90199ee32b0226452d4adb4c09991d8b"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/explain-identity-conflicts.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -613,6 +614,7 @@
     "docs/ADR-018-operational-semantic-cache.md",
     "docs/ADR-019-semantic-failure-diagnostics.md",
     "docs/ADR-020-canonical-physical-file-producers.md",
+    "docs/ADR-021-identity-preflight-and-validation-timing.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -778,15 +780,19 @@
     "src/governance/governance.ts",
     "src/governance/physical-file-kinds.test.ts",
     "src/graph/authority.ts",
+    "src/graph/identity-preflight.test.ts",
+    "src/graph/identity-preflight.ts",
     "src/graph/ranking.test.ts",
     "src/graph/ranking.ts",
     "src/graph/rdf.ts",
     "src/graph/shacl-shapes.ts",
+    "src/graph/validation-progress.ts",
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
     "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
+    "src/interfaces/identity-preflight.test.ts",
     "src/interfaces/init.test.ts",
     "src/interfaces/init.ts",
     "src/mcp.ts",
@@ -802,6 +808,7 @@
     "tests/extractor-compatibility.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
+    "tests/identity-preflight.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",

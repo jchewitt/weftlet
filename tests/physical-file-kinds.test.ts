@@ -244,7 +244,9 @@ describe('canonical physical-file producer composition', () => {
     const previousHead = await readFile(join(storage, 'heads', `${overlayHead}.json`));
     const snapshotsBefore = (await readdir(join(storage, 'snapshots'))).sort();
     await expect(buildWorkingOverlay(f.repository, config, store, storage, historical.manifest.snapshotId, agent))
-      .rejects.toThrow('Draft overlay failed SHACL validation; saved evidence was preserved');
+      .rejects.toMatchObject({ name: 'GraphIdentityConflictError', report: {
+        category: 'extraction-gap', phase: 'validate-identities', passed: false, shaclValidated: false,
+      } });
     expect((await readdir(join(storage, 'snapshots'))).sort()).toEqual(snapshotsBefore);
     expect(await readFile(join(storage, 'heads', `${overlayHead}.json`))).toEqual(previousHead);
     expect(await readFile(historicalPath)).toEqual(historicalBytes);

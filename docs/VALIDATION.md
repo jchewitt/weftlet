@@ -8,6 +8,60 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Consumer update after 0.4.0, 2026-10-27
+
+The maintainer reports that the consumer updated and appears to be working. This is positive
+consumer feedback after the T08 release. No exact consumer commit, graph scope, adapter test
+report, full-run timing or repeated-hydration report was supplied with that update, so those
+detailed acceptance results remain unrecorded. No private consumer files were inspected or changed.
+
+## T05a identity preflight and validation phase timing, 2026-10-27
+
+Implemented in development source after 0.4.0; no new publication is claimed.
+[ADR 021](ADR-021-identity-preflight-and-validation-timing.md) records the bounded scope:
+complete identity/kind attribution before compilation/RDF, explicit local diagnostic detail,
+and elapsed phase boundaries. Full SHACL shapes, accepted facts and cache identities are unchanged.
+
+- Twelve pure preflight cases pass: both endpoints, cross-source kinds, conceptual IDs,
+  duplicates/self-references, all late conflicts, exact copied provenance/authority, absent
+  authority preservation and opaque defaults including unknown kinds. A pass explicitly says
+  `shaclValidated: false`; it does not infer canonical classification or approved intent.
+- Two hydration composition cases pass with actual committed file/contract/document producers
+  and a deterministic semantic provider. A kind conflict skips compilation, invariants and RDF;
+  previous head/snapshot and completed artifact bytes remain intact. Correcting the fixture
+  reuses the artifact and runs full SHACL. Invalid confidence with consistent kinds still fails
+  real SHACL. Indexing is stubbed in these scheduling cases; real SCIP is covered separately.
+- Four CLI subprocess cases pass with real SCIP and public adapters: default human/JSON privacy,
+  explicit exact attribution, empty failure stdout, preserved artifacts/snapshots, overlay detail
+  propagation and valid full-validation timing. The existing four semantic-failure CLI cases pass.
+- All 26 full SHACL parity/timing cases pass, including original named-dataset positive/negative
+  equivalence and the 2,200-fact late failure. Phase events do not change verdicts or serialization;
+  completed means the operation returned, not that its graph conformed.
+- Local `pnpm context-graph:publication-check` passed: 403 deterministic tests (17 core,
+  386 toolkit), one optional OML skip, 13 unchanged advisory architecture findings, inventory,
+  licenses and fresh packed-consumer checks. The installed public API detects kind conflicts,
+  preserves exact opt-in citations, reports phase timing and still rejects the same pair under
+  full SHACL. All 79 original extraction source path/hash pairs remain intact.
+- Independent runtime/test review found no blocker. No live model or private consumer
+  performance result is implied. Hosted checks and merge are recorded separately.
+
+A bounded public profile ran the unique-node fixture in three fresh processes: 500 facts,
+the same 500 facts again, then 501 facts. Command: `node scripts/benchmark-shacl.mjs --counts 500
+--topologies unique --modes optimized --deadline-ms 15000` (use 501 for the final case), after
+`pnpm build`. Linux x64, Node 24.19.0, N3 2.7.2 and rdf-validate-shacl 0.6.5; built RDF module
+SHA-256 `8a66e0266d812b742103d42de3572faf4ab9873d0f37424b563962ea7473fae1`.
+
+| Facts / nodes | Preflight ms | RDF construction ms | Union ms | SHACL ms | Process peak RSS KiB |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 500 / 1,000 | 0.84 | 67.90 | 32 | 186 | 330,496 |
+| 500 / 1,000 repeat | 0.74 | 57.15 | 32 | 174 | 334,356 |
+| 501 / 1,002 | 0.74 | 59.88 | 54 | 185 | 333,584 |
+
+All three ran full validation and preserved serialization; the repeated input's serialization
+digest matched, and the added-fact digest differed. These single-run smoke measurements establish
+phase visibility, not a speedup or production capacity. RSS includes imports, fixture and
+serialization; no successful-result reuse or dependency-aware incremental validation was used.
+
 ## 0.4.0 publication and installed-package checks, 2026-10-26
 
 `@weftlet/core@0.4.0` and `@weftlet/toolkit@0.4.0` ship T03 operational cache reuse,

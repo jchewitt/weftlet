@@ -29,6 +29,8 @@ import { SemanticProviderError } from '../extraction/semantic-process.js';
 import { hydrateSemanticSources, type HydrationProgressEvent } from './semantic-run.js';
 export type { HydrationProgressEvent } from './semantic-run.js';
 import { graphAssemblyVersion, graphAssemblyIdentity } from './extraction-identity.js';
+import { assertGraphIdentities } from '../graph/identity-preflight.js';
+import { measureValidationPhase } from '../graph/validation-progress.js';
 
 export interface HydrationOptions {
   readonly signal?: AbortSignal;
@@ -38,6 +40,8 @@ export interface HydrationOptions {
   readonly forceSemantic?: boolean;
   readonly snapshotSuffix?: string;
   readonly requireClean?: boolean;
+  /** Explicit local diagnostics may disclose repository identities, producers and citations. */
+  readonly validationDetails?: boolean;
   readonly semanticSources?: readonly string[];
   readonly runtimeEvidenceRevision?: RuntimeEvidenceRevision;
 }
@@ -222,13 +226,21 @@ export class ContextGraphHydrator {
     diagnostics.push(...documents.diagnostics);
     diagnostics.push(...routing.diagnostics);
     checkpoint();
-    options.onProgress?.({ phase: 'compile-semantic-rdf' });
-    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
     const facts = [...semanticFacts, ...documents.facts, ...extractorFacts, ...routing.facts, ...runtimeFacts].sort(
       (left, right) => left.id.localeCompare(right.id),
     );
+    const validationCounts: { factCount: number; nodeCount?: number } = { factCount: facts.length };
+    await measureValidationPhase('validate-identities', validationCounts, options.onProgress, () => {
+      const report = assertGraphIdentities(facts, {
+        repositoryId: config.repositoryId, includeDetails: options.validationDetails,
+      });
+      validationCounts.nodeCount = report.nodeCount;
+    });
+    checkpoint();
+    options.onProgress?.({ phase: 'compile-semantic-rdf' });
+    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const invariants = (
       await Promise.all(
         this.dependencies.invariantEvaluators.map((evaluator) =>
@@ -308,8 +320,10 @@ export class ContextGraphHydrator {
       diagnostics,
     };
     checkpoint();
-    options.onProgress?.({ phase: 'validate-shacl' });
-    const validation = await new RdfEvidenceGraph(snapshot).validate();
+    const graph = await measureValidationPhase('build-rdf-evidence', validationCounts, options.onProgress,
+      () => new RdfEvidenceGraph(snapshot));
+    const validation = await graph.validate({ onProgress: (event) =>
+      options.onProgress?.({ ...event, nodeCount: validationCounts.nodeCount }) });
     if (!validation.conforms) {
       throw new Error(`Graph extraction failed SHACL validation: ${JSON.stringify(validation.issues)}`);
     }

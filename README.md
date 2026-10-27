@@ -109,6 +109,12 @@ for preview, retry and explicit legacy-cache adoption instructions.
 
 ## SHACL validation and performance
 
+The development increment after **0.4.0** adds an identity preflight before ontology/RDF work.
+`hydrate --json --quiet` reports conflicts using opaque references; `--validation-details` explicitly
+includes local identities, producer versions and citations. Validation emits phase-boundary times
+and graph counts, without a percentage or live heartbeat. Full SHACL remains required after a
+passing preflight. See [ADR 021](docs/ADR-021-identity-preflight-and-validation-timing.md).
+
 Starting with 0.3.0, the toolkit indexes a temporary union to accelerate cold validation.
 The toolkit uses JavaScript `rdf-validate-shacl` and an in-memory
 N3 store. Each hydration validates the complete graph; semantic artifact reuse does not make
@@ -135,7 +141,7 @@ pnpm benchmark:shacl
 
 Current hydration progress reports phase boundaries. The validator performs synchronous work,
 so an ordinary timer cannot provide an honest heartbeat while that work blocks Node's main
-thread. Worker-based progress, early identity checks, validation-result reuse and incremental
+thread. Worker-based progress, validation-result reuse and incremental
 validation remain separate T05 work; they do not delay the focused cold-validation release.
 
 ## Development
