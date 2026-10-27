@@ -1,6 +1,6 @@
 # ADR-025: Document roles, ownership and deterministic evidence
 
-Status: T07b implemented; local full gate and independent review passed. Hosted checks and merge are pending.
+Status: T07b merged in PR 42; local and hosted checks and independent review passed.
 No npm publication or consumer acceptance is claimed. See [validation](VALIDATION.md) for
 completed checks and the [1.0 plan](RELEASE-1.0-PLAN.md) for the remaining boundary.
 
@@ -74,5 +74,5 @@ from product-intent extraction without dropping their presence or citations.
 
 Validation covers role conflicts and defaults, owner eligibility and non-transfer of authority,
 actual committed presence/references, exact RDF/SHACL projection, query/viewer agreement and
-legacy behavior. Full gate and review outcomes belong in the validation record; this decision
-does not claim those gates have completed or that traversal already drives hydration.
+legacy behavior. Exact gate and review outcomes are in the validation record; neither those
+checks nor this decision claim npm publication or that traversal already drives hydration.

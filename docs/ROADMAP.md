@@ -25,14 +25,14 @@ next release: generated current examples, actual archive checks and fresh docume
 T07a [prospective document coverage](ADR-023-document-coverage-preview.md) is implemented separately
 from hydration. It follows committed Markdown links and reports coverage/budget gaps without
 model calls or graph writes. T07b [document roles and ownership](ADR-025-document-classification.md)
-and the standalone deterministic document-evidence API passed the local full gate and independent
-review; hosted checks and merge are pending. `documents plan --document-policy` accepts an operation-time JSON sidecar;
+and the standalone deterministic document-evidence API merged in PR 42 after local/hosted checks
+and independent review. `documents plan --document-policy` accepts an operation-time JSON sidecar;
 classification completeness is separate from traversal/budget readiness. Ownership never transfers
 approval. Current hydration selection and caches remain unchanged until T07c.
 T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
 release: actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
-After the T07b gates, two engineering workstreams remain: T07c hydration/cache integration and T05
+Two engineering workstreams remain: T07c hydration/cache integration and T05
 performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
 it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
 separate acceptance work; the 2.0 plan remains a separate future direction.
