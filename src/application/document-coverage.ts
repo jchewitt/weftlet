@@ -44,7 +44,7 @@ export async function planDocumentCoverage(configPath: string, options: Document
   const documents = traversal.documents.map(document => {
     const approvedBy = (config.approvedIntentSources ?? []).filter(pattern => matchesRepositoryGlob(document.path, pattern));
     const evidence = config.evidenceRoots.some(root => {
-      const normalized = root.replaceAll('\\', '/').replace(/^\.\//, '').replace(/\/$/, '');
+      const normalized = root.replaceAll('\\', '/').replace(/^\.\//, '').replace(/\/$/, '') || '.';
       return normalized === '.' || document.path === normalized || document.path.startsWith(`${normalized}/`) ||
         matchesRepositoryGlob(document.path, normalized) || matchesRepositoryGlob(document.path, `${normalized}/**`);
     });

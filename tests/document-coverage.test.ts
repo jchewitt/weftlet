@@ -143,6 +143,17 @@ it('retains configured validation-root glob labels without treating linked sourc
   expect(report.documents.find(doc => doc.path === 'docs/draft.md')?.role).toBe('semantic-document');
 });
 
+it.each(['.', './'])('labels every document under repository evidence root %s without propagating approval', async evidenceRoot => {
+  const { config, configPath } = await fixture();
+  config.evidenceRoots = [evidenceRoot];
+  await writeFile(configPath, JSON.stringify(config));
+  const report = await planDocumentCoverage(configPath, { entryPoints: ['docs/sot.md'] });
+  expect(report.documents).toHaveLength(10);
+  expect(report.documents.every(document => document.role === 'validation-evidence')).toBe(true);
+  expect(report.documents.filter(document => document.sourceAuthority === 'declared').map(document => document.path)).toEqual(['docs/sot.md']);
+  expect(report.documents.every(document => document.extractionReview === 'unreviewed')).toBe(true);
+});
+
 it('recomputes reachability for renames and deletions while preserving historical committed coverage', async () => {
   const { root, configPath, git, commit, commitSha } = await fixture();
   await rename(join(root, 'docs/draft.md'), join(root, 'docs/proposal.md'));
