@@ -1,23 +1,25 @@
 # Delivery roadmap
 
-Release checkpoint: 2026-10-26, after verified 0.4.0 publication. Evidence is recorded in
-[validation](VALIDATION.md); this roadmap is not a live registry status.
+Release checkpoint: 2026-10-27, after verified 0.5.0 publication.
+Evidence is recorded in [validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
-Current release priority: the consumer's approved ten-minute retry is blocked by 0.4.0's
-five-minute configuration ceiling. T09 raises the accepted timeout to 600000 ms and will ship
-with ready T05a work. The actual consumer retry has not run; this does not change default limits.
+T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
+`semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is
+unchanged. The consumer's actual ten-minute retry has not run; upstream installation and
+deterministic checks do not establish that outcome. See [provider limits and recovery](PROVIDERS.md#limits-and-reuse).
 
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the verified release at this checkpoint is 0.4.0. The received consumer findings are tracked in the
+the verified release at this checkpoint is 0.5.0. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
 no-model preview and T05's cold-validation improvement shipped in 0.3.0. T03 operational cache
 reuse, T04 timeout diagnostics and T08 deterministic physical-file consistency shipped in 0.4.0.
+T09 timeout support and T05a identity preflight/phase timing shipped in 0.5.0.
 Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
 before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
 
@@ -36,10 +38,9 @@ in one temporary validation graph, preserving the same shapes and canonical name
 Bounded public experiments measured substantial cold-path improvement, alongside about 1.3 GiB
 RSS in the prototype at 10,000 unique-node facts; the production harness including serialization
 peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
-T05a adds [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
-after 0.4.0, merged with local/hosted checks passing and publication pending. Full validation
-remains mandatory. In-phase worker progress, result reuse and incremental validation remain
-open; no Rust engine, graph database or
+T05a shipped [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
+in 0.5.0 after local/hosted checks and independent archive review. Full validation remains mandatory.
+In-phase worker progress, result reuse and incremental validation remain open; no Rust engine, graph database or
 validation-result cache is introduced by these increments.
 
 [T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in
@@ -144,8 +145,8 @@ preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
-`@weftlet/toolkit` are published at 0.3.0 through GitHub OIDC; the publication and verification
-record is in [validation](VALIDATION.md). Changesets prepares reviewed version PRs for the fixed package group;
+`@weftlet/toolkit` use GitHub OIDC publication; current and historical publication/verification
+records are in [validation](VALIDATION.md). Changesets prepares reviewed version PRs for the fixed package group;
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).
 Earlier Tently packages remain available and undeprecated.

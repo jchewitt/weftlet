@@ -1,7 +1,8 @@
 # ADR-021: Early identity conflicts and honest validation phase timing
 
-Status: implemented in development source after 0.4.0. Publication and consumer acceptance
-are separate checkpoints in [validation](VALIDATION.md). This is the bounded T05a increment.
+Status: shipped in 0.5.0 after local/hosted checks and independent archive review; release evidence
+is in [validation](VALIDATION.md). Consumer acceptance remains a separate checkpoint.
+This is the bounded T05a increment; broader T05 work remains open.
 
 ## Decision
 
