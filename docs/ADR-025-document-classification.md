@@ -74,5 +74,5 @@ from product-intent extraction without dropping their presence or citations.
 
 Validation covers role conflicts and defaults, owner eligibility and non-transfer of authority,
 actual committed presence/references, exact RDF/SHACL projection, query/viewer agreement and
-legacy behavior. Full gate and review outcomes belong in the validation record; this decision
-does not claim those gates have completed or that traversal already drives hydration.
+legacy behavior. Exact gate and review outcomes are in the validation record; neither those
+checks nor this decision claim npm publication or that traversal already drives hydration.
