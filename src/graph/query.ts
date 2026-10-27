@@ -14,6 +14,7 @@ import type {
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
 import { factSearchText, IMPACT_RANKING_VERSION, rankImpactFacts } from './ranking.js';
 import { contextPackLanes, contextPackLaneForFact, isDeclaredFact, coverageForFacts, coverageDescription } from './coverage.js';
+import { sourceDocumentDescription } from './document-role-description.js';
 export { contextPackLaneForFact } from './coverage.js';
 
 export const DEFAULT_CONTEXT_PACK_FACTS = 60;
@@ -75,6 +76,13 @@ function boundedFactLimit(value: number | undefined): number {
   return Math.min(value, MAX_CONTEXT_PACK_FACTS);
 }
 
+function markdownFactDetails(fact: GraphFact): string {
+  const document = sourceDocumentDescription(fact)?.replace(/[\\`*_{}\[\]()<>!|]/g, '\\$&').replace(/[\r\n]/g, ' ');
+  return `confidence ${fact.confidence}` +
+    (fact.sourceAuthority ? `; source ${fact.sourceAuthority}; extraction ${fact.extractionReview ?? 'unknown'}` : '') +
+    (document ? `; ${document}` : '');
+}
+
 export class MarkdownContextPackRenderer implements ContextPackRenderer {
   render(pack: Omit<ContextPack, 'markdown'>): string {
     const lines = [
@@ -119,7 +127,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
           .map(
             (fact) =>
               `- [${contextPackEvidenceAuthority(fact)}] ${fact.subject.label} —${fact.predicate}→ ${fact.object.label} ` +
-              `(\`${fact.provenance.path}:${fact.provenance.startLine}\`, confidence ${fact.confidence}${fact.sourceAuthority ? `; source ${fact.sourceAuthority}; extraction ${fact.extractionReview ?? 'unknown'}` : ''})`,
+              `(\`${fact.provenance.path}:${fact.provenance.startLine}\`, ${markdownFactDetails(fact)})`,
           ),
       ]),
       '',

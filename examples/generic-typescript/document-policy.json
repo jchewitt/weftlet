@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "roles": [
+    { "id": "search-intent", "pattern": "docs/search-capability.md", "role": "intent" }
+  ],
+  "owners": [
+    { "id": "search-owner", "pattern": "docs/search-capability.md", "ownerDocument": "docs/search-capability.md" }
+  ]
+}

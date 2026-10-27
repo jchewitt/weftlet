@@ -8,6 +8,39 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T07b document classification and evidence, 2026-10-27
+
+[ADR 025](ADR-025-document-classification.md) records explicit document roles and SOT owner
+mappings, the operation-level `documents plan --document-policy` input, and the public deterministic
+document-evidence extractor. These are prospective APIs: current hydration selection, semantic
+artifacts, configuration/extractor/assembly identities and historical snapshots remain unchanged.
+Traversal-driven hydration and default validation-document separation remain T07c.
+
+Public fixtures exercise real committed document/file extraction, empty validation documents,
+reference definition/use citations, approved validation reports, unapproved owned plans, ambiguous
+roles/owners, scope changes, renames/deletes and historical re-extraction. Presence and reference
+facts remain inferred structural evidence; neither written “PASS” text nor an owner mapping creates
+test-success evidence or approved assertions. Strict SHACL, exact RDF/SPARQL projection, API/MCP,
+Markdown and HTML/SVG/DOT preserve per-fact roles, policy identity, ownership and provenance.
+
+Preview and extraction checks use unavailable provider/adapter sentinels and retain source bytes,
+Git index, hydration plans and seeded cache artifacts. Classification gaps are separate from the
+preview's traversal/budget `ready` field. Independent review found that an approved validation
+document must be ineligible as an intent owner, and that a frontier exceeding 10,000 discovered
+documents must survive the classifier's per-call bound; both have focused regressions.
+
+Local `pnpm context-graph:publication-check` passed: **674 deterministic tests** (17 core,
+657 toolkit), including 111 new regressions, and one optional OML skip. Release documentation,
+inventory, licenses and fresh packed-consumer checks passed, including the new public policy and
+document-evidence APIs, installed CLI policy loading, real SCIP, RDF/SHACL, rendering and MCP.
+All 79 original source path/hash pairs are intact. Architecture checks passed with 14 advisories:
+13 existing findings and one new clone signal for independent Git test-fixture setup. Review found
+shared setup mechanics, not duplicated product rules; no policy, debt baseline or exception changed.
+Independent review found no remaining blocker after the two corrections above.
+
+Hosted checks and merge are pending at this checkpoint. No model/provider request, npm publication,
+browser interaction or private consumer acceptance is claimed.
+
 ## T10 implementation coverage reporting, 2026-10-27
 
 The consumer reports returned code relationships with zero implementation coverage. The exact

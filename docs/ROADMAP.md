@@ -24,13 +24,18 @@ T06 [release-documentation consistency](ADR-022-release-documentation.md) is imp
 next release: generated current examples, actual archive checks and fresh documented installation.
 T07a [prospective document coverage](ADR-023-document-coverage-preview.md) is implemented separately
 from hydration. It follows committed Markdown links and reports coverage/budget gaps without
-model calls or graph writes. T07b validation-evidence/authority handling and T07c hydration/cache
-integration remain open.
+model calls or graph writes. T07b [document roles and ownership](ADR-025-document-classification.md)
+and the standalone deterministic document-evidence API passed the local full gate and independent
+review; hosted checks and merge are pending. `documents plan --document-policy` accepts an operation-time JSON sidecar;
+classification completeness is separate from traversal/budget readiness. Ownership never transfers
+approval. Current hydration selection and caches remain unchanged until T07c.
 T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
 release: actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
-Document coverage, broader validation follow-ups and genuine consumer acceptance remain open
-before official 1.0. The 2.0 plan distinguishes proposed work from delivered capability.
+After the T07b gates, two engineering workstreams remain: T07c hydration/cache integration and T05
+performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
+it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
+separate acceptance work; the 2.0 plan remains a separate future direction.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
 publication. T02 and the focused T05 optimization shipped together in 0.3.0 through
@@ -49,8 +54,11 @@ RSS in the prototype at 10,000 unique-node facts; the production harness includi
 peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
 T05a shipped [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
 in 0.5.0 after local/hosted checks and independent archive review. Full validation remains mandatory.
-In-phase worker progress, result reuse and incremental validation remain open; no Rust engine, graph database or
-validation-result cache is introduced by these increments.
+In-phase worker progress, result reuse and incremental validation remain unsupported. T05 closeout
+still owes representative cold/repeated/changed-input measurements and explicit worker/reuse/
+incremental decisions. Direct full validation may remain the evaluated choice; no promised
+evaluation is silently deferred, and native/backend benchmarking is conditional on measurements
+justifying it. No Rust engine, graph database or validation-result cache is introduced here.
 
 [T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in
 Codex user artifacts can survive changes to timeout/retry/concurrency/document/byte limits while

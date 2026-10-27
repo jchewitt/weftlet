@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "5688d323cddd71ea50de4e9e437c621eca443a02a4f9c637b407c3559c897b75"
+      "destinationSha256": "c6b858f9e8712fafe9ae9f9050183b0dae0181d35145d08d53ea0da1ca3ead3e"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "be851d4e36db558016fd371557002571b4b0efec380dbe2902e3fc6ed79d7f93"
+      "destinationSha256": "e0bc50fcb845ae8da1e6ea79644ae40428596f73bd7ec35a9145543d8b15f229"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "7a0ce5a1ef6861d8c59d76cb7ae4db76301f90995950194e5861880923e6d43c"
+      "destinationSha256": "c25cbe64ba038a42eb3640b5e27e43ce6a8173f5482e90e2defd6df14bc90beb"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "8c65422c8705416d004f5d8b13ef25b3757c8e8c0a1ded4305602bc5c3e0a142"
+      "destinationSha256": "eec96db731c2af6cea126341fab1ea02bfc3c445ff082437e24972c20e32b86a"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "bb326562a6cb101892802bcc55b02ed21933cc74bcf47628b3bffb49e434faa8"
+      "destinationSha256": "f8550abee5ae40e2078ea8a28e116ce622a3ed0f98c0202890103a914647013d"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "1becccf72026cc700a2aedb0392c72c7561022e2e9b035916f5a8b8832ccc63c"
+      "destinationSha256": "21e5982d69e17e244c1609b01a620c63ab0eaa57d8ea480825539e703d64411c"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/check-release-documentation.md",
+    ".changeset/classify-document-evidence.md",
     ".changeset/config.json",
     ".changeset/preview-document-coverage.md",
     ".changeset/release-plan.json",
@@ -620,6 +621,7 @@
     "docs/ADR-022-release-documentation.md",
     "docs/ADR-023-document-coverage-preview.md",
     "docs/ADR-024-implementation-coverage.md",
+    "docs/ADR-025-document-classification.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -682,6 +684,7 @@
     "evaluations/weftlet/source-project-baseline.json",
     "evaluations/weftlet/source-project.config.json",
     "examples/generic-typescript/context-graph.oml.config.json",
+    "examples/generic-typescript/document-policy.json",
     "examples/pipeline/context-graph.config.json",
     "examples/pipeline/docs/admission.md",
     "examples/pipeline/docs/analysis.md",
@@ -749,6 +752,7 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/document-classification.test.ts",
     "src/application/document-coverage.ts",
     "src/application/extraction-identity.ts",
     "src/application/hydration-failure.ts",
@@ -768,6 +772,10 @@
     "src/extraction/codex-auth.ts",
     "src/extraction/codex-command.test.ts",
     "src/extraction/codex-command.ts",
+    "src/extraction/document-classification.test.ts",
+    "src/extraction/document-classification.ts",
+    "src/extraction/document-evidence.test.ts",
+    "src/extraction/document-evidence.ts",
     "src/extraction/document-references.ts",
     "src/extraction/document-traversal.test.ts",
     "src/extraction/document-traversal.ts",
@@ -794,6 +802,8 @@
     "src/graph/authority.ts",
     "src/graph/coverage.test.ts",
     "src/graph/coverage.ts",
+    "src/graph/document-role-description.ts",
+    "src/graph/document-roles.test.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
     "src/graph/ranking.test.ts",
@@ -823,6 +833,8 @@
     "tests/architecture.test.ts",
     "tests/cache-adoption.test.ts",
     "tests/document-coverage.test.ts",
+    "tests/document-evidence.test.ts",
+    "tests/document-source-rdf.test.ts",
     "tests/extractor-compatibility.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",

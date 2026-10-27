@@ -50,6 +50,16 @@ export interface GraphNode {
   readonly attributes?: Readonly<Record<string, string | number | boolean>>;
 }
 
+/** A source document's role does not establish approval of its assertions. */
+export type SourceDocumentRole = 'intent' | 'plan' | 'validation' | 'reference' | 'unclassified';
+
+/** Explicit document ownership mappings, kept separate from source and assertion approval. */
+export interface SourceOwnership {
+  readonly status: 'resolved' | 'missing' | 'ambiguous' | 'unavailable' | 'unapproved' | 'ineligible' | 'not-required';
+  readonly ownerDocuments: readonly string[];
+  readonly mappingIds: readonly string[];
+}
+
 export interface GraphFact {
   readonly id: string;
   readonly subject: GraphNode;
@@ -63,6 +73,10 @@ export interface GraphFact {
   /** Approval of the source does not constitute review of a model's extracted assertion. */
   readonly sourceAuthority?: 'declared' | 'inferred' | 'draft';
   readonly extractionReview?: 'unreviewed' | 'approved' | 'deterministic';
+  /** Classification belongs to this cited fact, never to a shared Document node. */
+  readonly sourceRole?: SourceDocumentRole;
+  readonly sourceOwnership?: SourceOwnership;
+  readonly sourcePolicyDigest?: string;
 }
 
 export interface SemanticArtifact {

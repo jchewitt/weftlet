@@ -40,7 +40,18 @@ export class RdfEvidenceGraph {
         snapshotId: fact.snapshotId, record: stableJson(fact),
         ...(fact.sourceAuthority ? { sourceAuthority: fact.sourceAuthority } : {}),
         ...(fact.extractionReview ? { extractionReview: fact.extractionReview } : {}),
+        ...(fact.sourceRole !== undefined ? { sourceRole: fact.sourceRole } : {}),
+        ...(fact.sourcePolicyDigest !== undefined ? { sourcePolicyDigest: fact.sourcePolicyDigest } : {}),
       })) this.dataset.addQuad(record, iri(CG + p), literal(value));
+      if (fact.sourceOwnership !== undefined) {
+        this.dataset.addQuad(record, iri(CG + 'ownershipStatus'), literal(fact.sourceOwnership.status));
+        for (const ownerDocument of fact.sourceOwnership.ownerDocuments) {
+          this.dataset.addQuad(record, iri(CG + 'ownerDocument'), literal(ownerDocument));
+        }
+        for (const mappingId of fact.sourceOwnership.mappingIds) {
+          this.dataset.addQuad(record, iri(CG + 'ownershipMapping'), literal(mappingId));
+        }
+      }
       for (const [p, value] of [['startLine', fact.provenance.startLine], ['endLine', fact.provenance.endLine]] as const) {
         this.dataset.addQuad(record, iri(CG + p), literal(String(value), iri(XSD + 'integer')));
       }

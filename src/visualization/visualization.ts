@@ -2,6 +2,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, resolve } from 'node:path';
 
+import { repositoryFileNode } from '@weftlet/core';
 import type {
   ContextPack,
   ContextPackLane,
@@ -13,6 +14,7 @@ import type {
 } from "@weftlet/core";
 import { contextPackEvidenceAuthority, contextPackLaneForFact } from "../graph/query.js";
 import { coverageDescription } from '../graph/coverage.js';
+import { sourceDocumentDescription } from '../graph/document-role-description.js';
 import { viewerScript } from "./viewer-interaction.js";
 import { diagnosticSummary } from "../graph/diagnostics.js";
 
@@ -137,6 +139,7 @@ function addNode(
   nodes: Map<string, VisualNode>,
   node: GraphNode,
   selectedLanes?: ReadonlySet<ContextPackLane>,
+  ownValidationSource = false,
 ): void {
   if (nodes.has(node.id)) return;
   nodes.set(node.id, {
@@ -144,7 +147,7 @@ function addNode(
     label: node.label,
     kind: node.kind,
     cluster: String(node.attributes?.module ?? node.attributes?.layer ?? node.kind),
-    column: visualColumn(node.kind, selectedLanes),
+    column: ownValidationSource && node.kind === 'Document' ? 'evidence' : visualColumn(node.kind, selectedLanes),
   });
 }
 
@@ -176,8 +179,16 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
   assertVisualizationBounds(pack);
   const nodes = new Map<string, VisualNode>();
   const selectedLanes = new Map<string, Set<ContextPackLane>>();
+  const validationDocuments = new Set<string>();
   const edges: VisualEdge[] = [];
   for (const fact of pack.facts) {
+    if (fact.sourceRole === 'validation') {
+      const citedDocument = repositoryFileNode(fact.provenance.path);
+      if (citedDocument.kind === 'Document' &&
+          [fact.subject, fact.object].some(node => node.kind === 'Document' && node.id === citedDocument.id)) {
+        validationDocuments.add(citedDocument.id);
+      }
+    }
     const lane = contextPackLaneForFact(fact);
     if (!lane) continue;
     for (const node of [fact.subject, fact.object]) {
@@ -187,8 +198,9 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
     }
   }
   for (const fact of pack.facts) {
-    addNode(nodes, fact.subject, selectedLanes.get(fact.subject.id));
-    addNode(nodes, fact.object, selectedLanes.get(fact.object.id));
+    addNode(nodes, fact.subject, selectedLanes.get(fact.subject.id), validationDocuments.has(fact.subject.id));
+    addNode(nodes, fact.object, selectedLanes.get(fact.object.id), validationDocuments.has(fact.object.id));
+    const sourceDescription = sourceDocumentDescription(fact);
     edges.push({
       id: fact.id,
       from: fact.subject.id,
@@ -196,7 +208,8 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
       label: fact.predicate,
       authority: contextPackEvidenceAuthority(fact),
       provenance: `${fact.provenance.path}:${fact.provenance.startLine}`,
-      detail: `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}`,
+      detail: `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}` +
+        (sourceDescription ? `; ${sourceDescription}` : ''),
       source: fact.provenance,
       sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
     });

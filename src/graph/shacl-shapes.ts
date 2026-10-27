@@ -26,4 +26,30 @@ cg:FactShape a sh:NodeShape; sh:targetClass rdf:Statement;
  sh:property [ sh:path cg:extractor; sh:minCount 1; sh:datatype xsd:string; sh:minLength 1 ].
 cg:NodeShape a sh:NodeShape; sh:targetClass cg:Node;
  sh:property [ sh:path cg:kind; sh:minCount 1; sh:maxCount 1 ].
+
+# Optional source metadata targets only assertions that carry those predicates.
+# Legacy facts do not acquire additional property or ownership consistency checks.
+cg:SourceRoleShape a sh:NodeShape; sh:targetSubjectsOf cg:sourceRole;
+ sh:property [ sh:path cg:sourceRole; sh:maxCount 1; sh:datatype xsd:string;
+   sh:in ("intent" "plan" "validation" "reference" "unclassified") ].
+cg:SourcePolicyShape a sh:NodeShape; sh:targetSubjectsOf cg:sourcePolicyDigest;
+ sh:property [ sh:path cg:sourcePolicyDigest; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ].
+cg:SourceOwnershipShape a sh:NodeShape;
+ sh:targetSubjectsOf cg:ownershipStatus, cg:ownerDocument, cg:ownershipMapping;
+ sh:property [ sh:path cg:ownershipStatus; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string;
+   sh:in ("resolved" "missing" "ambiguous" "unavailable" "unapproved" "ineligible" "not-required") ];
+ sh:property [ sh:path cg:ownerDocument; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path cg:ownershipMapping; sh:datatype xsd:string; sh:minLength 1 ];
+ # Structural consistency does not prove approval, ownership correctness or source availability.
+ sh:or (
+   [ sh:property [ sh:path cg:ownershipStatus; sh:in ("resolved" "unavailable" "unapproved" "ineligible") ];
+     sh:property [ sh:path cg:ownerDocument; sh:minCount 1; sh:maxCount 1 ];
+     sh:property [ sh:path cg:ownershipMapping; sh:minCount 1 ] ]
+   [ sh:property [ sh:path cg:ownershipStatus; sh:hasValue "ambiguous" ];
+     sh:property [ sh:path cg:ownerDocument; sh:minCount 2 ];
+     sh:property [ sh:path cg:ownershipMapping; sh:minCount 1 ] ]
+   [ sh:property [ sh:path cg:ownershipStatus; sh:in ("missing" "not-required") ];
+     sh:property [ sh:path cg:ownerDocument; sh:maxCount 0 ];
+     sh:property [ sh:path cg:ownershipMapping; sh:maxCount 0 ] ]
+ ).
 `);
