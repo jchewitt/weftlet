@@ -1,19 +1,20 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: maintainer-directed work; release checkpoint on 2026-10-26 after verified 0.4.0 publication.
+Status: maintainer-directed work; release checkpoint on 2026-10-27 after verified 0.5.0 publication.
 **T08's upstream deterministic physical-file fix has shipped; the maintainer reports the consumer
 updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.
 
-**Release priority T09:** 0.4.0 rejects the approved ten-minute extraction timeout. Support for
-`semantic.timeoutMs: 600000` is implemented for the next release alongside ready T05a work;
-the consumer's ten-minute retry has not run. This bounded blocker precedes T06/T07.
+**T09 shipped in 0.5.0:** the configuration accepts `semantic.timeoutMs: 600000`,
+alongside T05a identity preflight and validation phase timing. The two-minute default is unchanged.
+The consumer's approved ten-minute retry has not run; that outcome remains separate acceptance.
 
 The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
 shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
-shipped in 0.4.0. Broader T05 follow-ups, T06 documentation consistency and T07 document coverage
-remain open. Official 1.0 follows the agreed remaining scope and genuine consumer acceptance,
+shipped in 0.4.0. T09 and T05a shipped in 0.5.0. Broader T05 follow-ups,
+T06 documentation consistency and T07 document coverage remain open. Official 1.0 follows
+the agreed remaining scope and genuine consumer acceptance,
 with its exact release scope reviewed when the evidence is available.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
@@ -41,23 +42,42 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T09** | Accept the approved ten-minute extraction timeout | **Source fix implemented; release pending** | Raise only the config ceiling to 600000; preserve defaults/cache/retry behavior; consumer retry has not run |
+| **T09** | Accept the approved ten-minute extraction timeout | **Shipped in 0.5.0; consumer ten-minute retry unrun** | Raise only the config ceiling to 600000; preserve defaults/cache/retry behavior; consumer retry has not run |
 | **T08** | Canonical physical-file kinds and public adapter factory | **Shipped in 0.4.0; consumer reported working; detailed acceptance pending** | Public core factory and neutral producers agree; record consumer commit, adapter tests and full hydration/repeat evidence |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
-| **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a merged with local/hosted checks passing, unreleased** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
+| **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | Open; README version pins removed in 0.2.1 | Automated archive/version consistency check remains to be implemented |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | Planned bounded feature work | Use canonical identity from T01, preview from T02 and incremental reuse from T03; split selection/classification/extraction changes |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
 local/hosted checks, independent archive review and fresh packed/public-registry installation.
+T09 timeout support and T05a identity preflight/phase timing shipped in
+[0.5.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0).
 Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
 Broader T05, T06 and T07 remain bounded follow-ups.
 The consumer must migrate its framework adapter to the public core factory, then complete full
 hydration and repeat reuse; upstream fixtures do not establish that result.
+
+## T09 — Accept the approved ten-minute extraction timeout
+
+Shipped in 0.5.0: `semantic.timeoutMs` accepts integers from 1 through 600000.
+The default remains 120000; retry policy, cancellation,
+authentication/discovery bounds and compatible artifact identities are unchanged. This is a
+per-attempt Codex limit or whole-module-execution limit, not an overall hydration or CI timeout.
+
+For recovery, upgrade both `@weftlet/core` and `@weftlet/toolkit` to 0.5.0,
+set `semantic.timeoutMs: 600000`, and run `hydrate --plan` with the same committed ref and scope
+as the interrupted run. Then rerun ordinary hydration, preserving compatible artifacts and
+avoiding forced re-extraction. Follow [provider limits and reuse](PROVIDERS.md#limits-and-reuse).
+
+Boundary, provider propagation, cancellation, cache reuse and packed/public-registry consumer checks passed;
+release evidence is in [validation](VALIDATION.md). The consumer's approved ten-minute retry
+has **not run**. No ten-minute wall-clock execution, paid/model call or private acceptance is
+claimed by these deterministic upstream checks. T06/T07 and broader T05 work remain open.
 
 ## T08 — Resolve deterministic physical-file kind conflicts
 
@@ -117,8 +137,9 @@ Upstream completion evidence:
   [validation record](VALIDATION.md) for commits, checks and result boundaries.
 
 The private consumer has not yet supplied a successful full hydration/repeat with the identity
-patch. Use both 0.4.0 packages and migrate the framework adapter to the public core factory;
-this release retains the cold-validation improvement and adds the T08 deterministic producer fix.
+patch. Use both 0.5.0 packages and migrate the framework adapter
+to the public core factory; this release retains the cold-validation/T08 fixes and adds T09
+timeout support and T05a identity preflight/phase timing.
 Upstream publication and regression success do not close that acceptance gate or diagnose the
 separate full-graph validation latency observation.
 
@@ -213,13 +234,14 @@ Acceptance:
 
 ## T05 — Detect inexpensive conflicts early and explain validation work
 
-T05a implements [early identity attribution and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
-after 0.4.0, merged with local and hosted Ubuntu/Windows checks passing but not yet published.
+T05a shipped [early identity attribution and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
+in 0.5.0 after local and hosted Ubuntu/Windows checks and independent archive review.
 Hydration and overlays reject all conflicting subject/object kinds before RDF construction;
 opaque default reports have explicit local detail opt-in.
 Completed semantic artifacts and prior snapshots remain intact. Valid preflight results still
 require full SHACL. Timings report actual phase boundaries, not in-phase heartbeat or percentage.
-This does not close the broader evaluation/reuse/backend items below or claim publication.
+This does not close the broader evaluation/reuse/backend items below or establish the consumer's
+full-run performance.
 
 The implementation uses JavaScript on Node:
 `rdf-validate-shacl` validates an in-memory N3 dataset. Hydration constructs and validates the

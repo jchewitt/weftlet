@@ -8,6 +8,74 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## 0.5.0 publication and installed-package acceptance, 2026-10-27
+
+Published `@weftlet/core@0.5.0` and `@weftlet/toolkit@0.5.0` include T09
+ten-minute timeout support and T05a identity preflight/validation phase timing.
+`semantic.timeoutMs: 600000` is accepted; the default remains 120000. Retry limits,
+cancellation, five-second authentication/discovery bounds and semantic artifact identities
+are unchanged. This does not extend an outer CI/job timeout. The consumer's approved
+ten-minute retry has **not run**; no live extraction result is claimed.
+
+[Release PR 31](https://github.com/jchewitt/weftlet/pull/31) merged at
+`55770d5ff83737131fcfd17ddba5b87dc22daca3`.
+[Trusted publication run 40506053168](https://github.com/jchewitt/weftlet/actions/runs/40506053168)
+completed preparation, publication and release records on attempt 1. Both versions are public
+and tagged `latest`; downloaded registry archives are byte-identical to the reviewed archives.
+npm provenance payloads identify the release commit and workflow attempt and match the archive
+digests; this check does not claim separate cryptographic signature verification. The
+[core](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/core%400.5.0) and
+[toolkit](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0)
+package tags and GitHub Releases resolve to the same commit. Hosted Ubuntu and Windows also
+passed on that merged release commit in
+[run 40506053117](https://github.com/jchewitt/weftlet/actions/runs/40506053117).
+
+Completed upstream checks:
+
+- Exact reviewed head `370f18a506a948c3148b50a3c3364383e1b88c32` passed `pnpm release:prepare`:
+  408 deterministic tests (17 core, 391 toolkit), one optional OML skip, 13 unchanged advisory
+  architecture findings, inventory, licenses and fresh packed-consumer checks. Hosted Ubuntu and
+  Windows passed in [run 40504871916](https://github.com/jchewitt/weftlet/actions/runs/40504871916).
+- Timeout fix [PR 33](https://github.com/jchewitt/weftlet/pull/33) merged at
+  `795c67a24c5fffdb9c5c4d0cd1edab0ea2ae14bf`; exact source head
+  `68be50451d522590a7fd9626c1f6d3edd1acf5ca` passed
+  [run 40504193435](https://github.com/jchewitt/weftlet/actions/runs/40504193435).
+- Independent export review approved both archives: core 13 files/8,215 compressed bytes,
+  toolkit 218 files/254,008 compressed bytes. All 229 non-manifest files match reviewed
+  source/build bytes; 293 relative module references resolve. Compiled configuration contains
+  the 600000 ceiling, and T05a assets and exports are present. Core has no runtime dependencies;
+  toolkit requires core `^0.5.0`. Licenses/NOTICE/third-party attribution and all 79 original
+  source path/hash pairs are intact. No forbidden local-state entries or credential-signature
+  matches were found.
+- Hosted artifact `12734837678` from release commit `55770d5ff83737131fcfd17ddba5b87dc22daca3`
+  contains package archives byte-identical to those independently reviewed locally.
+- An offline Linux/Node 24.19.0 rehearsal installed the exact reviewed archives with lifecycle
+  scripts disabled. Its deterministic local provider received timeout 600000, with real SCIP
+  and full SHACL. It produced 54 total facts including 24 SCIP facts, and 53 impact-query facts.
+  Cold hydration extracted two artifacts; repeat hydration reused both with unchanged snapshot
+  identity, content digest and stored bytes. T05a positive/negative preflight and SHACL, exact
+  attribution, phase events and provider-unavailable saved queries/preview passed.
+- Fresh public-registry installation passed on Linux/Node 24.19.0 with lifecycle scripts disabled.
+  Both lockfile registry URLs and SHA-512 values match the reviewed archives. The installed CLI
+  accepted 600000 and the deterministic module verified receiving it. The committed public fixture
+  produced 54 total facts, including two semantic facts, four contract consumers, 24 real SCIP facts and
+  two public adapter facts; the impact query returned 53 facts. Cold hydration extracted two
+  artifacts; repeat hydration extracted zero and reused both with identical snapshot identity,
+  content digest and stored bytes. Positive/negative preflight and full SHACL, exact attribution
+  without mutation, and phase events passed. Removing the provider module preserved no-model
+  preview and saved queries with no additional provider calls. Fixture commit:
+  `f61e05a8f437097ebc6eeb966f6eda2b8bb12008`; content digest:
+  `d975795c1324795ef4d144ca803d225c5059c229063c9f0514c006ed310378c4`.
+
+The fixture does not run Codex/API requests, wait ten minutes or establish private consumer
+acceptance. T06/T07 and broader T05 work remain open. Entries below are historical checkpoints;
+their publication status and counts describe the time of each check.
+
+| Package | Reviewed and public SHA-512 integrity |
+| --- | --- |
+| `@weftlet/core@0.5.0` | `sha512-JM+wBBaGQewwlEHtVDW1bBqMdeTNTnoR9JoqRkJ8t2onK4UPZsoEWho65wtX7UlPlIL/tu975VovJps9xmjuhA==` |
+| `@weftlet/toolkit@0.5.0` | `sha512-7CgqoFX7qjTtK4SEX3+EYC30L0vE69H1gVGPLqbeSwVp176QIrAMA9qsjFzevdLVyPk/mLMp5of4vUXWyobITQ==` |
+
 ## Ten-minute timeout blocker, 2026-10-27
 
 The maintainer reports that published 0.4.0 rejects the approved `semantic.timeoutMs: 600000`.
