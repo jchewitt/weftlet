@@ -38,8 +38,23 @@ All 79 original source path/hash pairs are intact. Architecture checks passed wi
 shared setup mechanics, not duplicated product rules; no policy, debt baseline or exception changed.
 Independent review found no remaining blocker after the two corrections above.
 
-Hosted checks and merge are pending at this checkpoint. No model/provider request, npm publication,
-browser interaction or private consumer acceptance is claimed.
+[PR 42](https://github.com/jchewitt/weftlet/pull/42) merged at
+`6c59746118c910d850427c5c6c48e8b52eefcad7`. Exact feature head
+`72f554cb9accd32b4b992581d06c685f7e5c0e54` passed hosted Ubuntu/native Windows in
+[run 40557348341](https://github.com/jchewitt/weftlet/actions/runs/40557348341) and the
+[independent PR run](https://github.com/jchewitt/weftlet/actions/runs/40557375964).
+Ubuntu passed all 674 deterministic tests and the full publication gate. Windows passed all
+550 selected tests, inventory and licenses, including every new document-classification regression.
+
+The first push-run Windows attempt passed 549/550 tests but hit the existing 60-second timeout
+in the routing overlay rename/delete scenario. The independent PR run passed that scenario in
+21.9 seconds; the failed-job rerun passed it in 23.1 seconds and passed all 550 checks. Its prior
+T10 run took 22.8 seconds. No code or deadline changed between attempts. The first stall's phase
+and cause remain undiagnosed; these results do not establish a reproducible SHACL slowdown.
+
+T07b is merged with minor changesets; publication remains separate and npm's last verified release
+is 0.5.0. T07c and T05 closeout remain before the reviewed minor candidate and consumer acceptance.
+No model/provider request, browser interaction or private consumer acceptance is claimed.
 
 ## T10 implementation coverage reporting, 2026-10-27
 

@@ -1,6 +1,6 @@
 # ADR-025: Document roles, ownership and deterministic evidence
 
-Status: T07b implemented; local full gate and independent review passed. Hosted checks and merge are pending.
+Status: T07b merged in PR 42; local and hosted checks and independent review passed.
 No npm publication or consumer acceptance is claimed. See [validation](VALIDATION.md) for
 completed checks and the [1.0 plan](RELEASE-1.0-PLAN.md) for the remaining boundary.
 

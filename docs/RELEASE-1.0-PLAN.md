@@ -14,8 +14,8 @@ shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
 shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
 for the next release. T07a prospective coverage is implemented separately from hydration;
-T07b classification and deterministic document evidence passed the local full gate and independent
-review; hosted checks and merge are pending. Two engineering workstreams remain: T07c
+T07b classification and deterministic document evidence merged in PR 42 after local/hosted checks
+and independent review. Two engineering workstreams remain: T07c
 hydration/cache integration and T05 performance/validation closeout. Finish that scope, publish a
 reviewed minor candidate, validate it in TradePilot, then review and publish official 1.0. These
 release/consumer gates are separate from the engineering count; none is already accepted.
@@ -54,7 +54,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b local gate/review passed, hosted checks/merge pending; T07c open** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c open** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -77,7 +77,7 @@ the public reproduction does not claim a completed private consumer acceptance r
 
 The fix merged in [PR 40](https://github.com/jchewitt/weftlet/pull/40), with local publication checks
 and hosted Ubuntu/native Windows validation. Exact evidence and release status are recorded in
-[validation](VALIDATION.md). T07b/T07c and broader T05
+[validation](VALIDATION.md). T07c and broader T05
 work remain separate; this reporting correction does not activate document traversal in hydration.
 
 ## T09 — Accept the approved ten-minute extraction timeout
@@ -367,7 +367,7 @@ Delivery increments:
    Label this as prospective coverage until it drives hydration; existing hydration-plan documents
    and cache estimates must continue to describe actual execution inputs. The current graph linker
    also recognizes bare/code paths and is not itself a canonical traversal policy.
-2. **T07b local gate/review passed, hosted checks/merge pending:** explicit roles/ownership and separate
+2. **T07b merged with local/hosted checks and review passed:** explicit roles/ownership and separate
    deterministic document presence/reference evidence. Optional per-fact metadata survives RDF,
    query and viewer projection without changing canonical Document identities. Reaching an owner
    does not approve a child or assertion; direct-source hydration remains unchanged.
