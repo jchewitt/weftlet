@@ -8,6 +8,42 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Published 0.6.0 acceptance candidate, 2026-10-28
+
+Both `@weftlet/core@0.6.0` and `@weftlet/toolkit@0.6.0` are published and were verified as
+the registry `latest` versions. [Release PR 36](https://github.com/jchewitt/weftlet/pull/36)
+merged at `b4c808b9221c5c82f9f7326a310e966d1fee2888`; package versions were committed to main
+before publication. [Release run 40742010093](https://github.com/jchewitt/weftlet/actions/runs/40742010093)
+completed preparation, both trusted npm uploads and GitHub release records on its first attempt.
+No npm token was supplied to this cloud. Public provenance statements and both package-specific
+Git tags identify that exact source commit; both GitHub Releases exist.
+
+The version PR's exact head `944b66a7ac9d119b650b7341dc982e12ea45a75b` passed
+[hosted Ubuntu and Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40715307427).
+Frozen local installation/build, package preparation and dry runs passed before merging. Reviewed
+exports contain 13 files in core and 252 in toolkit, including applicable license notices and no
+source history, credentials, caches or native benchmark binary. All 79 original source path/hash
+pairs remain intact. Downloaded public npm archives match the reviewed local archives and the
+workflow's prepared archives byte for byte:
+
+| Package | Verified SHA-512 integrity |
+| --- | --- |
+| `@weftlet/core@0.6.0` | `sha512-2o2WO4DyhudgcsGQ//j0mXfXBvyqBHoYPnI52ZiqZSr5qqjCayw7njsRqCxOEIL6dseUYoICsnlkSYrRSDHKKw==` |
+| `@weftlet/toolkit@0.6.0` | `sha512-d7Q9gNdpwWUdkJLhGtY6xpi+gfg3CsLM5BqJqmVH9xgNwtc5e5kDpTwMSv4jq/+gybiXbQOOSsI7x7c+m1W1xA==` |
+
+A fresh public-registry consumer on Linux / Node 24.19.0 installed both exact versions, ran the
+documented npx initialization and config validation, imported public APIs, checked canonical file
+nodes, lossless RDF projection, SPARQL and positive/negative strict SHACL, and initialized MCP.
+`impact.scan` discovery and honest missing-snapshot reporting passed without model calls. This
+registry smoke is separate from the release gate's full deterministic/packed-consumer checks;
+neither is a private TradePilot hydration, live model-quality evaluation or browser interaction.
+
+T06, T07 and T10 are now available in the published candidate, alongside the T05 evaluation and
+earlier fixes. The planned 1.0 engineering work is complete. TradePilot should use these published
+versions for the [consumer acceptance checklist](RELEASE-1.0-PLAN.md#official-10-acceptance);
+official 1.0 remains conditional on that acceptance and any resulting blocker fixes. Previously
+tentative browser/live-auth work remains explicitly separate. No 1.0 release is claimed.
+
 ## T05 validation closeout, 2026-10-28
 
 [ADR 027](ADR-027-validation-closeout.md) records the engineering decision to retain full direct

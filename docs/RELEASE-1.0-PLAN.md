@@ -1,6 +1,7 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: maintainer-directed work; release checkpoint on 2026-10-27 after verified 0.5.0 publication.
+Status: planned engineering work complete; 0.6.0 candidate publication verified on 2026-10-28.
+Both npm packages are available for TradePilot acceptance; official 1.0 remains a separate gate.
 **T08's upstream deterministic physical-file fix has shipped; the maintainer reports the consumer
 updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.
@@ -12,15 +13,15 @@ The consumer's approved ten-minute retry has not run; that outcome remains separ
 The original report concerned `@weftlet/toolkit@0.2.0`. T01's upstream document-identity patch
 shipped in 0.2.1; T02 and T05's focused cold-validation optimization shipped in 0.3.0.
 T03 operational cache reuse, T04 semantic failure diagnostics and T08's public core file factory
-shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
-for the next release. T07a prospective coverage is implemented separately from hydration;
+shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06, T07 and T10 shipped in 0.6.0.
+T07a prospective coverage is implemented separately from hydration;
 T07b classification and deterministic document evidence merged in PR 42 after local/hosted checks
 and independent review. T07c hydration/cache integration merged in PR 44 with local and hosted checks passed;
 T05's remaining engineering evaluation is recorded in
 [ADR 027](ADR-027-validation-closeout.md), retaining full direct validation after measurements.
-Complete source/release checks, publish a reviewed minor candidate, validate it in TradePilot,
-then review and publish official 1.0. These
-release/consumer gates are separate from the engineering count; none is already accepted.
+The reviewed 0.6.0 candidate is published with verified registry archives, provenance and tags.
+Validate it in TradePilot, address any acceptance blockers, then review and publish official 1.0.
+Consumer acceptance and the official release remain separate from the completed engineering work.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
 remains a separate future direction for generation, approvals, a companion website and hosted
@@ -47,7 +48,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 
 | ID | Task | Priority/status | Dependencies and release boundary |
 | --- | --- | --- | --- |
-| **T10** | Correct implementation coverage for returned code relationships | **Merged after T07a; local/hosted checks passed; publication pending** | Separate evidence counts from display groups; preserve facts, authority, ranking and saved snapshots; scope gaps to returned page |
+| **T10** | Correct implementation coverage for returned code relationships | **Shipped in 0.6.0; consumer acceptance pending** | Separate evidence counts from display groups; preserve facts, authority, ranking and saved snapshots; scope gaps to returned page |
 | **T09** | Accept the approved ten-minute extraction timeout | **Shipped in 0.5.0; consumer ten-minute retry unrun** | Raise only the config ceiling to 600000; preserve defaults/cache/retry behavior; consumer retry has not run |
 | **T08** | Canonical physical-file kinds and public adapter factory | **Shipped in 0.4.0; consumer reported working; detailed acceptance pending** | Public core factory and neutral producers agree; record consumer commit, adapter tests and full hydration/repeat evidence |
 | **T01** | Coherent repository-document identity and kind | **Upstream patch shipped in 0.2.1; consumer acceptance pending** | SHACL and assertions preserved; genuine consumer re-run is still required |
@@ -55,8 +56,8 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a in 0.5.0; engineering closeout evaluated in ADR 027** | Cold/repeat/edits, worker, reuse, incremental and Rust evaluated; retain full direct validation; private consumer acceptance required |
-| **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c merged with local/hosted checks passed** | Committed closure, source roles/ownership, validation separation and draft invalidation implemented; npm publication pending |
+| **T06** | Packaged release-documentation consistency | **Shipped in 0.6.0** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **All three increments shipped in 0.6.0; consumer acceptance pending** | Committed closure, source roles/ownership, validation separation and draft invalidation implemented and published |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -64,7 +65,7 @@ local/hosted checks, independent archive review and fresh packed/public-registry
 T09 timeout support and T05a identity preflight/phase timing shipped in
 [0.5.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0).
 Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
-T05 closeout measurements and decisions are recorded in ADR 027; T06 and T07 are implemented for the next candidate.
+T05 closeout measurements and decisions are recorded in ADR 027; T06 and T07 shipped in the 0.6.0 candidate.
 The consumer must migrate its framework adapter to the public core factory, then complete full
 hydration and repeat reuse; upstream fixtures do not establish that result.
 
@@ -97,8 +98,8 @@ avoiding forced re-extraction. Follow [provider limits and reuse](PROVIDERS.md#l
 Boundary, provider propagation, cancellation, cache reuse and packed/public-registry consumer checks passed;
 release evidence is in [validation](VALIDATION.md). The consumer's approved ten-minute retry
 has **not run**. No ten-minute wall-clock execution, paid/model call or private acceptance is
-claimed by these deterministic upstream checks. T06/T07 are now implemented with publication
-pending; T05 engineering evaluation is recorded separately in ADR 027.
+claimed by these deterministic upstream checks. T06/T07 shipped in 0.6.0;
+T05 engineering evaluation is recorded separately in ADR 027.
 
 ## T08 — Resolve deterministic physical-file kind conflicts
 
@@ -330,12 +331,12 @@ Consumer performance acceptance remains required; public fixtures do not silentl
 
 ## T06 — Keep packaged documentation consistent with the release
 
-Implemented after 0.5.0, with [ADR 022](ADR-022-release-documentation.md) defining the checked
+Shipped in 0.6.0, with [ADR 022](ADR-022-release-documentation.md) defining the checked
 scope. Changesets regenerates current-version sections in both READMEs and the release guide.
 The dependency-free checker verifies source instructions and both actual tarballs before
 publication; the fresh-consumer smoke exercises the checked pinned commands and archive pair
 with an isolated npm/npx cache. Historical records and feature-introduction versions stay intact.
-Source validation is recorded in [validation](VALIDATION.md); no new npm release is claimed here.
+Source and publication validation are recorded in [validation](VALIDATION.md).
 
 The original consumer installed 0.2.0 while its README still named 0.1.2 and some archive examples
 used 0.1.1. Release 0.2.1 removed README version pins. T06 adds automation and replaces the release
@@ -384,7 +385,7 @@ command. Entry points, document roots and read limits are operation arguments, w
 semantic budgets used only for comparison. No configuration/cache identity or hydration selection
 is changed. [PR 38](https://github.com/jchewitt/weftlet/pull/38) merged T07a with hosted Ubuntu
 and native Windows checks; exact source validation is recorded in [validation](VALIDATION.md).
-No npm publication is claimed by implementation status.
+All three increments are now published in 0.6.0; registry verification is recorded separately in [validation](VALIDATION.md).
 
 [ADR 025](ADR-025-document-classification.md) records T07b's shared classification contract
 and standalone deterministic document-evidence API. `documents plan --document-policy <json-file>`

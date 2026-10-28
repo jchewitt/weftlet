@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-Release checkpoint: 2026-10-27, after verified 0.5.0 publication.
+Release checkpoint: 2026-10-28, after verified 0.6.0 candidate publication.
 Evidence is recorded in [validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
@@ -14,14 +14,14 @@ deterministic checks do not establish that outcome. See [provider limits and rec
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the verified release at this checkpoint is 0.5.0. The received consumer findings are tracked in the
+the verified release at this checkpoint is 0.6.0. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
 no-model preview and T05's cold-validation improvement shipped in 0.3.0. T03 operational cache
 reuse, T04 timeout diagnostics and T08 deterministic physical-file consistency shipped in 0.4.0.
 T09 timeout support and T05a identity preflight/phase timing shipped in 0.5.0.
-T06 [release-documentation consistency](ADR-022-release-documentation.md) is implemented for the
-next release: generated current examples, actual archive checks and fresh documented installation.
+T06 [release-documentation consistency](ADR-022-release-documentation.md) shipped in 0.6.0:
+generated current examples, actual archive checks and fresh documented installation.
 T07a [prospective document coverage](ADR-023-document-coverage-preview.md) is implemented separately
 from hydration. It follows committed Markdown links and reports coverage/budget gaps without
 model calls or graph writes. T07b [document roles and ownership](ADR-025-document-classification.md)
@@ -32,16 +32,17 @@ approval. T07c [traversal hydration](ADR-026-traversal-hydration.md) connects th
 explicit configuration, a shared no-model plan, compatible artifact reuse and draft invalidation.
 Direct-mode configuration retains its existing behavior; validation sources are excluded from
 model work in traversal mode. T07c merged in PR 44 after local and hosted Ubuntu/Windows checks;
-exact evidence is in [validation](VALIDATION.md). npm publication remains pending.
-T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
-release: actual code relationships can count as both contract and implementation evidence while
+exact evidence is in [validation](VALIDATION.md). All three T07 increments shipped in 0.6.0.
+T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) shipped in 0.6.0:
+actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
 T05 [performance/validation closeout](ADR-027-validation-closeout.md) records the remaining
 engineering evaluations: cold/repeat/changed inputs, worker isolation, exact-result reuse,
 incremental dependencies and a bounded Rust comparison. Retain full direct validation; no worker,
-cache, incremental or native runtime capability is claimed. Complete source/release checks, publish
-a reviewed minor candidate, validate it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
-separate acceptance work; the 2.0 plan remains a separate future direction.
+cache, incremental or native runtime capability is claimed. The planned 1.0 engineering work is
+complete and the reviewed 0.6.0 candidate is published. Validate it in TradePilot, address any
+acceptance blockers, then review official 1.0. Consumer/final release gates remain separate
+acceptance work; the 2.0 plan remains a separate future direction.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
 publication. T02 and the focused T05 optimization shipped together in 0.3.0 through
@@ -73,7 +74,7 @@ snapshots retain their full configuration identity. Exact legacy reads and expli
 adoption preserve prior artifacts; custom providers remain conservative.
 [T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) shipped in the same release, adding
 safe failure reports, opaque source mapping and settled progress without changing extraction/cache
-identity. T05 engineering evaluation is recorded; T06 and T07 implementation are pending candidate publication.
+identity. T05 engineering evaluation is recorded; T06 and T07 shipped in the 0.6.0 candidate.
 
 [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
 0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and
