@@ -64,7 +64,8 @@
     "benchmark:shacl": "node scripts/benchmark-shacl.mjs",
     "weftlet": "tsx src/cli.ts",
     "changeset": "changeset",
-    "release:version": "node scripts/version-packages.mjs"
+    "release:version": "node scripts/version-packages.mjs",
+    "benchmark:validation": "node scripts/validation-benchmark/run.mjs"
   },
   "engines": {
     "node": ">=24.0.0"

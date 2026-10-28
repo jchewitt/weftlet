@@ -6,12 +6,13 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
 const seed = 'weftlet-public-shacl-v1';
 const hash = (value) => createHash('sha256').update(value).digest('hex');
 const emit = (value) => process.stdout.write(`${JSON.stringify(value)}\n`);
 
-function fixture(count, topology) {
+export function syntheticSnapshot(count, topology) {
   const facts = Array.from({ length: count }, (_, i) => ({
     id: hash(`${seed}:${topology}:${i}`),
     subject: { id: `workflow:dispatch-${topology === 'shared' ? i % 10 : i}`,
@@ -41,7 +42,7 @@ async function worker({ count, topology, mode }) {
   const { default: SHACLValidator } = await import('rdf-validate-shacl');
   const { evidenceShapes } = await import('../dist/graph/shacl-shapes.js');
   const started = performance.now();
-  const snapshot = fixture(count, topology);
+  const snapshot = syntheticSnapshot(count, topology);
   const fixtureMs = performance.now() - started;
   const preflightStarted = performance.now();
   const preflight = inspectGraphIdentities(snapshot.facts, { repositoryId: snapshot.manifest.repositoryId });
@@ -188,7 +189,7 @@ No provider calls or private data. These are measurements, not CI timing thresho
   if (cases.some(c => c.status === 'error') || comparisons.some(c => c.status === 'mismatch')) process.exitCode = 1;
 }
 
-try {
+if (resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) try {
   if (process.argv[2] === '--child') await worker(JSON.parse(process.argv[3]));
   else await main(process.argv.slice(2));
 } catch (error) {

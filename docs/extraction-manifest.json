@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "7ad30de17e04589fc90ca67c165885b23371bdf128a39cfed90626455d0b02f2"
+      "destinationSha256": "bac1ea6e6b5af990445d62c4027e202029a8aace5bf9225d7fde632c8b4601d0"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -752,6 +752,13 @@
     "scripts/restore-publication-state.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/update-inventory.mjs",
+    "scripts/validation-benchmark/execution.mjs",
+    "scripts/validation-benchmark/extracted.ts",
+    "scripts/validation-benchmark/inputs.mjs",
+    "scripts/validation-benchmark/measure.mjs",
+    "scripts/validation-benchmark/run.mjs",
+    "scripts/validation-benchmark/study.test.ts",
+    "scripts/validation-benchmark/worker.mjs",
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
