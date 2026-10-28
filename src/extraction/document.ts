@@ -13,6 +13,7 @@ export function linkSemanticDocuments(
   hydrated: readonly { source: SemanticSource; artifact: SemanticArtifact }[],
   trackedPaths: readonly string[],
   approvedSourcePaths: readonly string[] = [],
+  options: { readonly canonicalReferences?: boolean } = {},
 ): { readonly facts: readonly GraphFact[]; readonly diagnostics: readonly GraphDiagnostic[] } {
   const facts = new Map<string, GraphFact>();
   const diagnostics = new Map<string, GraphDiagnostic>();
@@ -38,6 +39,7 @@ export function linkSemanticDocuments(
       }
     }
     for (const reference of documentReferences(source.content)) {
+      if (options.canonicalReferences === false && reference.relativeTo === 'document') continue;
       const resolved = resolveDocumentReference(source.path, reference, tracked);
       if (resolved.kind === 'ignored') continue;
       const provenance = span(reference.startLine, reference.endLine);

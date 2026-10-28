@@ -111,6 +111,11 @@ function settings(options: DocumentTraversalOptions): TraversalSettings {
   };
 }
 
+/** Validate operation/configuration bounds without reading repository data. */
+export function validateDocumentTraversalOptions(options: DocumentTraversalOptions): void {
+  settings(options);
+}
+
 function issue(state: TraversalState, code: string, message: string, affected: readonly string[], coverage = true): void {
   state.issues.push({ code, severity: 'error', message, paths: affected });
   if (coverage) state.complete = false;

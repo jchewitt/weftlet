@@ -135,7 +135,7 @@ snapshot profiles. Changing `timeoutMs`, `retries`, `concurrency`, `maxDocuments
 `maxSourceBytes` can reuse completed artifacts; selection budgets are still enforced. Snapshot
 configuration digests remain complete and saved snapshots are not accepted as current merely
 because their artifacts were reused. Workspace cache paths and custom-provider identities remain
-unchanged. See [ADR 018](ADR-018-operational-semantic-cache.md) for exact isolation and recovery rules.
+unchanged in direct mode. See [ADR 018](ADR-018-operational-semantic-cache.md) for exact isolation and recovery rules.
 
 If an older user-cache run was interrupted and its configuration has already changed, retain an
 exact copy of the previous configuration in its original directory. Its original `repositoryRoot`
@@ -204,3 +204,12 @@ Deterministic tests install a public synthetic CLI with npm locally and globally
 doctor, login probing and isolated extraction without contacting a model or using real credentials.
 These prove launcher plumbing, not live Codex authentication or semantic quality. Browser and live
 authentication follow-up remain deferred at the maintainer's request.
+
+
+Traversal hydration in the next minor candidate keeps the built-in Codex source/prompt contract
+unchanged. Its validated `documentTraversal` controls are excluded from the Codex artifact pool
+partition; classification is attached during assembly. Validation documents are excluded from
+semantic calls and counted only against traversal read limits. Module providers use a separate
+full-config namespace in traversal mode, including workspace storage. Modules with mutable
+external inputs must version their declared identity or force extraction; unchanged source/config
+reuse does not discover those external dependencies. See [ADR 026](ADR-026-traversal-hydration.md).

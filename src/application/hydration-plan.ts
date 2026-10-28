@@ -6,9 +6,11 @@ import type { SemanticArtifactStore } from '../storage/storage.js';
 import { createSemanticArtifactStore } from './semantic-artifact-store.js';
 import { inspectSemanticCache, type SemanticCacheInspection } from '../extraction/semantic-cache.js';
 import { semanticProviderIdentity } from '../extraction/semantic-identity.js';
-import { selectSemanticInputs, type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
+import { type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { resolveSemanticScope, type SemanticScope } from './semantic-scope.js';
+import { selectHydrationInputs, type DocumentEvidence } from './hydration-inputs.js';
+import type { DocumentSelectionRecord, SourceDocumentRole, SourceOwnership } from '@weftlet/core';
 import { semanticSourceId } from '../extraction/semantic-diagnostics.js';
 
 export interface HydrationPlanOptions {
@@ -31,6 +33,9 @@ export interface HydrationPlanDocument {
   readonly approvedBy: readonly string[];
   readonly extractionReview: 'unreviewed';
   readonly cache: Omit<SemanticCacheInspection, 'artifact'>;
+  readonly sourceRole?: SourceDocumentRole;
+  readonly sourceOwnership?: SourceOwnership;
+  readonly sourcePolicyDigest?: string;
 }
 
 export interface HydrationPlan {
@@ -43,6 +48,8 @@ export interface HydrationPlan {
   readonly ready: boolean;
   readonly scope: SemanticScope & { readonly complete: boolean };
   readonly documents: readonly HydrationPlanDocument[];
+  readonly documentSelection?: DocumentSelectionRecord;
+  readonly documentCoverage?: Pick<DocumentEvidence, 'traversal' | 'classification'>;
   readonly selections: readonly SemanticSelection[];
   readonly budgets: { readonly maxDocuments: number; readonly maxSourceBytes: number;
     readonly selectedDocuments: number; readonly totalSourceBytes: number };
@@ -76,11 +83,12 @@ export async function planHydration(configPath: string, options: HydrationPlanOp
   const ref = options.ref ?? 'HEAD';
   const commitSha = await repository.resolveRef(ref);
   const scope = await resolveSemanticScope(config, repository, commitSha, options.request);
-  const selection = await selectSemanticInputs(repository, commitSha, scope.selectors, config.semantic);
+  const selection = await selectHydrationInputs(repository, commitSha, config, scope.selectors);
   const issues = [...selection.issues];
   const { omittedDocuments, ignoredSearchTerms } = scope;
   const limited = omittedDocuments.length > 0 || ignoredSearchTerms > 0;
-  const complete = !limited && selection.selections.every((item) => item.status === 'matched');
+  const complete = !limited && selection.selections.every((item) => item.status === 'matched') &&
+    (selection.documentSelection?.complete ?? true);
   if (limited) issues.push({ code: 'selection-limited', severity: 'warning',
     message: `Existing agent selection limits omitted ${omittedDocuments.length} documents and ${ignoredSearchTerms} search terms; this plan describes only the selected scope.`,
     paths: omittedDocuments });
@@ -88,7 +96,11 @@ export async function planHydration(configPath: string, options: HydrationPlanOp
   const evidencePaths = new Set(await repository.listFilesAt(commitSha, config.evidenceRoots));
   const documents: HydrationPlanDocument[] = [];
   for (const source of selection.sources) {
-    const document = await describeDocument(source, selection.selections, config, evidencePaths, store, options.forceSemantic);
+    const described = await describeDocument(source, selection.selections, config, evidencePaths, store, options.forceSemantic);
+    const classification = selection.documentEvidence?.classification.documents.find(item => item.path === source.path);
+    const document = classification ? { ...described, role: 'semantic-document' as const,
+      sourceAuthority: classification.sourceAuthority, sourceRole: classification.sourceRole,
+      sourceOwnership: classification.ownership, sourcePolicyDigest: selection.documentEvidence!.classification.policyDigest } : described;
     const { cache } = document;
     if (cache.status === 'corrupt' || cache.status === 'unavailable') issues.push({
       code: `cache-${cache.status}`, severity: 'error', message: cache.reason, paths: [source.path],
@@ -101,9 +113,17 @@ export async function planHydration(configPath: string, options: HydrationPlanOp
     configurationDigest: sha256(stableJson(config)), ready: complete && !issues.some((item) => item.severity === 'error'),
     scope: { ...scope, complete },
     documents, selections: selection.selections, budgets: selection.budgets,
+    ...(selection.documentSelection ? { documentSelection: selection.documentSelection,
+      documentCoverage: { traversal: selection.documentEvidence!.traversal, classification: selection.documentEvidence!.classification } } : {}),
     estimates: { reusableArtifacts: count('hit'), extractions: count('miss', 'forced'), unknownArtifacts: count('corrupt', 'unavailable') },
     issues, excludedWorkingChanges: await repository.workingChanges(),
-    assumptions: [
+    assumptions: selection.documentSelection ? [
+      'Traversal uses committed entry points and canonical local links. All discovered documents and exclusions are reported; only semantic candidates count against extraction budgets.',
+      'Validation documents retain deterministic presence/references without model extraction. Role ambiguity and incomplete coverage block model work; ownership gaps remain explicit diagnostics.',
+      'Classification and owner mappings never approve assertions. Model facts remain inferred/unreviewed, including from approved sources.',
+      'Readiness checks selection, budgets and readable caches. It does not initialize providers, adapters, credentials, indexing, runtime sources or graph validation.',
+      'Built-in Codex artifacts retain their extraction identity. Traversal module providers use a separate conservative cache; no cache or snapshot was written.',
+    ] : [
       'Sources come from the resolved commit; configuration and cache are read from the current local environment.',
       'Estimates require unchanged source, configuration, provider contract and readable artifacts; concurrent changes can invalidate them.',
       'Document and per-document UTF-8 byte limits apply to all selected documents, including cache hits; no token or monetary estimate is made.',

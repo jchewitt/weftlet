@@ -20,7 +20,7 @@ import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, s
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { repositoryNodeIdentityVersion } from '../extraction/repository-nodes.js';
-import { selectSemanticInputs } from '../extraction/semantic-sources.js';
+import { selectHydrationInputs, classifyHydratedFacts, documentSelectionIdentity } from './hydration-inputs.js';
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
@@ -28,7 +28,7 @@ import { extractRoutingDeclarations, routingExtractorIdentity } from '../extract
 import { SemanticProviderError } from '../extraction/semantic-process.js';
 import { hydrateSemanticSources, type HydrationProgressEvent } from './semantic-run.js';
 export type { HydrationProgressEvent } from './semantic-run.js';
-import { graphAssemblyVersion, graphAssemblyIdentity } from './extraction-identity.js';
+import { graphAssemblyVersion, graphAssemblyIdentity, documentExtractionVersions } from './extraction-identity.js';
 import { assertGraphIdentities } from '../graph/identity-preflight.js';
 import { measureValidationPhase } from '../graph/validation-progress.js';
 
@@ -104,10 +104,16 @@ export class ContextGraphHydrator {
     const { config, repository, snapshotStore } = this.dependencies;
     const commitSha = await repository.resolveRef(options.ref);
     if (options.requireClean === true) await repository.requireExactCleanCommit(commitSha);
-    const selectedSemanticSources = options.semanticSources ?? config.semanticSources;
-    const selection = await selectSemanticInputs(repository, commitSha, selectedSemanticSources, config.semantic);
-    if (selection.issues.some((issue) => issue.severity === 'error')) {
-      throw new Error(selection.issues.map((issue) => issue.message).join('\n'));
+    if (config.documentTraversal && options.semanticSources !== undefined) {
+      throw new Error('Traversal hydration does not accept a direct semanticSources override');
+    }
+    const selection = await selectHydrationInputs(repository, commitSha, config, options.semanticSources);
+    const selectedSemanticSources = selection.documentSelection?.semanticPaths ?? options.semanticSources ?? config.semanticSources;
+    const scopePaths = selection.documentSelection?.documentPaths ?? selectedSemanticSources;
+    if (selection.documentSelection?.complete === false || selection.issues.some((issue) => issue.severity === 'error')) {
+      throw new Error(config.documentTraversal
+        ? 'Traversal hydration blocked: run hydrate --plan --json to review coverage, roles and budgets before retrying.'
+        : selection.issues.map((issue) => issue.message).join('\n'));
     }
     const { sources } = selection;
     await this.dependencies.ontologyCompiler.checkReady?.();
@@ -118,7 +124,7 @@ export class ContextGraphHydrator {
         : (prior?.manifest.commitSha ?? (await repository.firstParent(commitSha)));
     const allRoots = [
       ...new Set([
-        ...selectedSemanticSources,
+        ...scopePaths,
         ...config.codeRoots,
         ...config.evidenceRoots,
         ...contractPatternRoots(config.contractPatterns),
@@ -143,11 +149,12 @@ export class ContextGraphHydrator {
         ? `runtime-${runtimeRevision.digest.slice(0, 12)}`
         : undefined;
     const configurationDigest = sha256(stableJson(config));
-    const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
+    const scopeDigest = sha256(stableJson(scopePaths)).slice(0, 12);
     const effectiveSuffix = [`graph-v${graphAssemblyVersion}`, `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
       `contracts-${repositoryContractExtractorIdentity.version}`,
       `symbols-${scipSymbolExtractorIdentity.version}`,
       ...(config.routingSources?.length ? [`routes-${routingExtractorIdentity.version}`] : []),
+      ...(selection.documentSelection ? [documentSelectionIdentity, selection.documentSelection.digest.slice(0, 16)] : []),
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
@@ -182,7 +189,7 @@ export class ContextGraphHydrator {
         })),
       })),
     );
-    const semanticFacts = hydrated.flatMap(({ source, artifact }) =>
+    const semanticFacts = classifyHydratedFacts(hydrated.flatMap(({ source, artifact }) =>
       artifact.facts.map((fact) => ({
         ...fact,
         id: sha256(stableJson({ artifact: artifact.key, fact: fact.id, path: source.path })),
@@ -198,7 +205,7 @@ export class ContextGraphHydrator {
         sourceAuthority: (config.approvedIntentSources?.some((pattern) =>
           matchesRepositoryGlob(source.path, pattern)) ? 'declared' : 'inferred') as 'declared' | 'inferred',
       })),
-    );
+    ), selection.documentEvidence);
     checkpoint();
     options.onProgress?.({ phase: 'index-typescript' });
     const scip = await this.dependencies.staticIndexer.index(context);
@@ -222,13 +229,16 @@ export class ContextGraphHydrator {
     }
     const documents = linkSemanticDocuments(context, hydrated, trackedPaths,
       sources.filter((source) => config.approvedIntentSources?.some((pattern) =>
-        matchesRepositoryGlob(source.path, pattern))).map((source) => source.path));
+        matchesRepositoryGlob(source.path, pattern))).map((source) => source.path),
+      { canonicalReferences: !config.documentTraversal });
     diagnostics.push(...documents.diagnostics);
-    diagnostics.push(...routing.diagnostics);
+    diagnostics.push(...routing.diagnostics, ...(selection.documentEvidence?.diagnostics ?? []));
     checkpoint();
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
-    const facts = [...semanticFacts, ...documents.facts, ...extractorFacts, ...routing.facts, ...runtimeFacts].sort(
+    const structuralFacts = selection.documentEvidence?.facts.map(fact => ({ ...fact, snapshotId })) ?? [];
+    const facts = [...semanticFacts, ...classifyHydratedFacts(documents.facts, selection.documentEvidence),
+      ...structuralFacts, ...extractorFacts, ...routing.facts, ...runtimeFacts].sort(
       (left, right) => left.id.localeCompare(right.id),
     );
     const validationCounts: { factCount: number; nodeCount?: number } = { factCount: facts.length };
@@ -275,6 +285,7 @@ export class ContextGraphHydrator {
       unresolved,
       diagnostics,
       semanticSources: selectedSemanticSources,
+      ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
     };
     const contentDigest = sha256(stableJson(logical));
     const snapshot: GraphSnapshot = {
@@ -286,10 +297,12 @@ export class ContextGraphHydrator {
         baseSha,
         snapshotId,
         configurationDigest,
-        scope: selectedSemanticSources,
+        scope: scopePaths,
+        ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
           assembly: graphAssemblyIdentity,
+          ...documentExtractionVersions(config),
           [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
           [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
           'repository-node-identity': String(repositoryNodeIdentityVersion),

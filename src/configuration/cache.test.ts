@@ -89,6 +89,31 @@ describe('semantic cache partitions', () => {
     expect(semanticCachePartition(resolve(checkout, '.'), config)).toBe(semanticCachePartition(checkout, config));
   });
 
+  it('ignores only validated traversal controls for Codex and isolates module traversal even in workspace storage', () => {
+    const traversal = { entryPoints: ['docs/owner.md'], roots: ['docs'] };
+    for (const documentTraversal of [traversal, { ...traversal, maxReadDocuments: 2 },
+      { ...traversal, policy: { schemaVersion: 1 as const, owners: [] } }]) {
+      const changed = { ...config, documentTraversal };
+      expect(semanticCachePartition(checkout, changed)).toBe(semanticCachePartition(checkout, config));
+      expect(resolveSemanticStorageRoots(checkout, changed, cache).primary)
+        .toBe(resolveSemanticStorageRoots(checkout, config, cache).primary);
+      expect(resolveStorageRoot(checkout, changed, cache)).not.toBe(resolveStorageRoot(checkout, config, cache));
+    }
+    expect(() => semanticCachePartition(checkout, { ...config,
+      documentTraversal: { ...traversal, unknown: true } } as ContextGraphConfig)).toThrow();
+    for (const storageScope of ['user', 'workspace'] as const) {
+      const direct = { ...config, storageScope, semantic: { ...config.semantic, provider: 'module' as const,
+        providerModule: './provider.mjs', providerIdentity: 'public:1' } };
+      const changed = { ...direct, documentTraversal: traversal };
+      const current = resolveSemanticStorageRoots(checkout, changed, cache);
+      expect(current.legacy).toBeUndefined();
+      expect(current.primary).not.toBe(resolveSemanticStorageRoots(checkout, direct, cache).primary);
+      expect(current.primary).not.toBe(resolveSemanticStorageRoots(checkout, { ...changed,
+        documentTraversal: { ...traversal, maxReadDocuments: 2 } }, cache).primary);
+      expect(current.primary).toBe(resolveSemanticStorageRoots(checkout, structuredClone(changed), cache).primary);
+    }
+  });
+
   it('retains complete module configuration identity and its existing storage path', () => {
     const moduleConfig: ContextGraphConfig = { ...config, semantic: { ...config.semantic,
       provider: 'module', providerModule: './public-provider.mjs', providerIdentity: 'public-provider:1' } };

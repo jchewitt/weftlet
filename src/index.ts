@@ -20,3 +20,4 @@ export * from './application/document-coverage.js';
 export * from './extraction/document-traversal.js';
 export * from './extraction/document-classification.js';
 export * from './extraction/document-evidence.js';
+export type { DocumentTraversalConfig } from './configuration/document-traversal.js';

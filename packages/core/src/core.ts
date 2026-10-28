@@ -120,6 +120,18 @@ export interface InvariantResult {
   readonly provenance: readonly SourceSpan[];
 }
 
+export interface DocumentSelectionRecord {
+  readonly version: 1;
+  readonly digest: string;
+  readonly policyDigest: string;
+  readonly complete: boolean;
+  readonly entryPoints: readonly string[];
+  readonly roots: readonly string[];
+  readonly documentPaths: readonly string[];
+  readonly semanticPaths: readonly string[];
+  readonly excluded: readonly { readonly path: string; readonly reason: 'validation' | 'ambiguous-role' | 'unread' }[];
+}
+
 export interface SnapshotManifest {
   readonly schemaVersion: 1;
   readonly repositoryId: string;
@@ -135,6 +147,7 @@ export interface SnapshotManifest {
   readonly snapshotId: string;
   readonly configurationDigest?: string;
   readonly scope?: readonly string[];
+  readonly documentSelection?: DocumentSelectionRecord;
   readonly ontologyVersion: string;
   readonly extractorVersions: Readonly<Record<string, string>>;
   readonly semanticModel: string;
@@ -238,7 +251,7 @@ export interface ImpactScanRequest {
 
 export interface ContextPack {
   readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest' | 'overlayCapture'> &
-    Partial<Pick<SnapshotManifest, 'extractorVersions'>>;
+    Partial<Pick<SnapshotManifest, 'extractorVersions' | 'documentSelection'>>;
   readonly evidenceState?: {
     readonly currentCommit?: string;
     readonly excludedWorkingChanges: readonly string[];

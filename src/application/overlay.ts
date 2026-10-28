@@ -15,8 +15,11 @@ import { contextPackEvidenceAuthority } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
 import { RdfEvidenceGraph } from '../graph/rdf.js';
-import { graphAssemblyIdentity } from './extraction-identity.js';
+import { graphAssemblyIdentity, documentExtractionVersions } from './extraction-identity.js';
 import { assertGraphIdentities } from '../graph/identity-preflight.js';
+import { selectHydrationInputs, documentSelectionIdentity } from './hydration-inputs.js';
+import { retainOverlayDocumentFact, overlayDocumentRoots, overlayDocumentManifest, overlayDocumentNotes } from './document-overlay.js';
+import { documentEvidenceExtractorIdentity } from '../extraction/document-evidence.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
@@ -50,6 +53,7 @@ export async function buildWorkingOverlay(
     commitSha: head, snapshotId: baseSnapshotId, changedPaths: [], deletedPaths: [], renamedPaths: {},
   }, routingSources, { allowMissingSources: true });
   const roots = [...config.codeRoots, ...config.semanticSources, ...config.evidenceRoots,
+    ...overlayDocumentRoots(config),
     ...config.contractPatterns, ...scipSourcePatterns(config.scip.sourceProject),
     ...routingSources, ...baseRouting.referencedPaths];
   const excluded: string[] = [];
@@ -75,6 +79,8 @@ export async function buildWorkingOverlay(
     repositoryContractExtractor: repositoryContractExtractorIdentity,
     scipSymbolExtractor: scipSymbolExtractorIdentity,
     ...(routingSources.length ? { routingExtractor: routingExtractorIdentity } : {}),
+    ...(config.documentTraversal ? { documentSelection: documentSelectionIdentity,
+      documentEvidence: documentEvidenceExtractorIdentity } : {}),
   })).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
   const extracted = await withCommittedTree(repository.root, head, async (root) => {
@@ -101,6 +107,13 @@ export async function buildWorkingOverlay(
       deletedPaths: captured.filter((f) => f.content === null).map((f) => f.path),
       renamedPaths: {},
     };
+    const documents = config.documentTraversal
+      ? await selectHydrationInputs(draftRepository, context.commitSha, config) : undefined;
+    const documentSelection = documents?.documentSelection ? {
+      ...documents.documentSelection,
+      // Temporary Git commit timestamps are not evidence identity. Bind drafts to captured bytes.
+      digest: sha256(stableJson({ ...documents.documentSelection, digest: undefined, baseSha: head, overlayDigest })),
+    } : undefined;
     const scip = await new ScipTypeScriptIndexer(config.scip, storageRoot).index(context);
     const routing = await extractRoutingDeclarations(draftRepository, context, routingSources,
       { allowMissingSources: true });
@@ -115,19 +128,20 @@ export async function buildWorkingOverlay(
       new ScipSymbolExtractor(draftRepository, scip),
     ];
     const facts = [...(await Promise.all(extractors.map((e) => e.extract(context)))).flat(),
-      ...routing.facts].map(({ id: _id, ...fact }) => {
+      ...routing.facts, ...(documents?.documentEvidence?.facts ?? [])].map(({ id: _id, ...fact }) => {
       const draft = { ...fact, snapshotId, authority: 'draft' as const,
-        ...(fact.extractor.id === routingExtractorIdentity.id ? { sourceAuthority: 'draft' as const } : {}),
+        ...(fact.extractor.id === routingExtractorIdentity.id || fact.sourceRole !== undefined ? { sourceAuthority: 'draft' as const } : {}),
         provenance: { ...fact.provenance, commitSha: head } };
       return { ...draft, id: sha256(stableJson(draft)) };
     });
-    const diagnostics = routing.diagnostics.map(({ id: _id, ...item }) => {
+    const diagnostics = [...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
       const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
       return { ...draft, id: sha256(stableJson(draft)) };
     }).sort((a, b) => a.id.localeCompare(b.id));
-    return { facts, diagnostics };
+    return { facts, diagnostics, documents, documentSelection };
   });
   const retained = base.facts.filter((fact) =>
+    retainOverlayDocumentFact(fact, extracted.documents, affected) &&
     !implementationExtractors.has(fact.extractor.id) &&
     contextPackEvidenceAuthority(fact) !== 'implemented' &&
     fact.extractor.id !== 'otlp-runtime-evidence' &&
@@ -142,14 +156,17 @@ export async function buildWorkingOverlay(
     ...base,
     manifest: {
       ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
+      ...overlayDocumentManifest(extracted.documentSelection),
       extractorVersions: { ...base.manifest.extractorVersions,
         assembly: graphAssemblyIdentity,
+        ...documentExtractionVersions(config),
         [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version,
         [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
         [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
         ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
-      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(routingSources.length
-        ? { facts: allFacts, diagnostics: extracted.diagnostics } : allFacts)),
+      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(routingSources.length || config.documentTraversal
+        ? { facts: allFacts, diagnostics: extracted.diagnostics,
+          ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) } : allFacts)),
     },
     facts: allFacts,
     invariants: base.invariants.map((rule) => ({
@@ -158,6 +175,7 @@ export async function buildWorkingOverlay(
     runtimeEvidence: [],
     unresolved: [
       'Draft implementation overlay: changed semantic documents require explicit re-extraction.',
+      ...overlayDocumentNotes(config),
       `Changes outside configured source scope are excluded: ${excluded.join(', ') || '(none)'}`,
     ],
     diagnostics: extracted.diagnostics,
