@@ -1,7 +1,11 @@
 # Consumer hardening and the 1.0 release plan
 
-Status: planned engineering work complete; 0.6.0 candidate publication verified on 2026-10-28.
-Both npm packages are available for TradePilot acceptance; official 1.0 remains a separate gate.
+Status: original T01–T10 engineering work complete; 0.6.0 candidate publication verified on 2026-10-28.
+The maintainer has requested additional [business-context baseline work](PRE-1.0-BASELINE.md)
+before official 1.0: precise exploration, symbol-level implementation links, cross-boundary
+obligations, monorepo coverage and a measured Graphify/SCIP decision. Its A1–A3 public checks
+pass within recorded limits; B1–B6 remain open. Both npm packages remain available for
+TradePilot acceptance while this additional scope is assessed.
 **T08's upstream deterministic physical-file fix has shipped; the maintainer reports the consumer
 updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.
@@ -20,8 +24,9 @@ and independent review. T07c hydration/cache integration merged in PR 44 with lo
 T05's remaining engineering evaluation is recorded in
 [ADR 027](ADR-027-validation-closeout.md), retaining full direct validation after measurements.
 The reviewed 0.6.0 candidate is published with verified registry archives, provenance and tags.
-Validate it in TradePilot, address any acceptance blockers, then review and publish official 1.0.
-Consumer acceptance and the official release remain separate from the completed engineering work.
+Validate it in TradePilot, address any acceptance blockers and the newly requested baseline
+tasks, then review official 1.0. Consumer acceptance and the additional baseline are not closed
+by completion of the original engineering task list.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
 remains a separate future direction for generation, approvals, a companion website and hosted
@@ -418,6 +423,10 @@ Acceptance:
   negative cases. Separate deterministic fixtures from budgeted live-provider evaluation.
 
 ## Official 1.0 acceptance
+
+Also review the [A1–A3 assessment and B1–B6 task list](PRE-1.0-BASELINE.md), added after the
+0.6.0 candidate was published. The original list below remains necessary; a successful consumer
+hydration alone does not close the requested business-context and exploration improvements.
 
 With T01's upstream patch published, work through T02–T07 in bounded increments and record implementation
 PRs and validation evidence here or in the linked validation record. Review the exact 1.0 scope

@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "runtimeSourceCommit": "9b4acffe1c4d35f9fd2f91132c576f8934658677",
+  "releaseSourceCommit": "b4c808b9221c5c82f9f7326a310e966d1fee2888",
+  "packageVersions": {
+    "@weftlet/core": "0.6.0",
+    "@weftlet/toolkit": "0.6.0"
+  },
+  "environment": {
+    "os": "Linux",
+    "node": "24.19.0",
+    "pnpm": "10.18.2"
+  },
+  "fixtureProvider": {
+    "path": "tests/fixtures/business-context-provider.mjs",
+    "sha256": "4261c3261ca2959c89bdec73eda0f6aa5c40ffcb75db4aa64442f67534d8b2f7",
+    "mode": "deterministic public prose grammar; no model requests"
+  },
+  "boundaries": [
+    "New test files use unchanged runtime from the recorded source commit.",
+    "Real Git and TypeScript SCIP; actual application hydration, RDF/SHACL and MCP facade.",
+    "No live provider, actual broker/database execution, service build or private consumer acceptance.",
+    "No automatic business compatibility verdict or exact-function binding established.",
+    "No autonomous agent trial or new MCP transport exercise.",
+    "Graphify source review is separate; no comparative execution."
+  ],
+  "runs": [
+    {
+      "name": "existing-regressions",
+      "command": "pnpm exec vitest run tests/rdf.test.ts tests/routing.test.ts src/extraction/routing.test.ts src/extraction/scip-project.test.ts src/graph/query.test.ts",
+      "success": true,
+      "passed": 24,
+      "failed": 0,
+      "pending": 0,
+      "suites": [
+        {
+          "path": "tests/rdf.test.ts",
+          "sha256": "2b0f0fd6314ac28d4c64422d5650d56b540c9d391adab5eac0d24ed06a592397",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "unified evidence graph extracts public prose and real TypeScript across queue boundaries, with SPARQL/projection equivalence",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "tests/routing.test.ts",
+          "sha256": "bac6081701ada81f422e1b7641a212a3f51b0c44a94bc88deb93d610b4a65c34",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "committed routing declarations in independent repositories links a typed upstream change across an explicit boundary without shared-channel cross products",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations in independent repositories replaces routing edges for source renames/deletions and routing-manifest edits/deletions in drafts",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations in independent repositories preserves the last valid saved graph when a committed routing manifest is malformed or absent",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "src/extraction/routing.test.ts",
+          "sha256": "7b72aefa770bd217435220fa85bf21d5297e01cbf5e23d3765aed549b9300681",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "committed routing declarations joins document, test and production endpoints with actual neutral file and document facts",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations extracts exact cited bindings with inferred authority while ignoring dirty declarations",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations keeps binding, scope, case and repository identities separate despite equal channel labels",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations suppresses every duplicate scoped binding across files, including identical duplicates",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations does not guess case, extensions or directories, and suppresses the complete missing-endpoint pair",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations reads Unicode and spaced paths exactly from a nested repository root despite Git quoting",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations accepts executable blobs but rejects committed symlink modes without creating host symlinks",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations invalidates deleted or renamed endpoints until the mapping is updated, leaving historical results intact",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations fails closed on missing source files except explicit draft deletion diagnostics",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations rejects malformed, ambiguous and unsupported schemas or path forms",
+              "status": "passed"
+            },
+            {
+              "name": "committed routing declarations enforces file-count, combined declaration-count and source-byte bounds",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "src/extraction/scip-project.test.ts",
+          "sha256": "8a92ffd963ca5818c102aec3487ea21405d75bbaf593b13e2256b6f5a1914b23",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "links committed workspace contracts and excluded tests through real SCIP, preserving dirty bytes and rename/delete boundaries",
+              "status": "passed"
+            },
+            {
+              "name": "fails before indexing on absent aliases, empty/oversized scopes and reserved generated paths",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "src/graph/query.test.ts",
+          "sha256": "7b6653f767c2e7445ec19f0cafc9d3fe97494ae139835ec63d335a7210e62c6c",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "impact scan facade rejects snapshot traversal before the service can read outside snapshot storage",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade returns the same bounded Context Pack through the application service used by CLI and MCP",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade keeps skill command names aligned with the MCP facade and generic template",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade expands changed code files through symbols without traversing the project hub",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade returns the broader Fulfillment policy, PM, execution, worker, and validation purpose chain",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade uses the owner document as the traversal anchor and task terms to rank connected context",
+              "status": "passed"
+            },
+            {
+              "name": "impact scan facade shows observed runtime behavior beside declared intent and flags unmapped observations",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "business-context-acceptance",
+      "command": "pnpm exec vitest run tests/business-context-acceptance.test.ts",
+      "success": true,
+      "passed": 3,
+      "failed": 0,
+      "pending": 0,
+      "suites": [
+        {
+          "path": "tests/business-context-acceptance.test.ts",
+          "sha256": "c5e196db080cc798dc3abb21fb2cdb4ac3ecb07b4307cc3aa6764f04f60bb9cb",
+          "status": "passed",
+          "cases": [
+            {
+              "name": "public business-context acceptance boundaries bridges isolated service code only after the stored-data handoff is documented, retaining both rules and authority",
+              "status": "passed"
+            },
+            {
+              "name": "public business-context acceptance boundaries supports bounded MCP-facade pagination and focused follow-up without hiding depth exhaustion",
+              "status": "passed"
+            },
+            {
+              "name": "public business-context acceptance boundaries resolves shared contracts across separate workspace packages and TSX, with source and repeat identity intact",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,32 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Business-context baseline assessment, 2026-10-28
+
+The maintainer requested checks for business relationships across asynchronous/stored-data
+boundaries, progressive agent exploration and multiple service/client projects in a monorepo.
+[The assessment and new task list](PRE-1.0-BASELINE.md) explicitly extend the original T01–T10
+scope; the historical completion statements below concern that original list.
+
+Against unchanged runtime at `9b4acffe1c4d35f9fd2f91132c576f8934658677`, 24 existing focused
+tests and three new public acceptance tests pass on Linux, Node 24.19.0 / pnpm 10.18.2.
+[Recorded results](assessments/pre-1.0-2026-10-28.json) identify test files, cases, source hashes
+and commands. The new fixture uses real Git, SCIP, semantic-provider plumbing, RDF/SHACL and
+the application/MCP facade. Its small deterministic prose parser is not a live model.
+
+The control already reads the two disconnected services' documents. Adding only a documented
+stored-data handoff makes downstream implementations and tests reachable while retaining both
+freshness rules and excluding a same-label unrelated domain. One changed document is extracted,
+four are reused; the next repeat reuses all five with unchanged identity/content. Small result
+pages exhaust to the larger scan exactly; focused follow-up works and depth truncation stays
+explicit. Workspace aliases resolve a shared re-exported contract across API and TSX files.
+
+These are mechanism passes. They do not establish actual broker/database delivery, automatic
+rule compatibility or function binding, autonomous-agent usefulness, Expo/service builds, live
+semantic quality or private TradePilot acceptance. Exact-node exploration remains open.
+Graphify source/document review is pinned in [the evaluation note](GRAPHIFY-EVALUATION.md);
+no comparative benchmark, new runtime dependency or backend replacement is claimed.
+
 ## Published 0.6.0 acceptance candidate, 2026-10-28
 
 Both `@weftlet/core@0.6.0` and `@weftlet/toolkit@0.6.0` are published and were verified as
