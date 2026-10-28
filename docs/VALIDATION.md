@@ -36,7 +36,15 @@ development tooling, with no native binary download or dependency in package/CI 
 
 The local build and **691 deterministic tests** (17 core + 674 toolkit), one optional OML skip,
 architecture (14 advisory findings), inventory, licenses, release-documentation and fresh packed
-npm/npx/consumer smoke all passed. Exact-head hosted Ubuntu/Windows checks are pending.
+npm/npx/consumer smoke all passed. Hosted Ubuntu also passed at `10082e2` in the
+[push run](https://github.com/jchewitt/weftlet/actions/runs/40710918759) and
+[PR run](https://github.com/jchewitt/weftlet/actions/runs/40710994196). Initial native Windows
+checks passed the existing 561 tests but could not import the new benchmark: CRLF conversion of
+its shebang triggered a Vitest syntax error. The same CRLF failure was reproduced locally;
+removing the unnecessary shebangs from these Node-invoked scripts made all six study tests pass
+with CRLF content. A final harness correction also preserves the extractor's original content
+digest during timestamp-only scenarios. Those six checks pass locally. Corrected-head hosted
+outcomes are tracked in [PR 46](https://github.com/jchewitt/weftlet/pull/46/checks).
 No paid/live model, private TradePilot run, browser interaction, fresh-cloud restoration, npm upload
 or official 1.0 acceptance is claimed. The next gate is the reviewed minor candidate, then genuine
 consumer hydration/repeat acceptance and the separate official 1.0 release decision.

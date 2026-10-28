@@ -31,8 +31,11 @@ export function scenarioSnapshot(base, scenario) {
   const snapshot = structuredClone(base);
   const last = snapshot.facts.at(-1);
   if (!last) throw new Error('Benchmark edits need a nonempty fixture');
-  if (scenario === 'manifest-only') snapshot.manifest.generatedAt = '2026-01-02T00:00:00.000Z';
-  else if (scenario === 'insert') snapshot.facts.push({ ...structuredClone(last), id: `${last.id}-insert` });
+  if (scenario === 'manifest-only') {
+    snapshot.manifest.generatedAt = '2026-01-02T00:00:00.000Z';
+    return snapshot;
+  }
+  if (scenario === 'insert') snapshot.facts.push({ ...structuredClone(last), id: `${last.id}-insert` });
   else if (scenario === 'update') last.confidence = last.confidence === 0.75 ? 0.85 : 0.75;
   else if (scenario === 'delete') snapshot.facts.pop();
   else if (scenario === 'invalid-confidence') last.confidence = 2;

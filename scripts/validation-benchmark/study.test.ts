@@ -23,10 +23,15 @@ describe('validation lifecycle study', () => {
 
   it('includes all new document ownership shapes and conservative manifest invalidation', async () => {
     const rich = syntheticFixture(12, 'document-rich');
+    // An actual extractor may use a different content-digest algorithm from this synthetic harness.
+    rich.manifest.contentDigest = 'existing-extractor-content-digest';
     expect(rich.facts.every((f: any) => f.sourceRole && f.sourceOwnership && f.sourcePolicyDigest)).toBe(true);
     const graph = new RdfEvidenceGraph(rich);
     expect((await graph.validate()).conforms).toBe(true);
-    const changed = new RdfEvidenceGraph(scenarioSnapshot(rich, 'manifest-only'));
+    const timestampOnly = scenarioSnapshot(rich, 'manifest-only');
+    expect(timestampOnly.manifest.contentDigest).toBe(rich.manifest.contentDigest);
+    expect(timestampOnly.facts).toEqual(rich.facts);
+    const changed = new RdfEvidenceGraph(timestampOnly);
     expect(await changed.validate()).toEqual(await graph.validate());
     expect(await changed.serialize()).not.toBe(await graph.serialize());
     rich.facts[0].sourceOwnership.ownerDocuments = [];

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Public synthetic benchmark; build first. No providers, private data, or timing gates.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
