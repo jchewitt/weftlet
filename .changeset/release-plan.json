@@ -3,20 +3,16 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.6.0",
-      "previousVersion": "0.5.0"
+      "version": "0.6.1",
+      "previousVersion": "0.6.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.6.0",
-      "previousVersion": "0.5.0"
+      "version": "0.6.1",
+      "previousVersion": "0.6.0"
     }
   ],
   "changesets": [
-    "check-release-documentation.md",
-    "classify-document-evidence.md",
-    "preview-document-coverage.md",
-    "report-implementation-evidence.md",
-    "traversal-hydration.md"
+    "bounded-artifact-paths.md"
   ]
 }
