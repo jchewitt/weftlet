@@ -6,6 +6,11 @@ automatic rule-to-function discovery or complete agent exploration. The candidat
 available for TradePilot acceptance while the work below is assessed. No new release is
 announced by this plan.
 
+Consumer update: the physical artifact filename blocker shipped in **0.6.1**, with native
+Windows traversal → unchanged repeat → clean comparison passing. Use 0.6.1 for the private
+rerun; [validation](VALIDATION.md) records the public release evidence. This storage fix does
+not close any of B1–B6 below. Resume B1 and the bounded B2 evaluation after the blocker release.
+
 The product goal is to let an agent starting with a task or code change retrieve the relevant
 product obligations, understand their connections across domains and asynchronous service
 boundaries, and inspect the implementations, contracts and evidence behind those connections.

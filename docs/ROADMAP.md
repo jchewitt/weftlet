@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-Release checkpoint: 2026-10-28, after verified 0.6.0 candidate publication.
+Release checkpoint: 2026-10-28, after verified 0.6.1 consumer-blocker patch publication.
 Evidence is recorded in [validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
@@ -10,7 +10,10 @@ The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE
 three bounded public acceptance checks and the additional B1–B6 task list. Exact-node exploration,
 function-level intent bindings, cross-boundary obligations, monorepo coverage and a measured
 [Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) are open before the official release decision.
-The published 0.6.0 candidate remains available for the separate private consumer report.
+The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
+identities, provenance and cache reuse. The requested Windows traversal → repeat → clean
+comparison regression passes. See [ADR 028](ADR-028-bounded-artifact-paths.md); the private
+consumer rerun remains separate, and B1/B2 are next.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is
@@ -20,7 +23,7 @@ deterministic checks do not establish that outcome. See [provider limits and rec
 Forward direction is captured in the [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md):
 consumer hardening, cited code-derived drafts, scoped approvals and reconciliation, an optional
 review website, source publication, managed AI and guided setup. “2.0” is a planning label;
-the verified release at this checkpoint is 0.6.0. The received consumer findings are tracked in the
+the verified release at this checkpoint is 0.6.1. The received consumer findings are tracked in the
 [consumer hardening and 1.0 task list](RELEASE-1.0-PLAN.md): the document-identity patch is
 published and passes upstream checks; genuine consumer acceptance remains pending. T02's
 no-model preview and T05's cold-validation improvement shipped in 0.3.0. T03 operational cache
