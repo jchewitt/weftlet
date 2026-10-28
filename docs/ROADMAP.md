@@ -31,11 +31,12 @@ classification completeness is separate from traversal/budget readiness. Ownersh
 approval. T07c [traversal hydration](ADR-026-traversal-hydration.md) connects these APIs through
 explicit configuration, a shared no-model plan, compatible artifact reuse and draft invalidation.
 Direct-mode configuration retains its existing behavior; validation sources are excluded from
-model work in traversal mode. Local/hosted validation and publication status are recorded below.
+model work in traversal mode. T07c merged in PR 44 after local and hosted Ubuntu/Windows checks;
+exact evidence is in [validation](VALIDATION.md). npm publication remains pending.
 T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
 release: actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
-After T07c validation/merge, one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
+One engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
 it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
 separate acceptance work; the 2.0 plan remains a separate future direction.
 

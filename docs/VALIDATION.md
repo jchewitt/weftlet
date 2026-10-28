@@ -39,7 +39,14 @@ real indexing and packaged assets; a blocked refresh preserves the committed hea
 The chat's managed executor disconnected during development and later reconnected with the
 uncommitted work intact. This is recovery of this workspace, not a fresh-cloud restoration test.
 No live/paid model request, browser interaction, private TradePilot acceptance or npm publication
-is claimed. Hosted exact-head results and merge identity remain pending at this checkpoint.
+is claimed. [PR 44](https://github.com/jchewitt/weftlet/pull/44) merged at
+`b44053f08e4342ec1502046acc5b85a0efd08ea1`. Exact feature head
+`fd89410108e7be75524b54a4e02d53459afbcd20` passed both the
+[push run](https://github.com/jchewitt/weftlet/actions/runs/40690845708) and the
+[PR run](https://github.com/jchewitt/weftlet/actions/runs/40690905937). Hosted Ubuntu passed
+all 685 deterministic tests and the full publication gate; native Windows passed all 561 selected
+tests, inventory and licenses, including all new traversal hydration regressions. These are source
+validation results, not a new npm release. Release PR 36 remains unmerged.
 T05 performance/validation closeout remains the next engineering workstream, followed by the
 reviewed minor candidate, consumer acceptance and the separate official 1.0 decision.
 

@@ -1,6 +1,7 @@
 # ADR 026: Explicit traversal hydration with separate source and assertion authority
 
-Status: implemented for the next minor candidate; publication and consumer acceptance are separate.
+Status: accepted and merged in PR 44 after local/hosted validation. Publication and consumer
+acceptance remain separate; exact commits and checks are recorded in [validation](VALIDATION.md).
 
 ## Context
 

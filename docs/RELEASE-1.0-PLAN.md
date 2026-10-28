@@ -15,8 +15,8 @@ T03 operational cache reuse, T04 semantic failure diagnostics and T08's public c
 shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
 for the next release. T07a prospective coverage is implemented separately from hydration;
 T07b classification and deterministic document evidence merged in PR 42 after local/hosted checks
-and independent review. T07c hydration/cache integration is implemented and undergoing validation;
-after its merge, one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a
+and independent review. T07c hydration/cache integration merged in PR 44 with local and hosted checks passed;
+one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a
 reviewed minor candidate, validate it in TradePilot, then review and publish official 1.0. These
 release/consumer gates are separate from the engineering count; none is already accepted.
 
@@ -54,7 +54,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c implemented; validation/merge pending** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c merged with local/hosted checks passed** | Committed closure, source roles/ownership, validation separation and draft invalidation implemented; npm publication pending |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -62,7 +62,7 @@ local/hosted checks, independent archive review and fresh packed/public-registry
 T09 timeout support and T05a identity preflight/phase timing shipped in
 [0.5.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0).
 Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
-Broader T05 and T07 remain bounded follow-ups; T06 implementation evidence is recorded below.
+T05 closeout remains a bounded follow-up; T06 and T07 are implemented for the next candidate.
 The consumer must migrate its framework adapter to the public core factory, then complete full
 hydration and repeat reuse; upstream fixtures do not establish that result.
 
@@ -77,8 +77,8 @@ the public reproduction does not claim a completed private consumer acceptance r
 
 The fix merged in [PR 40](https://github.com/jchewitt/weftlet/pull/40), with local publication checks
 and hosted Ubuntu/native Windows validation. Exact evidence and release status are recorded in
-[validation](VALIDATION.md). T07c and broader T05
-work remain separate; this reporting correction does not activate document traversal in hydration.
+[validation](VALIDATION.md). T05 performance/validation closeout
+remains separate; this reporting correction does not activate document traversal in hydration.
 
 ## T09 — Accept the approved ten-minute extraction timeout
 
@@ -95,7 +95,8 @@ avoiding forced re-extraction. Follow [provider limits and reuse](PROVIDERS.md#l
 Boundary, provider propagation, cancellation, cache reuse and packed/public-registry consumer checks passed;
 release evidence is in [validation](VALIDATION.md). The consumer's approved ten-minute retry
 has **not run**. No ten-minute wall-clock execution, paid/model call or private acceptance is
-claimed by these deterministic upstream checks. T06/T07 and broader T05 work remain open.
+claimed by these deterministic upstream checks. T06/T07 are now implemented with publication
+pending; broader T05 work remains open.
 
 ## T08 — Resolve deterministic physical-file kind conflicts
 
@@ -371,7 +372,7 @@ Delivery increments:
    deterministic document presence/reference evidence. Optional per-fact metadata survives RDF,
    query and viewer projection without changing canonical Document identities. Reaching an owner
    does not approve a child or assertion; direct-source hydration remains unchanged.
-3. **T07c implemented; validation/merge pending:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
+3. **T07c merged with local/hosted checks passed:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
    delete/rename handling and positive/negative real-extractor fixtures. Coverage failures stop
    new model work without discarding completed artifacts or the last valid snapshot.
 
