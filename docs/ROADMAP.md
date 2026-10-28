@@ -6,6 +6,12 @@ Evidence is recorded in [validation](VALIDATION.md); this roadmap is not a live 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
+The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE.md) records
+three bounded public acceptance checks and the additional B1–B6 task list. Exact-node exploration,
+function-level intent bindings, cross-boundary obligations, monorepo coverage and a measured
+[Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) are open before the official release decision.
+The published 0.6.0 candidate remains available for the separate private consumer report.
+
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is
 unchanged. The consumer's actual ten-minute retry has not run; upstream installation and
@@ -39,10 +45,10 @@ display groups remain stable. Existing snapshots benefit without hydration; gaps
 T05 [performance/validation closeout](ADR-027-validation-closeout.md) records the remaining
 engineering evaluations: cold/repeat/changed inputs, worker isolation, exact-result reuse,
 incremental dependencies and a bounded Rust comparison. Retain full direct validation; no worker,
-cache, incremental or native runtime capability is claimed. The planned 1.0 engineering work is
-complete and the reviewed 0.6.0 candidate is published. Validate it in TradePilot, address any
-acceptance blockers, then review official 1.0. Consumer/final release gates remain separate
-acceptance work; the 2.0 plan remains a separate future direction.
+cache, incremental or native runtime capability is claimed. The original T01–T10 engineering
+work is complete and the reviewed 0.6.0 candidate is published. Validate it in TradePilot and
+address acceptance blockers alongside the newly requested B1–B6 baseline work before reviewing
+official 1.0. The 2.0 platform plan remains a separate future direction.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
 publication. T02 and the focused T05 optimization shipped together in 0.3.0 through
