@@ -32,6 +32,12 @@ This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-
 remains a separate future direction for generation, approvals, a companion website and hosted
 AI. None of those platform features is a dependency of the fixes here.
 
+The subsequent consumer filename blocker shipped in **0.6.1** on 2026-10-28: bounded physical
+artifact/temp names, unchanged full logical identities/provenance, legacy reads and the requested
+Windows traversal → repeat → clean regression. Registry archives, provenance, tags and a fresh
+packaged CLI sequence are verified in [validation](VALIDATION.md). Use this patch for the next
+consumer rerun; B1–B6 and actual product acceptance remain open.
+
 ## Reported evidence and boundaries
 
 The consumer reported a cold extraction in which two source documents referred to the same

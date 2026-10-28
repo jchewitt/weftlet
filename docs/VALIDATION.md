@@ -8,21 +8,58 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
-## Physical artifact filename fix, 2026-10-28
+## Published 0.6.1 physical artifact filename fix, 2026-10-28
 
-The consumer requested bounded physical artifact/temp names while retaining logical snapshot
-identity and provenance. [ADR 028](ADR-028-bounded-artifact-paths.md) records the fix and migration
-boundary. The public traversal → unchanged repeat → clean-comparison regression reproduced an
-overlong SCIP staging basename before the change and passes locally after it. Physical names are
-bounded; full IDs, cited facts, cache keys and content digests remain unchanged. Legacy saved files
-remain readable and immutable. The same traversal test and added storage cases run in native
-Windows CI. Local release checks passed: build, 698 deterministic tests (17 core + 681 toolkit;
-one optional OML integration skipped), architecture with 14 advisory findings, inventory,
-licenses and fresh packed-consumer smoke. Hosted outcomes and patch publication are pending
-at this source revision.
+Both `@weftlet/core@0.6.1` and `@weftlet/toolkit@0.6.1` are published and verified as
+registry `latest`. [Fix PR 49](https://github.com/jchewitt/weftlet/pull/49) merged at
+`00e09ace22ea2cbd840d118f177b0508a60da9a7`; [release PR 50](https://github.com/jchewitt/weftlet/pull/50)
+committed both package versions to main at `a56e7dca734b40829325cac9f377037bcfdc765d` before
+[trusted publication](https://github.com/jchewitt/weftlet/actions/runs/40768151495). Preparation,
+both uploads and release records passed on the first attempt. Public provenance and both
+package-specific tags identify that release commit; both GitHub Releases exist.
 
-This is a focused consumer blocker ahead of [B1–B6](PRE-1.0-BASELINE.md). No private consumer
-rerun, paid/model work or live optional OML compilation is claimed.
+[ADR 028](ADR-028-bounded-artifact-paths.md) records the bounded physical naming policy and
+legacy read compatibility. The public traversal → unchanged repeat → clean-comparison regression
+reproduced `ENAMETOOLONG` in real SCIP before the fix, after the first hydration/repeat succeeded.
+It passes with full logical IDs, cited facts/provenance, cache keys and content digests preserved.
+Long physical keys are hashed and staging names are independent; existing immutable files remain
+readable without rewriting them. Cross-process publication guarantees and strict validation remain.
+
+Release head `56d2db53ab2a3871d1db72cb2b0d04c99e86c9bc` passed
+[hosted Ubuntu and Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40767043720):
+698 deterministic tests (17 core + 681 toolkit; one optional OML integration skipped), architecture
+with 14 advisory findings, inventory, licenses and fresh packed-consumer smoke on Ubuntu;
+571 tests plus inventory/licenses on Windows. The requested Windows traversal/repeat/clean test
+passed, alongside 256-character keys, legacy bytes, immutable winners and concurrent heads.
+The fix PR also passed both platforms. Local build/release checks and package dry runs passed.
+Reviewed exports contain 13 core files and 258 toolkit files, including the runtime naming helper
+and license notices. All 79 original source path/hash pairs are unchanged.
+
+Downloaded public npm archives match the reviewed local and workflow-prepared archives byte for
+byte. Provenance source and subject digests were checked; independent certificate-chain validation
+is not claimed.
+
+| Package | Verified SHA-512 integrity |
+| --- | --- |
+| `@weftlet/core@0.6.1` | `sha512-xSEjqLulXW052KvPY/Dlu5DS5mTEJQYlHrv0idC3aZIPiuiq+GWA15nJ70T/tf9XE5S4ZbvF4dKJLsom3sIdDA==` |
+| `@weftlet/toolkit@0.6.1` | `sha512-S7iTCLWhGziTVbxBbeJIKu24j1FeuJKEnF+EbHFbH9oKRPveDzt0GnsO7s2AZn8PeDBJjUnl5+zB7X8IVL3AxA==` |
+
+An initial install during registry propagation returned `ETARGET`; a fresh-cache retry with
+`--prefer-online` passed. The fresh public-registry consumer on Linux / Node 24.19.0 installed
+both exact versions and ran configuration validation, traversal hydration, unchanged repeat,
+clean comparison and a saved
+snapshot query through the packaged CLI. The deterministic public grammar provider extracted
+six documents once; the repeat reused all six, and clean comparison made no further provider
+calls. Real SCIP and RDF/SHACL produced 230 facts and 200 query facts. The clean snapshot's
+226-character logical identity is retained, content digests and all facts/provenance apart from
+the containing snapshot ID agree, physical components are bounded, no staging files remain,
+and Git stays clean. This uses a public module provider, not a live model or Codex authentication.
+The Windows regression separately exercises the unchanged Codex adapter with an offline runner.
+
+This focused consumer blocker ships ahead of [B1–B6](PRE-1.0-BASELINE.md). TradePilot should
+upgrade to the patch and rerun its original sequence without clearing compatible semantic artifacts.
+No private consumer rerun, paid/model work or live optional OML compilation is claimed. B1 exact
+exploration and B2 Graphify/SCIP evaluation remain the next development items; no 1.0 is declared.
 
 ## Business-context baseline assessment, 2026-10-28
 
