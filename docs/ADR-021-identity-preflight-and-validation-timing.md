@@ -2,7 +2,9 @@
 
 Status: shipped in 0.5.0 after local/hosted checks and independent archive review; release evidence
 is in [validation](VALIDATION.md). Consumer acceptance remains a separate checkpoint.
-This is the bounded T05a increment; broader T05 work remains open.
+This is the bounded T05a increment. Follow-up [ADR 027](ADR-027-validation-closeout.md) records
+the broader T05 engineering evaluation; the remaining-work section below describes this original
+increment. Private consumer performance acceptance remains separate.
 
 ## Decision
 

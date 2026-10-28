@@ -260,10 +260,14 @@ pnpm build
 pnpm benchmark:shacl
 ```
 
-Current hydration progress reports phase boundaries. The validator performs synchronous work,
-so an ordinary timer cannot provide an honest heartbeat while that work blocks Node's main
-thread. Worker-based progress, validation-result reuse and incremental
-validation remain separate T05 work; they do not delay the focused cold-validation release.
+The [T05 closeout](docs/ADR-027-validation-closeout.md) measures cold, repeated and changed inputs,
+plus worker, exact-result-key and Rust prototypes. Direct full validation remains the 1.0 choice:
+the 10,000-fact public cases measured about 2.9–5.7 seconds, with material memory use. These are
+fixture measurements, not a private consumer capacity guarantee. The prototypes are development
+tools, not runtime options; every hydration still performs full validation. Current progress reports
+phase boundaries because synchronous work blocks same-thread timers. Reproduce the lifecycle study
+from a development checkout with `pnpm benchmark:validation`; raw results and commands are linked
+from the ADR.
 
 ## Development
 
