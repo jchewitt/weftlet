@@ -1,7 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { randomUUID } from 'node:crypto';
 import { withCommittedTree } from "../repository/committed-tree.js";
-import { copyFile, mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,6 +14,7 @@ import { moduleRequestNode } from './module-request.js';
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { runProcess } from "../infrastructure/process.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
+import { physicalArtifactKey, temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
 
 export interface ScipIndexResult {
   readonly path: string;
@@ -39,9 +39,9 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
       assertSourceProjectInvocation(this.config.command, this.config.args);
     }
     const require = createRequire(import.meta.url);
-    const destination = join(this.storageRoot, 'scip', `${context.snapshotId}.scip`);
+    const destination = join(this.storageRoot, 'scip', `${physicalArtifactKey(context.snapshotId)}.scip`);
     await mkdir(join(this.storageRoot, 'scip'), { recursive: true });
-    const temporary = `${destination}.${randomUUID()}.tmp`;
+    const temporary = temporaryArtifactPath(destination);
     const command =
       this.config.command === 'bundled-scip-typescript' ? process.execPath : this.config.command;
     const args =
@@ -53,24 +53,28 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
             temporary,
           ]
         : this.config.args;
-    await withCommittedTree(context.repositoryRoot, context.commitSha, async (worktreeRoot) => {
-      const project = this.config.sourceProject ? await prepareScipSourceProject(worktreeRoot, this.config.sourceProject,
-        await new GitRepository(context.repositoryRoot).listAllFilesAt(context.commitSha)) : undefined;
-      await runProcess(command, project ? [...args, project] : args, worktreeRoot, {
-        ...process.env,
-        NODE_OPTIONS: process.env.NODE_OPTIONS ?? '--max-old-space-size=8192',
+    try {
+      await withCommittedTree(context.repositoryRoot, context.commitSha, async (worktreeRoot) => {
+        const project = this.config.sourceProject ? await prepareScipSourceProject(worktreeRoot, this.config.sourceProject,
+          await new GitRepository(context.repositoryRoot).listAllFilesAt(context.commitSha)) : undefined;
+        await runProcess(command, project ? [...args, project] : args, worktreeRoot, {
+          ...process.env,
+          NODE_OPTIONS: process.env.NODE_OPTIONS ?? '--max-old-space-size=8192',
+        });
+        const source =
+          this.config.command === 'bundled-scip-typescript'
+            ? temporary
+            : join(worktreeRoot, 'index.scip');
+        await stat(source);
+        if (source !== temporary) await copyFile(source, temporary);
+        // SCIP embeds this disposable checkout in metadata and inferred-type hover text.
+        // Store the normalized artifact itself so its digest still authenticates its bytes.
+        await writeFile(temporary, normalizeScipCheckout(await readFile(temporary), worktreeRoot));
       });
-      const source =
-        this.config.command === 'bundled-scip-typescript'
-          ? temporary
-          : join(worktreeRoot, 'index.scip');
-      await stat(source);
-      if (source !== temporary) await copyFile(source, temporary);
-      // SCIP embeds this disposable checkout in metadata and inferred-type hover text.
-      // Store the normalized artifact itself so its digest still authenticates its bytes.
-      await writeFile(temporary, normalizeScipCheckout(await readFile(temporary), worktreeRoot));
-    });
-    await rename(temporary, destination);
+      await rename(temporary, destination);
+    } finally {
+      await rm(temporary, { force: true });
+    }
     return {
       path: destination,
       digest: sha256(await readFile(destination)),

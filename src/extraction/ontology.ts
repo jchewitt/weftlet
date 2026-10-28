@@ -135,7 +135,7 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
       throw new Error('Optional openCAESAR requires projectPath and containerImage');
     }
     const source = resolve(this.repositoryRoot, this.config.projectPath);
-    const work = join(this.storageRoot, 'work', `ontology-${snapshotId}-${randomUUID()}`);
+    const work = join(this.storageRoot, 'work', `ontology-${randomUUID()}`);
     await rm(work, { recursive: true, force: true });
     await mkdir(dirname(work), { recursive: true });
     const sourceBuild = join(source, 'build');
@@ -212,7 +212,7 @@ export class DirectRdfOntologyCompiler implements OntologyCompiler {
     const text = await new Promise<string>((accept, reject) =>
       writer.end((error, value) => error ? reject(error) : accept(value)));
     const content = text.split('\n').filter(Boolean).sort().join('\n') + '\n';
-    const root = join(this.storageRoot, 'work', `rdf-${snapshotId}-${randomUUID()}`);
+    const root = join(this.storageRoot, 'work', `rdf-${randomUUID()}`);
     await mkdir(root, { recursive: true });
     const path = join(root, 'semantic.nt');
     await writeFile(path, content);
