@@ -13,22 +13,13 @@ export type GraphNodeKind =
   | 'PersistenceModel'
   | 'Scope';
 
-export type GraphPredicate =
-  | 'realizes'
-  | 'implementedBy'
-  | 'consumes'
-  | 'emits'
-  | 'persistsTo'
-  | 'governedBy'
-  | 'definedBy'
-  | 'verifiedBy'
-  | 'operationallyOwnedBy'
-  | 'decisionAuthority'
-  | 'routesThrough'
-  | 'authorizedBy'
-  | 'sourcedFrom'
-  | 'references'
-  | 'contains';
+export const graphPredicates = Object.freeze([
+  'realizes', 'implementedBy', 'consumes', 'emits', 'persistsTo', 'governedBy',
+  'definedBy', 'verifiedBy', 'operationallyOwnedBy', 'decisionAuthority',
+  'routesThrough', 'authorizedBy', 'sourcedFrom', 'references', 'contains',
+] as const);
+
+export type GraphPredicate = typeof graphPredicates[number];
 
 export interface SourceSpan {
   readonly path: string;

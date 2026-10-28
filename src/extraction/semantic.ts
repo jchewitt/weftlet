@@ -10,6 +10,7 @@ import { runSemanticProcess, SemanticProviderError, type SemanticRunOptions } fr
 export { SemanticProviderError } from "./semantic-process.js";
 export type { SemanticRunOptions } from "./semantic-process.js";
 
+import { graphPredicates as predicates } from "@weftlet/core";
 import type {
   ExtractionContext,
   GraphFact,
@@ -185,24 +186,6 @@ const kinds: readonly GraphNodeKind[] = [
   'Provider',
   'PersistenceModel',
   'Scope',
-];
-
-const predicates: readonly GraphPredicate[] = [
-  'realizes',
-  'implementedBy',
-  'consumes',
-  'emits',
-  'persistsTo',
-  'governedBy',
-  'definedBy',
-  'verifiedBy',
-  'operationallyOwnedBy',
-  'decisionAuthority',
-  'routesThrough',
-  'authorizedBy',
-  'sourcedFrom',
-  'references',
-  'contains',
 ];
 
 export function semanticOutputSchema(lineCount: number): object {

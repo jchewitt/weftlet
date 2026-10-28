@@ -2,15 +2,21 @@ import { execFile } from 'node:child_process';
 import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { promisify } from 'node:util';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { ContextPack, ImpactScanRequest } from '@weftlet/core';
+import type { ContextPack, GraphNeighborhood, ImpactScanRequest } from '@weftlet/core';
 import { createContextGraphApplication } from '../src/application/application.js';
 import { handleImpactScan } from '../src/interfaces/mcp-facade.js';
+import { handleGraphNeighbors } from '../src/interfaces/graph-exploration.js';
 import { CG, nodeIri, RdfEvidenceGraph } from '../src/graph/rdf.js';
 import { sha256 } from '../src/infrastructure/util.js';
 
 const execute = promisify(execFile);
+const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
 const paths = {
   collection: 'services/api/src/collect.ts', execution: 'services/execution/src/execute.ts',
   notifications: 'services/notifications/src/notify.ts', mobile: 'apps/mobile/src/status.tsx',
@@ -181,4 +187,64 @@ describe('public business-context acceptance boundaries', () => {
     expect(repeated.snapshot.manifest.contentDigest).toBe(linked.snapshot.manifest.contentDigest);
     expect(await state.git('status', '--porcelain')).toBe('');
   });
+
+  it('follows exact IDs across actual extracted service evidence through CLI and MCP while dirty and providers are unavailable', async () => {
+    const { root, application, linked } = state;
+    const snapshotId = linked.snapshot.manifest.snapshotId;
+    const request = { snapshotId, nodeId: 'workflow:collection', direction: 'outgoing' as const,
+      predicates: ['routesThrough'] as const, maxFacts: 1 };
+    const before = JSON.stringify(await application.snapshotStore.read(snapshotId));
+    const configPath = join(root, 'context-graph.config.json');
+    const configBytes = await readFile(configPath, 'utf8');
+    const sourcePath = join(root, paths.collection);
+    const sourceBytes = await readFile(sourcePath, 'utf8');
+    const changedConfig = JSON.parse(configBytes);
+    changedConfig.semantic.providerModule = './unavailable-provider.mjs';
+    changedConfig.scip.command = 'unavailable-indexer';
+    delete changedConfig.scip.sourceProject;
+    await writeFile(configPath, JSON.stringify(changedConfig));
+    await writeFile(sourcePath, sourceBytes + '// draft working change\n');
+    const transport = new StdioClientTransport({ command: process.execPath,
+      args: ['--import', tsx, fileURLToPath(new URL('../src/mcp.ts', import.meta.url))], cwd: tmpdir(),
+      env: { ...process.env, CONTEXT_GRAPH_CONFIG: configPath }, stderr: 'pipe' });
+    const client = new Client({ name: 'public-exploration-acceptance', version: '1' });
+    try {
+      const savedApp = await createContextGraphApplication(configPath);
+      const direct = await handleGraphNeighbors(savedApp.explorationService, request);
+      expect(direct.facts).toEqual(linked.snapshot.facts.filter(fact =>
+        fact.subject.id === request.nodeId && fact.predicate === 'routesThrough'));
+      expect(direct.frontier.neighbors[0]).toMatchObject({ nodeId: 'workflow:execution' });
+      expect(direct.frontier.neighbors[0]!.otherIncidentFacts).toBeGreaterThan(0);
+      expect(direct.evidenceState).toMatchObject({ excludedWorkingChanges: [paths.collection],
+        configurationMatches: false, eligibleForCurrentDiffValidation: false });
+      const cli = await execute(process.execPath, ['--import', tsx, fileURLToPath(new URL('../src/cli.ts', import.meta.url)),
+        'graph', 'neighbors', '--config', configPath, '--snapshot', snapshotId, '--node', request.nodeId,
+        '--direction', 'outgoing', '--predicate', 'routesThrough', '--max-facts', '1', '--json'], { cwd: tmpdir(), timeout: 30_000 });
+      expect(JSON.parse(cli.stdout)).toEqual(JSON.parse(JSON.stringify(direct)));
+      await client.connect(transport);
+      const tools = (await client.listTools()).tools;
+      expect(tools.map(tool => tool.name)).toContain('graph.neighbors');
+      expect(tools.find(tool => tool.name === 'graph.neighbors')!.annotations?.readOnlyHint).toBe(true);
+      const response = await client.callTool({ name: 'graph.neighbors', arguments: request });
+      expect(response.isError).not.toBe(true);
+      const content = response.content as { type: string; text?: string }[];
+      expect(JSON.parse(content[1]!.text!)).toEqual(JSON.parse(JSON.stringify(direct)));
+      const follow = await client.callTool({ name: 'graph.neighbors', arguments: { snapshotId,
+        nodeId: direct.frontier.neighbors[0]!.nodeId, maxFacts: 200 } });
+      const followPack: GraphNeighborhood = JSON.parse((follow.content as { text: string }[])[1]!.text);
+      expect(followPack.facts.some(fact => fact.predicate === 'governedBy' &&
+        fact.object.label === 'Execution requires readings at most 60 seconds old')).toBe(true);
+      expect(followPack.facts.some(fact => fact.object.id === `component:file:${paths.execution}`)).toBe(true);
+      expect(followPack.facts.some(fact => fact.subject.id === 'workflow:billing')).toBe(false);
+      const bad = await client.callTool({ name: 'graph.neighbors', arguments: { nodeId: request.nodeId } });
+      expect(bad.isError).toBe(true);
+      expect(JSON.stringify(bad)).toContain('snapshotId');
+      expect(JSON.stringify(await application.snapshotStore.read(snapshotId))).toBe(before);
+    } finally {
+      await client.close();
+      await writeFile(configPath, configBytes);
+      await writeFile(sourcePath, sourceBytes);
+    }
+    expect(await state.git('status', '--porcelain')).toBe('');
+  }, 60_000);
 });

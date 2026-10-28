@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "2fc3c2eedee047c100d9ea6b9b185ca9da18909549016e23a1f5359c458beb72"
+      "destinationSha256": "7c9931d1d47664d6ebabfad3afd231ed6bb1ae89b7f8665ae3c171c52b44bd93"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "2101bb6877714ac9da05d7f9e015a673fe78010f7d5dbbe620e8a3958ff404c9"
+      "destinationSha256": "601b3e194fd3a51382550bdce42389aabb3a5b2156ef3f19246154d4a980b645"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "d4edc3853d65cf55cd9b12ab17e3af2607f87f6d654556a25ac5253f975292ac"
+      "destinationSha256": "dd5ce3a42b1714db8d013c171446619dba14ebe7ece0c08f61224430e367f104"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "e163e5ec862dcceea43d8351c3c0a4d0626e870b718fc1107627ebad10874628"
+      "destinationSha256": "94dce6cf1f6ff435212c29810c2bed621b5756a48e84b558004231fb0899589e"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "6d21bf3aa7890e3c16f89ff8619876e403ed84643f74af7813f8c1e289bce327"
+      "destinationSha256": "224fd53cf694993b8f31232470b53382ef654b3338d81a714b7ef09a3721633c"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -276,7 +276,7 @@
       "destinationPath": "src/graph/diagnostics.ts",
       "sourceSha256": "19045b253527d4b4c6f45520d926a034936ad296bc115c74c7012d0efe59a396",
       "modified": true,
-      "destinationSha256": "8f76b44ff586df876361e72db2a833ccc76fd50dc45fb632e4999ca009fec8dd"
+      "destinationSha256": "5a3fdf005046c095d2e28e230950cadfce31795c4ced5534d10dbdfcb89863bf"
     },
     {
       "sourcePath": "tools/context-graph/src/document.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "56949ce41d06e88507d656f6b4f6ca1f06e34eeb41b081a621889382167d4b77"
+      "destinationSha256": "ea2f13ce5840bec8e91ec93c11b82cddcdec2fcafa726e5dc0d7d5bcc7a755db"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -339,14 +339,14 @@
       "destinationPath": "tests/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "269381bcaa689f0574f802c14a6b4432c1734bf684953596185f60765dbed207"
+      "destinationSha256": "5e3ec960a2d66dc66486a01b7e3ab99e029e563fdc16ad436bee5418fbca1322"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "1859d7802a1ee5179ebcad0f799cd42a3fa6e0c614273a19ea7df3d9f7fd4024"
+      "destinationSha256": "5590287983468adec7eff140b00b754db65ddeb4533166f94307dc0071a321c1"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "aaac083e8eea8e9b6a7303b73f8beea3014c10711eb4afc0b0dd9d81424d5437"
+      "destinationSha256": "7dd9bbd9c7979f66e372e00d7be02f192518fc190edc01f89c3bbbbbbe8d96d0"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "804d833ca11ebe4578cc1254548b2af19090c66a240ff31a12aedfaff70adf7f"
+      "destinationSha256": "1dd654242b17a46a19a03effb347873766ae6d215f98105434dfd6e7a5e1618c"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/exact-node-neighborhoods.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -593,6 +594,7 @@
     "architecture.context-graph.config.json",
     "architecture.policy.json",
     "context-graph.config.json",
+    "docs/1.0-WORK-QUEUE.md",
     "docs/ADR-001-standalone-baseline.md",
     "docs/ADR-002-saved-evidence.md",
     "docs/ADR-003-draft-overlays.md",
@@ -621,6 +623,7 @@
     "docs/ADR-026-traversal-hydration.md",
     "docs/ADR-027-validation-closeout.md",
     "docs/ADR-028-bounded-artifact-paths.md",
+    "docs/ADR-029-exact-graph-neighborhoods.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -717,6 +720,7 @@
     "examples/pipeline/tsconfig.json",
     "mcp-launcher.mjs",
     "packages/core/CHANGELOG.md",
+    "packages/core/src/exploration.ts",
     "packages/core/src/repository-nodes.test.ts",
     "packages/core/src/repository-nodes.ts",
     "pnpm-lock.yaml",
@@ -778,6 +782,7 @@
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
+    "src/application/saved-exploration.ts",
     "src/application/semantic-artifact-store.ts",
     "src/application/semantic-run.ts",
     "src/application/semantic-scope.ts",
@@ -825,6 +830,10 @@
     "src/graph/document-roles.test.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
+    "src/graph/neighborhood-renderer.ts",
+    "src/graph/neighborhood-request.ts",
+    "src/graph/neighborhood.test.ts",
+    "src/graph/neighborhood.ts",
     "src/graph/ranking.test.ts",
     "src/graph/ranking.ts",
     "src/graph/rdf.ts",
@@ -836,6 +845,8 @@
     "src/interfaces/doctor.ts",
     "src/interfaces/document-coverage.test.ts",
     "src/interfaces/document-coverage.ts",
+    "src/interfaces/graph-exploration.test.ts",
+    "src/interfaces/graph-exploration.ts",
     "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/identity-preflight.test.ts",

@@ -5,7 +5,9 @@ The maintainer has requested additional [business-context baseline work](PRE-1.0
 before official 1.0: precise exploration, symbol-level implementation links, cross-boundary
 obligations, monorepo coverage and a measured Graphify/SCIP decision. Its A1–A3 public checks
 pass within recorded limits; B1–B6 remain open. Both npm packages remain available for
-TradePilot acceptance while this additional scope is assessed.
+TradePilot acceptance while this additional scope is assessed. The maintainer requested the
+next live test after a new candidate; [the implementation queue](1.0-WORK-QUEUE.md) tracks
+the intervening B1–B6 work.
 **T08's upstream deterministic physical-file fix has shipped; the maintainer reports the consumer
 updated and working on 2026-10-27. Detailed full hydration/repeat evidence remains pending.** T04 was completed before
 the T08 fix as requested.

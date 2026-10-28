@@ -2,3 +2,4 @@
 export * from './core.js';
 export * from './util.js';
 export * from './repository-nodes.js';
+export * from './exploration.js';

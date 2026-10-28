@@ -13,7 +13,8 @@ function-level intent bindings, cross-boundary obligations, monorepo coverage an
 The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
 identities, provenance and cache reuse. The requested Windows traversal → repeat → clean
 comparison regression passes. See [ADR 028](ADR-028-bounded-artifact-paths.md); the private
-consumer rerun remains separate, and B1/B2 are next.
+consumer rerun is now scheduled after the next candidate. The [1.0 work queue](1.0-WORK-QUEUE.md)
+tracks the requested B1–B6 increments, starting with exact-node neighborhoods.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is
