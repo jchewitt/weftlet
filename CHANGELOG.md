@@ -1,5 +1,27 @@
 # @weftlet/toolkit
 
+## 0.6.0
+
+### Minor Changes
+
+- 6c59746: Add explicit source roles and SOT owner mappings to prospective document coverage, with a bounded JSON policy supplied through `documents plan --document-policy`. Report ambiguous, unavailable and ineligible ownership without transferring approval.
+  
+  Expose a deterministic document-evidence extractor that retains cited document presence and references, including empty validation documents. Preserve optional source metadata through RDF/SHACL, queries and the viewer while keeping existing hydration, cache identities and legacy facts compatible. Traversal-driven hydration remains a separate increment.
+- 35de52e: Add a no-model `documents plan` command and public coverage API for committed Markdown links, with explicit scope, citations, incomplete frontiers and budget reporting. This prospective preview leaves existing hydration selection, evidence authority and semantic caches unchanged.
+- b44053f: Add opt-in committed document traversal to hydration and its no-model plan. Report coverage and
+  source ownership, retain validation documents as deterministic evidence without model extraction,
+  reuse compatible artifacts, and invalidate changed or unreachable draft document relationships.
+  Preserve direct-source configuration, strict SHACL, saved snapshots and assertion authority.
+
+### Patch Changes
+
+- eb7a234: Generate current package versions and installation examples during versioning, and verify the source and packed documentation before publication. Keep historical release records separate and exercise the checked examples in the fresh-consumer smoke test.
+- d3fe532: Count code implementation and consumer evidence independently of its display group, including SCIP and contract relationships. Mark coverage as nonexclusive and scoped to the returned page, preserve evidence authority and snapshot bytes, and avoid query-wide absence claims for paginated results.
+- Updated dependencies [6c59746]
+- Updated dependencies [d3fe532]
+- Updated dependencies [b44053f]
+  - @weftlet/core@0.6.0
+
 ## 0.5.0
 
 ### Minor Changes
