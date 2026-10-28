@@ -91,6 +91,31 @@ describe('hydrate --plan CLI', () => {
     await expect(readFile(join(root, '.context-graph'))).rejects.toMatchObject({ code: 'ENOENT' });
   });
 
+  it('previews traversal roles, exclusions and blocked coverage without initializing unavailable infrastructure', async () => {
+    const { root, config, configPath, commit, run } = await fixture();
+    await writeFile(join(root, 'docs/owner.md'), '# Owner\n[Checks](validation/check.md)\n');
+    await commit();
+    config.documentTraversal = { entryPoints: ['docs/owner.md'], roots: ['docs'] };
+    config.semantic.maxDocuments = 1;
+    await writeFile(configPath, JSON.stringify(config));
+    const plan = JSON.parse((await run('hydrate', '--plan', '--json')).stdout);
+    expect(plan).toMatchObject({ ready: true, scope: { mode: 'traversal' },
+      budgets: { selectedDocuments: 1 }, estimates: { extractions: 1 } });
+    expect(plan.documentSelection.excluded).toEqual([{ path: 'docs/validation/check.md', reason: 'validation' }]);
+    const human = await run('hydrate', '--plan');
+    expect(human.stdout).toContain('validation');
+    expect(human.stdout).toContain('docs/validation/check.md');
+    expect(human.stdout).toContain('Traversal reads: 2/1000 documents');
+    expect(human.stdout).not.toContain('The queue fixture checks successful delivery');
+    config.documentTraversal.maxReadDocuments = 1;
+    await writeFile(configPath, JSON.stringify(config));
+    const blocked = await run('hydrate', '--plan', '--json').catch(error => error);
+    expect(blocked.code).toBe(1);
+    expect(JSON.parse(blocked.stdout).documentSelection.complete).toBe(false);
+    await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
+    await expect(readFile(join(root, '.context-graph'))).rejects.toMatchObject({ code: 'ENOENT' });
+  });
+
   it('passes historical refs and forced extraction, and emits a complete blocked plan with exit 1', async () => {
     const { root, config, configPath, commitSha, commit, run } = await fixture();
     await writeFile(join(root, 'docs/new.md'), '# New source\nLater work.\n');

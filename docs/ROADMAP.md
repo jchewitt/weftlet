@@ -28,12 +28,14 @@ model calls or graph writes. T07b [document roles and ownership](ADR-025-documen
 and the standalone deterministic document-evidence API merged in PR 42 after local/hosted checks
 and independent review. `documents plan --document-policy` accepts an operation-time JSON sidecar;
 classification completeness is separate from traversal/budget readiness. Ownership never transfers
-approval. Current hydration selection and caches remain unchanged until T07c.
+approval. T07c [traversal hydration](ADR-026-traversal-hydration.md) connects these APIs through
+explicit configuration, a shared no-model plan, compatible artifact reuse and draft invalidation.
+Direct-mode configuration retains its existing behavior; validation sources are excluded from
+model work in traversal mode. Local/hosted validation and publication status are recorded below.
 T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
 release: actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
-Two engineering workstreams remain: T07c hydration/cache integration and T05
-performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
+After T07c validation/merge, one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
 it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
 separate acceptance work; the 2.0 plan remains a separate future direction.
 
@@ -66,7 +68,7 @@ snapshots retain their full configuration identity. Exact legacy reads and expli
 adoption preserve prior artifacts; custom providers remain conservative.
 [T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) shipped in the same release, adding
 safe failure reports, opaque source mapping and settled progress without changing extraction/cache
-identity. Broader T05 and T07 work remain open; T06 is implemented with publication pending.
+identity. T05 closeout remains open; T06 and T07 implementation are pending candidate publication.
 
 [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
 0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and

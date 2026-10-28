@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "c6b858f9e8712fafe9ae9f9050183b0dae0181d35145d08d53ea0da1ca3ead3e"
+      "destinationSha256": "2101bb6877714ac9da05d7f9e015a673fe78010f7d5dbbe620e8a3958ff404c9"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "e0bc50fcb845ae8da1e6ea79644ae40428596f73bd7ec35a9145543d8b15f229"
+      "destinationSha256": "66e66169034b0c04a6d0a5ad21d05fef91a35da18816b40a4441c54cc85258df"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -234,28 +234,28 @@
       "destinationPath": "src/configuration/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
       "modified": true,
-      "destinationSha256": "676467260f107d5120c19c11a6a32d785acbf6a0f69c03f96074ccd2c5e05b32"
+      "destinationSha256": "aefa63517c2a92f426d45d78619af7e5fe0e3d41c1dc50a1c14db824b75b9879"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "c25cbe64ba038a42eb3640b5e27e43ce6a8173f5482e90e2defd6df14bc90beb"
+      "destinationSha256": "6d21bf3aa7890e3c16f89ff8619876e403ed84643f74af7813f8c1e289bce327"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
       "destinationPath": "src/configuration/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
       "modified": true,
-      "destinationSha256": "f9bedfd754d937023f7d06ff9a0fb8e9e4c9d122178446d2e70ac6914e184156"
+      "destinationSha256": "9ecbca0bcac760213208e4d40e3553c5ca8d994ef922d874ceaf57897978698b"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "7c79bcd696102f89d3dcadaf01ab2311f68b37172b54b21a667de7f15bdec69a"
+      "destinationSha256": "29e606aff4311b6a717ee75b71a31a98a946d2547c383b2ed7aac3346cadae9d"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -283,7 +283,7 @@
       "destinationPath": "src/extraction/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
       "modified": true,
-      "destinationSha256": "1e9a5db4bf04455fa202d48fb20ac1de268d74179034cfcfa24d845cb4736bb3"
+      "destinationSha256": "535b92a52357edf4825414915b1109374f01cbc10ad7c0ed9c9b218452b8e18d"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "ef6e21f322915b3bf25589d748f379becea5a0ef188bf875caaca10cc479cd2c"
+      "destinationSha256": "bcb8333b85808ce7382af0e4b91886225aca11bf24428ec5effdc760c165a6e4"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "eec96db731c2af6cea126341fab1ea02bfc3c445ff082437e24972c20e32b86a"
+      "destinationSha256": "56949ce41d06e88507d656f6b4f6ca1f06e34eeb41b081a621889382167d4b77"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "f8550abee5ae40e2078ea8a28e116ce622a3ed0f98c0202890103a914647013d"
+      "destinationSha256": "b5b19bddd2d51a1b33b45c9a625082e1774df983ec56c6a0ff4d0c076f1b40da"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "21e5982d69e17e244c1609b01a620c63ab0eaa57d8ea480825539e703d64411c"
+      "destinationSha256": "c7513a270e7513d3ec48b1bc3e19850a9a0199aa058c1151dd1e5c8f983e2adc"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -584,6 +584,7 @@
     ".changeset/preview-document-coverage.md",
     ".changeset/release-plan.json",
     ".changeset/report-implementation-evidence.md",
+    ".changeset/traversal-hydration.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -622,6 +623,7 @@
     "docs/ADR-023-document-coverage-preview.md",
     "docs/ADR-024-implementation-coverage.md",
     "docs/ADR-025-document-classification.md",
+    "docs/ADR-026-traversal-hydration.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -748,14 +750,17 @@
     "scripts/release-records.test.ts",
     "scripts/release.mjs",
     "scripts/restore-publication-state.mjs",
+    "scripts/smoke-traversal.mjs",
     "scripts/update-inventory.mjs",
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
     "src/application/document-classification.test.ts",
     "src/application/document-coverage.ts",
+    "src/application/document-overlay.ts",
     "src/application/extraction-identity.ts",
     "src/application/hydration-failure.ts",
+    "src/application/hydration-inputs.ts",
     "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
@@ -765,6 +770,7 @@
     "src/application/semantic-scope.ts",
     "src/cli.ts",
     "src/configuration/cache.test.ts",
+    "src/configuration/document-traversal.ts",
     "src/configuration/scip-project.ts",
     "src/extraction/canonical-document-links.test.ts",
     "src/extraction/canonical-document-links.ts",
@@ -836,6 +842,7 @@
     "tests/document-evidence.test.ts",
     "tests/document-source-rdf.test.ts",
     "tests/extractor-compatibility.test.ts",
+    "tests/fixtures/traversal.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",
@@ -849,7 +856,8 @@
     "tests/semantic-cache-reuse.test.ts",
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",
-    "tests/snapshot-lifecycle.test.ts"
+    "tests/snapshot-lifecycle.test.ts",
+    "tests/traversal-hydration.test.ts"
   ],
   "publicationAuthorization": {
     "date": "2026-10-20",

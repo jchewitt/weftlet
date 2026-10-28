@@ -14,7 +14,7 @@ import type {
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
 import { factSearchText, IMPACT_RANKING_VERSION, rankImpactFacts } from './ranking.js';
 import { contextPackLanes, contextPackLaneForFact, isDeclaredFact, coverageForFacts, coverageDescription } from './coverage.js';
-import { sourceDocumentDescription } from './document-role-description.js';
+import { documentSelectionDescription, sourceDocumentDescription } from './document-role-description.js';
 export { contextPackLaneForFact } from './coverage.js';
 
 export const DEFAULT_CONTEXT_PACK_FACTS = 60;
@@ -90,6 +90,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       '',
       `Snapshot: \`${pack.snapshot.snapshotId}\` (${pack.snapshot.commitSha})`,
       `Configuration: ${pack.snapshot.configurationDigest ?? 'legacy/unknown'}; scope: ${pack.snapshot.scope?.join(', ') ?? 'legacy/unknown'}`,
+      ...[documentSelectionDescription(pack.snapshot.documentSelection)].filter(Boolean),
       ...(pack.exploration ? [
         `Ranking: ${pack.exploration.rankingVersion ?? 'legacy/unknown'}`,
         `Relationships returned: ${pack.exploration.returned}/${pack.exploration.reachableFacts}; truncated: ${pack.exploration.truncated}; depth limit reached: ${pack.exploration.depthLimitReached}`,
@@ -322,6 +323,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         overlayDigest: snapshot.manifest.overlayDigest,
         overlayCapture: snapshot.manifest.overlayCapture,
         extractorVersions: snapshot.manifest.extractorVersions,
+        ...(snapshot.manifest.documentSelection ? { documentSelection: snapshot.manifest.documentSelection } : {}),
       },
       capabilities,
       facts,

@@ -15,8 +15,8 @@ T03 operational cache reuse, T04 semantic failure diagnostics and T08's public c
 shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency is implemented
 for the next release. T07a prospective coverage is implemented separately from hydration;
 T07b classification and deterministic document evidence merged in PR 42 after local/hosted checks
-and independent review. Two engineering workstreams remain: T07c
-hydration/cache integration and T05 performance/validation closeout. Finish that scope, publish a
+and independent review. T07c hydration/cache integration is implemented and undergoing validation;
+after its merge, one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a
 reviewed minor candidate, validate it in TradePilot, then review and publish official 1.0. These
 release/consumer gates are separate from the engineering count; none is already accepted.
 
@@ -54,7 +54,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
 | **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
-| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c open** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
+| **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c implemented; validation/merge pending** | Prospective roles/ownership and standalone deterministic evidence; hydration integration and npm publication remain separate |
 
 T02 and the focused T05 fix shipped in 0.3.0; T03, T04 and T08 shipped in
 [0.4.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.4.0), following
@@ -371,7 +371,7 @@ Delivery increments:
    deterministic document presence/reference evidence. Optional per-fact metadata survives RDF,
    query and viewer projection without changing canonical Document identities. Reaching an owner
    does not approve a child or assertion; direct-source hydration remains unchanged.
-3. **T07c planned:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
+3. **T07c implemented; validation/merge pending:** opt-in hydration integration, incremental artifact reuse and cross-source linkage, with
    delete/rename handling and positive/negative real-extractor fixtures. Coverage failures stop
    new model work without discarding completed artifacts or the last valid snapshot.
 
@@ -389,8 +389,9 @@ traversal/budgets, while `classification.complete` independently reports role/ow
 A resolved owner must be available, approved and an unambiguous intent source; an approved
 validation/plan/reference or ambiguous-role owner is ineligible. Neither ownership nor links
 transfer approval. Presence and references retain validation documents even without semantic
-artifacts or outgoing links, without asserting test success. These APIs are not yet invoked by
-hydration/overlays; T07c must preserve that evidence when changing semantic source selection.
+artifacts or outgoing links, without asserting test success. T07c now invokes these APIs from explicitly configured hydration and overlays; validation
+evidence is preserved separately from semantic source selection. [ADR 026](ADR-026-traversal-hydration.md)
+records cache compatibility, coverage gates, draft invalidation and source/assertion authority.
 
 Acceptance:
 

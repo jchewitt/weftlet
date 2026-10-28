@@ -1,12 +1,13 @@
-import type { ImpactScanRequest, SemanticArtifact, SemanticSource } from '@weftlet/core';
+import type { DocumentSelectionRecord, ImpactScanRequest, SemanticArtifact, SemanticSource } from '@weftlet/core';
 import { loadConfig, type ContextGraphConfig } from '../configuration/config.js';
 import { resolveSemanticStorageRoots, resolveStorageRoot, semanticCachePartition } from '../configuration/cache.js';
 import { inspectSemanticCache, type SemanticCacheInspection } from '../extraction/semantic-cache.js';
 import { semanticProviderIdentity } from '../extraction/semantic-identity.js';
-import { selectSemanticInputs, type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
+import { type SemanticInputIssue, type SemanticSelection } from '../extraction/semantic-sources.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { GitRepository } from '../repository/git.js';
 import { SemanticArtifactStore } from '../storage/storage.js';
+import { selectHydrationInputs } from './hydration-inputs.js';
 import { resolveSemanticScope, type SemanticScope } from './semantic-scope.js';
 
 export interface SemanticCacheAdoptionOptions {
@@ -38,6 +39,7 @@ export interface SemanticCacheAdoption {
   readonly ready: boolean;
   readonly scope: SemanticScope & { readonly complete: boolean };
   readonly records: readonly SemanticCacheAdoptionRecord[];
+  readonly documentSelection?: DocumentSelectionRecord;
   readonly counts: Readonly<Record<SemanticCacheAdoptionStatus, number>>;
   readonly selections: readonly SemanticSelection[];
   readonly budgets: { readonly maxDocuments: number; readonly maxSourceBytes: number;
@@ -112,6 +114,12 @@ async function publishCandidate(candidate: AdoptionCandidate, config: ContextGra
     reason: 'Validated artifact is available in the current cache; the previous artifact is unchanged.' };
 }
 
+function previousArtifactRoot(repositoryRoot: string, config: ContextGraphConfig): string {
+  // Traverse only the explicitly named module namespace; direct/Codex recovery retains legacy conflict checks.
+  return config.documentTraversal && config.semantic.provider === 'module'
+    ? resolveSemanticStorageRoots(repositoryRoot, config).primary : resolveStorageRoot(repositoryRoot, config);
+}
+
 /** Explicitly adopts only committed-source artifacts from a compatible, named legacy profile. */
 export async function adoptSemanticCache(configPath: string,
   options: SemanticCacheAdoptionOptions): Promise<SemanticCacheAdoption> {
@@ -127,10 +135,11 @@ export async function adoptSemanticCache(configPath: string,
   const ref = options.ref ?? 'HEAD';
   const commitSha = await repository.resolveRef(ref);
   const scope = await resolveSemanticScope(config, repository, commitSha, options.request);
-  const selection = await selectSemanticInputs(repository, commitSha, scope.selectors, config.semantic);
+  const selection = await selectHydrationInputs(repository, commitSha, config, scope.selectors);
   const issues = [...selection.issues];
   const limited = scope.omittedDocuments.length > 0 || scope.ignoredSearchTerms > 0;
-  const complete = !limited && selection.selections.every((item) => item.status === 'matched');
+  const complete = !limited && selection.selections.every((item) => item.status === 'matched') &&
+    (selection.documentSelection?.complete ?? true);
   if (limited) issues.push({ code: 'selection-limited', severity: 'warning',
     message: `Existing agent selection limits omitted ${scope.omittedDocuments.length} documents and ${scope.ignoredSearchTerms} search terms; adoption describes only the selected scope.`,
     paths: scope.omittedDocuments });
@@ -140,7 +149,7 @@ export async function adoptSemanticCache(configPath: string,
     const current = new SemanticArtifactStore(resolveSemanticStorageRoots(repositoryRoot, config).primary);
     // Do not scan sibling profiles or infer ownership from an artifact key. The
     // supplied old configuration proves the exact legacy location to inspect.
-    const old = new SemanticArtifactStore(resolveStorageRoot(repositoryRoot, previous.config));
+    const old = new SemanticArtifactStore(previousArtifactRoot(repositoryRoot, previous.config));
     const identity = semanticProviderIdentity(config.semantic);
     for (const source of selection.sources) {
       const candidate = await inspectCandidate(source, config.semantic, identity, old, current);
@@ -160,9 +169,10 @@ export async function adoptSemanticCache(configPath: string,
     ref, commitSha, configurationDigest: sha256(stableJson(config)),
     previousConfigurationDigest: sha256(stableJson(previous.config)), dryRun,
     ready: complete && !issues.some((issue) => issue.severity === 'error'), scope: { ...scope, complete },
+    ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
     records, counts, selections: selection.selections, budgets: selection.budgets, issues,
     assumptions: [
-      'Selection uses the same configured or bounded agent scope as hydration planning at the resolved commit; only expected keys in the explicitly named previous profile are inspected.',
+      'Selection uses the same configured, traversal or bounded agent scope as hydration planning at the resolved commit; only expected keys in the explicitly named previous profile are inspected.',
       'Missing or incomplete previous artifacts need later extraction. Corrupt or conflicting complete artifacts are retained for diagnosis.',
       'Adoption preserves original artifact identity and provenance; it does not validate or publish a current snapshot.',
       'Artifacts are adopted independently; earlier valid copies remain available if a later artifact or storage operation fails.',

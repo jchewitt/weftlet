@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { assertScipSourceProject, assertSourceProjectInvocation, type ScipSourceProject } from './scip-project.js';
+import { assertDocumentTraversalConfig, type DocumentTraversalConfig } from './document-traversal.js';
 
 export interface ContextGraphConfig {
   readonly schemaVersion: 1;
@@ -11,6 +12,7 @@ export interface ContextGraphConfig {
   readonly namespace: string;
   readonly adapter?: string;
   readonly semanticSources: readonly string[];
+  readonly documentTraversal?: DocumentTraversalConfig;
   /** Explicit owner-approved source paths/globs; other model-derived prose remains inferred. */
   readonly approvedIntentSources?: readonly string[];
   readonly codeRoots: readonly string[];
@@ -127,6 +129,11 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
   }
   if (value.approvedIntentSources !== undefined) {
     requireConfig(isStringArray(value.approvedIntentSources), 'approvedIntentSources must be an array of strings', absolutePath);
+  }
+  if (value.documentTraversal !== undefined) {
+    assertDocumentTraversalConfig(value.documentTraversal);
+    requireConfig(value.agentContext === undefined,
+      'documentTraversal and bounded agentContext selection cannot be combined', absolutePath);
   }
   if (value.routingSources !== undefined) {
     requireConfig(isStringArray(value.routingSources) && value.routingSources.length <= 16 &&

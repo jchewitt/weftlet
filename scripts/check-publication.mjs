@@ -9,6 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { smokeTraversal } from './smoke-traversal.mjs';
 import { pnpmInvocation } from './package-manager.mjs';
 import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
 
@@ -91,6 +92,8 @@ try {
         'dist/application/semantic-artifact-store.js', 'dist/application/semantic-scope.js',
         'dist/application/semantic-run.js', 'dist/application/hydration-failure.js',
         'dist/application/extraction-identity.js',
+        'dist/application/hydration-inputs.js', 'dist/application/document-overlay.js',
+        'dist/configuration/document-traversal.js', 'dist/configuration/document-traversal.d.ts',
         'dist/extraction/semantic-diagnostics.js',
         'dist/extraction/semantic-identity.js',
         'dist/extraction/semantic-cache.js', 'dist/extraction/semantic-sources.js',
@@ -599,6 +602,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
       failure.stderr.includes(consumer) || failure.stderr.includes('missing-preview-provider')) {
     throw new Error('Installed hydration must safely report the unavailable provider and source mapping');
   }
+  await smokeTraversal(consumer, installedRoot, documentConfig, documentPolicy);
   run(process.execPath, ['smoke.mjs'], consumer);
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
@@ -627,7 +631,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, document policy and deterministic evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
+  console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

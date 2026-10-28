@@ -84,7 +84,7 @@ pnpm exec weftlet hydrate --plan --json --config /path/to/project/context-graph.
 The human summary and JSON identify the resolved commit, current local configuration, selected
 documents and inclusion reasons, UTF-8 byte sizes, source approval, expected cache reuse and
 extraction counts, budget violations, and working changes excluded from the committed input.
-Selection uses configured repository file/directory paths; `approvedIntentSources` uses its
+Direct-mode selection uses configured repository file/directory paths; `approvedIntentSources` uses its
 separate glob matcher. An explicit empty semantic source list selects no documents, fixing the
 earlier accidental expansion to the whole repository.
 
@@ -100,10 +100,9 @@ and existing agent-selection limits are warnings; they do not add a new hydratio
 would prevent removing the last document and invalidating its relationships. All selected
 documents remain visible when budgets are exceeded.
 
-Source approval does not approve model assertions. Validation-document labels reflect configured
-evidence roots; selected validation documents still undergo semantic extraction today.
-Traversal-driven hydration and default validation-document separation remain T07 work; the
-prospective coverage preview below is separate. See
+Source approval does not approve model assertions. In direct mode, validation-document labels
+reflect configured evidence roots and selected validation documents still undergo semantic
+extraction. The opt-in traversal mode below excludes them by default. See
 [ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
 
 Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
@@ -128,14 +127,14 @@ approval matches and validation-evidence labels remain explicit; following a lin
 its contents. Git objects supply the input even while the checkout is dirty.
 
 This reports prospective coverage and **does not change hydration inputs or estimate cache/model
-work**. Continue using `hydrate --plan` for the current execution plan. No config fields are added.
+work**. Continue using `hydrate --plan` for the current execution plan. This command does not modify configuration.
 Existing semantic document/byte budgets are compared after traversal, including validation
 documents. Independent read limits (`--max-read-documents`, `--max-read-bytes`,
 `--max-document-bytes`) leave an explicit unread frontier if reached. Incomplete coverage or
 exceeded extraction budgets return a report with exit status 1, without model calls or graph writes.
 The preview follows only supported local links; complete coverage is not a claim of complete
 product knowledge. See [ADR 023](docs/ADR-023-document-coverage-preview.md) for limits and the
-remaining hydration work.
+prospective-operation boundaries.
 
 The preview also accepts an optional JSON source policy:
 
@@ -169,8 +168,61 @@ its issues for role/ownership gaps. The policy does not change current hydration
 The public `extractDocumentEvidence` API separately emits cited document-presence and reference
 facts, including empty validation documents, without interpreting prose or treating a written
 “PASS” as proof that a test ran. Queries, RDF/SHACL and the viewer preserve its source metadata.
-Connecting these APIs to hydration is the next increment. See
-[ADR 025](docs/ADR-025-document-classification.md) for the contract and limits.
+See [ADR 025](docs/ADR-025-document-classification.md) for the contract and limits.
+
+## Hydrate linked SOT and roadmap documents
+
+This checkout/archive adds opt-in traversal hydration; npm 0.5.0 does not support it. Merge this
+fragment into your normal configuration, using real committed entry paths and reviewed owner
+mappings. Keep the existing `semanticSources` array for direct-mode compatibility; traversal
+replaces its selection when enabled.
+
+```json
+{
+  "documentTraversal": {
+    "entryPoints": ["docs/sot.md", "docs/roadmap.md"],
+    "roots": ["docs"],
+    "maxReadDocuments": 1000,
+    "maxReadBytes": 16777216,
+    "maxDocumentBytes": 1048576,
+    "policy": {
+      "schemaVersion": 1,
+      "roles": [
+        { "id": "intent", "pattern": "docs/sot.md", "role": "intent" },
+        { "id": "plans", "pattern": "docs/roadmap.md", "role": "plan" },
+        { "id": "checks", "pattern": "docs/validation/**", "role": "validation" }
+      ],
+      "owners": [
+        { "id": "product-owner", "pattern": "docs/**", "ownerDocument": "docs/sot.md" }
+      ]
+    }
+  }
+}
+```
+
+Review `approvedIntentSources` separately: an owner must already be explicitly approved. Preview
+with `weftlet hydrate --plan --json`, then run `weftlet hydrate --ref HEAD` after reviewing scope
+and cost. The plan reports all discovered documents, roles, ownership, exclusions, read limits,
+semantic budgets and expected artifact reuse. Validation documents receive presence/reference
+facts without model calls. `semantic.maxDocuments` and `maxSourceBytes` apply to semantic candidates;
+traversal read limits apply to every read document. Broken/ambiguous links, incomplete reads, role
+ambiguity or exceeded budgets stop new model work rather than silently trimming coverage.
+
+Ownership gaps remain diagnostics. Reaching an owner, choosing an intent role or reading an
+approved source never approves a model assertion. Plans/unclassified sources remain explicitly
+labeled, and model facts remain inferred/unreviewed. Complete coverage means the configured
+canonical links were followed, not that every product rule was found.
+
+Built-in Codex can reuse unchanged artifacts when enabling traversal or editing its policy/read
+limits. Role/owner metadata is assembled without rewriting those artifacts. Custom module
+providers use a separate full-config cache. Snapshots bind the configuration and selection, while
+old snapshots remain queryable. Draft overlays recompute reachability, invalidate changed sources
+and owners, and label incomplete coverage without making model calls.
+
+Traversal cannot be combined with `agentContext` or a direct programmatic source override; saved
+impact queries still accept owner/task filters. `documents plan` remains a prospective operation;
+its sidecar policy is not automatically adopted by hydration. See
+[ADR 026](docs/ADR-026-traversal-hydration.md) for identity, compatibility and limits.
 
 ## SHACL validation and performance
 

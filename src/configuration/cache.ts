@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 
 import type { ContextGraphConfig } from "./config.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
+import { assertDocumentTraversalConfig } from './document-traversal.js';
 
 export function resolveStorageRoot(
   repositoryRoot: string,
@@ -22,16 +23,26 @@ const codexOperationalFields = new Set([
 ]);
 
 export function semanticCachePartition(repositoryRoot: string, config: ContextGraphConfig): string {
+  if (config.documentTraversal) assertDocumentTraversalConfig(config.documentTraversal);
   const semantic = config.semantic.provider === 'codex-cli'
     ? Object.fromEntries(Object.entries(config.semantic).filter(([field]) => !codexOperationalFields.has(field)))
     : config.semantic;
-  return sha256(stableJson({ config: { ...config, semantic }, checkout: resolve(repositoryRoot) }));
+  // Traversal/role metadata is assembled after the built-in Codex artifact is validated.
+  // Keep the old partition exactly when enabling it; do not ignore unknown configuration.
+  const { documentTraversal: _traversal, ...directConfig } = config;
+  const inputs = config.semantic.provider === 'codex-cli' ? directConfig : config;
+  return sha256(stableJson({ config: { ...inputs, semantic }, checkout: resolve(repositoryRoot) }));
 }
 
 /** Snapshot profiles retain the full configuration. Only Codex user artifacts share operational changes. */
 export function resolveSemanticStorageRoots(repositoryRoot: string, config: ContextGraphConfig,
   userCacheRoot = resolve(homedir(), '.cache', 'context-graph')): { primary: string; legacy?: string } {
   const legacy = resolveStorageRoot(repositoryRoot, config, userCacheRoot);
+  // Module providers can inspect arbitrary extraction context. Opt-in traversal isolates their
+  // artifacts even in workspace storage, while unchanged committed sources still reuse them.
+  if (config.documentTraversal && config.semantic.provider === 'module') {
+    return { primary: resolve(legacy, 'document-semantic-v1', semanticCachePartition(repositoryRoot, config)) };
+  }
   if (config.storageScope !== 'user' || config.semantic.provider !== 'codex-cli') return { primary: legacy };
   return { primary: resolve(userCacheRoot, 'semantic-artifacts-v1', semanticCachePartition(repositoryRoot, config)), legacy };
 }

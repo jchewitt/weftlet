@@ -8,6 +8,41 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T07c traversal hydration, 2026-10-28
+
+[ADR 026](ADR-026-traversal-hydration.md) connects canonical coverage and source classification to
+opt-in `documentTraversal` hydration, its no-model plan, cache adoption and draft overlays.
+Direct configurations retain their existing selection and identity. Validation sources receive
+presence/reference evidence without model extraction. Coverage/read-limit/role-ambiguity and
+semantic-budget failures stop new model work while retaining previous evidence. Ownership gaps
+remain explicit diagnostics; neither source classification nor owner mappings approve assertions.
+
+The local publication gate passed **685 deterministic tests** (17 core, 668 toolkit), including
+11 added regressions, and one optional OML skip. Inventory, licenses, release documentation and
+fresh npm/npx/packed-consumer checks passed. Final small cache-adoption/read-limit-reporting edits
+were followed by a rebuilt toolkit, all 32 affected integration/cache-adoption/CLI tests, governance
+and inventory checks; the installed-package smoke was repeated against that rebuild. Governance
+reports 14 advisory findings at existing finding locations, including the prior fixture-setup
+clone signal. No architecture policy, baseline or exception was changed. All 79 original source
+path/hash pairs are preserved.
+
+Public tests use the unchanged Codex adapter with an offline prose parser through its real prompt,
+JSON and citation checks, plus real SCIP, strict SHACL and lossless RDF projection. The six-stage
+queue-boundary pipeline reaches downstream implementation/tests. An unchanged repeat reuses all
+six eligible semantic sources, with identical snapshot identity and content digest; two validation
+documents remain in the graph. Other regressions cover Codex activation/policy reuse without
+artifact rewriting, actual module-provider isolation/reuse in workspace and user storage,
+rename/delete/reachability, changed owners, incomplete draft coverage, saved-history queries and
+current-diff rejection. Installed CLI hydration/query/repeat tests use a deterministic module,
+real indexing and packaged assets; a blocked refresh preserves the committed head.
+
+The chat's managed executor disconnected during development and later reconnected with the
+uncommitted work intact. This is recovery of this workspace, not a fresh-cloud restoration test.
+No live/paid model request, browser interaction, private TradePilot acceptance or npm publication
+is claimed. Hosted exact-head results and merge identity remain pending at this checkpoint.
+T05 performance/validation closeout remains the next engineering workstream, followed by the
+reviewed minor candidate, consumer acceptance and the separate official 1.0 decision.
+
 ## T07b document classification and evidence, 2026-10-27
 
 [ADR 025](ADR-025-document-classification.md) records explicit document roles and SOT owner

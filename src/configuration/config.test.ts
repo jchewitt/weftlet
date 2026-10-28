@@ -44,6 +44,26 @@ function withoutPath(path: string): object {
 }
 
 describe('loadConfig', () => {
+  it('validates traversal configuration without silently accepting agent narrowing or unknown controls', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-traversal-config-'));
+    const path = join(root, 'config.json');
+    const traversal = { entryPoints: ['docs/owner.md'], roots: ['docs'],
+      policy: { schemaVersion: 1, roles: [{ id: 'owner', pattern: 'docs/owner.md', role: 'intent' }] } };
+    await writeFile(path, JSON.stringify({ ...validConfig, documentTraversal: traversal }));
+    expect((await loadConfig(path)).config.documentTraversal).toEqual(traversal);
+    for (const documentTraversal of [null, [], {}, { ...traversal, unknown: true },
+      { ...traversal, maxDocuments: 1 }, { ...traversal, entryPoints: ['../owner.md'] },
+      { ...traversal, roots: ['/docs'] }, { ...traversal, maxReadDocuments: 0 },
+      { ...traversal, maxReadBytes: 67_108_865 }, { ...traversal, maxDocumentBytes: 4_194_305 },
+      { ...traversal, policy: { schemaVersion: 2 } },
+      { ...traversal, policy: { schemaVersion: 1, roles: [{ id: 'bad', pattern: '**', role: 'approved' }] } }]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, documentTraversal }));
+      await expect(loadConfig(path)).rejects.toThrow();
+    }
+    await writeFile(path, JSON.stringify({ ...validConfig, documentTraversal: traversal, agentContext: {} }));
+    await expect(loadConfig(path)).rejects.toThrow('cannot be combined');
+  });
+
   it('accepts ten-minute extraction timeouts and retains finite positive integer bounds', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-config-timeout-'));
     const path = join(root, 'config.json');

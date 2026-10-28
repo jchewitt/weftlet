@@ -5,7 +5,7 @@ import { sha256, stableJson } from '../infrastructure/util.js';
 import { AgentSemanticScopeResolver } from './agent-context.js';
 
 export interface SemanticScope {
-  readonly mode: 'configured' | 'agent';
+  readonly mode: 'configured' | 'agent' | 'traversal';
   readonly selectors: readonly string[];
   readonly digest: string;
   readonly headName: string;
@@ -19,8 +19,8 @@ export async function resolveSemanticScope(config: ContextGraphConfig, repositor
   const agent = config.agentContext
     ? await new AgentSemanticScopeResolver(config, repository).resolve(request, commitSha)
     : undefined;
-  const selectors = agent?.semanticSources ?? config.semanticSources;
-  return { mode: agent ? 'agent' : 'configured', selectors, digest: sha256(stableJson(selectors)),
+  const selectors = config.documentTraversal?.entryPoints ?? agent?.semanticSources ?? config.semanticSources;
+  return { mode: config.documentTraversal ? 'traversal' : agent ? 'agent' : 'configured', selectors, digest: sha256(stableJson(selectors)),
     headName: agent?.headName ?? 'default', omittedDocuments: agent?.omittedDocuments ?? [],
     ignoredSearchTerms: agent?.ignoredSearchTerms ?? 0 };
 }

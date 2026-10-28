@@ -14,7 +14,7 @@ import type {
 } from "@weftlet/core";
 import { contextPackEvidenceAuthority, contextPackLaneForFact } from "../graph/query.js";
 import { coverageDescription } from '../graph/coverage.js';
-import { sourceDocumentDescription } from '../graph/document-role-description.js';
+import { documentSelectionDescription, sourceDocumentDescription } from '../graph/document-role-description.js';
 import { viewerScript } from "./viewer-interaction.js";
 import { diagnosticSummary } from "../graph/diagnostics.js";
 
@@ -536,6 +536,7 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
     Excluded working paths: ${pack.evidenceState?.excludedWorkingChanges.length ?? 'unknown'}.
     ${pack.snapshot.overlayDigest ? `Overlay freshness: ${escapeXml(pack.evidenceState?.overlayFreshness ?? 'unknown')}.` : ''}
     This view does not validate the current diff.</p>
+    <p>${escapeXml(documentSelectionDescription(pack.snapshot.documentSelection))}</p>
     <p>${pack.exploration ? `${pack.exploration.returned}/${pack.exploration.reachableFacts} reachable facts on this page; max depth ${pack.exploration.maxDepth}; ${pack.exploration.truncated ? 'TRUNCATED' : 'not truncated within this scope'}${pack.exploration.depthLimitReached ? '; depth limit reached — rerun with greater --max-depth' : ''}` : 'Query completeness metadata unavailable.'}</p>
     ${pack.exploration?.continuation ? `<details><summary>Continue agent/CLI query with this token</summary><code>${escapeXml(pack.exploration.continuation)}</code></details>` : ''}
     ${pack.evidenceState?.excludedWorkingChanges.length ? `<details><summary>Excluded working changes</summary>${detailList(pack.evidenceState.excludedWorkingChanges, '')}</details>` : ''}
