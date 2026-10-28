@@ -1,8 +1,23 @@
+import { syntheticSnapshot } from '../benchmark-shacl.mjs';
 import { createHash } from 'node:crypto';
 
 export const hash = value => createHash('sha256').update(value).digest('hex');
-export const scenarios = ['cold', 'repeat', 'rebuild', 'insert', 'update', 'delete', 'rename',
+export const scenarios = ['cold', 'repeat', 'rebuild', 'manifest-only', 'insert', 'update', 'delete', 'rename',
   'invalid-confidence', 'invalid-shared-kind', 'repair-delete'];
+
+/** Worst-case metadata density; not a claim about the private consumer's distribution. */
+export function syntheticFixture(count, topology) {
+  const snapshot = syntheticSnapshot(count, topology === 'document-rich' ? 'shared' : topology);
+  if (topology === 'document-rich') for (const [index, fact] of snapshot.facts.entries()) {
+    fact.sourceRole = ['intent', 'plan', 'validation', 'reference'][index % 4];
+    fact.sourcePolicyDigest = hash('public-owner-policy');
+    fact.sourceOwnership = index % 4 < 2
+      ? { status: 'resolved', ownerDocuments: ['docs/public-owner.md'], mappingIds: ['public-owner'] }
+      : { status: 'not-required', ownerDocuments: [], mappingIds: [] };
+  }
+  snapshot.manifest.contentDigest = hash(JSON.stringify(snapshot.facts));
+  return snapshot;
+}
 
 /** Public benchmark edits. These are complete candidate graphs, never a production delta validator. */
 export function scenarioSnapshot(base, scenario) {
@@ -16,7 +31,8 @@ export function scenarioSnapshot(base, scenario) {
   const snapshot = structuredClone(base);
   const last = snapshot.facts.at(-1);
   if (!last) throw new Error('Benchmark edits need a nonempty fixture');
-  if (scenario === 'insert') snapshot.facts.push({ ...structuredClone(last), id: `${last.id}-insert` });
+  if (scenario === 'manifest-only') snapshot.manifest.generatedAt = '2026-01-02T00:00:00.000Z';
+  else if (scenario === 'insert') snapshot.facts.push({ ...structuredClone(last), id: `${last.id}-insert` });
   else if (scenario === 'update') last.confidence = last.confidence === 0.75 ? 0.85 : 0.75;
   else if (scenario === 'delete') snapshot.facts.pop();
   else if (scenario === 'invalid-confidence') last.confidence = 2;

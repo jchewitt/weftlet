@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { RdfEvidenceGraph, CG } from '../../src/graph/rdf.js';
 import { syntheticSnapshot } from '../benchmark-shacl.mjs';
-import { scenarioSnapshot, scenarios, expectedConformance, normalized } from './inputs.mjs';
+import { scenarioSnapshot, syntheticFixture, scenarios, expectedConformance, normalized } from './inputs.mjs';
 import { options, runBoundedCase, compareModes } from './run.mjs';
 
 describe('validation lifecycle study', () => {
@@ -19,6 +19,18 @@ describe('validation lifecycle study', () => {
     expect(renamed.facts.flatMap((f: any) => [f.subject.id, f.object.id])).not.toContain(physical);
     expect(renamed.facts[0].object.kind).toBe(base.facts[0].object.kind);
     expect(renamed.facts[0].provenance).toEqual(base.facts[0].provenance);
+  });
+
+  it('includes all new document ownership shapes and conservative manifest invalidation', async () => {
+    const rich = syntheticFixture(12, 'document-rich');
+    expect(rich.facts.every((f: any) => f.sourceRole && f.sourceOwnership && f.sourcePolicyDigest)).toBe(true);
+    const graph = new RdfEvidenceGraph(rich);
+    expect((await graph.validate()).conforms).toBe(true);
+    const changed = new RdfEvidenceGraph(scenarioSnapshot(rich, 'manifest-only'));
+    expect(await changed.validate()).toEqual(await graph.validate());
+    expect(await changed.serialize()).not.toBe(await graph.serialize());
+    rich.facts[0].sourceOwnership.ownerDocuments = [];
+    expect((await new RdfEvidenceGraph(rich).validate()).conforms).toBe(false);
   });
 
   it('proves changed-facts-only validation misses a violation spanning unchanged producers', async () => {

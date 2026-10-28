@@ -7,8 +7,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { performance } from 'node:perf_hooks';
-import { syntheticSnapshot } from '../benchmark-shacl.mjs';
-import { scenarios, scenarioSnapshot, expectedConformance, hash } from './inputs.mjs';
+import { scenarios, syntheticFixture, scenarioSnapshot, expectedConformance, hash } from './inputs.mjs';
 import { observe, workerExecutor, cancellationProbe } from './execution.mjs';
 
 const script = fileURLToPath(import.meta.url);
@@ -16,7 +15,7 @@ const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const emit = value => process.stdout.write(`${JSON.stringify(value)}\n`);
 
 export function options(args) {
-  const config = { counts: [2000], fixtures: ['pipeline', 'shared', 'unique'], modes: ['direct', 'worker'],
+  const config = { counts: [2000], fixtures: ['pipeline', 'shared', 'unique', 'document-rich'], modes: ['direct', 'worker'],
     scenarios: [...scenarios], samples: 3, deadlineMs: 45_000 };
   const fields = { '--counts': 'counts', '--fixtures': 'fixtures', '--modes': 'modes', '--scenarios': 'scenarios',
     '--samples': 'samples', '--deadline-ms': 'deadlineMs' };
@@ -27,7 +26,7 @@ export function options(args) {
       : [...new Set(value.split(',').map(item => field === 'counts' ? Number(item) : item))];
   }
   assert(config.counts.length && config.counts.every(n => Number.isInteger(n) && n >= 2 && n <= 10_000), 'Counts must be 2–10000');
-  assert(config.fixtures.length && config.fixtures.every(x => ['pipeline', 'shared', 'unique'].includes(x)), 'Invalid fixtures');
+  assert(config.fixtures.length && config.fixtures.every(x => ['pipeline', 'shared', 'unique', 'document-rich'].includes(x)), 'Invalid fixtures');
   assert(config.modes.length && config.modes.every(x => ['direct', 'worker'].includes(x)), 'Invalid modes');
   assert(config.scenarios.length && config.scenarios.every(x => scenarios.includes(x)), 'Invalid scenarios');
   assert(!config.scenarios.includes('repeat') || config.scenarios.indexOf('repeat') === config.scenarios.indexOf('cold') + 1 && config.scenarios.includes('cold'), 'Repeat must immediately follow cold');
@@ -37,7 +36,7 @@ export function options(args) {
 }
 
 async function child(spec) {
-  const snapshot = spec.fixture === 'pipeline' ? JSON.parse(await readFile(spec.fixturePath, 'utf8')) : syntheticSnapshot(spec.count, spec.fixture);
+  const snapshot = spec.fixture === 'pipeline' ? JSON.parse(await readFile(spec.fixturePath, 'utf8')) : syntheticFixture(spec.count, spec.fixture);
   const startup = performance.now();
   const executor = spec.mode === 'worker' ? await workerExecutor() : { run: (await import('./measure.mjs')).measure, close: async () => {} };
   const startupMs = performance.now() - startup;
@@ -100,10 +99,11 @@ export function compareModes(runs) {
 
 async function main(args) {
   if (args.includes('--help')) {
-    process.stdout.write('Build first: pnpm build\nnode scripts/validation-benchmark/run.mjs [--counts 2000] [--fixtures pipeline,shared,unique] [--samples 3] [--modes direct,worker] [--scenarios cold,repeat,rebuild,insert,update,delete,rename,invalid-confidence,invalid-shared-kind,repair-delete] [--deadline-ms 45000]\nPublic development benchmark only. Workers and exact-result keys are experiments, not production options. Each fixture/mode/sample uses a fresh bounded child. Repeat revalidates the same object; rebuild constructs identical evidence afresh. Changed inputs always run full validation. No model calls; pipeline preparation uses an offline provider and real SCIP. Reports contain metadata/timings/digests, not graph contents. No performance thresholds are CI gates.\n');
+    process.stdout.write('Build first: pnpm build\nnode scripts/validation-benchmark/run.mjs [--counts 2000] [--fixtures pipeline,shared,unique,document-rich] [--samples 3] [--modes direct,worker] [--scenarios cold,repeat,rebuild,manifest-only,insert,update,delete,rename,invalid-confidence,invalid-shared-kind,repair-delete] [--deadline-ms 45000]\nPublic development benchmark only. Workers and exact-result keys are experiments, not production options. Each fixture/mode/sample uses a fresh bounded child. Repeat revalidates the same object; rebuild constructs identical evidence afresh. Changed inputs always run full validation. No model calls; pipeline preparation uses an offline provider and real SCIP. Reports contain metadata/timings/digests, not graph contents. No performance thresholds are CI gates.\n');
     return;
   }
   const config = options(args);
+  const sourceDirtyPaths = execFileSync('git', ['status', '--porcelain=v1', '--untracked-files=all'], { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
   const directory = await mkdtemp(join(tmpdir(), 'weftlet-validation-study-'));
   const fixturePath = join(directory, 'public-pipeline.json');
   try {
@@ -118,10 +118,10 @@ async function main(args) {
       }
     }
     const comparisons = compareModes(runs);
-    const cancellation = await cancellationProbe(syntheticSnapshot(2000, 'unique'));
+    const cancellation = await cancellationProbe(syntheticFixture(2000, 'unique'));
     const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
     const report = { schemaVersion: 1, generatedAt: new Date().toISOString(),
-      sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
+      sourceDirtyPaths, sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
       runtime: { node: process.version, platform: process.platform, arch: process.arch },
       dependencies: { n3: pkg.dependencies.n3, shacl: pkg.dependencies['rdf-validate-shacl'] }, config,
       harnessDigests: Object.fromEntries(await Promise.all(['run.mjs', 'inputs.mjs', 'execution.mjs', 'measure.mjs', 'worker.mjs', 'extracted.ts']
