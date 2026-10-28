@@ -72,6 +72,42 @@ it('hydrates the planned canonical closure with actual Codex parsing, SCIP, RDF/
   expect((await planHydration(f.configPath)).estimates).toEqual({ extractions: 0, reusableArtifacts: 6, unknownArtifacts: 0 });
 }, 60_000);
 
+it('keeps traversal, unchanged repeat and clean comparison within physical filename limits on Windows and POSIX', async () => {
+  const f = await fixture();
+  await writeFile(join(f.root, 'routing.json'), JSON.stringify({ schemaVersion: 1, routes: [{
+    id: 'discovery-analysis', scope: 'public-pipeline', channel: 'analysis',
+    producer: 'src/discovery.ts', consumer: 'src/analysis.ts',
+  }] }));
+  await writeFile(join(f.root, 'runtime.json'), '[]\n');
+  await f.commit();
+  // Exercise the combined identity suffixes. The fixture's runtime provider supplies no traces.
+  const config = { ...f.config, routingSources: ['routing.json'], runtimeEvidence: [join(f.root, 'runtime.json')] };
+  await f.save(config);
+  const app = traversalApplication(f, config, true);
+  const first = await app.hydrate();
+  const repeat = await app.hydrate();
+  expect(repeat).toMatchObject({ semanticExtracted: 0, semanticReused: 6,
+    snapshot: { manifest: { snapshotId: first.snapshot.manifest.snapshotId, contentDigest: first.snapshot.manifest.contentDigest } } });
+  const clean = await app.hydrator.compareClean({ ref: 'HEAD', headName: 'default' });
+  expect(clean).toMatchObject({ semanticExtracted: 0, semanticReused: 6,
+    snapshot: { manifest: { contentDigest: first.snapshot.manifest.contentDigest } } });
+  expect(clean.snapshot.manifest.snapshotId).toContain('-document-selection-v1-');
+  expect(clean.snapshot.manifest.snapshotId).toMatch(/-clean-\d+-runtime-/);
+  expect(clean.snapshot.manifest.snapshotId.length).toBeGreaterThan(215);
+  const withoutSnapshot = (facts: typeof first.snapshot.facts) => facts.map(({ snapshotId: _snapshotId, ...fact }) => fact);
+  expect(withoutSnapshot(clean.snapshot.facts)).toEqual(withoutSnapshot(first.snapshot.facts));
+  expect(clean.snapshot.facts.every(fact => fact.snapshotId === clean.snapshot.manifest.snapshotId)).toBe(true);
+  expect(clean.snapshot.manifest.documentSelection).toEqual(first.snapshot.manifest.documentSelection);
+  expect(await app.store.readHead('default')).toEqual(first.snapshot);
+  expect(await app.store.readHead('default-clean')).toEqual(clean.snapshot);
+  expect(app.calls).toHaveLength(6);
+  for (const path of await readdir(app.storage, { recursive: true })) {
+    expect(path.split(/[\\/]/).every(part => part.length <= 133)).toBe(true);
+    expect(path.endsWith('.tmp')).toBe(false);
+  }
+  expect(await f.git('status', '--porcelain')).toBe('');
+}, 60_000);
+
 it('reuses unchanged Codex artifacts on activation and policy edits without rewriting their bytes or approving claims', async () => {
   const f = await fixture();
   const old = traversalApplication(f, f.direct);

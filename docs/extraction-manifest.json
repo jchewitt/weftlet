@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "912041a3148f7bbc005218c4b70d331406b656d4e751555b32fa4fb04b859bdd"
+      "destinationSha256": "4e52ee6a41192ae60f98ada522f27668115e145525c7afb6ec373b034c902f24"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
@@ -479,14 +479,14 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "99147784d567ff9ccf2619a5452824fb13dc7b8061fc269c1fc90b36cdd96851"
+      "destinationSha256": "93dac6495ebe45baec5022aabf5c8515b1af3e6e64ec9e1be752220765662e7f"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "48a4eabe1954f612b1d27f2ac56cb63ae064b0b957570c25c349154adfc2d34d"
+      "destinationSha256": "82945a91cc1e02970225e7f9247ee1e3526754462d0f29607a6543c9f07f1619"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/bounded-artifact-paths.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -620,6 +621,7 @@
     "docs/ADR-025-document-classification.md",
     "docs/ADR-026-traversal-hydration.md",
     "docs/ADR-027-validation-closeout.md",
+    "docs/ADR-028-bounded-artifact-paths.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -829,6 +831,7 @@
     "src/graph/rdf.ts",
     "src/graph/shacl-shapes.ts",
     "src/graph/validation-progress.ts",
+    "src/infrastructure/artifact-paths.ts",
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
@@ -844,6 +847,7 @@
     "src/repository/git-entries.test.ts",
     "src/repository/working-content.test.ts",
     "src/repository/working-content.ts",
+    "src/storage/artifact-paths.test.ts",
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
     "src/telemetry.ts",

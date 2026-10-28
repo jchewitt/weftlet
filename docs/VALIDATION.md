@@ -8,6 +8,22 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Physical artifact filename fix, 2026-10-28
+
+The consumer requested bounded physical artifact/temp names while retaining logical snapshot
+identity and provenance. [ADR 028](ADR-028-bounded-artifact-paths.md) records the fix and migration
+boundary. The public traversal → unchanged repeat → clean-comparison regression reproduced an
+overlong SCIP staging basename before the change and passes locally after it. Physical names are
+bounded; full IDs, cited facts, cache keys and content digests remain unchanged. Legacy saved files
+remain readable and immutable. The same traversal test and added storage cases run in native
+Windows CI. Local release checks passed: build, 698 deterministic tests (17 core + 681 toolkit;
+one optional OML integration skipped), architecture with 14 advisory findings, inventory,
+licenses and fresh packed-consumer smoke. Hosted outcomes and patch publication are pending
+at this source revision.
+
+This is a focused consumer blocker ahead of [B1–B6](PRE-1.0-BASELINE.md). No private consumer
+rerun, paid/model work or live optional OML compilation is claimed.
+
 ## Business-context baseline assessment, 2026-10-28
 
 The maintainer requested checks for business relationships across asynchronous/stored-data

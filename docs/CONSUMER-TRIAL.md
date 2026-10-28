@@ -134,10 +134,12 @@ does not establish what the agent saw. Also retain a short account of what the a
 in its implementation or test plan because of these results, and the actual test outcomes.
 
 Retain the selected immutable snapshot, not just the mutable head pointer. With workspace
-storage, it is `<repositoryRoot>/<storagePath>/snapshots/<snapshotId>.json`; the default
-`storagePath` is `.context-graph`. `storageScope: "user"` instead uses a configuration/checkout
-hash directory under `~/.cache/context-graph`. Preserve the original store and exact
-configuration if its resolved path is uncertain. Semantic artifacts under `artifacts/semantic/`
+storage, snapshots are under `<repositoryRoot>/<storagePath>/snapshots/`; the default
+`storagePath` is `.context-graph`. Long physical filenames are hashed: identify the selected
+record by its full `manifest.snapshotId`, not by constructing a filename from that ID.
+`storageScope: "user"` instead uses a configuration/checkout hash directory under
+`~/.cache/context-graph`. Preserve the original store and exact configuration if its resolved
+path is uncertain. Semantic artifacts under `artifacts/semantic/`
 contain model output; keep them locally if extraction debugging is needed. They are not
 required to query an existing snapshot. Do not copy credentials or whole account directories.
 

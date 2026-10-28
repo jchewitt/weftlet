@@ -1,10 +1,10 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { mkdir, readFile, writeFile, link, rm } from 'node:fs/promises';
-import { randomUUID } from 'node:crypto';
-import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
 import { atomicRename } from './atomic-rename.js';
+import { physicalArtifactKey, temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
 
 async function readJson<T>(path: string): Promise<T | undefined> {
   try {
@@ -15,9 +15,19 @@ async function readJson<T>(path: string): Promise<T | undefined> {
   }
 }
 
+async function readWithLegacyPath<T>(path: string, legacyPath: string): Promise<T | undefined> {
+  const current = await readJson<T>(path);
+  if (current !== undefined || path === legacyPath) return current;
+  // No old file could have this component on supported filesystems. Do not attempt an
+  // overlong fallback after a normal cache miss; other I/O/corruption errors still propagate.
+  if (Buffer.byteLength(basename(legacyPath)) > 255) return undefined;
+  if (process.platform === 'win32' && /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(basename(legacyPath))) return undefined;
+  return readJson<T>(legacyPath);
+}
+
 async function atomicJson(path: string, value: unknown): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
-  const temporary = `${path}.${randomUUID()}.tmp`;
+  const temporary = temporaryArtifactPath(path);
   try {
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
     await atomicRename(temporary, path);
@@ -31,7 +41,7 @@ function safeKey(key: string): string {
   return key;
 }
 
-function snapshotPath(root: string, snapshotId: string): string {
+function snapshotPath(root: string, snapshotId: string, legacy = false): string {
   if (
     snapshotId.length > 256 ||
     !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(snapshotId) ||
@@ -41,7 +51,7 @@ function snapshotPath(root: string, snapshotId: string): string {
     throw new Error('snapshotId must be a safe storage identifier');
   }
   const directory = resolve(root, 'snapshots');
-  const candidate = resolve(directory, `${snapshotId}.json`);
+  const candidate = resolve(directory, `${legacy ? snapshotId : physicalArtifactKey(snapshotId)}.json`);
   const pathFromDirectory = relative(directory, candidate);
   if (
     pathFromDirectory === '..' ||
@@ -58,8 +68,15 @@ export class FileSnapshotStore implements SnapshotStore {
 
   async write(snapshot: GraphSnapshot): Promise<void> {
     const destination = snapshotPath(this.root, snapshot.manifest.snapshotId);
+    const prior = await this.read(snapshot.manifest.snapshotId);
+    if (prior) {
+      if (prior.manifest.contentDigest !== snapshot.manifest.contentDigest) {
+        throw new Error(`Refusing to overwrite immutable snapshot ${snapshot.manifest.snapshotId} with different content`);
+      }
+      return; // Preserve an existing legacy file without copying or rewriting its bytes.
+    }
     await mkdir(dirname(destination), { recursive: true });
-    const temporary = `${destination}.${randomUUID()}.tmp`;
+    const temporary = temporaryArtifactPath(destination);
     try {
       await writeFile(temporary, JSON.stringify(snapshot), { flag: 'wx' });
       // Linking a complete file publishes atomically without ever replacing a winner.
@@ -78,19 +95,21 @@ export class FileSnapshotStore implements SnapshotStore {
   }
 
   read(snapshotId: string): Promise<GraphSnapshot | undefined> {
-    return readJson(snapshotPath(this.root, snapshotId));
+    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true));
   }
 
   async readHead(headName: string): Promise<GraphSnapshot | undefined> {
-    const head = await readJson<{ snapshotId: string }>(
-      join(this.root, 'heads', `${safeKey(headName)}.json`),
+    const key = safeKey(headName);
+    const head = await readWithLegacyPath<{ snapshotId: string }>(
+      join(this.root, 'heads', `${physicalArtifactKey(key)}.json`),
+      join(this.root, 'heads', `${key}.json`),
     );
     return head ? this.read(head.snapshotId) : undefined;
   }
 
   async updateHead(headName: string, snapshotId: string): Promise<void> {
     if (!(await this.read(snapshotId))) throw new Error('Cannot point a head to an absent snapshot');
-    return atomicJson(join(this.root, 'heads', `${safeKey(headName)}.json`), { snapshotId });
+    return atomicJson(join(this.root, 'heads', `${physicalArtifactKey(safeKey(headName))}.json`), { snapshotId });
   }
 }
 
@@ -103,18 +122,27 @@ export class SemanticArtifactStore {
 
   /** Only explicitly supplied roots are consulted; never enumerate other consumers' profiles. */
   async readEntry(key: string): Promise<{ artifact: SemanticArtifact; origin: 'primary' | 'legacy' } | undefined> {
-    const filename = `${safeKey(key)}.json`;
+    const filename = `${physicalArtifactKey(safeKey(key))}.json`;
     for (const [index, root] of [this.root, ...this.legacyRoots].entries()) {
-      const artifact = await readJson<SemanticArtifact>(join(root, 'artifacts', 'semantic', filename));
+      const artifact = await readWithLegacyPath<SemanticArtifact>(join(root, 'artifacts', 'semantic', filename),
+        join(root, 'artifacts', 'semantic', `${key}.json`));
       if (artifact !== undefined) return { artifact, origin: index === 0 ? 'primary' : 'legacy' };
     }
     return undefined;
   }
 
   async write(artifact: SemanticArtifact): Promise<void> {
-    const path = join(this.root, 'artifacts', 'semantic', `${safeKey(artifact.key)}.json`);
+    const key = safeKey(artifact.key);
+    const path = join(this.root, 'artifacts', 'semantic', `${physicalArtifactKey(key)}.json`);
+    const prior = await readWithLegacyPath<SemanticArtifact>(path, join(this.root, 'artifacts', 'semantic', `${key}.json`));
+    if (prior) {
+      if (prior.outputDigest !== artifact.outputDigest) {
+        throw new Error('Concurrent semantic artifact differs; retry with explicit force refresh');
+      }
+      return;
+    }
     await mkdir(dirname(path), { recursive: true });
-    const temporary = `${path}.${randomUUID()}.tmp`;
+    const temporary = temporaryArtifactPath(path);
     try {
       await writeFile(temporary, JSON.stringify(artifact), { flag: 'wx' });
       await link(temporary, path);
