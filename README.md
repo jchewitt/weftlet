@@ -349,6 +349,22 @@ context-graph impact scan --config context-graph.config.json --capability search
 context-graph visualize --config context-graph.config.json --capability search --output graph.html
 ```
 
+**Development feature for the next candidate:** for precise follow-up, copy the returned
+snapshot ID and a node ID from a cited fact (not yet included in npm 0.6.1):
+
+```sh
+weftlet graph neighbors --snapshot <snapshot-id> --node <node-id> --direction both --max-facts 20 --json
+```
+
+MCP exposes the same read-only operation as `graph.neighbors` with `snapshotId` and `nodeId`.
+Use `predicates` (CLI: repeat `--predicate`) to select relations and `direction` for incoming,
+outgoing or both. Follow `selection.continuation` with the same arguments to retrieve more
+assertions. `frontier.neighbors` identifies returned neighbors with other incident evidence;
+query one of those IDs with the same snapshot to investigate another area. These are exact-ID,
+one-hop reads of saved evidence: no model or indexer is invoked. Each assertion retains its own
+citations, authority and review state, including multiple assertions about the same edge.
+Page completion does not establish complete product coverage. See [the query contract](docs/ADR-029-exact-graph-neighborhoods.md).
+
 Semantic hydration requires a working configured provider. Direct RDF is the default;
 Docker/openCAESAR is an optional explicit backend. Run `context-graph doctor` for setup diagnostics.
 Committed indexing and ontology input use disposable archives, preserving the active checkout.

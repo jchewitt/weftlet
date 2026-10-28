@@ -18,12 +18,20 @@ export const diagnosticKinds: readonly DiagnosticKind[] = [
 ];
 export const MAX_DIAGNOSTICS_PER_KIND = 5;
 
+function overlapsReturnedEvidence(item: GraphDiagnostic, facts: readonly GraphFact[]): boolean {
+  return item.provenance.some(span => facts.some(fact =>
+    fact.provenance.path === span.path && fact.provenance.startLine <= span.endLine &&
+    fact.provenance.endLine >= span.startLine));
+}
+
 function relevantDiagnostic(
   item: GraphDiagnostic,
   request: ImpactScanRequest,
   facts: readonly GraphFact[],
   focus: readonly string[],
+  exactNodeIds?: ReadonlySet<string>,
 ): boolean {
+  if (exactNodeIds) return item.relatedNodeIds.some(id => exactNodeIds.has(id)) || overlapsReturnedEvidence(item, facts);
   const hasSelectors =
     request.ownerDocument ||
     request.changedFiles?.length ||
@@ -41,17 +49,7 @@ function relevantDiagnostic(
     return true;
   // A source document can contain many independent capabilities. Match the cited passage,
   // not every diagnostic from a philosophy document that contributed one selected fact.
-  if (
-    item.provenance.some((span) =>
-      facts.some(
-        (fact) =>
-          fact.provenance.path === span.path &&
-          fact.provenance.startLine <= span.endLine &&
-          fact.provenance.endLine >= span.startLine,
-      ),
-    )
-  )
-    return true;
+  if (overlapsReturnedEvidence(item, facts)) return true;
   return (
     item.provenance.some((span) => span.path === request.ownerDocument) &&
     (focus.length === 0 || focus.some((term) => item.reason.toLowerCase().includes(term)))
@@ -64,12 +62,13 @@ export function selectDiagnostics(
   facts: readonly GraphFact[],
   focus: readonly string[],
   queryDiagnostics: readonly GraphDiagnostic[],
+  exactNodeIds?: ReadonlySet<string>,
 ): DiagnosticReport {
   const report = { unclassifiedLegacyCount: snapshot.unresolved.length } as DiagnosticReport;
   const unique = [...new Map((snapshot.diagnostics ?? []).map((item) => [item.id, item])).values()];
   for (const kind of diagnosticKinds) {
     const candidates = unique.filter((item) => item.kind === kind);
-    const relevant = candidates.filter((item) => relevantDiagnostic(item, request, facts, focus));
+    const relevant = candidates.filter((item) => relevantDiagnostic(item, request, facts, focus, exactNodeIds));
     const ordered = [
       ...queryDiagnostics.filter((item) => item.kind === kind),
       ...relevant.sort((a, b) => a.id.localeCompare(b.id)),

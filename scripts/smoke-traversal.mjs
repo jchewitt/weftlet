@@ -1,6 +1,8 @@
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
 /** Run the installed CLI, provider contract and runtime assets from an independent packed consumer. */
 export async function smokeTraversal(consumer, installedRoot, baseConfig, policy) {
@@ -36,6 +38,34 @@ export function createSemanticExtractor(config) {
         fact.sourceAuthority === 'inferred' && fact.authority === 'inferred' && fact.extractionReview === 'unreviewed')) {
     throw new Error('Installed saved queries must preserve traversal coverage and source/assertion authority');
   }
+  const request = { snapshotId: first.snapshotId, nodeId: 'capability:public-smoke', direction: 'incoming',
+    predicates: ['references'], maxFacts: 1 };
+  const neighborhoodArgs = ['graph', 'neighbors', '--snapshot', request.snapshotId, '--node', request.nodeId,
+    '--direction', request.direction, '--predicate', 'references', '--max-facts', '1', '--json'];
+  const neighborhood = cli(...neighborhoodArgs);
+  if (neighborhood.focus.status !== 'present' || neighborhood.selection.matchingFacts !== 2 ||
+      !neighborhood.selection.continuation || neighborhood.frontier.remainingNeighbors !== 1) {
+    throw new Error('Installed exact-ID neighborhood must expose pending evidence and neighbors');
+  }
+  const next = cli(...neighborhoodArgs, '--continuation', neighborhood.selection.continuation);
+  const expected = pack.facts.filter(fact => fact.object.id === request.nodeId && fact.predicate === 'references');
+  if (next.selection.truncated || next.selection.remainingFacts ||
+      JSON.stringify([...neighborhood.facts, ...next.facts].sort((a, b) => a.id.localeCompare(b.id))) !==
+      JSON.stringify(expected.sort((a, b) => a.id.localeCompare(b.id)))) {
+    throw new Error('Installed neighborhood pagination must preserve all cited assertions and authority');
+  }
+  const transport = new StdioClientTransport({ command: process.execPath,
+    args: [join(installedRoot, 'dist/mcp.js')], cwd: consumer,
+    env: { ...process.env, CONTEXT_GRAPH_CONFIG: join(consumer, 'traversal.config.json') }, stderr: 'pipe' });
+  const client = new Client({ name: 'installed-exploration', version: '1' });
+  try {
+    await client.connect(transport);
+    if (!(await client.listTools()).tools.some(tool => tool.name === 'graph.neighbors')) throw new Error('Missing graph.neighbors');
+    const response = await client.callTool({ name: 'graph.neighbors', arguments: request });
+    if (response.isError || JSON.stringify(JSON.parse(response.content[1].text)) !== JSON.stringify(neighborhood)) {
+      throw new Error('Installed MCP and CLI exact-node exploration differ');
+    }
+  } finally { await client.close(); }
   const before = await readFile(join(consumer, config.storagePath, 'heads/default.json'), 'utf8');
   config.documentTraversal.maxReadDocuments = 1;
   await writeFile(join(consumer, 'traversal.config.json'), JSON.stringify(config));

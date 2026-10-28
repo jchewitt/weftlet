@@ -21,3 +21,6 @@ export * from './extraction/document-traversal.js';
 export * from './extraction/document-classification.js';
 export * from './extraction/document-evidence.js';
 export type { DocumentTraversalConfig } from './configuration/document-traversal.js';
+export * from './graph/neighborhood.js';
+export * from './graph/neighborhood-request.js';
+export * from './graph/neighborhood-renderer.js';

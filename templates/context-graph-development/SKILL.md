@@ -24,7 +24,12 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
    requires checking the citation. Never promote current behavior or model output into intent.
 5. Query progressively for relationships that need detail. Follow continuation tokens and
    check depth truncation; rerun with a larger maxDepth when needed. Missing pages are not proof
-   of missing dependencies.
+   of missing dependencies. When the installed MCP advertises `graph.neighbors`, use it for
+   precise follow-up with the returned
+   `snapshotId` and an exact node ID. Select direction/relations when useful, follow
+   `selection.continuation` with identical arguments, and inspect `frontier.neighbors` for other
+   business areas. Query a neighbor using the same snapshot; one-hop page completion does not
+   prove that transitive dependencies or omitted source coverage are complete.
 6. Give subagents the bounded Context Pack, snapshot SHA, and unresolved assumptions.
 7. Query again after material diff changes. Historical saved evidence remains useful context but
    cannot satisfy current-diff validation or merge gates.

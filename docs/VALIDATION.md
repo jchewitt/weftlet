@@ -8,6 +8,41 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B1a exact-node exploration, 2026-10-28
+
+The maintainer requested the remaining 1.0 items be tasked and started, with TradePilot live
+acceptance deferred until the next candidate. [The work queue](1.0-WORK-QUEUE.md) records B1–B6
+increments and dependencies. The maintainer believes the 0.6.1 filename issue was the main
+consumer blocker; this is not an additional private acceptance result.
+
+[ADR 029](ADR-029-exact-graph-neighborhoods.md) records the additive `graph.neighbors` public
+contract, CLI and MCP tool. Exact snapshot/node selection, direction/relation filters, assertion
+pagination and frontier counts retain citations, source/assertion authority and node variants.
+The shared read-side helper preserves dirty checkout, captured-overlay and subsequent-edit state.
+No new extraction, storage identity, backend or model/provider integration is introduced.
+
+Local release checks pass build, 736 deterministic tests (17 core + 719 toolkit; one optional
+OML integration skipped), architecture with 13 advisory findings, inventory, licenses and fresh
+packed-consumer installation. The existing 79 source path/hash pairs remain unchanged. The
+public predicate list is frozen without changing its ordered values. Relevant extraction gaps,
+including diagnostics for absent nodes, retain bounded items and explicit omitted counts.
+Hosted results belong to the exact change PR head; this source entry does not claim hosted
+completion or npm publication.
+
+New focused cases retain multiple citations, cycles and self-links; test exact IDs against
+same-label and malicious-looking inputs; exhaust pages against the RDF query; reject changed
+snapshots/filters/page sizes and malformed/stale cursors; and preserve old snapshots when newer
+ones no longer contain a node. Working-overlay tests cover draft authority, renames/deletions
+and stale captures through the new service. The actual public monorepo extraction test follows
+collection to execution's obligation and implementing file through real CLI/MCP transport while
+the checkout is dirty and configured provider/indexer are unavailable. It uses real SCIP and
+RDF/SHACL with a small deterministic prose provider, not a live model. Packed installation tests
+exercise the same new CLI/MCP operation and complete its two-page assertion set without loss.
+
+B1b multi-hop paths/viewer parity and B2's Graphify comparison remain open, followed by B3–B6.
+No new candidate, live semantic-quality result, browser interaction or private consumer rerun
+is claimed. A pending minor changeset accumulates toward the next acceptance candidate.
+
 ## Published 0.6.1 physical artifact filename fix, 2026-10-28
 
 Both `@weftlet/core@0.6.1` and `@weftlet/toolkit@0.6.1` are published and verified as
