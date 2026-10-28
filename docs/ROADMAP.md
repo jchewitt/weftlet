@@ -36,8 +36,11 @@ exact evidence is in [validation](VALIDATION.md). npm publication remains pendin
 T10 [implementation coverage reporting](ADR-024-implementation-coverage.md) is merged for the next
 release: actual code relationships can count as both contract and implementation evidence while
 display groups remain stable. Existing snapshots benefit without hydration; gaps are page-scoped.
-One engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a reviewed minor candidate, validate
-it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
+T05 [performance/validation closeout](ADR-027-validation-closeout.md) records the remaining
+engineering evaluations: cold/repeat/changed inputs, worker isolation, exact-result reuse,
+incremental dependencies and a bounded Rust comparison. Retain full direct validation; no worker,
+cache, incremental or native runtime capability is claimed. Complete source/release checks, publish
+a reviewed minor candidate, validate it in TradePilot, then review official 1.0. The candidate and consumer/final release gates remain
 separate acceptance work; the 2.0 plan remains a separate future direction.
 
 The maintainer reported SHACL pushing generation past a 30-minute timeout before graph
@@ -57,11 +60,12 @@ RSS in the prototype at 10,000 unique-node facts; the production harness includi
 peaked near 1.6 GiB. They do not reproduce the private consumer's overall timeout.
 T05a shipped [early identity checks and phase timing](ADR-021-identity-preflight-and-validation-timing.md)
 in 0.5.0 after local/hosted checks and independent archive review. Full validation remains mandatory.
-In-phase worker progress, result reuse and incremental validation remain unsupported. T05 closeout
-still owes representative cold/repeated/changed-input measurements and explicit worker/reuse/
-incremental decisions. Direct full validation may remain the evaluated choice; no promised
-evaluation is silently deferred, and native/backend benchmarking is conditional on measurements
-justifying it. No Rust engine, graph database or validation-result cache is introduced here.
+In-phase worker progress, result reuse and incremental validation remain unsupported. ADR 027
+records 258 direct/worker cases and 29 native correctness cases, with full graph/data preservation.
+The Rust file-transfer prototype showed no clear overall performance/resource advantage and
+differed on diagnostic multiplicity in two cases. Full direct validation remains the evaluated
+choice; private consumer performance acceptance remains required. No Rust engine, graph database
+or validation-result cache is introduced into the runtime.
 
 [T03 operational cache reuse](ADR-018-operational-semantic-cache.md) shipped in 0.4.0. Built-in
 Codex user artifacts can survive changes to timeout/retry/concurrency/document/byte limits while
@@ -69,7 +73,7 @@ snapshots retain their full configuration identity. Exact legacy reads and expli
 adoption preserve prior artifacts; custom providers remain conservative.
 [T04 diagnostics](ADR-019-semantic-failure-diagnostics.md) shipped in the same release, adding
 safe failure reports, opaque source mapping and settled progress without changing extraction/cache
-identity. T05 closeout remains open; T06 and T07 implementation are pending candidate publication.
+identity. T05 engineering evaluation is recorded; T06 and T07 implementation are pending candidate publication.
 
 [T08 physical-file kind consistency](ADR-020-canonical-physical-file-producers.md) also shipped in
 0.4.0 after local/hosted Ubuntu/Windows checks, independent archive review and fresh packed and

@@ -3,6 +3,10 @@
 Status: accepted and implemented in the focused 0.3.0 release; absent from 0.2.1.
 See [validation](VALIDATION.md) for checks and recorded publication evidence.
 
+Follow-up: [ADR 027](ADR-027-validation-closeout.md) records the completed T05 engineering
+evaluation and retains full direct validation. The measurements and remaining-work section below
+describe the original focused release; private consumer acceptance remains separate.
+
 ## Problem and measured mechanism
 
 The canonical RDF dataset has one named relationship graph per assertion, with assertion records,

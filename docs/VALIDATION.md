@@ -8,6 +8,39 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## T05 validation closeout, 2026-10-28
+
+[ADR 027](ADR-027-validation-closeout.md) records the engineering decision to retain full direct
+validation after public cold/repeat/changed-input, worker, exact-key, incremental-dependency and
+Rust evaluations. No runtime validation code, shapes, policy, baseline, cache identity or production
+dependency changed. No assertion/provenance/authority was dropped or promoted. All 79 original
+source path/hash pairs are intact. The original 23-case SHACL corpus is shared with the optional
+native probe; its original named-dataset equivalence assertions still pass.
+
+[Raw reports](benchmarks/validation-2026-10-28/README.md) record 258 completed direct/worker cases
+and 18 paired sample groups with identical verdicts/canonical input. Three-sample cold direct
+medians at 10,000 facts are 2.86 seconds for unique identities and 5.67 seconds for dense source
+metadata. Direct whole-process peak RSS reached 1.72 GiB; one worker case reached 2.99 GiB.
+These are public fixture measurements, not private consumer performance or capacity guarantees.
+The actual six-stage public extraction uses an offline runner through the Codex adapter and real
+SCIP; all six semantic sources are reused on repeat. Prototype cancellation returns no accepted
+verdict and attempts no publication. Exact-key costs/misses and a changed-facts-only false pass
+support the decisions to keep full validation without introducing receipts or incrementality.
+
+Rudof 0.3.35, Apache-2.0, was evaluated from its checksum-verified official Linux GNU binary
+outside the repository. All 29 conformance/location cases agree; diagnostic counts differ on two
+malformed citation cases, retained explicitly in the report. All 12 native timing cases complete,
+with no clear overall file-transfer performance/resource benefit. The probe deliberately exits 1
+for the diagnostic mismatch; it is not a passed replacement-equivalence gate. It is optional
+development tooling, with no native binary download or dependency in package/CI installation.
+
+The local build and **691 deterministic tests** (17 core + 674 toolkit), one optional OML skip,
+architecture (14 advisory findings), inventory, licenses, release-documentation and fresh packed
+npm/npx/consumer smoke all passed. Exact-head hosted Ubuntu/Windows checks are pending.
+No paid/live model, private TradePilot run, browser interaction, fresh-cloud restoration, npm upload
+or official 1.0 acceptance is claimed. The next gate is the reviewed minor candidate, then genuine
+consumer hydration/repeat acceptance and the separate official 1.0 release decision.
+
 ## T07c traversal hydration, 2026-10-28
 
 [ADR 026](ADR-026-traversal-hydration.md) connects canonical coverage and source classification to

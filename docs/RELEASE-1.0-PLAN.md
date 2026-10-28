@@ -16,8 +16,10 @@ shipped in 0.4.0. T09 and T05a shipped in 0.5.0. T06 documentation consistency i
 for the next release. T07a prospective coverage is implemented separately from hydration;
 T07b classification and deterministic document evidence merged in PR 42 after local/hosted checks
 and independent review. T07c hydration/cache integration merged in PR 44 with local and hosted checks passed;
-one engineering workstream remains: T05 performance/validation closeout. Finish that scope, publish a
-reviewed minor candidate, validate it in TradePilot, then review and publish official 1.0. These
+T05's remaining engineering evaluation is recorded in
+[ADR 027](ADR-027-validation-closeout.md), retaining full direct validation after measurements.
+Complete source/release checks, publish a reviewed minor candidate, validate it in TradePilot,
+then review and publish official 1.0. These
 release/consumer gates are separate from the engineering count; none is already accepted.
 
 This is the near-term release task list. The [Weftlet 2.0 product plan](WEFTLET-2.0-PLAN.md)
@@ -52,7 +54,7 @@ integration. Consumer acceptance is reported separately from upstream determinis
 | **T02** | No-model hydration/setup preview | Shipped in 0.3.0 | Shared selection/cache inspection, human/JSON plans; extend with T07 traversal coverage |
 | **T03** | Artifact reuse across operational configuration changes | Shipped in 0.4.0 | Built-in Codex user artifacts share five operational changes; custom providers remain conservative; exact legacy recovery without model calls |
 | **T04** | Actionable, privacy-safe timeout diagnostics | Shipped in 0.4.0 | Safe source IDs, settled counts, failure classification and T02/T03 recovery; no extraction/cache identity change |
-| **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a shipped in 0.5.0; broader work open** | Full validation preserved; worker progress, reuse and broader profiling remain separate |
+| **T05** | Early identity checks and validation progress/profiling | **Cold fix shipped in 0.3.0; T05a in 0.5.0; engineering closeout evaluated in ADR 027** | Cold/repeat/edits, worker, reuse, incremental and Rust evaluated; retain full direct validation; private consumer acceptance required |
 | **T06** | Packaged release-documentation consistency | **Implemented after 0.5.0; publication pending** | Generated current sections, checked actual tarballs, historical records preserved, fresh documented installation commands |
 | **T07** | Coverage-aware traversal from SOT/roadmap entry points | **T07a merged; T07b merged with local/hosted checks and review passed; T07c merged with local/hosted checks passed** | Committed closure, source roles/ownership, validation separation and draft invalidation implemented; npm publication pending |
 
@@ -62,7 +64,7 @@ local/hosted checks, independent archive review and fresh packed/public-registry
 T09 timeout support and T05a identity preflight/phase timing shipped in
 [0.5.0](https://github.com/jchewitt/weftlet/releases/tag/%40weftlet/toolkit%400.5.0).
 Source, registry integrity, provenance and release tags are recorded in [validation](VALIDATION.md).
-T05 closeout remains a bounded follow-up; T06 and T07 are implemented for the next candidate.
+T05 closeout measurements and decisions are recorded in ADR 027; T06 and T07 are implemented for the next candidate.
 The consumer must migrate its framework adapter to the public core factory, then complete full
 hydration and repeat reuse; upstream fixtures do not establish that result.
 
@@ -96,7 +98,7 @@ Boundary, provider propagation, cancellation, cache reuse and packed/public-regi
 release evidence is in [validation](VALIDATION.md). The consumer's approved ten-minute retry
 has **not run**. No ten-minute wall-clock execution, paid/model call or private acceptance is
 claimed by these deterministic upstream checks. T06/T07 are now implemented with publication
-pending; broader T05 work remains open.
+pending; T05 engineering evaluation is recorded separately in ADR 027.
 
 ## T08 — Resolve deterministic physical-file kind conflicts
 
@@ -273,7 +275,7 @@ cold validation a release priority ahead of the remaining 1.0 work. Upstream has
 named-graph lookup cost in public synthetic fixtures, but has not measured that consumer graph or
 diagnosed its complete timeout. The focused cold-validation fix shipped in 0.3.0, ahead of the
 remaining 1.0 tasks. The consumer is now reported working after 0.4.0; exact performance and
-repeat-hydration acceptance evidence remains unrecorded. Broader T05 items stay open.
+repeat-hydration acceptance evidence remains unrecorded. ADR 027 records the broader engineering evaluation.
 
 [ADR 017](ADR-017-shacl-validation-union.md) records the implemented cold-validation optimization:
 build a temporary union of every SPO triple for the same validator/shapes, while keeping original
@@ -285,7 +287,7 @@ are synthetic phase measurements, not a private consumer reproduction or end-to-
 
 The focused change still validates the whole graph each time. It does not add Rust, GraphDB,
 incremental validation or a validation-result cache. T05a now adds early checks and phase timing;
-worker progress and broader observability/reuse remain follow-ups. Native code or a database does
+worker progress and reuse remain unsupported, with the decision evaluated in ADR 027. Native code or a database does
 not by itself establish faster or correct incremental SHACL.
 
 Acceptance:
@@ -317,13 +319,14 @@ Acceptance:
   failure must preserve the prior snapshot. Keep model-independent profiling separate from live
   extraction performance and from the reported two-fact correctness defect.
 
-The bounded 1.0 closeout must finish representative cold/repeated/changed-input measurements and
-record decisions on worker execution, successful-result reuse and dependency-aware incremental
-validation. Retaining direct full validation can be the evidence-backed result of those evaluations;
-it does not mean cache, worker or incremental capabilities were delivered. Native/backend benchmarks
-remain conditional on measurements justifying a candidate. Do not silently defer the promised
-measurements/evaluations or consumer performance acceptance; any scope deferral requires an explicit
-maintainer decision recorded with its remaining limitation.
+The bounded closeout is recorded in [ADR 027](ADR-027-validation-closeout.md): 258 public
+direct/worker cases cover cold/repeat/rebuilt and changed inputs; all 18 paired sample groups
+match exact verdicts and data. Dense metadata and 10,000-fact memory measurements justified a
+Rudof 0.3.35 evaluation: all 29 conformance/location cases agree, two diagnostic multiplicities
+differ, and 12 native timings establish no clear overall file-transfer benefit. Retain direct full
+validation. No cache, worker, incremental or native runtime capability is delivered. Exact-key
+costs/misses and a changed-facts-only counterexample support the reuse/incremental decisions.
+Consumer performance acceptance remains required; public fixtures do not silently replace it.
 
 ## T06 — Keep packaged documentation consistent with the release
 
