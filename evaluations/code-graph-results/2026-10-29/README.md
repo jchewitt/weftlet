@@ -97,3 +97,83 @@ attempt's eight completed business runs remain diagnostic history, not additiona
 This keeps each scenario within three native extractions across attempts. The replay uses only
 the 16 fully recorded runs from attempt 2, without indexer/provider calls, and is charged to the
 original total time budget. Sample counts are unequal and too small for general speed claims.
+
+## Measured outcome
+
+Decision: [retain SCIP and improve its projection](../../../docs/ADR-031-code-extractor-selection.md).
+The corrected 51-case cold comparison resolves 15/15 declaration families and 16/16 references
+from raw SCIP. Graphify resolves 14/15 families, 8/16 references and 7/10 native calls. Current
+Weftlet provides coarse candidates for 7/15 families and 12/16 references; it does not expose
+exact occurrences. Neither SCIP projection has native call evidence. No named false-join negative
+was asserted by the two exact-track arms, and no invalid citation or ambiguous identity was found.
+This is not general precision: unjudged references remain in every output. Graphify has one
+ambiguous line-only re-export and only one of three parse-overload declaration spans.
+
+The corrected record covers **16 completed scenario runs**: all eight business scenarios and
+dispatch cold/repeat, plus a second sample of business cold/repeat/body-edit/rename/delete/dirty.
+The earlier attempt and uncredited partial run remain in the archive. Native executions never
+exceed three per scenario across attempts. Replay calls neither extractor. Total charged
+measurement time, including failed/interrupted work and replay, is **342.50 seconds** of 1,800.
+No worker exceeded its time/memory/artifact cap, reported OOM, or made a model request. Largest
+original output is 2,428,883 bytes. Source isolation and retained snapshot hashes pass.
+
+All 96 corrected arm/mode assemblies conform to strict SHACL and return identical facts through
+SPARQL. All arms preserve the fixed business controls and review authority. Without the handoff,
+collection loses the downstream chain; code-only never establishes it. All fixed-business dispatch
+queries retrieve 16/16 labeled targets, zero of seven distractions; code-only gets 13/16. Current
+and richer SCIP dispatch searches have remaining pages, explicitly reported. Graph density is
+not a proof of query completeness or business-rule compatibility.
+
+Cold business indexing/static extraction medians are 0.808/0.035 seconds; whole SCIP/Graphify
+workers are 2.056/1.087 seconds. They have different work boundaries, and there are only two
+samples. Dispatch has one sample. The report retains every observed value, min/max and cache
+state, along with original and corrected assembly/query times. These measurements establish
+neither large-repository scaling nor a cross-platform performance guarantee.
+
+Repeat reuses five business document artifacts (three dispatch) and extracts zero again. Removing
+the handoff extracts one changed document and reuses four. This is the deterministic fixture
+provider, not a live model. Both code tools execute again. All same-SHA normalized outputs match;
+Graphify dirty raw JSON differs only in the absolute extracted-source list. Unrelated declaration
+identities survive edits, renames and deletions. Deleted mock cases (nine) and excluded worker
+cases (two) are listed explicitly; omission is not a zero-impact finding. Selected/indexed source
+counts are 21/21 business, 18/18 dispatch, and 20/20 after delete or worker omission.
+
+Dynamic-target and undeclared-queue gaps remain silent in every arm. Raw SCIP's adapter reports
+the external implementation as declaration-only; the other arms do not. Source-only graph
+connectivity does not fill undocumented business mappings or deployment wiring.
+
+## Durable evidence and reproduction
+
+- `setup.json`: premeasurement tool/dependency/image receipts, licenses and resource probe.
+- `results.json`: corrected scores, original score comparison, source commits, controls, scope,
+  timings, cache counts and identity checks. Cold rows retain every case's native target witness.
+- `public-evidence.tar.gz`: original native SCIP bytes/JSON, Graphify JSON, normalized outputs,
+  snapshots, queries, worker logs/metrics and sealed receipts for both attempts and replay.
+  Destination-authored harness source at each sealed SHA is included for reproduction after squash merge.
+- `export-inventory.json`: exact allowlisted members, sizes and SHA-256 hashes, plus the archive hash.
+
+The archive contains only outputs generated from the frozen public fixtures, including disposable
+Linux paths. It excludes consumer checkouts, `.git`, caches, credentials, installed dependencies
+and Graphify source. These are destination-authored experiment artifacts, not extracted product
+snapshots. The archive and evaluation scripts are outside the npm runtime file list.
+
+Read a member without extracting it, for example:
+
+```sh
+tar -tzf evaluations/code-graph-results/2026-10-29/public-evidence.tar.gz
+tar -xOzf evaluations/code-graph-results/2026-10-29/public-evidence.tar.gz \
+  replay-8b97b9df4da8/1-business-cold/output/comparison.json
+```
+
+Use the actual replay prefix in `results.json` if selecting a member programmatically. Setup and
+run commands are retained in the receipts and each `*.execution.json`. The driver requires its
+sealed harness SHA, exact frozen blobs and the prepared isolated tool paths. This is a bounded
+research harness, not an npm-user setup command. `replay.py` reprojects recorded outputs after
+an explicitly sealed correction. `report.py --workspace <study> --output <report>` reads them to
+produce the summary and allowlisted archive without extraction, network or provider calls.
+
+Post-observation corrections limit the strength of a claim that the original scorer was perfect.
+They are retained rather than hidden: definition-family credit increases for Graphify, and the
+re-export becomes explicitly ambiguous rather than silently absent. Frozen inputs, source labels,
+negative cases, authority and resource limits remain unchanged. A fresh, independently designed
+corpus would be needed to establish generalization.

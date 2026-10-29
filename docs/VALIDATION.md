@@ -8,6 +8,45 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B2b measured extractor decision, 2026-10-29
+
+[ADR 031](ADR-031-code-extractor-selection.md) selects retaining SCIP and exposing richer
+code entities/occurrences in B3a. This increment changes research tooling and records only;
+no production schema, indexer or dependency change and no npm publication.
+
+The [public evidence record](../evaluations/code-graph-results/2026-10-29/README.md) contains
+sealed setup/harness receipts, native bytes, per-case results, corrected projections, query
+witnesses and an explicit export inventory. Inputs remain the 72 frozen files at `f1844f3`,
+digest `04fa4584bd80a9b1a1d964420dcaf35b5e8c61a67515cc57e2476fd44fa798b3`.
+Sixteen fully recorded scenario runs are replayed after two disclosed normalization corrections;
+failed/interrupted attempts remain retained, and no scenario exceeds three native extractions.
+The 342.50-second total includes those attempts and replay, below the frozen 1,800-second budget.
+Extraction runs offline in Docker with 2 GiB cgroup memory enforcement. No paid/model or private
+consumer inputs. Graphify is an isolated pinned source-API experiment, not a verified published
+Python distribution or a new Weftlet runtime dependency.
+
+Cold labeled results: raw SCIP 15/15 declaration families and 16/16 references; Graphify 14/15
+families, 8/16 references and 7/10 native calls. Current Weftlet has coarse candidates for 7/15
+families and 12/16 references but lacks exact occurrences. No named false-join negative was
+asserted by the exact-track arms; unjudged edges and explicit/silent gaps remain reported.
+Calls remain unsupported by SCIP; a reference is not reclassified as a call.
+
+All 96 corrected graph/mode assemblies pass strict SHACL and exact RDF/SPARQL projection parity.
+Documented asynchronous business chains, the negative missing-handoff control, shared contracts,
+dispatch targets and assertion authority survive. Repeat/dirty normalized outputs are identical;
+rename/delete remove old current spans, excluded projects remain explicit, unrelated identities
+and historical snapshot hashes stay stable. These are synthetic deterministic retrieval results,
+not live semantic quality, deployed queue delivery, compatible rule checks or private acceptance.
+All 1,035 allowlisted artifact hashes and all 79 original extraction source path/hash pairs were
+verified. The six-megabyte compressed evidence archive is excluded from npm package contents.
+
+Local Linux build and **786 deterministic tests** pass (17 core + 769 toolkit; one optional OML
+integration skipped), with the existing 13 advisory architecture findings, inventory and license
+checks and fresh packed-consumer smoke. Twelve new scoring regressions join the native Windows
+CI selection; the frozen-input verifier retains seven checks. Hosted results are recorded with
+the exact change PR. This study does not validate Graphify on Windows/macOS or claim general speed ratios.
+Release PR #53 remains open for the later candidate; B3a is next.
+
 ## B2a frozen code-extractor comparison, 2026-10-29
 
 The [comparison note](GRAPHIFY-EVALUATION.md) now points to a committed public corpus and
