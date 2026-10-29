@@ -60,6 +60,24 @@ describe('predeclared code-study normalization and scoring', () => {
     expect(score.tracks.reference).toMatchObject({ tp: 0, fp: 2, fn: 1, precision: 0, recall: 0 });
   });
 
+  it('retains the pinned native re_exports relation without inventing token locations', () => {
+    const result = normalizeGraphify({ nodes: [], edges: [{ source: 'file', target: 'symbol',
+      relation: 're_exports', source_file: 'a.ts', source_location: 'L3', confidence: 'EXTRACTED' }] }, sources, commit);
+    expect(result.references).toMatchObject([{ nativeRelation: 're_exports', relation: 'reference',
+      span: { startLine: 3, startColumn: null, endColumn: null } }]);
+    expect(result.unprojectedRelations).toEqual({});
+  });
+
+  it('credits an overload family from its implementation while reporting missing signature spans', () => {
+    const overloaded = { ...suite, entities: { yes: ['yes', 'no'] },
+      cases: [{ id: 'definition', track: 'definition', from: 'yes', to: 'yes', expected: 'present' }] };
+    const implementationOnly = native();
+    implementationOnly.entities = implementationOnly.entities.filter((entity: any) => entity.id === 'no');
+    const score = scoreNative(implementationOnly, overloaded, locations, sources, commit);
+    expect(score.tracks.definition).toMatchObject({ tp: 1, fn: 0 });
+    expect(score.declarationSpans).toEqual([{ id: 'yes', expected: 2, found: 1 }]);
+  });
+
   it('does not hide an additional wrong target behind a correct exact-span match or inflate duplicate recall', () => {
     const mixed = scoreNative(native(['yes', 'yes', 'no']), suite, locations, sources, commit);
     expect(mixed.tracks.reference).toMatchObject({ tp: 1, fp: 2, fn: 0 });

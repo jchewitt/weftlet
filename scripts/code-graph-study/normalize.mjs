@@ -80,7 +80,7 @@ export function normalizeGraphify(raw, sources, commit) {
   const references = [];
   const unprojectedRelations = {};
   for (const edge of raw.edges ?? []) {
-    if (!['references', 'calls', 'uses', 'imports', 'reexports', 'indirect_call'].includes(edge.relation)) {
+    if (!['references', 'calls', 'uses', 'imports', 'reexports', 're_exports', 'indirect_call'].includes(edge.relation)) {
       unprojectedRelations[edge.relation] = (unprojectedRelations[edge.relation] ?? 0) + 1;
       continue;
     }

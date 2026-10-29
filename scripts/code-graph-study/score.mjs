@@ -48,7 +48,8 @@ export function scoreNative(normalized, suite, locations, sources, commit) {
     if (!from || !suite.entities[item.to].some(id => locations[id])) { removedCases.push(item.id); continue; }
     const unsupported = normalized.unsupportedTracks.includes(item.track);
     const candidates = item.track === 'definition'
-      ? normalized.entities.filter(entity => entity.definitions.some(span => overlaps(span, from)))
+      ? normalized.entities.filter(entity => entity.definitions.some(span => suite.entities[item.to]
+        .some(anchor => locations[anchor] && overlaps(span, locations[anchor]))))
         .map(entity => ({ target: entity.id, spans: entity.definitions }))
       : normalized.references.filter((reference, index) => {
         const selected = overlaps(reference.span, from) && (item.track !== 'call' || reference.relation === 'call');

@@ -80,3 +80,20 @@ from the tracked/untracked source-state comparison. Committed-input hashes and h
 snapshot checks remain unchanged. No labels, scoring, tools or source inputs changed. The
 failed attempt remains recorded, and its elapsed time is charged against the same 1,800-second
 budget using `priorMeasurementSeconds`; a replacement run cannot reset the measurement budget.
+
+### Post-observation normalization correction
+
+Review of saved native JSON found two harness defects: Graphify's `re_exports` spelling was
+omitted, and declaration scoring looked only at a family's first anchor instead of accepting
+any of its frozen overload declarations. Both are corrected with focused tests. No native
+output, input label, dependency or case denominator changes. Overload signature-span coverage
+remains separate. Line-only re-exports with multiple targets remain ambiguous, without guessed
+token locations. Original and corrected scores are retained; the decision uses the corrected
+replay and explicitly acknowledges this post-observation amendment.
+
+Further extraction stopped after one full matrix and six additional completed business scenarios;
+the next assembly finished but lacks the driver's final invariants and is not credited. The first
+attempt's eight completed business runs remain diagnostic history, not additional score samples.
+This keeps each scenario within three native extractions across attempts. The replay uses only
+the 16 fully recorded runs from attempt 2, without indexer/provider calls, and is charged to the
+original total time budget. Sample counts are unequal and too small for general speed claims.
