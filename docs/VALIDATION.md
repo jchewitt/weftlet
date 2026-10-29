@@ -8,6 +8,32 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B2a frozen code-extractor comparison, 2026-10-29
+
+The [comparison note](GRAPHIFY-EVALUATION.md) now points to a committed public corpus and
+predeclared protocol: current Weftlet SCIP projection, richer raw SCIP and pinned Graphify
+static extraction. There are 51 labeled declaration/reference/call cases, three explicit-gap
+requirements, three business controls and eight edit/coverage scenarios. The 72 input files
+have inventory digest `04fa4584bd80a9b1a1d964420dcaf35b5e8c61a67515cc57e2476fd44fa798b3`.
+The measurement receipt must identify the full freeze commit as well as this digest.
+
+Seven focused checks validate both configuration templates and typecheck both public corpora,
+reject changed/extra inputs, ambiguous anchors, contradictory labels, unsafe paths and broken
+edits/renames, and verify immutable Git blobs while the checkout is dirty. Real Git CRLF
+conversion remains supported. No indexer or provider is invoked by these input checks.
+Generated output is excluded; all 79 original extraction source path/hash pairs are unchanged.
+
+Local build and 774 deterministic tests pass (17 core + 757 toolkit, one optional OML integration
+skipped), along with architecture (the existing 13 advisory findings), inventory and licenses.
+Hosted checks and fresh packed-consumer installation are recorded with the exact change PR.
+The existing regression suite still exercises real SCIP and hydration on its established
+fixtures; that is not a comparative run on the new frozen corpus.
+
+Graphify's pinned manifest/lock project versions differ (0.9.97/0.9.96). The protocol requires an
+explicit setup receipt before measurement; no Graphify dependency, source or service was
+installed, and no comparative quality, timing, backend-selection or private acceptance result
+is claimed. B2b is next. The candidate release PR remains open, with no npm upload for B2a.
+
 ## B1b bounded cited paths, 2026-10-29
 
 [ADR 030](ADR-030-bounded-evidence-paths.md) records `graph.paths` through the public API,

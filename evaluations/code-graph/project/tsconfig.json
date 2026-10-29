@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "types": [],
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@public/contracts": [
+        "packages/contracts/src/index.ts"
+      ],
+      "@public/math": [
+        "packages/math/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "services/**/*.ts",
+    "apps/**/*.tsx",
+    "packages/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-comparison",
+  "baselineCommit": "f3b0f99cc7f01227925bf7372f3ab7a60f0de62c",
+  "arms": [
+    {
+      "id": "weftlet-scip",
+      "source": "baselineCommit",
+      "projection": "existing ScipSymbolExtractor; no modification"
+    },
+    {
+      "id": "raw-scip",
+      "index": "same immutable index bytes as weftlet-scip",
+      "projection": "preserve source declarations and all occurrence ranges, including local and same-file references; no new syntax parser or guessed calls"
+    },
+    {
+      "id": "graphify-static",
+      "repository": "https://github.com/Graphify-Labs/graphify",
+      "commit": "0a8cd4e1e342235fe53e881fb5d591bf0460071f",
+      "manifestVersion": "0.9.97",
+      "lockProjectVersion": "0.9.96",
+      "lockSha256": "0c3c9046327c32b8bc4c73dcc37cf7828bec06c4ae51d35cf14a6ae11f0ed5f8",
+      "entrypoint": "static code extractor only; exact command/API and wheel hashes must be recorded before measured runs",
+      "extras": []
+    }
+  ],
+  "tools": {
+    "node": "24.19.0",
+    "pnpm": "10.18.2",
+    "scipTypescript": "0.4.0",
+    "scipCompilerTypescript": "5.9.3",
+    "fixtureTypecheckTypescript": "5.5.4",
+    "python": "3.12.14",
+    "dependencyPolicy": "Frozen pnpm lock at baseline; Graphify upstream uv.lock at pinned source. Resolve the manifest/lock version discrepancy explicitly in a reviewed setup receipt before measurement. No silent re-resolution."
+  },
+  "corpora": [
+    {
+      "id": "business",
+      "root": "evaluations/code-graph/project",
+      "expectedProjects": [
+        "apps/mobile",
+        "packages/contracts",
+        "packages/math",
+        "services/api",
+        "services/billing",
+        "services/execution",
+        "services/notifications",
+        "services/worker"
+      ],
+      "configTemplate": "evaluations/code-graph/business.config.json",
+      "materializeSupport": [
+        {
+          "from": "evaluations/code-graph/business.config.json",
+          "to": "context-graph.config.json"
+        },
+        {
+          "from": "tests/fixtures/business-context-provider.mjs",
+          "to": "provider.mjs"
+        }
+      ]
+    },
+    {
+      "id": "dispatch",
+      "root": "evaluations/dispatch/project",
+      "legacyCases": "evaluations/dispatch/cases.json",
+      "configTemplate": "evaluations/code-graph/dispatch.config.json",
+      "materializeSupport": [
+        {
+          "from": "evaluations/code-graph/dispatch.config.json",
+          "to": "context-graph.config.json"
+        },
+        {
+          "from": "evaluations/weftlet/document-only.mjs",
+          "to": "provider.mjs"
+        }
+      ]
+    }
+  ],
+  "supportFiles": [
+    "tests/fixtures/business-context-provider.mjs",
+    "evaluations/dispatch/cases.json",
+    "evaluations/weftlet/document-only.mjs"
+  ],
+  "bounds": {
+    "paidCalls": 0,
+    "networkDuringExtraction": false,
+    "setupSecondsPerArm": 600,
+    "setupDiskBytesPerArm": 2147483648,
+    "extractionSeconds": 120,
+    "processTreeMemoryBytes": 2147483648,
+    "artifactBytesPerRun": 67108864,
+    "querySeconds": 30,
+    "totalMeasurementSeconds": 1800,
+    "samplesPerScenario": 3,
+    "impact": {
+      "maxFacts": 60,
+      "maxDepth": 32,
+      "maxPages": 3
+    },
+    "paths": {
+      "maxPaths": 5,
+      "maxDepth": 16,
+      "maxSteps": 1000,
+      "maxPages": 3
+    }
+  },
+  "scenarios": [
+    {
+      "id": "cold",
+      "corpus": "all",
+      "operations": [],
+      "cache": "fresh",
+      "expect": "All declared inputs selected; retain source commit, raw artifacts, citations, gaps and project coverage."
+    },
+    {
+      "id": "repeat",
+      "corpus": "all",
+      "operations": [],
+      "cache": "same as cold",
+      "expect": "Run immediately after cold. Compare raw/logical identity and content, separately reporting tool nondeterminism and normalization. Never force equality by dropping evidence."
+    },
+    {
+      "id": "body-edit",
+      "corpus": "business",
+      "operations": [
+        {
+          "kind": "replace",
+          "path": "services/api/src/analyze.ts",
+          "before": "  const parsed = readValue(raw);",
+          "after": "  const parsed = readValue(raw.trim());"
+        }
+      ],
+      "expect": "Keep the resolved target and unrelated entity identities; update citation/digest for changed bytes."
+    },
+    {
+      "id": "rename",
+      "corpus": "business",
+      "operations": [
+        {
+          "kind": "rename",
+          "path": "services/api/src/analyze.ts",
+          "to": "services/api/src/inspect.ts"
+        }
+      ],
+      "expect": "Rebuild committed variant; new path replaces old path, no dangling old current-file edges. Retain historical snapshot. Path-derived IDs may change, unrelated IDs must not."
+    },
+    {
+      "id": "delete",
+      "corpus": "business",
+      "operations": [
+        {
+          "kind": "delete",
+          "path": "tests/parse.test.ts"
+        }
+      ],
+      "expect": "Remove mock definitions/references from new snapshot; retain real math symbols and historical snapshot."
+    },
+    {
+      "id": "dirty",
+      "corpus": "business",
+      "operations": [
+        {
+          "kind": "replace",
+          "path": "services/api/src/analyze.ts",
+          "before": "  const parsed = readValue(raw);",
+          "after": "  const parsed = 99;"
+        }
+      ],
+      "expect": "Do not commit. Materialize original committed SHA in isolation; evidence must equal clean source and report excluded working changes."
+    },
+    {
+      "id": "omitted-project",
+      "corpus": "business",
+      "operations": [],
+      "excludedProjects": [
+        "services/worker"
+      ],
+      "expect": "Record worker as excluded, not indexed or zero-impact. Business docs unchanged."
+    },
+    {
+      "id": "without-handoff",
+      "corpus": "business",
+      "operations": [
+        {
+          "kind": "replace",
+          "path": "docs/collection.md",
+          "before": "The collection workflow routes through the execution workflow using stored readings.\n",
+          "after": ""
+        }
+      ],
+      "expect": "Other docs/code unchanged; missing stored-data route is explicit, not inferred from labels."
+    }
+  ],
+  "scoring": {
+    "tracks": [
+      "definition",
+      "reference",
+      "call"
+    ],
+    "commonComparison": [
+      "definition",
+      "reference"
+    ],
+    "formula": "For each track, deduplicate (case id, native target identity). TP=positive labeled cases supported by valid citations and correct resolved target; FN=remaining positive cases including unsupported; FP=negative labeled cases asserted or positive cases asserted with a wrong target/invalid citations. A wrong-target positive is both FP and FN. Precision=TP/(TP+FP), recall=TP/(TP+FN); zero denominators are null. Report denominators and unjudged edges; these are labeled-case metrics, not whole-graph precision.",
+    "callRule": "Native caller/callsite/callee evidence required. A SCIP reference is only a reference. A JSX element reference does not prove a direct JavaScript function invocation.",
+    "gapRule": "Score each named gap separately as explicit, silent, or fabricated. Missing edges alone are not an explicit gap. A generic tool-not-supported note is not a source-specific resolution diagnostic.",
+    "coarseRule": "File/shared-symbol evidence gets separate coarse retrieval credit; never exact occurrence/call credit.",
+    "authorityRule": "Fixed docs/routing are the same for all arms and remain separate from code-only scores; inferred mappings never become approved intent.",
+    "identityRule": "Match via committed path and declaration range, retaining raw IDs. Never join by display name or match to an expected answer. Overload declarations are one entity family; report declaration-span coverage separately.",
+    "unresolvedRule": "Unsupported features, timeouts, bad citations and unresolved targets remain visible. Do not drop failing cases or recalculate scope after observing results.",
+    "scenarioRule": "Cold/repeat use base labels. Body-edit remaps the edited line through the exact replacement while keeping the call token and target. Rename remaps all anchors under the old path to the new path and requires absence of old current-file facts. Delete and omitted-project remove affected source cases and entities without remaining declarations from code-score denominators; separately require no current facts for deleted/excluded paths, exact excluded counts, preserved historical evidence and no zero-impact claim. Report every removed case ID/count. Dirty uses unchanged base labels against original committed bytes. Without-handoff changes only its business control; code labels are unchanged."
+  },
+  "receipt": {
+    "required": [
+      "freezeCommit",
+      "freezeDigest",
+      "baselineCommit",
+      "toolSourceAndLockHashes",
+      "installedPackageVersionsAndHashes",
+      "commands",
+      "normalizerSourceCommit",
+      "platformCpuMemory",
+      "inputCommitsAndDigests",
+      "selectedExcludedProjects",
+      "rawArtifactHashes",
+      "coldWarmCacheState",
+      "wallTimeByPhase",
+      "processTreePeakRss",
+      "diskBytes",
+      "diagnostics",
+      "caseScores",
+      "unjudgedEdges",
+      "citationFailures",
+      "identityChanges",
+      "rdfProjectionParity",
+      "shapeConformance"
+    ],
+    "rules": "Seal tool setup and normalizer before measured execution. Run each arm on identical committed bytes and selections. If pinned installation or memory enforcement is unavailable, stop that arm and report blocked; do not quietly replace pins or invent measurements."
+  },
+  "inputModes": {
+    "codeOnly": "Use the same source files and tsconfig/alias selection; assemble only code facts. Do not call the semantic or routing extractors.",
+    "fixedBusiness": "Use frozen config/provider; preserve all facts and authority. Dispatch routes only come from routing/dispatch.json. Store separate results from codeOnly."
+  }
+}
