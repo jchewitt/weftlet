@@ -14,8 +14,13 @@ export function scipRange(raw: readonly number[], lines: readonly string[], path
   if ((raw.length !== 3 && raw.length !== 4) || raw.some(value => !Number.isSafeInteger(value) || value < 0)) {
     throw new Error(`Invalid SCIP range in ${path}`);
   }
-  const startLine = raw[0]! + 1, startColumn = raw[1]! + 1;
-  const endLine = (raw.length === 3 ? raw[0]! : raw[2]!) + 1, endColumn = raw.at(-1)! + 1;
+  const startLine = raw[0]! + 1;
+  const endLine = (raw.length === 3 ? raw[0]! : raw[2]!) + 1;
+  // TypeScript's file reader strips a leading UTF-8 BOM. Citations address the
+  // original committed text, whose first line retains that UTF-16 code unit.
+  const firstLineOffset = lines[0]?.startsWith('\uFEFF') ? 1 : 0;
+  const startColumn = raw[1]! + 1 + (startLine === 1 ? firstLineOffset : 0);
+  const endColumn = raw.at(-1)! + 1 + (endLine === 1 ? firstLineOffset : 0);
   if (startLine > lines.length || endLine > lines.length || startColumn > lines[startLine - 1]!.length + 1 ||
       endColumn > lines[endLine - 1]!.length + 1 || comparePosition(startLine, startColumn, endLine, endColumn) > 0) {
     throw new Error(`SCIP range is outside committed source in ${path}`);

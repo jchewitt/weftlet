@@ -90,6 +90,12 @@ describe('real SCIP symbol and occurrence evidence', () => {
     expect(new Set(overloads.map(f => f.subject.id)).size).toBe(1);
     expect(new Set(overloads.map(f => f.provenance.startLine)).size).toBe(3);
     expect(reference(snapshot, symbol(snapshot, 'useOverload').id, overloads[0]!.subject.id)).toHaveLength(1);
+    const bom = definitions(snapshot).find(f => f.subject.label === 'bom')!;
+    expect(bom).toBeDefined();
+    expect(bom.provenance).toMatchObject({ path: 'src/bom.ts', startLine: 1, startColumn: 18, endColumn: 21 });
+    expect(files['src/bom.ts']!.split('\n')[0]!.slice(bom.provenance.startColumn! - 1, bom.provenance.endColumn! - 1)).toBe('bom');
+    expect(reference(snapshot, bom.codeOccurrence!.enclosingSymbolId!, bom.subject.id)[0]!.provenance)
+      .toMatchObject({ startLine: 2, startColumn: 1, endColumn: 4 });
     const graph = new RdfEvidenceGraph(snapshot);
     expect(await graph.validate()).toEqual({ conforms: true, issues: [] });
     expect(await graph.facts()).toEqual(snapshot.facts);

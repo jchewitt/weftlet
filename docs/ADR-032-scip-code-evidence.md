@@ -23,7 +23,9 @@ native entries deduplicate. Existing file-to-Contract relationships remain for c
 This is additive evidence, not a claim that the two node types are interchangeable.
 
 Citations carry one-based UTF-16 start/end columns with an exclusive end, committed source digest
-and SHA. Native declaration/body ranges are retained separately; arrow initializer extents may
+and SHA. A leading UTF-8 BOM stripped by TypeScript is mapped back into committed first-line
+columns. Source files are read as UTF-8; UTF-16 here describes column units, not file encoding.
+Native declaration/body ranges are retained separately; arrow initializer extents may
 exclude the variable name. A zero-width module anchor can precede
 its declaration extent; `locationKind: zero-width-anchor` distinguishes it from an actual name.
 Invalid source ranges fail extraction. Test files retain canonical Evidence identity; static

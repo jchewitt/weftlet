@@ -39,6 +39,19 @@ describe('SCIP occurrence projection', () => {
     expect(facts.some(fact => String(fact.predicate) === 'calls')).toBe(false);
   });
 
+  it('maps a stripped UTF-8 BOM back to committed first-line columns and multiline extents', () => {
+    const source = '\uFEFF' + text;
+    const facts = extract([occurrence('container', [0, 0, 0], 1, [0, 0, 2, 28]), ...sites], source);
+    const inner = facts.find(f => f.codeOccurrence!.role === 'definition' && f.subject.label === 'inner')!;
+    expect(inner.provenance).toMatchObject({ startColumn: 11, endColumn: 16, digest: sha256(source) });
+    expect(inner.codeOccurrence!.declarationRange).toMatchObject({ startColumn: 2, endColumn: 21 });
+    const anchor = facts.find(f => f.codeOccurrence!.locationKind === 'zero-width-anchor')!;
+    expect(anchor.provenance).toMatchObject({ startColumn: 2, endColumn: 2 });
+    expect(anchor.codeOccurrence!.declarationRange).toMatchObject({ startColumn: 2, endLine: 3, endColumn: 29 });
+    expect(facts.filter(f => f.codeOccurrence!.role === 'reference' && f.provenance.startLine === 2)
+      .map(f => f.provenance.startColumn).sort()).toEqual([20, 29]);
+  });
+
   it('deduplicates identical native evidence but retains different sites and roles', () => {
     expect(extract([...sites, sites[2]!])).toEqual(extract());
     expect(extract([...sites, { ...sites[2]!, symbol_roles: 8 }])).toHaveLength(sites.length + 1);

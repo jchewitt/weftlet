@@ -15,7 +15,8 @@ existing projection. It does not yet implement explicit intent-to-symbol binding
 The new public integration fixture uses real committed TypeScript, SCIP, hydration, strict SHACL
 and RDF/SPARQL equivalence. Its 3,000-line file is explicitly padded with comments; the functional
 cases cover repeated same-line references, Unicode columns, recursive references, private methods,
-local arrow range limits, overload declaration spans, independent mocks and cross-file use.
+local arrow range limits, overload declaration spans, UTF-8 BOM first-line offsets, independent
+mocks and cross-file use.
 It is a location/isolation regression with a predeclared 300-fact/60-second hydration ceiling,
 not a representative monorepo benchmark.
 
@@ -33,7 +34,7 @@ execution verdict. Semantic artifact identities are unchanged; extraction/assemb
 a code refresh. The frozen B2 comparison is unchanged and all 79 original source path/hash pairs
 remain intact. No private source or live model/provider request was used for this increment.
 
-The local aggregate publication gate passes build, **828 deterministic tests** (21 core + 807
+Before the additional BOM regression, the local aggregate publication gate passes build, **828 deterministic tests** (21 core + 807
 toolkit; optional OML integration skipped), architecture with the existing 13 advisory findings,
 release documentation, inventory, license checks and fresh packed-consumer smoke. The installed
 consumer exercises the public core factory, new runtime modules, real SCIP/RDF/SHACL and MCP.
@@ -42,7 +43,11 @@ toolkit tests and 21 core tests. The concurrent PR run passes every new SCIP cas
 existing timeout-fixture startup race: its 250 ms module deadline expires on the first source,
 before the deliberately blocked second source. The test-only deadline is now 2 seconds; timeout,
 completed-artifact reuse, privacy and old-snapshot assertions remain unchanged. Hosted results
-for that correction are recorded with the change PR. Browser interaction, live
+for that correction are recorded with the change PR. A final real-indexer probe also showed that
+TypeScript strips a leading UTF-8 BOM: the new projection now translates first-line columns back
+to committed text. Its 18 focused range/hydration tests pass, including first-line names, zero-width
+anchors, multiline extents, subsequent lines and unchanged repeat. Final aggregate/hosted results
+are recorded with the change PR. Browser interaction, live
 provider quality, private large-graph volume/usefulness and the 1.0 acceptance decision remain
 separate. Release PR #53 stays open; this increment does not publish npm packages.
 

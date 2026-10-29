@@ -28,6 +28,7 @@ export function codeEvidenceProject(): Record<string, string> {
     'package.json': JSON.stringify({ name: 'public-code-evidence', version: '1.0.0', type: 'module' }),
     'src/large.ts': lines.join('\n') + '\n',
     'src/consumer.ts': "import { run } from './large.js';\nexport function consume(value: number) { return run(value); }\n",
+    'src/bom.ts': '\uFEFFexport function bom() { return 1; }\nbom();\n',
     'src/unrelated.ts': 'export function other(value: number) { return Math.round(value); }\n',
     'test/mock.spec.ts': 'export function normalize(value: number) { return value; }\nexport function check(value: number) { return normalize(value); }\n',
   };
