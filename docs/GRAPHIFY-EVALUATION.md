@@ -1,9 +1,22 @@
 # Graphify evaluation for the pre-1.0 baseline
 
-Status: preliminary source/document review on 2026-10-28. **No comparative execution or
-replacement decision yet.** This is B2 of the [baseline plan](PRE-1.0-BASELINE.md).
+Status: B2a inputs frozen on 2026-10-29 after the preliminary source/document review.
+**No comparative execution or replacement decision yet.** This is B2 of the [baseline plan](PRE-1.0-BASELINE.md).
 No Graphify dependency, code, binary, skill or service was installed into Weftlet. Public source
 was read at a pinned revision outside the repository; no private consumer material was used.
+
+The source repository's [frozen corpus and protocol](https://github.com/jchewitt/weftlet/tree/main/evaluations/code-graph)
+contain 51 labeled code cases, three gap requirements, existing A1–A3/dispatch business controls,
+eight edit/coverage scenarios and explicit resource ceilings. `pnpm evaluate:code:check` verifies
+the inventory and source anchors without model/indexer execution; `--ref <full SHA>` reads
+committed inputs even when the checkout is dirty. The current projection and richer projection
+will share identical raw SCIP bytes. Native call evidence, references and coarse file retrieval
+are scored separately. B2b must seal the tool/normalizer receipt before measurement.
+
+The pinned upstream `uv.lock` was read on 2026-10-29. Its SHA-256 is
+`0c3c9046327c32b8bc4c73dcc37cf7828bec06c4ae51d35cf14a6ae11f0ed5f8`;
+its project entry says 0.9.96 while the manifest says 0.9.97. This discrepancy is an explicit
+setup checkpoint, not a verified installation. No Graphify package has been installed.
 
 ## Reviewed candidate
 

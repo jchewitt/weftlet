@@ -1,0 +1,6 @@
+{
+  "name": "@public/contracts",
+  "version": "1.0.0",
+  "type": "module",
+  "types": "dist/index.d.ts"
+}

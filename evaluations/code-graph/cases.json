@@ -1,0 +1,692 @@
+{
+  "schemaVersion": 1,
+  "anchors": {
+    "math.string": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "export function parse(value: string): number;",
+      "token": "parse"
+    },
+    "math.number": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "export function parse(value: number): number;",
+      "token": "parse"
+    },
+    "math.impl": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "export function parse(value: string | number): number {",
+      "token": "parse"
+    },
+    "math.clamp": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "function clamp(value: number): number {",
+      "token": "clamp"
+    },
+    "math.private": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "  private normalize(value: number): number {",
+      "token": "normalize"
+    },
+    "math.run": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "  public run(value: number): number {",
+      "token": "run"
+    },
+    "math.unused": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "export function unused(value: number): number {",
+      "token": "unused"
+    },
+    "math.clamp-use": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "    return clamp(value);",
+      "token": "clamp"
+    },
+    "math.private-use": {
+      "path": "evaluations/code-graph/project/packages/math/src/parse.ts",
+      "text": "    return this.normalize(value);",
+      "token": "normalize"
+    },
+    "barrel.decode": {
+      "path": "evaluations/code-graph/project/packages/math/src/index.ts",
+      "text": "export { parse as decode, Normalizer }",
+      "token": "parse"
+    },
+    "api.analyze": {
+      "path": "evaluations/code-graph/project/services/api/src/analyze.ts",
+      "text": "export function analyze(raw: string): number {",
+      "token": "analyze"
+    },
+    "api.string-call": {
+      "path": "evaluations/code-graph/project/services/api/src/analyze.ts",
+      "text": "  const parsed = readValue(raw);",
+      "token": "readValue"
+    },
+    "api.number-call": {
+      "path": "evaluations/code-graph/project/services/api/src/analyze.ts",
+      "text": "  return readValue(value);",
+      "token": "readValue"
+    },
+    "api.run-call": {
+      "path": "evaluations/code-graph/project/services/api/src/analyze.ts",
+      "text": "  return normalizer.run(parsed);",
+      "token": "run"
+    },
+    "billing.parse": {
+      "path": "evaluations/code-graph/project/services/billing/src/parse.ts",
+      "text": "export function parse(value: string): string {",
+      "token": "parse"
+    },
+    "billing.parse-use": {
+      "path": "evaluations/code-graph/project/services/billing/src/invoice.ts",
+      "text": "  return parse(value);",
+      "token": "parse"
+    },
+    "mock.parse": {
+      "path": "evaluations/code-graph/project/tests/parse.test.ts",
+      "text": "function parse(value: string): number { return 7; }",
+      "token": "parse"
+    },
+    "mock.use": {
+      "path": "evaluations/code-graph/project/tests/parse.test.ts",
+      "text": "export const mocked = parse('5');",
+      "token": "parse"
+    },
+    "mock.real": {
+      "path": "evaluations/code-graph/project/tests/parse.test.ts",
+      "text": "export const actual = realParse('5');",
+      "token": "realParse"
+    },
+    "mock.comment": {
+      "path": "evaluations/code-graph/project/tests/parse.test.ts",
+      "text": "// parse('not a call') is documentation only.",
+      "token": "parse"
+    },
+    "mock.string": {
+      "path": "evaluations/code-graph/project/tests/parse.test.ts",
+      "text": "export const example = \"parse('not a call')\";",
+      "token": "parse"
+    },
+    "contract.status": {
+      "path": "evaluations/code-graph/project/packages/contracts/src/status.ts",
+      "text": "export interface Status { state: 'queued' | 'complete' }",
+      "token": "Status"
+    },
+    "mobile.status": {
+      "path": "evaluations/code-graph/project/apps/mobile/src/status.tsx",
+      "text": "export function show(status: Status) { return status.state; }",
+      "token": "Status"
+    },
+    "api.status": {
+      "path": "evaluations/code-graph/project/services/api/src/status.ts",
+      "text": "export function status(): Status { return { state: 'queued' }; }",
+      "token": "Status"
+    },
+    "card.status": {
+      "path": "evaluations/code-graph/project/apps/mobile/src/card.tsx",
+      "text": "export function StatusCard(props: { status: Status }): JSX.Element {",
+      "token": "StatusCard"
+    },
+    "card.use": {
+      "path": "evaluations/code-graph/project/apps/mobile/src/card.tsx",
+      "text": "  return <StatusCard status={status} />;",
+      "token": "StatusCard"
+    },
+    "card.type": {
+      "path": "evaluations/code-graph/project/apps/mobile/src/card.tsx",
+      "text": "export function screen(status: Status): JSX.Element {",
+      "token": "Status"
+    },
+    "dynamic.use": {
+      "path": "evaluations/code-graph/project/services/api/src/dynamic.ts",
+      "text": "  return handlers[key](value);",
+      "token": "handlers"
+    },
+    "vendor.declaration": {
+      "path": "evaluations/code-graph/project/services/api/src/vendor.d.ts",
+      "text": "  export function assess(value: number): boolean;",
+      "token": "assess"
+    },
+    "vendor.use": {
+      "path": "evaluations/code-graph/project/services/api/src/risk.ts",
+      "text": "  return assess(value);",
+      "token": "assess"
+    },
+    "collection": {
+      "path": "evaluations/code-graph/project/services/api/src/collect.ts",
+      "text": "export function collect(reading: { observedAt: number; value: number }) { return JSON.stringify(reading); }",
+      "token": "collect"
+    },
+    "execution": {
+      "path": "evaluations/code-graph/project/services/execution/src/execute.ts",
+      "text": "export function execute(reading: { observedAt: number; value: number }, now: number) { return now - reading.observedAt <= 60000; }",
+      "token": "execute"
+    },
+    "execution.use": {
+      "path": "evaluations/code-graph/project/tests/execution.test.ts",
+      "text": "export const result = execute({ observedAt: 0, value: 1 }, 61000);",
+      "token": "execute"
+    },
+    "queue.use": {
+      "path": "evaluations/code-graph/project/services/api/src/queue.ts",
+      "text": "  queue.publish('readings.ready', payload);",
+      "token": "publish"
+    },
+    "worker.consume": {
+      "path": "evaluations/code-graph/project/services/worker/src/consume.ts",
+      "text": "export function consume(payload: unknown): unknown {",
+      "token": "consume"
+    },
+    "handoff": {
+      "path": "evaluations/code-graph/project/docs/collection.md",
+      "text": "The collection workflow routes through the execution workflow using stored readings.",
+      "token": "execution"
+    },
+    "dispatch.policy": {
+      "path": "evaluations/dispatch/project/src/dispatch/policy.ts",
+      "text": "export function evaluatePolicy(request: DispatchRequest): { accepted: boolean; lane: 'economy' | 'express' } {",
+      "token": "evaluatePolicy"
+    },
+    "dispatch.policy-use": {
+      "path": "evaluations/dispatch/project/src/dispatch/planner.ts",
+      "text": "    const decision = evaluatePolicy(request);",
+      "token": "evaluatePolicy"
+    }
+  },
+  "entities": {
+    "math.parse": [
+      "math.string",
+      "math.number",
+      "math.impl"
+    ],
+    "math.clamp": [
+      "math.clamp"
+    ],
+    "math.normalize": [
+      "math.private"
+    ],
+    "math.run": [
+      "math.run"
+    ],
+    "math.unused": [
+      "math.unused"
+    ],
+    "api.analyze": [
+      "api.analyze"
+    ],
+    "billing.parse": [
+      "billing.parse"
+    ],
+    "mock.parse": [
+      "mock.parse"
+    ],
+    "contract.status": [
+      "contract.status"
+    ],
+    "mobile.card": [
+      "card.status"
+    ],
+    "vendor.assess": [
+      "vendor.declaration"
+    ],
+    "collection": [
+      "collection"
+    ],
+    "execution": [
+      "execution"
+    ],
+    "worker.consume": [
+      "worker.consume"
+    ],
+    "dispatch.policy": [
+      "dispatch.policy"
+    ]
+  },
+  "cases": [
+    {
+      "id": "definition:math.parse",
+      "track": "definition",
+      "from": "math.string",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:math.clamp",
+      "track": "definition",
+      "from": "math.clamp",
+      "to": "math.clamp",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:math.normalize",
+      "track": "definition",
+      "from": "math.private",
+      "to": "math.normalize",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:math.run",
+      "track": "definition",
+      "from": "math.run",
+      "to": "math.run",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:math.unused",
+      "track": "definition",
+      "from": "math.unused",
+      "to": "math.unused",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:api.analyze",
+      "track": "definition",
+      "from": "api.analyze",
+      "to": "api.analyze",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:billing.parse",
+      "track": "definition",
+      "from": "billing.parse",
+      "to": "billing.parse",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:mock.parse",
+      "track": "definition",
+      "from": "mock.parse",
+      "to": "mock.parse",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:contract.status",
+      "track": "definition",
+      "from": "contract.status",
+      "to": "contract.status",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:mobile.card",
+      "track": "definition",
+      "from": "card.status",
+      "to": "mobile.card",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:vendor.assess",
+      "track": "definition",
+      "from": "vendor.declaration",
+      "to": "vendor.assess",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:collection",
+      "track": "definition",
+      "from": "collection",
+      "to": "collection",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:execution",
+      "track": "definition",
+      "from": "execution",
+      "to": "execution",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:worker.consume",
+      "track": "definition",
+      "from": "worker.consume",
+      "to": "worker.consume",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "definition:dispatch.policy",
+      "track": "definition",
+      "from": "dispatch.policy",
+      "to": "dispatch.policy",
+      "expected": "present",
+      "reason": "A source declaration exists. Overload declarations form one entity family; report spans individually."
+    },
+    {
+      "id": "reference:barrel.decode",
+      "track": "reference",
+      "from": "barrel.decode",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:api.string-call",
+      "track": "reference",
+      "from": "api.string-call",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:api.number-call",
+      "track": "reference",
+      "from": "api.number-call",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:api.run-call",
+      "track": "reference",
+      "from": "api.run-call",
+      "to": "math.run",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:math.clamp-use",
+      "track": "reference",
+      "from": "math.clamp-use",
+      "to": "math.clamp",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:math.private-use",
+      "track": "reference",
+      "from": "math.private-use",
+      "to": "math.normalize",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:billing.parse-use",
+      "track": "reference",
+      "from": "billing.parse-use",
+      "to": "billing.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:mock.use",
+      "track": "reference",
+      "from": "mock.use",
+      "to": "mock.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:mock.real",
+      "track": "reference",
+      "from": "mock.real",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:mobile.status",
+      "track": "reference",
+      "from": "mobile.status",
+      "to": "contract.status",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:api.status",
+      "track": "reference",
+      "from": "api.status",
+      "to": "contract.status",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:card.type",
+      "track": "reference",
+      "from": "card.type",
+      "to": "contract.status",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:card.use",
+      "track": "reference",
+      "from": "card.use",
+      "to": "mobile.card",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:vendor.use",
+      "track": "reference",
+      "from": "vendor.use",
+      "to": "vendor.assess",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:execution.use",
+      "track": "reference",
+      "from": "execution.use",
+      "to": "execution",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "reference:dispatch.policy-use",
+      "track": "reference",
+      "from": "dispatch.policy-use",
+      "to": "dispatch.policy",
+      "expected": "present",
+      "reason": "Resolve this occurrence to the declared entity, retaining raw identity and both source locations."
+    },
+    {
+      "id": "call:api.string-call",
+      "track": "call",
+      "from": "api.string-call",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:api.number-call",
+      "track": "call",
+      "from": "api.number-call",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:api.run-call",
+      "track": "call",
+      "from": "api.run-call",
+      "to": "math.run",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:math.clamp-use",
+      "track": "call",
+      "from": "math.clamp-use",
+      "to": "math.clamp",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:math.private-use",
+      "track": "call",
+      "from": "math.private-use",
+      "to": "math.normalize",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:billing.parse-use",
+      "track": "call",
+      "from": "billing.parse-use",
+      "to": "billing.parse",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:mock.use",
+      "track": "call",
+      "from": "mock.use",
+      "to": "mock.parse",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:mock.real",
+      "track": "call",
+      "from": "mock.real",
+      "to": "math.parse",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:execution.use",
+      "track": "call",
+      "from": "execution.use",
+      "to": "execution",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "call:dispatch.policy-use",
+      "track": "call",
+      "from": "dispatch.policy-use",
+      "to": "dispatch.policy",
+      "expected": "present",
+      "reason": "Separate capability track: a typed reference alone is not a native call edge. Report unsupported if the producer cannot distinguish it."
+    },
+    {
+      "id": "false-join:api.string-call:billing.parse",
+      "track": "reference",
+      "from": "api.string-call",
+      "to": "billing.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:api.number-call:billing.parse",
+      "track": "reference",
+      "from": "api.number-call",
+      "to": "billing.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:billing.parse-use:math.parse",
+      "track": "reference",
+      "from": "billing.parse-use",
+      "to": "math.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:mock.use:math.parse",
+      "track": "reference",
+      "from": "mock.use",
+      "to": "math.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:mock.real:mock.parse",
+      "track": "reference",
+      "from": "mock.real",
+      "to": "mock.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:mock.comment:math.parse",
+      "track": "reference",
+      "from": "mock.comment",
+      "to": "math.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:mock.string:math.parse",
+      "track": "reference",
+      "from": "mock.string",
+      "to": "math.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:dynamic.use:math.parse",
+      "track": "reference",
+      "from": "dynamic.use",
+      "to": "math.parse",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:queue.use:worker.consume",
+      "track": "reference",
+      "from": "queue.use",
+      "to": "worker.consume",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    },
+    {
+      "id": "false-join:collection:execution",
+      "track": "reference",
+      "from": "collection",
+      "to": "execution",
+      "expected": "absent",
+      "reason": "No source-resolved reference to this entity exists; names, strings, topic names or business linkage do not establish it."
+    }
+  ],
+  "gaps": [
+    {
+      "id": "dynamic-target",
+      "from": "dynamic.use",
+      "reason": "The caller supplies the runtime registry/key. A set of possible targets or an explicit unresolved target is acceptable; a single proven target is not."
+    },
+    {
+      "id": "external-implementation",
+      "from": "vendor.use",
+      "reason": "The ambient declaration is resolvable. Its implementation is outside the corpus; report that separately from successful declaration resolution."
+    },
+    {
+      "id": "undeclared-queue",
+      "from": "queue.use",
+      "reason": "Matching readings.ready strings do not prove deployment wiring to worker.consume. Report missing wiring, not a fabricated code edge."
+    }
+  ],
+  "businessControls": [
+    {
+      "id": "stored-reading-handoff",
+      "corpus": "business",
+      "positive": "With the frozen docs and deterministic provider, collection -> execution -> notifications -> mobile is retrievable with cited rules (600s vs 60s) and the execution test.",
+      "negative": "Without the collection handoff sentence, collection must not acquire that chain. Billing remains unrelated despite identical rule labels.",
+      "authority": "Docs are declared fixture intent; parser assertions remain inferred/unreviewed. This is retrieval, not a compatibility verdict or model-quality result."
+    },
+    {
+      "id": "shared-status",
+      "corpus": "business",
+      "positive": "The contracts Status declaration joins API and mobile through the same symbol, including the barrel and TSX consumer.",
+      "negative": "Different same-name entities must not be merged by label."
+    },
+    {
+      "id": "dispatch",
+      "corpus": "dispatch",
+      "positive": "Retain all labels in evaluations/dispatch/cases.json. Run code-only and fixed-document/routing modes separately; declared archive-completion supplies the independent archive route.",
+      "negative": "An undeclared topic match is not a code edge; audit/account and refund policy stay distinct. Existing file-level metrics do not count as exact function metrics."
+    }
+  ]
+}
