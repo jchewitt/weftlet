@@ -16,6 +16,9 @@ const temporaryRoots: string[] = [];
 const privateText = 'PRIVATE_SOURCE_SENTINEL';
 const privateError = 'PRIVATE_PROVIDER_SENTINEL';
 const privateCredential = 'PRIVATE_CREDENTIAL_SENTINEL';
+// Includes worker import/startup: 250 ms can expire on the successful first source on
+// hosted Windows. The deliberately non-resolving second source still must time out.
+const fixtureTimeoutMs = 2000;
 
 afterEach(async () => {
   await Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
@@ -49,7 +52,7 @@ async function fixture(mode: 'timeout' | 'error') {
     repositoryId: 'public/failure-cli', semanticSources: ['docs'], approvedIntentSources: [],
     codeRoots: [], evidenceRoots: [], runtimeEvidence: [],
     semantic: { ...config.semantic, provider: 'module', providerModule: './provider.mjs',
-      providerIdentity: 'public-failure-cli:1', timeoutMs: 250, concurrency: 1 },
+      providerIdentity: 'public-failure-cli:1', timeoutMs: fixtureTimeoutMs, concurrency: 1 },
     scip: { version: 'unavailable', command: 'weftlet-test-missing-indexer', args: [] },
   });
   await writeFile(join(root, 'context-graph.config.json'), JSON.stringify(config));
@@ -107,7 +110,7 @@ describe('semantic hydration failure CLI', () => {
     expect(first.stderr).toContain('Semantic hydration timeout: source-');
     expect(first.stderr).toContain('semantic-source-started');
     expect(first.stderr).toContain('1/3 completed (1 extracted, 0 reused)');
-    expect(first.stderr).toContain('configured module-execution timeout 250 ms');
+    expect(first.stderr).toContain(`configured module-execution timeout ${fixtureTimeoutMs} ms`);
     assertSafe(first.stderr, root);
     await assertPreserved();
 
@@ -127,10 +130,10 @@ describe('semantic hydration failure CLI', () => {
     const report = JSON.parse(second.stderr);
     expect(report).toMatchObject({ schemaVersion: 1, kind: 'semantic-hydration-failure',
       code: 'timeout', category: 'timeout', sourceId: source.sourceId, commitSha,
-      phase: 'semantic-extract', timeoutMs: 250, timeoutScope: 'module-execution',
+      phase: 'semantic-extract', timeoutMs: fixtureTimeoutMs, timeoutScope: 'module-execution',
       progress: { total: 3, completed: 1, extracted: 0, reused: 1, failed: 1,
         cancelled: 0, notStarted: 1, remaining: 2 } });
-    expect(report.elapsedMs).toBeGreaterThanOrEqual(200);
+    expect(report.elapsedMs).toBeGreaterThanOrEqual(fixtureTimeoutMs - 50);
     expect(report.recovery.join(' ')).toContain('hydrate --plan');
     assertSafe(second.stderr, root);
     expect((await readFile(join(root, 'calls.txt'), 'utf8')).trim().split('\n'))

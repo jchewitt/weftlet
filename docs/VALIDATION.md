@@ -37,7 +37,12 @@ The local aggregate publication gate passes build, **828 deterministic tests** (
 toolkit; optional OML integration skipped), architecture with the existing 13 advisory findings,
 release documentation, inventory, license checks and fresh packed-consumer smoke. The installed
 consumer exercises the public core factory, new runtime modules, real SCIP/RDF/SHACL and MCP.
-Hosted Linux/Windows results are recorded with the change PR. Browser interaction, live
+Hosted Linux passes the same gate. The initial native Windows branch run passes 700 selected
+toolkit tests and 21 core tests. The concurrent PR run passes every new SCIP case but hits an
+existing timeout-fixture startup race: its 250 ms module deadline expires on the first source,
+before the deliberately blocked second source. The test-only deadline is now 2 seconds; timeout,
+completed-artifact reuse, privacy and old-snapshot assertions remain unchanged. Hosted results
+for that correction are recorded with the change PR. Browser interaction, live
 provider quality, private large-graph volume/usefulness and the 1.0 acceptance decision remain
 separate. Release PR #53 stays open; this increment does not publish npm packages.
 
