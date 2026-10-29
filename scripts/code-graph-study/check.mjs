@@ -87,12 +87,19 @@ export function checkStudy(root, ref) {
   if (ref && (!/^[a-f0-9]{40}$/.test(ref) || git(['rev-parse', `${ref}^{commit}`]).toString().trim() !== ref)) {
     fail('--ref requires a complete immutable commit SHA');
   }
+  // One tree read and one blob read per file: Windows process startup dominates repeated Git calls.
+  const entries = new Map(ref ? git(['ls-tree', '-r', '-z', ref]).toString().split('\0').filter(Boolean).map(entry => {
+    const separator = entry.indexOf('\t');
+    return [entry.slice(separator + 1), entry.slice(0, separator)];
+  }) : []);
+  const contents = new Map();
   const normalize = createGitLineEndingReader(root);
   const read = path => {
     safePath(path);
+    if (contents.has(path)) return contents.get(path);
     let bytes;
     if (ref) {
-      const entry = git(['ls-tree', ref, '--', path]).toString();
+      const entry = entries.get(path);
       if (!entry) throw Object.assign(new Error(`Missing committed input: ${path}`), { code: 'ENOENT' });
       if (!/^100(644|755) blob /.test(entry)) fail(`Input is not a regular blob: ${path}`);
       bytes = git(['show', `${ref}:${path}`]);
@@ -105,12 +112,14 @@ export function checkStudy(root, ref) {
       bytes = normalize(path, readFileSync(join(root, path)));
     }
     if (bytes.length > 1024 * 1024) fail(`Oversized input: ${path}`);
+    contents.set(path, bytes);
     return bytes;
   };
   const list = path => {
     safePath(path);
     if (generated(path)) return [];
-    if (ref) return git(['ls-tree', '-r', '--name-only', ref, '--', path]).toString().trim().split('\n').filter(path => path && !generated(path));
+    if (ref) return [...entries.keys()].filter(entry =>
+      (entry === path || entry.startsWith(`${path}/`)) && !generated(entry));
     const stat = lstatSync(join(root, path));
     if (stat.isSymbolicLink()) fail(`Symlink input: ${path}`);
     if (stat.isFile()) return [path];
