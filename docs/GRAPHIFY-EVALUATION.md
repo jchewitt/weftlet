@@ -1,22 +1,26 @@
 # Graphify evaluation for the pre-1.0 baseline
 
-Status: B2a inputs frozen on 2026-10-29 after the preliminary source/document review.
-**No comparative execution or replacement decision yet.** This is B2 of the [baseline plan](PRE-1.0-BASELINE.md).
-No Graphify dependency, code, binary, skill or service was installed into Weftlet. Public source
-was read at a pinned revision outside the repository; no private consumer material was used.
+Status: B2b measured on 2026-10-29. [ADR 031](ADR-031-code-extractor-selection.md) selects
+**keeping SCIP and improving its declaration/reference projection**. Production implementation
+is B3a; no Graphify runtime or dependency is added to Weftlet.
 
-The source repository's [frozen corpus and protocol](https://github.com/jchewitt/weftlet/tree/main/evaluations/code-graph)
-contain 51 labeled code cases, three gap requirements, existing A1–A3/dispatch business controls,
-eight edit/coverage scenarios and explicit resource ceilings. `pnpm evaluate:code:check` verifies
-the inventory and source anchors without model/indexer execution; `--ref <full SHA>` reads
-committed inputs even when the checkout is dirty. The current projection and richer projection
-will share identical raw SCIP bytes. Native call evidence, references and coarse file retrieval
-are scored separately. B2b must seal the tool/normalizer receipt before measurement.
+The [durable public measurement record](../evaluations/code-graph-results/2026-10-29/README.md)
+contains tool receipts, native outputs, per-case scores, costs, failed attempts and disclosed
+harness corrections. On the 51 frozen cases, raw SCIP resolves 15/15 declaration families and
+16/16 references; Graphify resolves 14/15 families, 8/16 references and 7/10 native calls.
+Current Weftlet discards useful raw SCIP detail. Calls remain unsupported by the SCIP projections.
+No named false-join negative was asserted, but these are labeled-case metrics, not whole-graph
+precision. Graphify is faster on these tiny inputs; the small Linux-only study does not establish
+production performance or universal language support.
 
-The pinned upstream `uv.lock` was read on 2026-10-29. Its SHA-256 is
-`0c3c9046327c32b8bc4c73dcc37cf7828bec06c4ae51d35cf14a6ae11f0ed5f8`;
-its project entry says 0.9.96 while the manifest says 0.9.97. This discrepancy is an explicit
-setup checkpoint, not a verified installation. No Graphify package has been installed.
+All arms preserve fixed, cited business controls and strict RDF/SHACL parity. They do not infer
+missing queue wiring or prove undocumented rule-to-function mappings. Those remain B3–B5 work.
+No paid/model calls or private consumer material were used. The pinned Graphify source API was
+installed only in an isolated experiment, using its unchanged lock and 30 runtime distributions.
+Its 0.9.97 manifest/0.9.96 lock-project discrepancy is recorded; no project distribution was installed.
+
+The remainder records the preliminary source review and the predeclared comparison protocol.
+The frozen corpus, labels and budgets at `f1844f31717341f5ff95314a68def80eae509734` remain unchanged.
 
 ## Reviewed candidate
 
