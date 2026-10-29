@@ -372,7 +372,33 @@ symbol, request incoming/outgoing `references` to inspect exact occurrences. Nat
 enclosure is not a call graph. Resolution distinguishes indexed definitions, declaration-only
 targets and absent indexed definitions. Local ordinal IDs are scoped to the exact index; refresh
 code evidence before comparing revisions. See [code evidence and limits](docs/ADR-032-scip-code-evidence.md).
-Explicit rule-to-symbol binding and static call analysis are still in the 1.0 work queue.
+The development checkout also resolves explicit Markdown symbol selectors in selected documents:
+
+```md
+[helper](../src/worker.ts#weftlet-symbol=Engine.execute)
+[implementation](../src/worker.ts#weftlet-symbol=execute "weftlet:implementedBy invariant:max-age")
+[check](../test/worker.test.ts#weftlet-symbol=check "weftlet:verifiedBy invariant:max-age")
+```
+
+The first link creates a Document→references→CodeSymbol relationship. The annotated forms require
+an exact existing business-node ID from the graph; discover it with `impact.scan`/`graph.neighbors`.
+They declare a mapping and retain its supporting assertions and review state. They do not prove
+that the implementation fulfills the rule or that a test passed. No function name or nearby prose
+automatically creates an implementation mapping. Approved source documents remain distinguishable
+from unreviewed extracted assertions.
+
+Selectors match an exact indexed name, symbol ID, or unambiguous native lexical name such as
+`Engine.execute` in the named file. For an alias or a specific occurrence, supply both one-based
+UTF-16 coordinates, for example `#weftlet-symbol=publicAlias&weftlet-line=1&weftlet-column=23`.
+The graph retains both the selected occurrence and all indexed target definitions, with digests
+and commit SHAs. Missing/ambiguous targets produce cited `implementationGaps`, with no guessed link.
+An indexed `.d.ts` declaration stays declaration-only. These links use the existing configured
+semantic/document-traversal scope and SCIP selection; they require no extra provider call.
+Validation documents stay outside intent extraction and can declare `verifiedBy`, not `implementedBy`.
+See [ADR 033](docs/ADR-033-document-symbol-bindings.md) for bounds and draft-overlay behavior.
+
+This capability is pending the next npm candidate. Inferred mapping assessment and actual static
+call analysis remain separate 1.0 work; ordinary SCIP references are not calls.
 
 The development checkout also supports paths between two exact IDs:
 

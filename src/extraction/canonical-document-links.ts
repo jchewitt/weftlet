@@ -4,12 +4,14 @@ import type { Definition, Nodes } from 'mdast';
 
 export interface CanonicalDocumentDefinition {
   readonly target: string;
+  readonly title?: string;
   readonly startLine: number;
   readonly endLine: number;
 }
 
 export interface CanonicalDocumentLink {
   readonly kind: 'link' | 'ambiguous-reference';
+  readonly title?: string;
   readonly target?: string;
   readonly startLine: number;
   readonly endLine: number;
@@ -21,7 +23,7 @@ export interface CanonicalDocumentLink {
 }
 
 /** Explicit Markdown links only: this deliberately does not change the graph linker's policy. */
-export function canonicalDocumentLinks(content: string): readonly CanonicalDocumentLink[] {
+export function canonicalDocumentLinks(content: string, options: { readonly includeTitles?: boolean } = {}): readonly CanonicalDocumentLink[] {
   const tree = fromMarkdown(content);
   const definitions = new Map<string, Definition[]>();
   const collect = (node: Nodes): void => {
@@ -36,19 +38,19 @@ export function canonicalDocumentLinks(content: string): readonly CanonicalDocum
   const links: CanonicalDocumentLink[] = [];
   const visit = (node: Nodes): void => {
     if (node.type === 'link' && node.position) {
-      links.push({ kind: 'link', target: node.url,
+      links.push({ kind: 'link', target: node.url, ...(options.includeTitles && node.title ? { title: node.title } : {}),
         startLine: node.position.start.line, endLine: node.position.end.line });
       return;
     }
     if (node.type === 'linkReference' && node.position) {
       const declared = (definitions.get(node.identifier) ?? []).flatMap(definition => definition.position
-        ? [{ target: definition.url, startLine: definition.position.start.line, endLine: definition.position.end.line }]
+        ? [{ target: definition.url, ...(options.includeTitles && definition.title ? { title: definition.title } : {}), startLine: definition.position.start.line, endLine: definition.position.end.line }]
         : []);
       const first = declared[0];
       if (!first) return;
       const reference = { identifier: node.identifier,
         referenceStartLine: node.position.start.line, referenceEndLine: node.position.end.line };
-      if (new Set(declared.map(definition => definition.target)).size > 1) {
+      if (new Set(declared.map(definition => JSON.stringify([definition.target, definition.title]))).size > 1) {
         // Never silently choose the first conflicting definition, as normal Markdown rendering does.
         links.push({ kind: 'ambiguous-reference', ...reference,
           startLine: node.position.start.line, endLine: node.position.end.line, definitions: declared });

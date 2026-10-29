@@ -71,6 +71,12 @@ export function viewerScript(): string {
           source.textContent = edge.provenance + ' @ ' + edge.source.commitSha.slice(0,12);
           if (edge.sourceUrl) { source.href = edge.sourceUrl; source.target = '_blank'; source.rel = 'noopener noreferrer'; }
           item.append(document.createElement('br'), source);
+          for (const citation of edge.bindingSources || []) {
+            const link = document.createElement(citation.sourceUrl ? 'a' : 'code');
+            link.textContent = citation.provenance;
+            if (citation.sourceUrl) { link.href = citation.sourceUrl; link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+            item.append(document.createElement('br'), link);
+          }
           const focus = document.createElement('button'); focus.textContent = 'Show source relationships';
           focus.addEventListener('click', () => { search.value = edge.source.path; update(); });
           item.append(document.createElement('br'), focus); detail.append(item);

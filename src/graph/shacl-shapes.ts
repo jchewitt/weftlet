@@ -68,6 +68,31 @@ cg:CodeSymbolShape a sh:NodeShape; sh:targetClass cg:CodeSymbol;
      sh:property [ sh:path cg:codeIndex; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ] ]
  ).
 
+cg:DocumentCodeBindingShape a sh:NodeShape; sh:targetClass cg:DocumentCodeBinding;
+ sh:property [ sh:path cg:bindingVersion; sh:minCount 1; sh:maxCount 1; sh:hasValue 1 ];
+ sh:property [ sh:path cg:bindingMethod; sh:minCount 1; sh:maxCount 1; sh:hasValue "explicit-markdown" ];
+ sh:property [ sh:path <${CG}bindingSelector/path>; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path <${CG}bindingSelector/symbol>; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path cg:bindingDocument; sh:minCount 1; sh:class cg:BindingCitation ];
+ sh:property [ sh:path cg:bindingSelection; sh:minCount 1; sh:class cg:BindingCitation ];
+ sh:property [ sh:path cg:bindingDefinition; sh:minCount 1; sh:class cg:BindingCitation ];
+ sh:property [ sh:path cg:bindingSubject; sh:class cg:BindingCitation ];
+ sh:property [ sh:path rdf:object; sh:class cg:CodeSymbol ];
+ sh:property [ sh:path rdf:predicate; sh:in (cg:references cg:implementedBy cg:verifiedBy) ];
+ sh:property [ sh:path cg:authority; sh:in ("inferred" "draft") ];
+ sh:property [ sh:path cg:extractionReview; sh:minCount 1; sh:in ("deterministic" "unreviewed") ].
+cg:BindingCitationShape a sh:NodeShape; sh:targetClass cg:BindingCitation;
+ sh:property [ sh:path cg:path; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path cg:digest; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path cg:commitSha; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string; sh:minLength 1 ];
+ sh:property [ sh:path cg:startLine; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ];
+ sh:property [ sh:path cg:endLine; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ];
+ sh:property [ sh:path cg:bindingFact; sh:maxCount 1; sh:class rdf:Statement ].
+cg:BindingSelectorPositionShape a sh:NodeShape;
+ sh:targetSubjectsOf <${CG}bindingSelector/line>, <${CG}bindingSelector/column>;
+ sh:property [ sh:path <${CG}bindingSelector/line>; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ];
+ sh:property [ sh:path <${CG}bindingSelector/column>; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:integer; sh:minInclusive 1 ].
+
 # Optional source metadata targets only assertions that carry those predicates.
 # Legacy facts do not acquire additional property or ownership consistency checks.
 cg:SourceRoleShape a sh:NodeShape; sh:targetSubjectsOf cg:sourceRole;

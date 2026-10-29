@@ -2,6 +2,12 @@ import type { GraphFact, ContextPack } from '@weftlet/core';
 
 /** Human-readable labels for the same typed evidence returned to CLI/MCP clients. */
 export function codeEvidenceDescription(fact: GraphFact): string | undefined {
+  const binding = fact.codeBinding;
+  if (binding) {
+    const sites = binding.definitions.map(proof => `${proof.provenance.path}:${proof.provenance.startLine}:${proof.provenance.startColumn ?? 1}@${proof.provenance.commitSha}`).join(', ');
+    const selected = binding.selectedOccurrences.map(proof => `${proof.provenance.path}:${proof.provenance.startLine}:${proof.provenance.startColumn ?? 1}@${proof.provenance.commitSha}`).join(', ');
+    return `explicit mapping declaration; target ${binding.selector.symbol}; selected ${selected}; definitions ${sites}; not proof of fulfillment or test execution`;
+  }
   const code = fact.codeOccurrence;
   if (!code) return undefined;
   const symbol = code.role === 'definition' ? fact.subject : fact.object;

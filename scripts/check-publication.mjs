@@ -88,7 +88,9 @@ try {
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/scip-symbols.js', 'dist/extraction/scip-runtime.js',
         'dist/extraction/scip-occurrences.js', 'dist/extraction/scip-ranges.js',
-        'dist/graph/code-rdf.js', 'dist/graph/code-description.js',
+        'dist/graph/code-rdf.js', 'dist/graph/code-description.js', 'dist/graph/binding-rdf.js',
+        'dist/extraction/document-code-bindings.js', 'dist/extraction/symbol-selectors.js', 'dist/extraction/symbol-resolution.js',
+        'dist/application/document-code-bindings.js', 'dist/application/draft-facts.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
         'dist/application/hydration-plan.js', 'dist/application/cache-adoption.js',
@@ -261,6 +263,7 @@ try {
       id: 'archive', scope: 'public-smoke', channel: 'greeting.completed',
       producer: 'src/consumer.ts', consumer: 'src/archive.ts',
     }] }) + '\n'),
+    writeFile(join(consumer, 'symbols.md'), '[greeting](src/consumer.ts#weftlet-symbol=greeting)\n'),
     writeFile(join(consumer, 'intent.md'), '# Greeting\nSee [implementation](src/consumer.ts) and [checks](test/contract.test.ts).\n'),
     writeFile(join(consumer, 'coverage.md'), '# Public coverage\nSee [notes](notes.md) and [intent](intent.md).\n'),
     writeFile(join(consumer, 'notes.md'), '# Public notes\nReturn to [coverage](coverage.md).\n'),
@@ -298,7 +301,7 @@ import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', st
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
-  inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
+  extractDocumentCodeBindings, inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
@@ -377,7 +380,14 @@ if (testConsumer?.subject.id !== adapterFileNode('test/contract.test.ts').id ||
     testConsumer.subject.kind !== 'Evidence' || testConsumer.extractor.version !== '1.2.0') {
   throw new Error('Installed neutral contract consumer and public adapter factory must agree on test Evidence');
 }
-const facts = [...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
+const bindingContent = execFileSync('git', ['show', context.commitSha + ':symbols.md'], { encoding: 'utf8' });
+const bindings = await extractDocumentCodeBindings(new GitRepository(root), context, [{path:'symbols.md', content:bindingContent,
+  digest:createHash('sha256').update(bindingContent).digest('hex'), stableSemanticId:'document:symbols.md', metadata:{sourceAuthority:'declared'}}], sourceFacts, []);
+if (bindings.diagnostics.length || bindings.facts.length !== 1 || bindings.facts[0].object.label !== 'greeting' ||
+    bindings.facts[0].codeBinding.definitions[0].provenance.path !== 'src/consumer.ts' || bindings.facts[0].authority !== 'inferred') {
+  throw new Error('Installed explicit document-to-symbol bindings must resolve against actual indexed evidence');
+}
+const facts = [...bindings.facts, ...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
 const preflight = assertGraphIdentities(facts, { repositoryId: context.repositoryId });
 if (!preflight.passed || preflight.shaclValidated || preflight.factCount !== facts.length) {
   throw new Error('Installed identity preflight must remain separate from full SHACL validation');

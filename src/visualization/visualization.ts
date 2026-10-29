@@ -59,6 +59,7 @@ interface VisualEdge {
   readonly detail: string;
   readonly source: GraphFact['provenance'];
   readonly sourceUrl?: string;
+  readonly bindingSources?: readonly { readonly provenance: string; readonly sourceUrl?: string }[];
 }
 
 interface VisualModel {
@@ -214,6 +215,13 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
         (sourceDescription ? `; ${sourceDescription}` : ''),
       source: fact.provenance,
       sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
+      ...(fact.codeBinding ? { bindingSources: [
+        ...fact.codeBinding.documentCitations.map(provenance => ({ role: 'document', provenance })),
+        ...fact.codeBinding.selectedOccurrences.map(proof => ({ role: 'selected occurrence', provenance: proof.provenance })),
+        ...fact.codeBinding.definitions.map(proof => ({ role: 'definition', provenance: proof.provenance })),
+        ...fact.codeBinding.subjectEvidence.map(proof => ({ role: 'subject evidence', provenance: proof.provenance })),
+      ].map(({ role, provenance }) => ({ provenance: `${role}: ${sourceLocation(provenance)} @ ${provenance.commitSha}`,
+        sourceUrl: sourceLink(provenance, sourceUrlTemplate) })) } : {}),
     });
   }
   return {
@@ -454,7 +462,7 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
         edge.label,
       )}</td><td><strong>${escapeXml(targetLabel)}</strong><br /><code>${escapeXml(
         edge.to,
-      )}</code></td><td>${edge.sourceUrl ? `<a href="${escapeXml(edge.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeXml(edge.provenance)}</a>` : escapeXml(edge.provenance)}</td></tr>`;
+      )}</code></td><td>${edge.sourceUrl ? `<a href="${escapeXml(edge.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeXml(edge.provenance)}</a>` : escapeXml(edge.provenance)}${(edge.bindingSources ?? []).map(citation => `<br />${citation.sourceUrl ? `<a href="${escapeXml(citation.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeXml(citation.provenance)}</a>` : escapeXml(citation.provenance)}`).join('')}</td></tr>`;
     })
     .join('');
   const controls = (Object.keys(authorityColors) as EvidenceAuthority[])

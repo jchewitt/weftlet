@@ -8,6 +8,33 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B3a explicit document-to-symbol bindings, 2026-10-29
+
+[ADR 033](ADR-033-document-symbol-bindings.md) adds cited explicit mappings after semantic and
+code extraction. Focused public tests pass with real SCIP and an offline deterministic prose
+provider: functions/private methods, duplicate names, native qualification, overloads, re-export
+aliases, declaration-only targets, UTF-8 BOM offsets and reference-style Markdown. Missing,
+ambiguous and stale-byte targets produce gaps rather than guessed links. The public extractor
+checks committed source and definition bytes. Named-dataset and union SHACL agree on the new
+shape cases; consistency checks reject missing/mismatched proof facts and authority promotion.
+
+Agent neighborhoods/paths, impact scans, SPARQL and the viewer expose the same binding facts.
+Bindings retain selected occurrences, all indexed definitions, source citations and original
+subject assertion authority/review. Tests verify unchanged semantic reuse and clean comparison,
+dirty saved querying, overlay source edits/deletions/renames and invalidation of withdrawn rules.
+Traversal-selected validation documents can supply cited test mappings without model extraction
+or product-intent promotion. No private consumer or paid/live provider request was used.
+
+The initial full Linux publication gate passed **853 deterministic tests** (21 core + 832 toolkit;
+optional OML integration skipped), build, inventory, licenses and fresh packed npm/npx consumer
+smoke including real SCIP/RDF/SHACL and MCP. Follow-up review added code-derived contract-subject
+coverage, corrected omission of unset optional proof fields for exact JSON projection, and separated
+citation/parsing/proof checks into focused helpers. The 23-test selector/integration suite passes;
+architecture is back to the existing **13 advisory findings**, with no new baseline or exception.
+All 79 original source path/hash pairs remain intact. Final aggregate and hosted Windows/Linux
+checks are required on the change PR. Browser interaction, live model quality and private consumer
+acceptance remain separate.
+
 ## B3a precise SCIP evidence, 2026-10-29
 
 [ADR 032](ADR-032-scip-code-evidence.md) adds typed code entities and exact occurrences to the

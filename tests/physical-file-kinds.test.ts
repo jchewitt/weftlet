@@ -215,7 +215,7 @@ describe('canonical physical-file producer composition', () => {
     const overlay = await buildWorkingOverlay(f.repository, config, store, storage, base.manifest.snapshotId, agent);
     expect(await new RdfEvidenceGraph(overlay).validate()).toEqual({ conforms: true, issues: [] });
     expect(overlay.manifest.extractorVersions).toMatchObject({
-      assembly: 'standalone-graph-v8', 'repository-contract-extractor': '1.2.0',
+      assembly: 'standalone-graph-v9', 'repository-contract-extractor': '1.2.0',
       'scip-symbol-extractor': '2.0.0',
     });
     for (const path of ['src/service.ts', 'src/service.spec.ts', 'src/service.test.ts']) {
