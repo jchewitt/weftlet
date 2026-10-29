@@ -65,6 +65,35 @@ export function createSemanticExtractor(config) {
     if (response.isError || JSON.stringify(JSON.parse(response.content[1].text)) !== JSON.stringify(neighborhood)) {
       throw new Error('Installed MCP and CLI exact-node exploration differ');
     }
+    const pathRequest = { snapshotId: first.snapshotId, fromNodeId: expected[0].subject.id,
+      toNodeId: expected[1].subject.id, direction: 'both', predicates: ['references'], maxSteps: 1, maxPaths: 1 };
+    const pathArgs = ['graph', 'paths', '--snapshot', first.snapshotId, '--from', pathRequest.fromNodeId,
+      '--to', pathRequest.toNodeId, '--direction', 'both', '--predicate', 'references', '--max-steps', '1', '--max-paths', '1', '--json'];
+    let pathPage = cli(...pathArgs);
+    const pathResponse = await client.callTool({ name: 'graph.paths', arguments: pathRequest });
+    if (pathResponse.isError || JSON.stringify(JSON.parse(pathResponse.content[1].text)) !== JSON.stringify(pathPage)) {
+      throw new Error('Installed MCP and CLI path exploration differ');
+    }
+    const pathFacts = new Map(pathPage.facts.map(fact => [fact.id, fact]));
+    const pathResults = [...pathPage.paths];
+    for (let page = 0; pathPage.search.continuation; page++) {
+      if (page >= 20) throw new Error('Installed path search did not exhaust bounded fixture');
+      pathPage = cli(...pathArgs, '--continuation', pathPage.search.continuation);
+      pathPage.facts.forEach(fact => pathFacts.set(fact.id, fact));
+      pathResults.push(...pathPage.paths);
+    }
+    // These real documents also contain a direct Markdown link. Keep that path as well as
+    // the semantic capability path; neither producer's cited relationship may be discarded.
+    const directFacts = pack.facts.filter(fact => fact.predicate === 'references' &&
+      ((fact.subject.id === pathRequest.fromNodeId && fact.object.id === pathRequest.toNodeId) ||
+       (fact.subject.id === pathRequest.toNodeId && fact.object.id === pathRequest.fromNodeId)));
+    const signatures = paths => paths.map(path => JSON.stringify(path.factIds)).sort();
+    const expectedPaths = [...directFacts.map(fact => ({ factIds: [fact.id] })), { factIds: expected.map(fact => fact.id) }];
+    const expectedFacts = [...expected, ...directFacts].sort((a, b) => a.id.localeCompare(b.id));
+    if (pathPage.search.truncated || !directFacts.length || JSON.stringify(signatures(pathResults)) !== JSON.stringify(signatures(expectedPaths)) ||
+        JSON.stringify([...pathFacts.values()].sort((a, b) => a.id.localeCompare(b.id))) !== JSON.stringify(expectedFacts)) {
+      throw new Error('Installed path pagination must retain exact cited evidence across the shared capability');
+    }
   } finally { await client.close(); }
   const before = await readFile(join(consumer, config.storagePath, 'heads/default.json'), 'utf8');
   config.documentTraversal.maxReadDocuments = 1;

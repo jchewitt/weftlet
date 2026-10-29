@@ -522,8 +522,12 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
     ${controls}
     <label>Cluster <select id="graph-cluster"><option value="">All</option>${[...new Set(model.nodes.map(node => node.cluster))].sort().map(cluster => `<option value="${escapeXml(cluster)}">${escapeXml(cluster)}</option>`).join('')}</select></label>
     <label><input type="checkbox" id="neighbors-only" /> Selected node and neighbors</label>
-    <label>Path target <select id="path-target">${model.nodes.map(node => `<option value="${escapeXml(node.id)}">${escapeXml(node.label)}</option>`).join('')}</select></label>
-    <button id="highlight-path" type="button">Highlight directed path</button>
+    <label>Path target <select id="path-target">${model.nodes.map(node => `<option value="${escapeXml(node.id)}">${escapeXml(node.label)} · ${escapeXml(node.id)}</option>`).join('')}</select></label>
+    <label>Direction <select id="path-direction"><option value="outgoing">Outgoing</option><option value="incoming">Incoming</option><option value="both">Both</option></select></label>
+    <label>Relation <select id="path-predicate"><option value="">All</option>${[...new Set(model.edges.map(edge => edge.label))].sort().map(predicate => `<option value="${escapeXml(predicate)}">${escapeXml(predicate)}</option>`).join('')}</select></label>
+    <label>Max depth <input id="path-depth" type="number" min="1" max="32" value="8" /></label>
+    <button id="highlight-path" type="button">Highlight cited path</button>
+    <button id="next-path" type="button" disabled>Continue path search</button>
     <span id="path-status" aria-live="polite"></span>
     <button id="reset-filters" type="button">Reset</button>
     <span id="visible-count" aria-live="polite"></span>

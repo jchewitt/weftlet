@@ -4,7 +4,8 @@ Status: original T01–T10 engineering work complete; 0.6.0 candidate publicatio
 The maintainer has requested additional [business-context baseline work](PRE-1.0-BASELINE.md)
 before official 1.0: precise exploration, symbol-level implementation links, cross-boundary
 obligations, monorepo coverage and a measured Graphify/SCIP decision. Its A1–A3 public checks
-pass within recorded limits; B1–B6 remain open. Both npm packages remain available for
+pass within recorded limits; B1 query mechanisms are implemented for the next candidate, while
+B2–B6 remain open. Both npm packages remain available for
 TradePilot acceptance while this additional scope is assessed. The maintainer requested the
 next live test after a new candidate; [the implementation queue](1.0-WORK-QUEUE.md) tracks
 the intervening B1–B6 work.

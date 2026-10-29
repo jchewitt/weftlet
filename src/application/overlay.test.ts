@@ -1,5 +1,7 @@
 import { SavedGraphExplorationService } from './saved-exploration.js';
 import { SnapshotGraphExplorationService } from '../graph/neighborhood.js';
+import { SavedGraphPathService } from './saved-paths.js';
+import { SnapshotGraphPathService } from '../graph/paths.js';
 import { execFile } from 'node:child_process';
 import { mkdtemp, mkdir, writeFile, rename, rm, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -113,6 +115,13 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   expect(draft.facts.every(fact => fact.authority === 'draft')).toBe(true);
   expect(draft.evidenceState).toMatchObject({ overlayFreshness: 'current', stale: false, eligibleForCurrentDiffValidation: false });
   expect((await exact(first.manifest.snapshotId, 'component:file:src/input.ts')).focus.status).toBe('absent-from-snapshot');
+  const pathQueries = new SavedGraphPathService(new SnapshotGraphPathService(store), repository, sha256(stableJson(config)));
+  const pathRequest = { snapshotId: first.manifest.snapshotId, fromNodeId: 'component:file:src/consumer.ts',
+    toNodeId: 'component:file:src/contract.ts', direction: 'both' as const, predicates: ['consumes', 'contains'] as const };
+  const draftPaths = await pathQueries.paths(pathRequest);
+  expect(draftPaths.paths.length).toBeGreaterThan(0);
+  expect(draftPaths.facts.every(fact => fact.authority === 'draft')).toBe(true);
+  expect(draftPaths.evidenceState).toEqual(draft.evidenceState);
   const scan = () => queries.scan({ snapshotId: first.manifest.snapshotId });
   expect((await scan()).evidenceState).toMatchObject({
     stale: false, overlayFreshness: 'current', excludedWorkingChanges: [],
@@ -149,6 +158,8 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   expect(deleted.manifest.overlayDigest).not.toBe(first.manifest.overlayDigest);
   expect(deleted.facts.some((fact) => fact.provenance.path === 'src/consumer.ts')).toBe(false);
   expect((await exact(deleted.manifest.snapshotId)).focus.status).toBe('absent-from-snapshot');
+  expect((await pathQueries.paths({ ...pathRequest, snapshotId: deleted.manifest.snapshotId })).endpoints.from.status).toBe('absent-from-snapshot');
+  expect((await pathQueries.paths(pathRequest)).evidenceState).toMatchObject({ overlayFreshness: 'stale', eligibleForCurrentDiffValidation: false });
   expect((await exact()).focus.status).toBe('present');
   expect(await store.readHead('default')).toEqual(base);
   expect(await repository.resolveRef('HEAD')).toBe(sha);

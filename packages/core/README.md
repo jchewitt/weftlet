@@ -36,3 +36,7 @@ This development checkout adds the neutral exploration contracts `GraphNeighbors
 `GraphNeighborhood` and `GraphExplorationService` for exact-node one-hop reads. `graphPredicates` supplies the
 shared runtime relation vocabulary used by extraction and query inputs. The toolkit supplies
 the RDF-backed implementation; core does not load a graph database, provider or repository.
+
+`GraphPathsRequest`, `GraphPaths` and `GraphPathQueryService` describe bounded cited paths between
+exact snapshot endpoints, including work/depth limits, continuation and unexplored frontier.
+They are also development contracts for the next candidate.

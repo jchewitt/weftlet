@@ -1,44 +1,28 @@
-export interface PathEdge { id: string; from: string; to: string }
+import { searchEvidencePaths, type PathEdge } from '../graph/path-search.js';
+export type { PathEdge } from '../graph/path-search.js';
 
-/** One shortest directed path over displayed facts only; it does not add inferred edges. */
-export function findEvidencePath(edges: readonly PathEdge[], start: string, target: string, maxVisited = 1000) {
-  const queue = [start];
-  const parents = new Map<string, { node: string; edge: string }>();
-  const visited = new Set([start]);
-  let truncated = false;
-  for (let cursor = 0; cursor < queue.length; cursor++) {
-    const current = queue[cursor]!;
-    if (current === target) {
-      const edgeIds: string[] = [];
-      let node = target;
-      while (parents.has(node)) {
-        const parent = parents.get(node)!;
-        edgeIds.unshift(parent.edge);
-        node = parent.node;
-      }
-      return { found: true, edgeIds, truncated };
-    }
-    for (const edge of edges.filter((item) => item.from === current)) {
-      if (visited.has(edge.to)) continue;
-      if (visited.size >= maxVisited) { truncated = true; continue; }
-      visited.add(edge.to);
-      parents.set(edge.to, { node: current, edge: edge.id });
-      queue.push(edge.to);
-    }
-  }
-  return { found: false, edgeIds: [] as string[], truncated };
+/** First deterministic simple path over displayed facts; shares the agent search engine. */
+export function findEvidencePath(edges: readonly PathEdge[], start: string, target: string, maxSteps = 1000) {
+  const result = searchEvidencePaths(edges, start, target, { maxDepth: 32, maxPaths: 1, maxSteps });
+  return { found: result.paths.length > 0, edgeIds: result.paths[0]?.factIds ?? [], truncated: result.search.truncated };
 }
 
 export function viewerScript(): string {
   return `
     (() => {
-      const findPath = ${findEvidencePath.toString()};
+      const searchPaths = ${searchEvidencePaths.toString()};
       const model = JSON.parse(document.getElementById('visual-model').textContent);
       const search = document.getElementById('graph-search');
       const cluster = document.getElementById('graph-cluster');
       const detail = document.getElementById('node-detail');
       const target = document.getElementById('path-target');
       const status = document.getElementById('path-status');
+      const nextPath = document.getElementById('next-path');
+      const depth = document.getElementById('path-depth');
+      const direction = document.getElementById('path-direction');
+      const predicate = document.getElementById('path-predicate');
+      let pathOffset = 0;
+      const clearPath = () => { pathOffset = 0; nextPath.disabled = true; pathIds.clear(); status.textContent = ''; };
       const layers = [...document.querySelectorAll('[data-layer]')];
       const edges = [...document.querySelectorAll('[data-visual-edge]')];
       const nodes = [...document.querySelectorAll('[data-visual-node]')];
@@ -73,7 +57,7 @@ export function viewerScript(): string {
         document.getElementById('visible-count').textContent = count + ' visible relationships from this page';
       };
       const select = (id) => {
-        selected = id; pathIds.clear(); status.textContent = '';
+        selected = id; clearPath();
         detail.replaceChildren();
         const node = model.nodes.find(node => node.id === id);
         const heading = document.createElement('strong');
@@ -97,21 +81,37 @@ export function viewerScript(): string {
         node.addEventListener('click', () => select(node.dataset.nodeId));
         node.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(node.dataset.nodeId); } });
       });
-      document.getElementById('highlight-path').addEventListener('click', () => {
+      const showPath = (resume) => {
         if (!selected) { status.textContent = 'Select a start node first.'; return; }
-        const result = findPath(enabledEdges(), selected, target.value);
-        pathIds = new Set(result.edgeIds);
-        status.textContent = result.found ? 'One shortest directed path: ' + result.edgeIds.length + ' relationships.' :
-          'No path found in this displayed page and authority selection. Check coverage and continuation.';
-        if (result.truncated) status.textContent += ' Exploration limit reached.';
-        search.value = ''; cluster.value = ''; document.getElementById('neighbors-only').checked = false;
-        update();
-      });
+        if (!resume) pathOffset = 0;
+        try {
+          const input = enabledEdges().filter(edge => !predicate.value || edge.label === predicate.value).flatMap(edge => {
+            const forward = { id: edge.id, from: edge.from, to: edge.to };
+            const reverse = { id: edge.id, from: edge.to, to: edge.from };
+            return direction.value === 'incoming' ? [reverse] : direction.value === 'outgoing' || edge.from === edge.to ? [forward] : [forward, reverse];
+          });
+          const result = searchPaths(input, selected, target.value, { maxDepth: Number(depth.value), maxPaths: 1, maxSteps: 1000, offset: pathOffset }, new Set(model.nodes.map(node => node.id)));
+          pathOffset = result.search.totalSteps;
+          nextPath.disabled = result.search.exhaustedWithinDepth || result.search.stopReason === 'search-limit';
+          pathIds = new Set(result.paths[0]?.factIds || []);
+          status.textContent = result.paths.length ? 'One cited path: ' + result.paths[0].factIds.length + ' relationships.' : 'No path returned on this search page.';
+          status.textContent += ' Displayed facts and selected authority/relations only; ' + result.search.stopReason + '.';
+          if (!nextPath.disabled) status.textContent += ' Continue to examine remaining branches.';
+          if (result.search.depthLimitReached) status.textContent += ' Depth limit reached; increase depth and restart.';
+          if (result.search.stopReason === 'search-limit') status.textContent += ' Narrow the selection or choose an intermediate node.';
+          status.textContent += ' Pending prefixes: ' + result.frontier.pending.length + '; depth-limited extensions: ' + result.frontier.depthLimited.count + '.';
+          search.value = ''; cluster.value = ''; document.getElementById('neighbors-only').checked = false;
+          update();
+        } catch (error) { clearPath(); status.textContent = error.message; update(); }
+      };
+      document.getElementById('highlight-path').addEventListener('click', () => showPath(false));
+      nextPath.addEventListener('click', () => showPath(true));
+      [target, depth, direction, predicate].forEach(item => item.addEventListener('change', () => { clearPath(); update(); }));
       search.addEventListener('input', update); cluster.addEventListener('change', update);
       document.getElementById('neighbors-only').addEventListener('change', update);
-      layers.forEach(item => item.addEventListener('change', () => { pathIds.clear(); status.textContent = ''; update(); }));
+      layers.forEach(item => item.addEventListener('change', () => { clearPath(); update(); }));
       document.getElementById('reset-filters').addEventListener('click', () => {
-        search.value = ''; cluster.value = ''; selected = undefined; pathIds.clear();
+        search.value = ''; cluster.value = ''; selected = undefined; clearPath();
         document.getElementById('neighbors-only').checked = false;
         layers.forEach(item => { item.checked = true; });
         detail.textContent = 'Select a node to inspect its cited relationships.'; status.textContent = ''; update();

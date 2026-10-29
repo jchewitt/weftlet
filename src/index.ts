@@ -24,3 +24,6 @@ export type { DocumentTraversalConfig } from './configuration/document-traversal
 export * from './graph/neighborhood.js';
 export * from './graph/neighborhood-request.js';
 export * from './graph/neighborhood-renderer.js';
+export * from './graph/paths.js';
+export * from './graph/path-request.js';
+export * from './graph/paths-renderer.js';

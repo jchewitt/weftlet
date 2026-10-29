@@ -30,6 +30,11 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
    `selection.continuation` with identical arguments, and inspect `frontier.neighbors` for other
    business areas. Query a neighbor using the same snapshot; one-hop page completion does not
    prove that transitive dependencies or omitted source coverage are complete.
+   When available, `graph.paths` explores cited paths between exact `fromNodeId`/`toNodeId`
+   in that snapshot. Follow `search.continuation` with identical arguments even on an empty
+   work page. Inspect pending/depth-cut frontier and explicit work limits; depth exhaustion
+   needs a deeper restart, and total-work exhaustion needs narrower scope or an intermediate
+   node. A path is an association, not a business-compatibility or behavior verdict.
 6. Give subagents the bounded Context Pack, snapshot SHA, and unresolved assumptions.
 7. Query again after material diff changes. Historical saved evidence remains useful context but
    cannot satisfy current-diff validation or merge gates.

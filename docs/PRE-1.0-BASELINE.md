@@ -13,7 +13,7 @@ not close any of B1–B6 below. Resume B1 and the bounded B2 evaluation after th
 
 The maintainer now considers this the main reported consumer blocker and requests the next live
 TradePilot test after a new candidate. [The implementation queue](1.0-WORK-QUEUE.md) breaks B1–B6
-into bounded increments; B1a exact-node neighborhoods is implemented for the next candidate. This schedules acceptance;
+into bounded increments; B1a exact-node neighborhoods and B1b bounded paths are implemented for the next candidate. This schedules acceptance;
 it does not claim an additional private run or a full product-usefulness pass.
 
 The product goal is to let an agent starting with a task or code change retrieve the relevant
