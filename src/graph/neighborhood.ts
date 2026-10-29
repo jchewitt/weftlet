@@ -1,3 +1,4 @@
+import { snapshotContext } from './snapshot-context.js';
 import type { GraphExplorationService, GraphFact, GraphNeighborhood, GraphNeighborsRequest, SnapshotStore } from '@weftlet/core';
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { RdfEvidenceGraph } from './rdf.js';
@@ -77,11 +78,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
     }));
     const manifest = saved.manifest;
     const plain: Omit<GraphNeighborhood, 'markdown'> = {
-      snapshot: { snapshotId: manifest.snapshotId, commitSha: manifest.commitSha, contentDigest: manifest.contentDigest,
-        configurationDigest: manifest.configurationDigest, scope: manifest.scope, baseSha: manifest.baseSha,
-        overlayDigest: manifest.overlayDigest, overlayCapture: manifest.overlayCapture,
-        extractorVersions: manifest.extractorVersions,
-        ...(manifest.documentSelection ? { documentSelection: manifest.documentSelection } : {}) },
+      snapshot: snapshotContext(manifest),
       focus: { nodeId: request.nodeId, status: incident.length ? 'present' : 'absent-from-snapshot' },
       facts,
       coverage: coverageForFacts(facts),

@@ -7,14 +7,15 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 [source inventory](SOURCE-INVENTORY.md).
 
 The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE.md) records
-three bounded public acceptance checks and the additional B1–B6 task list. Exact-node exploration,
-function-level intent bindings, cross-boundary obligations, monorepo coverage and a measured
+three bounded public acceptance checks and the additional B1–B6 task list. B1 exact neighborhoods
+and bounded paths are implemented for the next candidate. Function-level intent bindings,
+cross-boundary obligations, monorepo coverage and a measured
 [Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) are open before the official release decision.
 The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
 identities, provenance and cache reuse. The requested Windows traversal → repeat → clean
 comparison regression passes. See [ADR 028](ADR-028-bounded-artifact-paths.md); the private
 consumer rerun is now scheduled after the next candidate. The [1.0 work queue](1.0-WORK-QUEUE.md)
-tracks the requested B1–B6 increments, starting with exact-node neighborhoods.
+tracks the requested B1–B6 increments; freezing the Graphify/SCIP comparison is next.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is

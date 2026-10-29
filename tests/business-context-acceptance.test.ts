@@ -8,7 +8,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { promisify } from 'node:util';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { ContextPack, GraphNeighborhood, ImpactScanRequest } from '@weftlet/core';
+import type { ContextPack, GraphNeighborhood, GraphPaths, ImpactScanRequest } from '@weftlet/core';
 import { createContextGraphApplication } from '../src/application/application.js';
 import { handleImpactScan } from '../src/interfaces/mcp-facade.js';
 import { handleGraphNeighbors } from '../src/interfaces/graph-exploration.js';
@@ -236,6 +236,30 @@ describe('public business-context acceptance boundaries', () => {
         fact.object.label === 'Execution requires readings at most 60 seconds old')).toBe(true);
       expect(followPack.facts.some(fact => fact.object.id === `component:file:${paths.execution}`)).toBe(true);
       expect(followPack.facts.some(fact => fact.subject.id === 'workflow:billing')).toBe(false);
+      const pathRequest = { snapshotId, fromNodeId: `component:file:${paths.collection}`,
+        toNodeId: `component:file:${paths.execution}`, direction: 'both' as const,
+        predicates: ['implementedBy', 'routesThrough'] as const, maxPaths: 1, maxSteps: 1 };
+      const firstPath = await savedApp.pathService.paths(pathRequest);
+      expect(firstPath.search.truncated).toBe(true);
+      expect(firstPath.evidenceState).toEqual(direct.evidenceState);
+      const pathCli = await execute(process.execPath, ['--import', tsx, fileURLToPath(new URL('../src/cli.ts', import.meta.url)),
+        'graph', 'paths', '--config', configPath, '--snapshot', snapshotId, '--from', pathRequest.fromNodeId,
+        '--to', pathRequest.toNodeId, '--direction', 'both', '--predicate', 'implementedBy', '--predicate', 'routesThrough',
+        '--max-paths', '1', '--max-steps', '1', '--json'], { cwd: tmpdir(), timeout: 30_000 });
+      expect(JSON.parse(pathCli.stdout)).toEqual(JSON.parse(JSON.stringify(firstPath)));
+      let pathPage = firstPath;
+      const found = [...pathPage.paths];
+      for (let count = 0; pathPage.search.continuation; count++) {
+        expect(count).toBeLessThan(50);
+        const nextPath = await client.callTool({ name: 'graph.paths', arguments: { ...pathRequest, continuation: pathPage.search.continuation } });
+        expect(nextPath.isError).not.toBe(true);
+        pathPage = JSON.parse((nextPath.content as { text: string }[])[1]!.text) as GraphPaths;
+        found.push(...pathPage.paths);
+        for (const fact of pathPage.facts) expect(fact).toEqual(linked.snapshot.facts.find(item => item.id === fact.id));
+      }
+      expect(found.map(path => path.nodeIds)).toContainEqual([pathRequest.fromNodeId, 'workflow:collection', 'workflow:execution', pathRequest.toNodeId]);
+      expect(found.some(path => path.nodeIds.includes('workflow:billing'))).toBe(false);
+      expect(pathPage.search.truncated).toBe(false);
       const bad = await client.callTool({ name: 'graph.neighbors', arguments: { nodeId: request.nodeId } });
       expect(bad.isError).toBe(true);
       expect(JSON.stringify(bad)).toContain('snapshotId');

@@ -8,6 +8,42 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B1b bounded cited paths, 2026-10-29
+
+[ADR 030](ADR-030-bounded-evidence-paths.md) records `graph.paths` through the public API,
+CLI and MCP. Cited simple paths use deterministic assertion-ID depth-first order, exact saved
+snapshot endpoints, direction/relation filters and explicit page/depth/work bounds. Continuations
+reconstruct bounded state; replay and new steps are reported separately. Pending DFS prefixes,
+depth-cut examples and omitted counts remain explicit. Search completion only covers selected
+saved facts and depth, not unextracted dependencies, causality or business compatibility.
+
+The focused integration run passed 46 tests, including an independent oracle for all 4,096
+directed four-node graphs, competing branches/parallel citations, cycles/self-links, twelve-hop
+paths, empty work pages, frontier bounds, stale/malformed cursors and a 100,000-step hard ceiling.
+RDF projection comparisons retain exact facts. Actual public extraction/SCIP/RDF follows source
+files across the collection/execution boundary through real CLI/MCP continuation while dirty
+and with unavailable providers/indexers. Real overlays retain draft authority and capture/stale
+state, and old snapshots remain readable after deletion. All three original MCP startup tests
+remain enabled and pass. Missing targets in an incomplete document scope retain the exact
+selection/exclusion record and an explicit INCOMPLETE warning.
+
+Final local checks pass build, 767 deterministic tests (17 core + 750 toolkit; one optional OML
+integration skipped), architecture with the existing 13 advisory findings, release documentation,
+inventory, licenses and fresh packed-consumer smoke. The installed CLI/MCP exhaust work pages
+and preserve both a direct Markdown route and the semantic capability route with every citation.
+Shared snapshot metadata and CLI parsing keep neighbors/paths consistent; no architecture rule,
+baseline or exception was changed. All 79 original source path/hash pairs remain unchanged.
+
+The offline viewer embeds the same search function and provides next-path, direction, relation
+and depth controls. Executing rendered controls in a small DOM harness matches the RDF service's
+highlighted assertion IDs and continuation states, including duplicate labels and filtered
+evidence. This proves script/projection parity, not interactive browser rendering. The former
+viewer-only shortest-path behavior is replaced and labeled as cited deterministic paths.
+
+Hosted results belong to the exact change PR head. No npm publication, live model quality or
+private TradePilot acceptance is claimed. B2's frozen comparison protocol is the next task;
+the candidate version PR remains open while B2–B5 work accumulates.
+
 ## B1a exact-node exploration, 2026-10-28
 
 The maintainer requested the remaining 1.0 items be tasked and started, with TradePilot live

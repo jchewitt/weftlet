@@ -365,6 +365,23 @@ one-hop reads of saved evidence: no model or indexer is invoked. Each assertion 
 citations, authority and review state, including multiple assertions about the same edge.
 Page completion does not establish complete product coverage. See [the query contract](docs/ADR-029-exact-graph-neighborhoods.md).
 
+The development checkout also supports paths between two exact IDs:
+
+```sh
+weftlet graph paths --snapshot <snapshot-id> --from <node-id> --to <node-id> --direction both --max-depth 8 --json
+```
+
+MCP `graph.paths` takes `snapshotId`, `fromNodeId` and `toNodeId`. Direction defaults to outgoing;
+use `predicates` to select relations. `maxPaths` (default 5, up to 20) bounds page results;
+`maxSteps` (default 1000, up to 10000) bounds new candidate-edge examinations. Depth is 1–32;
+the search's total ceiling is 100,000 examinations. Responses report replay work separately.
+Follow `search.continuation` with identical inputs even if a work page contains no completed
+path. Depth cuts and total-work exhaustion remain explicit without pretending all dependencies
+were checked; inspect `frontier` and restart with greater depth or narrower endpoints/relations.
+Paths are deterministic cited associations, not shortest routes or proof of business compatibility.
+The HTML viewer uses the same engine and continuation on its displayed facts and selected layers.
+See [path semantics and limits](docs/ADR-030-bounded-evidence-paths.md).
+
 Semantic hydration requires a working configured provider. Direct RDF is the default;
 Docker/openCAESAR is an optional explicit backend. Run `context-graph doctor` for setup diagnostics.
 Committed indexing and ontology input use disposable archives, preserving the active checkout.
