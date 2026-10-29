@@ -1,10 +1,11 @@
+import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
 import type { ContextGraphConfig } from '../configuration/config.js';
 import { repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from '../extraction/static.js';
 import { routingExtractorIdentity } from '../extraction/routing.js';
 import { documentEvidenceExtractorIdentity } from '../extraction/document-evidence.js';
 import { documentSelectionIdentity } from './hydration-inputs.js';
 
-export const graphAssemblyVersion = 8;
+export const graphAssemblyVersion = 9;
 export const graphAssemblyIdentity = `standalone-graph-v${graphAssemblyVersion}`;
 
 export function documentExtractionVersions(config?: Pick<ContextGraphConfig, 'documentTraversal'>): Readonly<Record<string, string>> {
@@ -15,6 +16,7 @@ export function documentExtractionVersions(config?: Pick<ContextGraphConfig, 'do
 /** Runtime expectations are separate from source/configuration identity and artifact reuse. */
 export function requiredSnapshotExtractorVersions(config?: Pick<ContextGraphConfig, 'routingSources' | 'documentTraversal'>): Readonly<Record<string, string>> {
   return { assembly: graphAssemblyIdentity,
+    [documentCodeBindingIdentity.id]: documentCodeBindingIdentity.version,
     ...documentExtractionVersions(config),
     [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
     [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,

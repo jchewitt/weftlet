@@ -44,6 +44,7 @@ function snapshot(id: string, versions: Readonly<Record<string, string>>): Graph
 describe('current-validation extraction compatibility', () => {
   it.each([
     { name: 'old assembly', versions: { ...current, assembly: 'standalone-graph-v6' }, incompatible: 'assembly' },
+    { name: 'old document bindings', versions: { ...current, 'document-code-binding-extractor': '0' }, incompatible: 'document-code-binding-extractor' },
     { name: 'old contract', versions: { ...current, [contract]: '1.1.0' }, incompatible: contract },
     { name: 'old SCIP fact extraction', versions: { ...current, [symbols]: '1.0.0' }, incompatible: symbols },
     { name: 'missing SCIP fact extraction', versions: { assembly: current.assembly!, [contract]: current[contract]! }, incompatible: symbols },

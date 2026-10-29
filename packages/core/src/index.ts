@@ -5,3 +5,4 @@ export * from './repository-nodes.js';
 export * from './exploration.js';
 export * from './paths.js';
 export * from './code.js';
+export type { BindingEvidence, BindingSubjectEvidence, DocumentCodeBinding } from './bindings.js';

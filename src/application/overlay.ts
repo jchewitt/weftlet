@@ -19,12 +19,15 @@ import { graphAssemblyIdentity, documentExtractionVersions } from './extraction-
 import { assertGraphIdentities } from '../graph/identity-preflight.js';
 import { selectHydrationInputs, documentSelectionIdentity } from './hydration-inputs.js';
 import { retainOverlayDocumentFact, overlayDocumentRoots, overlayDocumentManifest, overlayDocumentNotes } from './document-overlay.js';
+import { assembleDocumentCodeBindings } from './document-code-bindings.js';
+import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
+import { draftFacts } from './draft-facts.js';
 import { documentEvidenceExtractorIdentity } from '../extraction/document-evidence.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
   'repository-file-extractor', 'repository-contract-extractor', 'scip-symbol-extractor',
-  routingExtractorIdentity.id,
+  routingExtractorIdentity.id, documentCodeBindingIdentity.id,
 ]);
 
 /** Conservative code overlay: reindex implementation; invalidate changed prose, never synthesize intent. */
@@ -107,8 +110,7 @@ export async function buildWorkingOverlay(
       deletedPaths: captured.filter((f) => f.content === null).map((f) => f.path),
       renamedPaths: {},
     };
-    const documents = config.documentTraversal
-      ? await selectHydrationInputs(draftRepository, context.commitSha, config) : undefined;
+    const documents = await selectHydrationInputs(draftRepository, context.commitSha, config);
     const documentSelection = documents?.documentSelection ? {
       ...documents.documentSelection,
       // Temporary Git commit timestamps are not evidence identity. Bind drafts to captured bytes.
@@ -127,29 +129,23 @@ export async function buildWorkingOverlay(
         config.contractConsumerRoots ?? config.codeRoots, config.contractAliases),
       new ScipSymbolExtractor(draftRepository, scip),
     ];
-    const facts = [...(await Promise.all(extractors.map((e) => e.extract(context)))).flat(),
-      ...routing.facts, ...(documents?.documentEvidence?.facts ?? [])].map(({ id: _id, ...fact }) => {
-      const draft = { ...fact, snapshotId, authority: 'draft' as const,
-        ...(fact.extractor.id === routingExtractorIdentity.id || fact.sourceRole !== undefined ? { sourceAuthority: 'draft' as const } : {}),
-        provenance: { ...fact.provenance, commitSha: head } };
-      return { ...draft, id: sha256(stableJson(draft)) };
-    });
-    const diagnostics = [...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
+    const codeFacts = (await Promise.all(extractors.map((extractor) => extractor.extract(context)))).flat();
+    const retainedSubjects = base.facts.filter(fact =>
+      retainOverlayDocumentFact(fact, documents, affected) &&
+      !implementationExtractors.has(fact.extractor.id) &&
+      contextPackEvidenceAuthority(fact) !== 'implemented' &&
+      fact.extractor.id !== 'otlp-runtime-evidence' && !affected.has(fact.provenance.path) &&
+      ![fact.subject, fact.object].some(node => [...affected].some(path =>
+        node.id === `component:file:${path}` || node.id === `document:${path}` || node.label === path)));
+    const bindings = await assembleDocumentCodeBindings(draftRepository, context, documents, config, codeFacts, [...retainedSubjects, ...codeFacts, ...routing.facts]);
+    const facts = draftFacts([...codeFacts, ...routing.facts, ...(documents.documentEvidence?.facts ?? []), ...bindings.facts], snapshotId, head);
+    const diagnostics = [...bindings.diagnostics, ...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
       const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
       return { ...draft, id: sha256(stableJson(draft)) };
     }).sort((a, b) => a.id.localeCompare(b.id));
-    return { facts, diagnostics, documents, documentSelection };
+    return { facts, diagnostics, documents, documentSelection, retainedSubjects };
   });
-  const retained = base.facts.filter((fact) =>
-    retainOverlayDocumentFact(fact, extracted.documents, affected) &&
-    !implementationExtractors.has(fact.extractor.id) &&
-    contextPackEvidenceAuthority(fact) !== 'implemented' &&
-    fact.extractor.id !== 'otlp-runtime-evidence' &&
-    !affected.has(fact.provenance.path) &&
-    ![fact.subject, fact.object].some((node) => [...affected].some((path) =>
-      node.id === `component:file:${path}` || node.id === `document:${path}` || node.label === path,
-    )),
-  ).map((fact) => ({ ...fact, snapshotId }));
+  const retained = extracted.retainedSubjects.map(fact => ({ ...fact, snapshotId }));
   const allFacts = [...retained, ...extracted.facts].sort((a, b) => a.id.localeCompare(b.id));
   assertGraphIdentities(allFacts, { repositoryId: config.repositoryId, includeDetails: options.validationDetails });
   const overlay: GraphSnapshot = {
@@ -159,6 +155,7 @@ export async function buildWorkingOverlay(
       ...overlayDocumentManifest(extracted.documentSelection),
       extractorVersions: { ...base.manifest.extractorVersions,
         assembly: graphAssemblyIdentity,
+        [documentCodeBindingIdentity.id]: documentCodeBindingIdentity.version,
         ...documentExtractionVersions(config),
         [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version,
         [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,

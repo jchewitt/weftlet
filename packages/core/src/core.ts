@@ -22,17 +22,8 @@ export const graphPredicates = Object.freeze([
 
 export type GraphPredicate = typeof graphPredicates[number];
 
-export interface SourceSpan {
-  readonly path: string;
-  readonly startLine: number;
-  readonly endLine: number;
-  readonly digest: string;
-  readonly commitSha: string;
-  /** When present, both columns are one-based UTF-16 offsets; the end is exclusive. */
-  readonly startColumn?: number;
-  readonly endColumn?: number;
-  readonly columnEncoding?: 'utf-16';
-}
+export type { SourceSpan } from './source-span.js';
+import type { SourceSpan } from './source-span.js';
 
 export interface ExtractorIdentity {
   readonly id: string;
@@ -76,6 +67,7 @@ export interface GraphFact {
   readonly sourcePolicyDigest?: string;
   /** Static occurrence evidence; a reference never establishes a call or observed execution. */
   readonly codeOccurrence?: import('./code-types.js').CodeOccurrence;
+  readonly codeBinding?: import('./bindings.js').DocumentCodeBinding;
 }
 
 export interface SemanticArtifact {
