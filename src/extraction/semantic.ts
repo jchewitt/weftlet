@@ -79,7 +79,7 @@ function omlEscape(value: string): string {
 }
 
 function renderOml(key: string, assertions: readonly ExtractedAssertion[]): string {
-  const typeByKind: Record<GraphNodeKind, string> = {
+  const typeByKind: Record<Exclude<GraphNodeKind, 'CodeSymbol'>, string> = {
     Project: 'cg:Project',
     Document: 'cg:OwnerDocument',
     Capability: 'cg:ProductCapability',
@@ -129,6 +129,7 @@ function renderOml(key: string, assertions: readonly ExtractedAssertion[]): stri
   const instances = [...nodes.entries()]
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([id, node]) => {
+      if (node.kind === 'CodeSymbol') throw new Error('Code symbols require deterministic code extraction');
       const local = localNames.get(id) as string;
       const properties = [
         `    cg:hasIdentifier "${omlEscape(node.id)}"`,

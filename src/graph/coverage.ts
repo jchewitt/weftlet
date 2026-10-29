@@ -36,6 +36,7 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
   if (isValidationFact(fact)) {
     return 'validationEvidence';
   }
+  if (kinds.has('CodeSymbol')) return 'implementationAndConsumers';
   if (
     kinds.has('Contract') ||
     kinds.has('Invariant') ||
@@ -73,7 +74,7 @@ export function isImplementationEvidence(fact: GraphFact): boolean {
   if (file.kind !== 'Component') return false;
   const nodes = [fact.subject, fact.object];
   // Explicit adapter authority also supports logical component/provider identities.
-  if (fact.authority === 'implemented') return nodes.some(node => ['Component', 'Provider'].includes(node.kind));
+  if (fact.authority === 'implemented') return nodes.some(node => ['Component', 'Provider', 'CodeSymbol'].includes(node.kind));
   // Legacy deterministic adapters omitted authority. Require their cited physical file,
   // rather than treating every fact in the implementation display group as code evidence.
   return nodes.some(node => node.kind === 'Component' && node.id === file.id);

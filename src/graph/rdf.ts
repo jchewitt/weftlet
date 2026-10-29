@@ -7,6 +7,7 @@ import { stableJson } from "../infrastructure/util.js";
 import { createRequire } from 'node:module';
 import { CG, RDF, XSD, evidenceShapes } from './shacl-shapes.js';
 import { measureValidationPhase, type GraphValidationProgress } from './validation-progress.js';
+import { addCodeEvidence, codeEvidenceIssues, invalidCodeRange } from './code-rdf.js';
 
 const { namedNode: iri, literal } = DataFactory;
 export { CG } from './shacl-shapes.js';
@@ -56,6 +57,7 @@ export class RdfEvidenceGraph {
         this.dataset.addQuad(record, iri(CG + p), literal(String(value), iri(XSD + 'integer')));
       }
       this.dataset.addQuad(record, iri(CG + 'confidence'), literal(String(fact.confidence), iri(XSD + 'decimal')));
+      addCodeEvidence(this.dataset, record, fact, nodeIri);
       for (const node of [fact.subject, fact.object]) {
         const term = iri(nodeIri(node.id));
         this.dataset.addQuad(term, iri(RDF + 'type'), iri(CG + 'Node'));
@@ -100,6 +102,13 @@ export class RdfEvidenceGraph {
       message: result.message.map((message) => message.value).join('; '),
     }));
     for (const fact of this.snapshot.facts) {
+      for (const message of codeEvidenceIssues(fact)) issues.push({ category: 'extraction-gap',
+        focus: factIri(fact.id), path: CG + 'codeRole', message });
+      if (invalidCodeRange(fact.provenance) ||
+          (fact.codeOccurrence?.declarationRange && invalidCodeRange(fact.codeOccurrence.declarationRange))) {
+        issues.push({ category: 'extraction-gap', focus: factIri(fact.id), path: CG + 'startColumn',
+          message: 'Invalid UTF-16 source range' });
+      }
       if (fact.provenance.endLine < fact.provenance.startLine) {
         issues.push({ category: 'extraction-gap', focus: factIri(fact.id), path: CG + 'endLine',
           message: 'Citation ends before it starts' });

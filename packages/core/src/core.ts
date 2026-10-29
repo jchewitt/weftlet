@@ -11,7 +11,8 @@ export type GraphNodeKind =
   | 'Snapshot'
   | 'Provider'
   | 'PersistenceModel'
-  | 'Scope';
+  | 'Scope'
+  | 'CodeSymbol';
 
 export const graphPredicates = Object.freeze([
   'realizes', 'implementedBy', 'consumes', 'emits', 'persistsTo', 'governedBy',
@@ -27,6 +28,10 @@ export interface SourceSpan {
   readonly endLine: number;
   readonly digest: string;
   readonly commitSha: string;
+  /** When present, both columns are one-based UTF-16 offsets; the end is exclusive. */
+  readonly startColumn?: number;
+  readonly endColumn?: number;
+  readonly columnEncoding?: 'utf-16';
 }
 
 export interface ExtractorIdentity {
@@ -39,6 +44,7 @@ export interface GraphNode {
   readonly kind: GraphNodeKind;
   readonly label: string;
   readonly attributes?: Readonly<Record<string, string | number | boolean>>;
+  readonly codeSymbol?: import('./code-types.js').CodeSymbolDescriptor;
 }
 
 /** A source document's role does not establish approval of its assertions. */
@@ -68,6 +74,8 @@ export interface GraphFact {
   readonly sourceRole?: SourceDocumentRole;
   readonly sourceOwnership?: SourceOwnership;
   readonly sourcePolicyDigest?: string;
+  /** Static occurrence evidence; a reference never establishes a call or observed execution. */
+  readonly codeOccurrence?: import('./code-types.js').CodeOccurrence;
 }
 
 export interface SemanticArtifact {
@@ -266,6 +274,11 @@ export interface ContextPack {
   readonly exploration?: {
     /** Ordering policy for this query; independent of the immutable snapshot's assembly version. */
     readonly rankingVersion?: string;
+    /** Unresolved code targets are terminal for automatic impact expansion; inspect exact neighbors explicitly. */
+    readonly codeTraversalVersion?: string;
+    readonly unexpandedCodeTargets?: readonly string[];
+    readonly unexpandedCodeTargetCount?: number;
+    readonly unexpandedCodeTargetsTruncated?: boolean;
     readonly returned: number;
     readonly reachableFacts: number;
     readonly maxDepth: number;

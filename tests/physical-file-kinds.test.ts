@@ -142,8 +142,14 @@ describe('canonical physical-file producer composition', () => {
     for (const path of ['src/service.ts', 'src/service.spec.ts', 'src/service.test.ts']) {
       const facts = symbols.filter(fact => fact.provenance.path === path);
       expect(facts.length).toBeGreaterThan(0);
-      expect(facts.every(fact => fact.subject.id === repositoryFileNode(path).id &&
+      const physical = facts.filter(fact => !fact.codeOccurrence);
+      expect(physical.length).toBeGreaterThan(0);
+      expect(physical.every(fact => fact.subject.id === repositoryFileNode(path).id &&
         fact.subject.kind === repositoryFileNode(path).kind)).toBe(true);
+      const definitions = facts.filter(fact => fact.codeOccurrence?.role === 'definition');
+      expect(definitions.length).toBeGreaterThan(0);
+      expect(definitions.every(fact => fact.object.id === repositoryFileNode(path).id &&
+        fact.object.kind === repositoryFileNode(path).kind)).toBe(true);
       expect(facts.every(fact => fact.provenance.digest === sha256(f.files[path]!) &&
         fact.provenance.commitSha === f.context.commitSha && fact.confidence === 1)).toBe(true);
     }
@@ -209,8 +215,8 @@ describe('canonical physical-file producer composition', () => {
     const overlay = await buildWorkingOverlay(f.repository, config, store, storage, base.manifest.snapshotId, agent);
     expect(await new RdfEvidenceGraph(overlay).validate()).toEqual({ conforms: true, issues: [] });
     expect(overlay.manifest.extractorVersions).toMatchObject({
-      assembly: 'standalone-graph-v7', 'repository-contract-extractor': '1.2.0',
-      'scip-symbol-extractor': '1.1.0',
+      assembly: 'standalone-graph-v8', 'repository-contract-extractor': '1.2.0',
+      'scip-symbol-extractor': '2.0.0',
     });
     for (const path of ['src/service.ts', 'src/service.spec.ts', 'src/service.test.ts']) {
       const contract = overlay.facts.find(fact => fact.extractor.id === 'repository-contract-extractor' &&

@@ -58,11 +58,21 @@ it('hydrates the planned canonical closure with actual Codex parsing, SCIP, RDF/
   expect(stableJson([...(await graph.facts())].sort((a, b) => a.id.localeCompare(b.id))))
     .toBe(stableJson([...facts].sort((a, b) => a.id.localeCompare(b.id))));
   expect((await graph.select(`SELECT ?from ?to WHERE { GRAPH ?assertion { ?from <${CG}routesThrough> ?to } }`)).rows).toHaveLength(6);
-  const pack = await new SnapshotImpactQueryService(app.store, 'default').scan({ changedFiles: ['src/discovery.ts'], maxDepth: 32, maxFacts: 500 });
+  const service = new SnapshotImpactQueryService(app.store, 'default');
+  const request = { changedFiles: ['src/discovery.ts'], maxDepth: 32, maxFacts: 200 };
+  const pack = await service.scan(request);
+  const retrieved = [...pack.facts];
+  let page = pack;
+  for (let count = 0; page.exploration?.continuation; count++) {
+    if (count > 100) throw new Error('Traversal pagination did not terminate');
+    page = await service.scan({ ...request, continuation: page.exploration.continuation });
+    retrieved.push(...page.facts);
+  }
+  expect(new Set(retrieved.map(fact => fact.id)).size).toBe(retrieved.length);
   expect(pack.snapshot.documentSelection).toEqual(plan.documentSelection);
-  expect(pack.facts.some(fact => fact.provenance.path === 'src/outcomes.ts')).toBe(true);
-  expect(pack.facts.some(fact => fact.provenance.path === 'test/pipeline.test.ts')).toBe(true);
-  expect(pack.facts.some(fact => fact.predicate === 'consumes' && fact.extractor.id === 'scip-symbol-extractor')).toBe(true);
+  expect(retrieved.some(fact => fact.provenance.path === 'src/outcomes.ts')).toBe(true);
+  expect(retrieved.some(fact => fact.provenance.path === 'test/pipeline.test.ts')).toBe(true);
+  expect(retrieved.some(fact => fact.predicate === 'consumes' && fact.extractor.id === 'scip-symbol-extractor')).toBe(true);
   expect(renderContextPackHtml(pack)).toContain('validation');
   expect(renderContextPackHtml(pack)).toContain('Document traversal: complete within configured links');
   expect(pack.markdown).toContain('Document traversal: complete within configured links');

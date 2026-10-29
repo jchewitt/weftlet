@@ -1,3 +1,5 @@
+import { codeEvidenceDescription } from './code-description.js';
+import { sourceLocation } from '@weftlet/core';
 import type { GraphNeighborhood } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from './authority.js';
 import { coverageDescription } from './coverage.js';
@@ -28,7 +30,7 @@ export function renderGraphNeighborhood(result: Omit<GraphNeighborhood, 'markdow
     ...result.coverage.gaps.map(gap => `GAP: ${gap}`),
     '', '## Cited assertions',
     ...result.facts.map(fact => `- [${contextPackEvidenceAuthority(fact)}] ${quoted(fact.subject.id)} —${fact.predicate}→ ${quoted(fact.object.id)} ` +
-      `(${quoted(fact.provenance.path)}:${fact.provenance.startLine}–${fact.provenance.endLine}; confidence ${fact.confidence}; source ${fact.sourceAuthority ?? 'unspecified'}; extraction ${fact.extractionReview ?? 'unspecified'})`),
+      `(${quoted(sourceLocation(fact.provenance))}–${fact.provenance.endLine}${fact.provenance.endColumn === undefined ? '' : `:${fact.provenance.endColumn}`}; confidence ${fact.confidence}; source ${fact.sourceAuthority ?? 'unspecified'}; extraction ${fact.extractionReview ?? 'unspecified'}${codeEvidenceDescription(fact) ? `; ${codeEvidenceDescription(fact)}` : ''})`),
     '', '## Scoped diagnostics',
     ...diagnosticSummary(result).map(item => `- ${quoted(item)}`),
     '', '## Further exploration',

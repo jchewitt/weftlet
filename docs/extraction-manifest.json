@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "601b3e194fd3a51382550bdce42389aabb3a5b2156ef3f19246154d4a980b645"
+      "destinationSha256": "929df36d18dba5235516cfd95b1320a03bdc330c66b08ab32cab9735ccb8c013"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "a641053d1d815f06f5f6f6fc751fa86231718b7b73bef39f50b340e11ad15aea"
+      "destinationSha256": "b55024fc4100c99dbf1ee8f18737b5460fef6be25b7423f8742b9fea9cf4abfc"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "66e66169034b0c04a6d0a5ad21d05fef91a35da18816b40a4441c54cc85258df"
+      "destinationSha256": "a660119e9194eb6ae597c0d5589a52e9d081e587cfe63a129b9280d43eb51200"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -311,7 +311,7 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "e32e0af9596cbf036570e08033503c053a25ed401c3c999c48dab7b106274710"
+      "destinationSha256": "b6fa33a8c76cb152567878720d96fd823a6d95f4f641d70bd7c4f2c6ea15aca0"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "b5b19bddd2d51a1b33b45c9a625082e1774df983ec56c6a0ff4d0c076f1b40da"
+      "destinationSha256": "0e7d87b5a23e0cd3f916b6f21792b595c7cdacd301bd7de67f58f8f5074ad5aa"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "7dd9bbd9c7979f66e372e00d7be02f192518fc190edc01f89c3bbbbbbe8d96d0"
+      "destinationSha256": "78443b22bc30e2313eba43093f03b7027d8f9019e24be8b05ab279078d126025"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -472,14 +472,14 @@
       "destinationPath": "src/extraction/static.test.ts",
       "sourceSha256": "9def1cfe0fc0349ad59709555a63a9261d56ff7379f155fce58f26a552278fbc",
       "modified": true,
-      "destinationSha256": "9676b7b610e78207bce07b490ca2511fdd3e8656376c8e7b8e78d29fd36966c0"
+      "destinationSha256": "bcfac714e51ec0ac81b47eddcd79bdf95c758d0ecc6f4ef15a0c1c2a7db3cffc"
     },
     {
       "sourcePath": "tools/context-graph/src/static.ts",
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "93dac6495ebe45baec5022aabf5c8515b1af3e6e64ec9e1be752220765662e7f"
+      "destinationSha256": "b9d18f37e2f7b6b9a6e9d05211260cf02083c5fb93b2f04944153d0d6999b8d8"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "e18677aaaa9331de8c5fedd15f6e0097189c0b0a77ff1bb05d82c953de1ad53a"
+      "destinationSha256": "21f918c08cbca43a310e57f257ea7e472468f0bcc89201014b4a89a5e206266c"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -581,6 +581,7 @@
     ".changeset/bounded-evidence-paths.md",
     ".changeset/config.json",
     ".changeset/exact-node-neighborhoods.md",
+    ".changeset/precise-scip-occurrences.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -627,6 +628,7 @@
     "docs/ADR-029-exact-graph-neighborhoods.md",
     "docs/ADR-030-bounded-evidence-paths.md",
     "docs/ADR-031-code-extractor-selection.md",
+    "docs/ADR-032-scip-code-evidence.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -773,6 +775,9 @@
     "examples/pipeline/tsconfig.json",
     "mcp-launcher.mjs",
     "packages/core/CHANGELOG.md",
+    "packages/core/src/code-types.ts",
+    "packages/core/src/code.test.ts",
+    "packages/core/src/code.ts",
     "packages/core/src/exploration.ts",
     "packages/core/src/paths.ts",
     "packages/core/src/repository-nodes.test.ts",
@@ -879,8 +884,13 @@
     "src/extraction/repository-nodes.ts",
     "src/extraction/routing.test.ts",
     "src/extraction/routing.ts",
+    "src/extraction/scip-occurrences.test.ts",
+    "src/extraction/scip-occurrences.ts",
     "src/extraction/scip-project.test.ts",
     "src/extraction/scip-project.ts",
+    "src/extraction/scip-ranges.ts",
+    "src/extraction/scip-runtime.ts",
+    "src/extraction/scip-symbols.ts",
     "src/extraction/semantic-cache.ts",
     "src/extraction/semantic-diagnostics.ts",
     "src/extraction/semantic-identity.ts",
@@ -891,6 +901,8 @@
     "src/governance/governance.ts",
     "src/governance/physical-file-kinds.test.ts",
     "src/graph/authority.ts",
+    "src/graph/code-description.ts",
+    "src/graph/code-rdf.ts",
     "src/graph/coverage.test.ts",
     "src/graph/coverage.ts",
     "src/graph/document-role-description.ts",
@@ -943,11 +955,14 @@
     "tests/architecture.test.ts",
     "tests/business-context-acceptance.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/code-evidence-rdf.test.ts",
+    "tests/code-evidence.test.ts",
     "tests/document-coverage.test.ts",
     "tests/document-evidence.test.ts",
     "tests/document-source-rdf.test.ts",
     "tests/extractor-compatibility.test.ts",
     "tests/fixtures/business-context-provider.mjs",
+    "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/shacl.ts",
     "tests/fixtures/traversal.ts",
     "tests/hydration-failure.test.ts",

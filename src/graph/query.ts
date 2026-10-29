@@ -1,4 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
+import { codeEvidenceDescription, unexpandedCodeDescription } from './code-description.js';
+import { sourceLocation } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from "./authority.js";
 import { RdfEvidenceGraph } from "./rdf.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
@@ -80,7 +82,8 @@ function markdownFactDetails(fact: GraphFact): string {
   const document = sourceDocumentDescription(fact)?.replace(/[\\`*_{}\[\]()<>!|]/g, '\\$&').replace(/[\r\n]/g, ' ');
   return `confidence ${fact.confidence}` +
     (fact.sourceAuthority ? `; source ${fact.sourceAuthority}; extraction ${fact.extractionReview ?? 'unknown'}` : '') +
-    (document ? `; ${document}` : '');
+    (document ? `; ${document}` : '') +
+    (codeEvidenceDescription(fact) ? `; ${codeEvidenceDescription(fact)}` : '');
 }
 
 export class MarkdownContextPackRenderer implements ContextPackRenderer {
@@ -128,7 +131,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
           .map(
             (fact) =>
               `- [${contextPackEvidenceAuthority(fact)}] ${fact.subject.label} —${fact.predicate}→ ${fact.object.label} ` +
-              `(\`${fact.provenance.path}:${fact.provenance.startLine}\`, ${markdownFactDetails(fact)})`,
+              `(\`${sourceLocation(fact.provenance)}\`, ${markdownFactDetails(fact)})`,
           ),
       ]),
       '',
@@ -148,6 +151,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       '## Suggested files',
       ...pack.suggestedFiles.map((path) => `- \`${path}\``),
       '',
+      ...unexpandedCodeDescription(pack.exploration),
       '## Scoped diagnostics',
       ...diagnosticSummary(pack).map((item) => `- ${item}`),
     ];
@@ -190,10 +194,18 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     const directTerms = anchorTerms.length > 0 ? anchorTerms : focus;
     const direct = snapshot.facts.filter((fact) => this.matches(fact, directTerms));
     const ranked = new Map(direct.map((fact) => [fact.id, fact]));
+    const unexpandedCodeTargets = new Set<string>();
+    const expand = (node: GraphFact['subject']) => {
+      if (node.kind === 'CodeSymbol' && node.codeSymbol?.resolution === 'no-indexed-definition') {
+        unexpandedCodeTargets.add(node.id);
+        return false;
+      }
+      return node.kind !== 'Project';
+    };
     let frontier = new Set(
       direct.flatMap((fact) =>
         [fact.subject, fact.object]
-          .filter((node) => node.kind !== 'Project')
+          .filter(expand)
           .map((node) => node.id),
       ),
     );
@@ -204,7 +216,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         if (!frontier.has(fact.subject.id) && !frontier.has(fact.object.id)) continue;
         ranked.set(fact.id, fact);
         for (const node of [fact.subject, fact.object]) {
-          if (node.kind !== 'Project' && !visitedNodes.has(node.id)) next.add(node.id);
+          if (expand(node) && !visitedNodes.has(node.id)) next.add(node.id);
         }
       }
       for (const node of next) visitedNodes.add(node);
@@ -221,7 +233,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
     ]);
     const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
-    const queryDigest = sha256(stableJson({ ranking: IMPACT_RANKING_VERSION, query }));
+    const queryDigest = sha256(stableJson({ ranking: IMPACT_RANKING_VERSION, codeTraversal: 'indexed-symbols-v1', query }));
     let offset = 0;
     if (request.continuation) {
       if (request.continuation.length > 2048) throw new Error('Invalid continuation');
@@ -336,6 +348,10 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       diagnostics: selectDiagnostics(snapshot, request, facts, focus, queryDiagnostics),
       exploration: {
         rankingVersion: IMPACT_RANKING_VERSION,
+        codeTraversalVersion: 'indexed-symbols-v1',
+        unexpandedCodeTargets: [...unexpandedCodeTargets].sort().slice(0, 100),
+        unexpandedCodeTargetCount: unexpandedCodeTargets.size,
+        unexpandedCodeTargetsTruncated: unexpandedCodeTargets.size > 100,
         returned: facts.length, reachableFacts: allBalanced.length, maxDepth,
         depthLimitReached: frontier.size > 0, truncated: Boolean(continuation) || frontier.size > 0,
         continuation,

@@ -54,7 +54,7 @@ export interface GraphIdentityPreflightReport {
 
 const publicKinds: ReadonlySet<string> = new Set<GraphNodeKind>([
   'Project', 'Document', 'Capability', 'Workflow', 'Component', 'Contract', 'Evidence',
-  'Invariant', 'Snapshot', 'Provider', 'PersistenceModel', 'Scope',
+  'Invariant', 'Snapshot', 'Provider', 'PersistenceModel', 'Scope', 'CodeSymbol',
 ]);
 
 /** Find the single-kind constraint's conflicts without constructing RDF or changing any fact. */

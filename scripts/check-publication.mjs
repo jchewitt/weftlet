@@ -86,6 +86,9 @@ try {
         'dist/cli.js', 'dist/mcp.js',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
+        'dist/extraction/scip-symbols.js', 'dist/extraction/scip-runtime.js',
+        'dist/extraction/scip-occurrences.js', 'dist/extraction/scip-ranges.js',
+        'dist/graph/code-rdf.js', 'dist/graph/code-description.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
         'dist/extraction/routing.js', 'dist/extraction/repository-nodes.js',
         'dist/application/hydration-plan.js', 'dist/application/cache-adoption.js',
@@ -289,7 +292,7 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor, RepositoryContractExtractor } from ${JSON.stringify(staticModule)};
-import { repositoryFileNode } from '@weftlet/core';
+import { repositoryFileNode, codeSymbolNode } from '@weftlet/core';
 import { adapterFileNode } from './adapter-core.mjs';
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
@@ -335,6 +338,13 @@ const sourceIndex = await new ScipTypeScriptIndexer({ version: '0.4.0', command:
     aliases: { '@fixture/contracts': 'src/contract.ts' } } }, join(root, '.context-graph'))
   .index({ ...context, snapshotId: 'publication-source-project' });
 const sourceFacts = await new ScipSymbolExtractor(repository, sourceIndex).extract(context);
+const codeFacts = sourceFacts.filter(fact => fact.codeOccurrence);
+const codeDefinition = codeFacts.find(fact => fact.codeOccurrence.role === 'definition');
+if (!codeDefinition || !codeFacts.some(fact => fact.codeOccurrence.role === 'reference') ||
+    !codeFacts.every(fact => fact.provenance.columnEncoding === 'utf-16') ||
+    codeSymbolNode(codeDefinition.subject.codeSymbol, codeDefinition.subject.label).id !== codeDefinition.subject.id) {
+  throw new Error('Installed extractor must retain typed code evidence using the public core identity contract');
+}
 const definition = sourceFacts.find((fact) => fact.predicate === 'contains' && fact.object.label.includes('Greeting#'));
 if (!definition || !sourceFacts.some((fact) => fact.provenance.path === 'test/contract.test.ts' &&
     fact.predicate === 'consumes' && fact.object.id === definition.object.id)) {
@@ -423,7 +433,7 @@ const scipPack = await scipQuery.scan({ maxFacts: 200 });
 const productionFacts = sourceFacts.filter(fact => fact.subject.kind === 'Component');
 if (!productionFacts.length || scipPack.coverage.scope !== 'returned-page' ||
     scipPack.coverage.countsAreNonExclusive !== true ||
-    scipPack.coverage.counts.implementationAndConsumers !== productionFacts.length ||
+    scipPack.coverage.counts.implementationAndConsumers !== sourceFacts.filter(fact => fact.provenance.path.startsWith('src/')).length ||
     scipPack.coverage.counts.contractsAndInvariants !== productionFacts.length ||
     scipPack.diagnostics.implementationGaps.items.length ||
     JSON.stringify(scipSnapshot.facts) !== JSON.stringify(sourceFacts)) {

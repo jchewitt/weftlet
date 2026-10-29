@@ -17,8 +17,8 @@ comparison regression passes. See [ADR 028](ADR-028-bounded-artifact-paths.md); 
 consumer rerun is now scheduled after the next candidate. The [1.0 work queue](1.0-WORK-QUEUE.md)
 tracks the requested B1–B6 increments. B2a's public cases, pins, budgets and scoring rules are
 frozen and verified; B2b is measured with retained evidence and disclosed harness corrections.
-[ADR 031](ADR-031-code-extractor-selection.md) makes B3a's richer code entities and explicit
-document-to-symbol bindings the next implementation increment.
+[ADR 032](ADR-032-scip-code-evidence.md) implements B3a's code entities and precise occurrences.
+Explicit document-to-symbol bindings are next; B3c's actual call analysis remains separate.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is
