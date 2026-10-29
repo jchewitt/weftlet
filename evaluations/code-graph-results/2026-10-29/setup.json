@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "status": "sealed-tools-before-measurement",
+  "freezeCommit": "f1844f31717341f5ff95314a68def80eae509734",
+  "freezeDigest": "04fa4584bd80a9b1a1d964420dcaf35b5e8c61a67515cc57e2476fd44fa798b3",
+  "baselineCommit": "f3b0f99cc7f01227925bf7372f3ab7a60f0de62c",
+  "node": {
+    "node": "v24.19.0",
+    "nodeBinary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "nodeSha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+    "scip": "0.4.0",
+    "scipTypescript": "5.9.3",
+    "fixtureTypescript": "5.5.4",
+    "baselineLockSha256": "36087a52387c75fc203a92cc1deb3aeaff5872b44d07e97f572e95834f7d20ac",
+    "scipEntrypointSha256": "22104bf4323e7667ff0d6f38606937c467af2d6e1fda171203c2065d9b757979",
+    "extractorSha256": "502fed6fc3e5634d7526bbb78dcd556d252da9822484a1cceb594a937e244ee0"
+  },
+  "python": {
+    "python": "3.12.14",
+    "git": "git version 2.39.5",
+    "packages": [
+      {
+        "name": "networkx",
+        "version": "3.7",
+        "recordSha256": "0403c7ac1516dc6dc03a4f0d8256c3b5d333c5721e6ab116c9f2b37fdeb6eb30",
+        "wheelTags": [
+          "py3-none-any"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "networkx-3.7-py3-none-any.whl",
+            "sha256": "e3fd2c13a7814cee3746340d8d7f8598a67f16a58bf47fb7f8793fab6efca1b0"
+          }
+        ],
+        "installedFilesSha256": "25a677a0b55e146be30893e01fd4688f24c97c874f6a9c9a1de9cec5feb56df6",
+        "installedFileCount": 606
+      },
+      {
+        "name": "numpy",
+        "version": "1.26.4",
+        "recordSha256": "41c2940b025c27b9b09abd3d900d723846522cd9cf5678fa4ec565e70e3ce67b",
+        "wheelTags": [
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_17_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed"
+          }
+        ],
+        "installedFilesSha256": "ed772601796ef3346bd3826ed46c3825e09beff972291fb205844d12c98cfbcc",
+        "installedFileCount": 792
+      },
+      {
+        "name": "pyyaml",
+        "version": "6.0.3",
+        "recordSha256": "7d0856221a182f5b25fde9bb976af79b4883090f54680d86a42b35fc8d6735a2",
+        "wheelTags": [
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_17_x86_64",
+          "cp312-cp312-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+          }
+        ],
+        "installedFilesSha256": "858ad48647f0ac0f34823a7e1f8864c2dd1cae40ef37854fb9f7b4855ab69de4",
+        "installedFileCount": 26
+      },
+      {
+        "name": "rapidfuzz",
+        "version": "3.14.6",
+        "recordSha256": "e4a7eee051a47eb5333e0def25d26729c803ec741443f68632c8a3b65a6295d4",
+        "wheelTags": [
+          "cp312-cp312-manylinux_2_27_x86_64",
+          "cp312-cp312-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "rapidfuzz-3.14.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "0debb5f43662ea84d2f0228a0c7407ff647f9c3d13f3b692efff0cde46eebce0"
+          }
+        ],
+        "installedFilesSha256": "4012fef90bbba3ba5e1255c731795d2101c28aee327eb00bc490797697423a01",
+        "installedFileCount": 69
+      },
+      {
+        "name": "tree-sitter",
+        "version": "0.25.2",
+        "recordSha256": "99acd63827b1042cf7ba9de4a66b813c2be80e1b34bce8f6fa03278abf58000b",
+        "wheelTags": [
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_17_x86_64",
+          "cp312-cp312-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter-0.25.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "b43a9e4c89d4d0839de27cd4d6902d33396de700e9ff4c5ab7631f277a85ead9"
+          }
+        ],
+        "installedFilesSha256": "c72ebeaac0612eae0e7363f0bcf0bae5e7f0ad65fc1f4ae1b36da4b9480322ce",
+        "installedFileCount": 11
+      },
+      {
+        "name": "tree-sitter-bash",
+        "version": "0.25.1",
+        "recordSha256": "20a4e70c95521cb20ec6194dfcde2bf19a7dac0b132a8b8545b6e32be6e3239a",
+        "wheelTags": [
+          "cp310-abi3-manylinux2014_x86_64",
+          "cp310-abi3-manylinux_2_17_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_bash-0.25.1-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "3f484c4bb8796cde7a87ca351e6116f09653edac0eb3c6d238566359dd28b117"
+          }
+        ],
+        "installedFilesSha256": "5e1beafdc980557d8dab6260ab718ab0ae7ac874e902d40804cc9ad948e1fc61",
+        "installedFileCount": 13
+      },
+      {
+        "name": "tree-sitter-c",
+        "version": "0.24.2",
+        "recordSha256": "15870e7b35f6c0f661b22cfe0ff8dfc2c2f3b81c731093db5db0d2e0fbc63819",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_c-0.24.2-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "5041ef67eb68ce6bc8bb0b1f8ef3a5585ce523dae0c7eec109ab0627dd75aede"
+          }
+        ],
+        "installedFilesSha256": "dcea57a68b50e06393e60f3d9bbdda63a539800eb288d7fb2b4a695313a4ca12",
+        "installedFileCount": 14
+      },
+      {
+        "name": "tree-sitter-c-sharp",
+        "version": "0.23.5",
+        "recordSha256": "a64607d70a22f4d67fc5cbca7a83987fa809a586b7e112b198618e6de10c9963",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_c_sharp-0.23.5-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "aa88a780204cd153c4c1ae2d59c654cee1402212fa0d069823d6d34301587438"
+          }
+        ],
+        "installedFilesSha256": "9d73d7f4cf48e21d173b4d22979ad0f0e49f3eebad94410b17db5963ed08a426",
+        "installedFileCount": 14
+      },
+      {
+        "name": "tree-sitter-cpp",
+        "version": "0.23.4",
+        "recordSha256": "c297385f43951fa1064a9a425ab044c4772945366333e3978c95b67e3d24a4fd",
+        "wheelTags": [
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_cpp-0.23.4-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "773d2cafc08bbc0f998687fa33f42f378c1a371cdb582870c4d13abb06092706"
+          }
+        ],
+        "installedFilesSha256": "a87ee83487e19d7481ff24933c602dc83d1c9bdb570359ac4902f9118dd74cd8",
+        "installedFileCount": 15
+      },
+      {
+        "name": "tree-sitter-elixir",
+        "version": "0.3.5",
+        "recordSha256": "084542381b095608c3477732decd91d7c355715bc5fc79b92a499ef2c7aab1b1",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux_2_28_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_elixir-0.3.5-cp39-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "ebfe3491a3d00ac50b12a3bfcabb1c564f3809ed8a095099fe87f49d6b3987e6"
+          }
+        ],
+        "installedFilesSha256": "4bafdc0c84723fcb46dc22808568c710f8c25dd6fb67ef634adab9479a5ca889",
+        "installedFileCount": 16
+      },
+      {
+        "name": "tree-sitter-fortran",
+        "version": "0.6.0",
+        "recordSha256": "8740d0a253bbf33da8cee20b14415bea89684b4abaad80e4e45f4d3268bd7049",
+        "wheelTags": [
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_fortran-0.6.0-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "ac4800b4abc1b25e6e7ab4a3f2eae274c5b19107beb18d3a473c0f67509c7486"
+          }
+        ],
+        "installedFilesSha256": "fcd8a17dce739cd9b5b3e1a29601caa9259aa7fecc8d304da62513737ace61e8",
+        "installedFileCount": 17
+      },
+      {
+        "name": "tree-sitter-go",
+        "version": "0.25.0",
+        "recordSha256": "37160342ff4dee23c5d1efc95ed140b62a0802ef6a64ec31acda8fc8ada44e95",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_go-0.25.0-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "04b3b3cb4aff18e74e28d49b716c6f24cb71ddfdd66768987e26e4d0fa812f74"
+          }
+        ],
+        "installedFilesSha256": "9e0c07c1cdd2ae6e47da593065c94deb058dd572570da6eb6a8a5f9e32e8fd94",
+        "installedFileCount": 14
+      },
+      {
+        "name": "tree-sitter-groovy",
+        "version": "0.1.2",
+        "recordSha256": "04e23f91528011e388dd66e1dd0880c0d21c7b6c6c4dc8bf54b695a2fec60e5f",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_groovy-0.1.2-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "9e938e9c2cd5fdb08fd1b28d7d621d15ea959a17a4bc0b77833e07a94fe7d263"
+          }
+        ],
+        "installedFilesSha256": "434f63c1be820fae1cf160c3cb9da4ac6138ed89397555916bcdc80a1b251204",
+        "installedFileCount": 11
+      },
+      {
+        "name": "tree-sitter-java",
+        "version": "0.23.5",
+        "recordSha256": "f7977aa6d2ea6b115c0cadd6c5c8edbc15c5f659b05a2b4f284ce3061c112060",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_java-0.23.5-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "370b204b9500b847f6d0c5ad584045831cee69e9a3e4d878535d39e4a7e4c4f1"
+          }
+        ],
+        "installedFilesSha256": "3acb9bf0209f3a1a160e24ebfb126b775c1a8487a4c9aa1a54bffa86f556ea92",
+        "installedFileCount": 14
+      },
+      {
+        "name": "tree-sitter-javascript",
+        "version": "0.25.0",
+        "recordSha256": "5c1cd59a5c98bb67aba887a36e5b7f04ee267606e638ffc67365a56cf2b6ede3",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_javascript-0.25.0-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "9dc04ba91fc8583344e57c1f1ed5b2c97ecaaf47480011b92fbeab8dda96db75"
+          }
+        ],
+        "installedFilesSha256": "5e6e089d2a308b3e04548de218fa7ba62df940f713fbbeaf3017ad58127ca954",
+        "installedFileCount": 18
+      },
+      {
+        "name": "tree-sitter-json",
+        "version": "0.24.8",
+        "recordSha256": "44403b644a655d45870ef51417371fabdcda6c13a48ba0ee2cc798fa3e9f28cf",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_json-0.24.8-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "85cca779872f7278f3a74eb38533d34b9c4de4fd548615e3361fa64fe350ad0a"
+          }
+        ],
+        "installedFilesSha256": "d29b95457cab04a8f43e6be61c42a576d2f25ab2d5d9fdb35c6b23aa8d47096c",
+        "installedFileCount": 13
+      },
+      {
+        "name": "tree-sitter-julia",
+        "version": "0.23.1",
+        "recordSha256": "593a4d640ad440be2865691667abd56683c0df8fd3d58ba85368eeae7d58b29c",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_julia-0.23.1-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "7d4f6ae938198fc0be9b6ea76313ade24fcdb89be01a791e0cc90c88fae5743d"
+          }
+        ],
+        "installedFilesSha256": "a40b3da9eef20faaf52a3e807495a4d9f0ad7930a67cbd6a65dbfd75d2aa9596",
+        "installedFileCount": 13
+      },
+      {
+        "name": "tree-sitter-kotlin",
+        "version": "1.1.0",
+        "recordSha256": "2db49b5a5ef36fff3b537feff8c1613ebddf6dbbae686adc6dfe598f72a5fb83",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_kotlin-1.1.0-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "9a92afe24b634cf914c5812af0f5c53184b1c18bdf6ee5505c83afac81f6bf6c"
+          }
+        ],
+        "installedFilesSha256": "e6562a86e432de806b4164e6121391b6dec1e2d448d19c8548377eb45512956d",
+        "installedFileCount": 12
+      },
+      {
+        "name": "tree-sitter-lua",
+        "version": "0.5.0",
+        "recordSha256": "7ecb5e61552ad48b3d31e1758eb0ca06c244e85b61b905a69b0673960f707763",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_lua-0.5.0-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "5ec448c854fea32414a0449147d648bc5baddf7a0357008c4abe3269db35370a"
+          }
+        ],
+        "installedFilesSha256": "231352a8ef571fb1e32f48512dad3f6a4ec8fc73596e3059b90e6ec4c9ceef4d",
+        "installedFileCount": 16
+      },
+      {
+        "name": "tree-sitter-objc",
+        "version": "3.0.2",
+        "recordSha256": "e246523ba21bf27a4e8e9d0610c29d3440602d94411824cf59ea947aa1c893f6",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_objc-3.0.2-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "e71282ac9c096a966bf2fa6a4ecdbea4bd037d3e01ea4aa9bbc64d9a4c0022f6"
+          }
+        ],
+        "installedFilesSha256": "8f16811f7ba241a2c98053eaa86129b612bb39eb70f58fb2aae3a29d3c6c2774",
+        "installedFileCount": 17
+      },
+      {
+        "name": "tree-sitter-php",
+        "version": "0.24.1",
+        "recordSha256": "f6f86dfbfa07133626a1ca82e0b3c8c775044828009998eda31d362753102eef",
+        "wheelTags": [
+          "cp310-abi3-manylinux2014_x86_64",
+          "cp310-abi3-manylinux_2_17_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_php-0.24.1-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "7a1404a30f2972498ace040b0029738b8dac45d0a12932ccb8b605eb94bafbe4"
+          }
+        ],
+        "installedFilesSha256": "f380dfb27a265a52bc1da2afd901f47bc5fcd1d48a5db5ce654d6eb557e7d6f4",
+        "installedFileCount": 16
+      },
+      {
+        "name": "tree-sitter-powershell",
+        "version": "0.26.4",
+        "recordSha256": "d907c5f8a3cabd83061cf450fdcdfe7e079ceba22e15b3e038c62179fd060d08",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_powershell-0.26.4-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "56508e4ac7aad1e3b26f2ef96b8d2b60b149c4efa0c23742e91e809a11db73ee"
+          }
+        ],
+        "installedFilesSha256": "c6328819828f9c3658975620660fe7e4bf5f72ef36e36a7cbdef7ed6618e7e9a",
+        "installedFileCount": 13
+      },
+      {
+        "name": "tree-sitter-python",
+        "version": "0.25.0",
+        "recordSha256": "05828a37c05c6e21c31f6f7da06cdf144b9c61982909fe68ec45825133d2d5f0",
+        "wheelTags": [
+          "cp310-abi3-manylinux1_x86_64",
+          "cp310-abi3-manylinux_2_28_x86_64",
+          "cp310-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_python-0.25.0-cp310-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "86f118e5eecad616ecdb81d171a36dde9bef5a0b21ed71ea9c3e390813c3baf5"
+          }
+        ],
+        "installedFilesSha256": "08f42b5ea8dd1b00a013370d5bcd311feeabcc846e61948c86eeb2d17bfed292",
+        "installedFileCount": 14
+      },
+      {
+        "name": "tree-sitter-ruby",
+        "version": "0.23.1",
+        "recordSha256": "127b9024e95ad88ee98d1877f3a63a225cad5e5eaddef76d868d363fb52b9364",
+        "wheelTags": [
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_ruby-0.23.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "f7bcd93972b4ca2803856d4fe0fbd04123ff29c4592bbb9f12a27528bd252341"
+          }
+        ],
+        "installedFilesSha256": "84a05a597bf4553f03c667aa733b507ea6c4b065202b27ee5208fe2a4ee80c36",
+        "installedFileCount": 15
+      },
+      {
+        "name": "tree-sitter-rust",
+        "version": "0.24.2",
+        "recordSha256": "d1b10157a9b56fabb36295a4639d03d9eaa5f2098a8aa34b3818a336c5851faa",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux_2_28_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_rust-0.24.2-cp39-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "e033c5a93b57c88e0a835880de39fc802909ff69f57aaff6000211c196ea5190"
+          }
+        ],
+        "installedFilesSha256": "52644787fd68c3b3dd318283cf40b532903a9c55d6be3577e3dabbb315064fda",
+        "installedFileCount": 15
+      },
+      {
+        "name": "tree-sitter-scala",
+        "version": "0.26.3",
+        "recordSha256": "0ed834a7d583680e8c340a02c7b7aff5bc952d512fd292b0c7c90e0ce9b7b96d",
+        "wheelTags": [
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_28_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_scala-0.26.3-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "a66b803409bb76ae6a03b696969594d3da64bc93af375ddafcdb7c7bcc718cc2"
+          }
+        ],
+        "installedFilesSha256": "5e1893f0282f555c8a422e181e1eff72652527e5b78b15ad315ef5ac406c3920",
+        "installedFileCount": 16
+      },
+      {
+        "name": "tree-sitter-swift",
+        "version": "0.7.4",
+        "recordSha256": "803efe9e81dcaffbe2932684b496ba61e1639d12a545502b4787af07389d12eb",
+        "wheelTags": [
+          "cp38-abi3-manylinux1_x86_64",
+          "cp38-abi3-manylinux_2_28_x86_64",
+          "cp38-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_swift-0.7.4-cp38-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+            "sha256": "d11d15a479d7d3b14c7fc526b4daab107995feca5752936fec5c60cc7fa6fe4d"
+          }
+        ],
+        "installedFilesSha256": "22d1f75aec43f1a5a47dc0880f92d5fcdff71fb33757e48a605ce27cc79774cf",
+        "installedFileCount": 20
+      },
+      {
+        "name": "tree-sitter-typescript",
+        "version": "0.23.2",
+        "recordSha256": "258115b553a23451d09a71fc581f047901f1aa622faad8f78534611b2e1c9f28",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_typescript-0.23.2-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "e96d36b85bcacdeb8ff5c2618d75593ef12ebaf1b4eace3477e2bdb2abb1752c"
+          }
+        ],
+        "installedFilesSha256": "6737e80b5fd51587d527cede514b3b21b99db750d05bef247681102060c6383a",
+        "installedFileCount": 15
+      },
+      {
+        "name": "tree-sitter-verilog",
+        "version": "1.0.3",
+        "recordSha256": "3691094dec34ff6c1e95edf23520535989d9faaa94f28d9838aa2b7743f39c4e",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_verilog-1.0.3-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "747dd7d4bc95fb389bc37225f82d16f0c40549856e9a244be3ff9d7bfe62b730"
+          }
+        ],
+        "installedFilesSha256": "be9f1179cd2a03b43948786b4a756f9b0bf68ed165b760ddbed98a15e4e4fb16",
+        "installedFileCount": 12
+      },
+      {
+        "name": "tree-sitter-zig",
+        "version": "1.1.2",
+        "recordSha256": "2bd292f0ccc3e29950bef5f71cca7b157ef7b1a2d2ce233a9b5fca2187016d06",
+        "wheelTags": [
+          "cp39-abi3-manylinux1_x86_64",
+          "cp39-abi3-manylinux2014_x86_64",
+          "cp39-abi3-manylinux_2_17_x86_64",
+          "cp39-abi3-manylinux_2_5_x86_64"
+        ],
+        "lockedArchives": [
+          {
+            "filename": "tree_sitter_zig-1.1.2-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "e924509dcac5a6054da357e3d6bcf37ea82984ee1d2a376569753d32f61ea8bb"
+          }
+        ],
+        "installedFilesSha256": "20d8b2dbc4e306366cddb5183212f52e4c07f25aec5a0222b7e73dc7a8c779a3",
+        "installedFileCount": 16
+      }
+    ],
+    "osRelease": "PRETTY_NAME=\"Debian GNU/Linux 12 (bookworm)\"\nNAME=\"Debian GNU/Linux\"\nVERSION_ID=\"12\"\nVERSION=\"12 (bookworm)\"\nVERSION_CODENAME=bookworm\nID=debian\nHOME_URL=\"https://www.debian.org/\"\nSUPPORT_URL=\"https://www.debian.org/support\"\nBUG_REPORT_URL=\"https://bugs.debian.org/\"\n"
+  },
+  "graphify": {
+    "download": {
+      "sourceCommit": "0a8cd4e1e342235fe53e881fb5d591bf0460071f",
+      "archiveSha256": "d69145201e7677ecdf7040d941075514b7319f15caf58e69f9eb2c470e7d3ac8",
+      "archiveBytes": 13848384,
+      "downloadSeconds": 8.255994081497192,
+      "downloadStartedUtc": "2026-10-29T16:47:11Z",
+      "lockSha256": "0c3c9046327c32b8bc4c73dcc37cf7828bec06c4ae51d35cf14a6ae11f0ed5f8"
+    },
+    "lockSha256": "0c3c9046327c32b8bc4c73dcc37cf7828bec06c4ae51d35cf14a6ae11f0ed5f8",
+    "uvVersion": "uv 0.12.23 (x86_64-unknown-linux-gnu)",
+    "uvSha256": "abdc39eab8b4ad341dca91f3823a23a343fae94bdb22ebdd9e91694415206f2f",
+    "dependencyInstallSeconds": 8.147512912750244,
+    "installExitCode": 0,
+    "sourceManifestVersion": "0.9.97",
+    "lockProjectVersion": "0.9.96",
+    "projectInstalled": false,
+    "entrypoint": "graphify.extract.extract(paths, root=committedRoot, cache_root=persistentCache, parallel=False)",
+    "packagingResolution": "Run the pinned source API; uv sync --frozen --no-dev --no-install-project installs the unchanged locked dependency graph. No registry Graphify package, lock refresh or project rebuild is substituted. All 30 installed distributions match locked wheel hashes/tags. This does not validate a pip install of the published project.",
+    "dependencyCommand": [
+      "uv",
+      "sync",
+      "--project",
+      "/source",
+      "--frozen",
+      "--no-dev",
+      "--no-install-project",
+      "--python",
+      "/usr/local/bin/python3.12",
+      "--no-managed-python"
+    ]
+  },
+  "runtime": {
+    "id": "sha256:a0e5ebfb8804b512f12295f268f6dad59203ff6993082f20f2a1b960a36a3490",
+    "size": 215142616,
+    "created": "2026-10-29T16:55:09.752940471Z"
+  },
+  "baseImageDigests": [
+    "python@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e"
+  ],
+  "dockerfile": "# syntax=docker/dockerfile:1\nFROM python@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e\nRUN --mount=type=secret,id=proxy_ca,required=true \\\n    apt-get -o Acquire::https::CaInfo=/run/secrets/proxy_ca update \\\n    && apt-get -o Acquire::https::CaInfo=/run/secrets/proxy_ca install -y --no-install-recommends git \\\n    && rm -rf /var/lib/apt/lists/*\n",
+  "isolationProbe": {
+    "returncode": 0,
+    "stdout": "3.12.14\n2147483648\n{'networkConnectErrno': 101}\nstatic-import-ok\n",
+    "stderr": ""
+  },
+  "setupWindowSeconds": 479.1580946445465,
+  "setupTimingLimits": "Window includes source inspection and orchestration pauses. SCIP pnpm reports 2.1s using an existing content store; Python uses a fresh venv/cache. Do not compare these as clean-machine installation times.",
+  "host": {
+    "platform": "Linux 6.18.55 x86_64 GNU/Linux",
+    "git": "git version 2.52.0",
+    "cpuModel": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCpus": 5,
+    "memTotal": "MemTotal:       34906016 kB"
+  },
+  "limits": {
+    "cpuQuota": 2,
+    "memoryBytes": 2147483648,
+    "swapBytes": 0,
+    "networkDuringExtraction": "none",
+    "rootFilesystem": "read-only",
+    "maxProcesses": 128,
+    "rssMeasurement": "10ms sampled sum of container process VmRSS, including supervisor; separately retain cgroup memory.peak (includes page cache), not mislabeled as RSS."
+  },
+  "setupLogicalBytes": {
+    "baseline": 317200623,
+    "graphify-venv": 164710395,
+    "uv-cache": 164696473,
+    "upstream": 30138739
+  }
+}
