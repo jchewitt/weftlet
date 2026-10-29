@@ -70,3 +70,13 @@ from the same base commit and cache state; dirty edits stay uncommitted while bo
 the original committed bytes. Old snapshot files, isolated inputs and active checkout state
 must remain unchanged. Artifacts and their hashes identify the corresponding input/engine/harness
 commits. Setup cache conditions are recorded rather than presented as a clean-machine install race.
+
+### Retained harness amendment before the replacement run
+
+Attempt 1 (`d58df3e`) completed eight business scenarios and all dispatch-cold
+worker phases, then its checkout-state assertion stopped: the dispatch fixture does not ignore
+its configured `.context-graph` output. The harness now excludes exactly that output path
+from the tracked/untracked source-state comparison. Committed-input hashes and historical
+snapshot checks remain unchanged. No labels, scoring, tools or source inputs changed. The
+failed attempt remains recorded, and its elapsed time is charged against the same 1,800-second
+budget using `priorMeasurementSeconds`; a replacement run cannot reset the measurement budget.

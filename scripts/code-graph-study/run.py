@@ -66,6 +66,12 @@ def main():
         environment.pop(name, None)
     docker = ['docker', '--host=unix:///var/run/docker.sock']
     started = time.monotonic()
+    prior_seconds = receipt.get('priorMeasurementSeconds', 0)
+    def elapsed():
+        return prior_seconds + time.monotonic() - started
+    def checkout_state(root):
+        # The configured output is allowed to appear; retain tracked and all other untracked changes.
+        return git(root, 'status', '--porcelain', '--', '.', ':(exclude).context-graph').decode().splitlines()
     results = []
     counter = 0
     def container_path(path):
@@ -77,7 +83,7 @@ def main():
         spec = json.loads(spec_path.read_text())
         output = workspace / spec['output'].removeprefix('/study/')
         name = f'weftlet-study-{os.getpid()}-{counter}'
-        remaining = protocol['bounds']['totalMeasurementSeconds'] - (time.monotonic() - started)
+        remaining = protocol['bounds']['totalMeasurementSeconds'] - elapsed()
         if remaining <= 0:
             return {'status': 'global-budget-exhausted'}
         budget = min(protocol['bounds']['extractionSeconds'], remaining)
@@ -162,7 +168,7 @@ def main():
             for scenario in protocol['scenarios']:
                 if scenario['corpus'] not in ['all', corpus['id']]:
                     continue
-                if time.monotonic() - started >= protocol['bounds']['totalMeasurementSeconds']:
+                if elapsed() >= protocol['bounds']['totalMeasurementSeconds']:
                     results.append({'sample': sample, 'corpus': corpus['id'], 'scenario': scenario['id'], 'status': 'global-budget-exhausted'})
                     continue
                 case_dir = output_root / f'{sample}-{corpus["id"]}-{scenario["id"]}'
@@ -184,7 +190,7 @@ def main():
                         cold_state = (consumer, isolated, head, tracked, selected, cache, arm_store)
                 historical = hashes(arm_store)
                 isolated_before = hashes(isolated)
-                dirty = git(consumer, 'status', '--porcelain').decode().splitlines()
+                dirty = checkout_state(consumer)
                 spec = {'baseline': '/study/baseline', 'graphifySource': '/study/upstream/Graphify-Labs-graphify-0a8cd4e',
                         'consumerRoot': container_path(consumer), 'isolatedRoot': container_path(isolated), 'commit': head,
                         'selectedFiles': selected, 'allFiles': tracked, 'output': container_path(output),
@@ -204,7 +210,7 @@ def main():
                 after = hashes(arm_store)
                 assert all(after.get(path) == value for path, value in historical.items()), 'Historical evidence changed'
                 assert hashes(isolated) == isolated_before, 'Extractor changed committed input bytes'
-                assert git(consumer, 'status', '--porcelain').decode().splitlines() == dirty, 'Active checkout changed'
+                assert checkout_state(consumer) == dirty, 'Active checkout changed'
                 record = {'sample': sample, 'corpus': corpus['id'], 'scenario': scenario['id'], 'commit': head,
                           'selectedFiles': selected, 'excludedProjects': scenario.get('excludedProjects', []),
                           'excludedWorkingChanges': dirty, 'historicalArtifactsPreserved': len(historical),
@@ -212,13 +218,13 @@ def main():
                           'status': 'complete' if len(executions) == 3 and all(value['status'] == 'complete' for value in executions.values()) else 'failed',
                           'execution': executions, 'artifactHashes': hashes(output), 'output': str(output.relative_to(output_root))}
                 results.append(record)
-                write_json(output_root / 'runs.json', {'seconds': time.monotonic() - started, 'runs': results})
+                write_json(output_root / 'runs.json', {'seconds': elapsed(), 'runs': results})
                 print(json.dumps({key: record[key] for key in ['sample', 'corpus', 'scenario', 'status']}), flush=True)
                 if record['status'] != 'complete':
                     # Preserve the first failure. A harness fix needs another sealed commit and receipt.
                     return 1
-    write_json(output_root / 'runs.json', {'seconds': time.monotonic() - started, 'runs': results})
-    print(json.dumps({'output': str(output_root), 'seconds': time.monotonic() - started}), flush=True)
+    write_json(output_root / 'runs.json', {'seconds': elapsed(), 'runs': results})
+    print(json.dumps({'output': str(output_root), 'seconds': elapsed()}), flush=True)
     return 0
 
 
