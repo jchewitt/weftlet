@@ -8,6 +8,39 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B3a precise SCIP evidence, 2026-10-29
+
+[ADR 032](ADR-032-scip-code-evidence.md) adds typed code entities and exact occurrences to the
+existing projection. It does not yet implement explicit intent-to-symbol binding or actual calls.
+The new public integration fixture uses real committed TypeScript, SCIP, hydration, strict SHACL
+and RDF/SPARQL equivalence. Its 3,000-line file is explicitly padded with comments; the functional
+cases cover repeated same-line references, Unicode columns, recursive references, private methods,
+local arrow range limits, overload declaration spans, independent mocks and cross-file use.
+It is a location/isolation regression with a predeclared 300-fact/60-second hydration ceiling,
+not a representative monorepo benchmark.
+
+Exact neighbor pagination and paths preserve cited evidence. Shared unresolved external symbols
+remain queryable without automatically joining unrelated co-users in impact scans; diagnostic ID
+examples are bounded to 100 with total/omitted state. Repeat output is identical, and edited,
+renamed/deleted code is replaced in a draft overlay while prior evidence remains unchanged.
+New negative checks retain strict kind cardinality and reject malformed source/identity metadata,
+role/enclosure inconsistencies and invalid ranges. Native zero-width anchors and arrow initializer
+extents are preserved instead of imposing a false name-containment requirement.
+
+Existing coverage and traversal tests now include the additional code facts and follow continuation
+when they no longer fit on one page. Static test source remains implemented evidence, not an
+execution verdict. Semantic artifact identities are unchanged; extraction/assembly identity requires
+a code refresh. The frozen B2 comparison is unchanged and all 79 original source path/hash pairs
+remain intact. No private source or live model/provider request was used for this increment.
+
+The local aggregate publication gate passes build, **828 deterministic tests** (21 core + 807
+toolkit; optional OML integration skipped), architecture with the existing 13 advisory findings,
+release documentation, inventory, license checks and fresh packed-consumer smoke. The installed
+consumer exercises the public core factory, new runtime modules, real SCIP/RDF/SHACL and MCP.
+Hosted Linux/Windows results are recorded with the change PR. Browser interaction, live
+provider quality, private large-graph volume/usefulness and the 1.0 acceptance decision remain
+separate. Release PR #53 stays open; this increment does not publish npm packages.
+
 ## B2b measured extractor decision, 2026-10-29
 
 [ADR 031](ADR-031-code-extractor-selection.md) selects retaining SCIP and exposing richer

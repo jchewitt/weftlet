@@ -4,7 +4,7 @@ import { routingExtractorIdentity } from '../extraction/routing.js';
 import { documentEvidenceExtractorIdentity } from '../extraction/document-evidence.js';
 import { documentSelectionIdentity } from './hydration-inputs.js';
 
-export const graphAssemblyVersion = 7;
+export const graphAssemblyVersion = 8;
 export const graphAssemblyIdentity = `standalone-graph-v${graphAssemblyVersion}`;
 
 export function documentExtractionVersions(config?: Pick<ContextGraphConfig, 'documentTraversal'>): Readonly<Record<string, string>> {

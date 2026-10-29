@@ -1,3 +1,5 @@
+import { codeEvidenceDescription } from './code-description.js';
+import { sourceLocation } from '@weftlet/core';
 import type { GraphPaths } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from './authority.js';
 import { coverageDescription } from './coverage.js';
@@ -28,7 +30,7 @@ export function renderGraphPaths(result: Omit<GraphPaths, 'markdown'>): string {
     '', '## Paths',
     ...result.paths.map((path, index) => `${index + 1}. ${path.nodeIds.map(quoted).join(' → ')}; facts: ${path.factIds.map(quoted).join(', ') || '(zero-length identity path)'}`),
     '', '## Supporting assertions',
-    ...result.facts.map(fact => `- ${quoted(fact.id)} [${contextPackEvidenceAuthority(fact)}] ${quoted(fact.subject.id)} —${fact.predicate}→ ${quoted(fact.object.id)} (${quoted(fact.provenance.path)}:${fact.provenance.startLine}–${fact.provenance.endLine}; confidence ${fact.confidence}; source ${fact.sourceAuthority ?? 'unspecified'}; extraction ${fact.extractionReview ?? 'unspecified'})`),
+    ...result.facts.map(fact => `- ${quoted(fact.id)} [${contextPackEvidenceAuthority(fact)}] ${quoted(fact.subject.id)} —${fact.predicate}→ ${quoted(fact.object.id)} (${quoted(sourceLocation(fact.provenance))}–${fact.provenance.endLine}${fact.provenance.endColumn === undefined ? '' : `:${fact.provenance.endColumn}`}; confidence ${fact.confidence}; source ${fact.sourceAuthority ?? 'unspecified'}; extraction ${fact.extractionReview ?? 'unspecified'}${codeEvidenceDescription(fact) ? `; ${codeEvidenceDescription(fact)}` : ''})`),
     '', '## Unexplored frontier',
     ...frontier.pending.map(item => `- ${quoted(item.nodeId)} via ${item.viaFactIds.map(quoted).join(', ') || '(start)'}: ${item.remainingCandidates} candidates; next ${quoted(item.nextFactId)}`),
     ...frontier.depthLimited.examples.map(item => `- Depth boundary: ${quoted(item.nodeId)} → ${quoted(item.nextNodeId)} via ${quoted(item.nextFactId)}`),

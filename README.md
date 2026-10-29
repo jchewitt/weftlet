@@ -365,6 +365,15 @@ one-hop reads of saved evidence: no model or indexer is invoked. Each assertion 
 citations, authority and review state, including multiple assertions about the same edge.
 Page completion does not establish complete product coverage. See [the query contract](docs/ADR-029-exact-graph-neighborhoods.md).
 
+The development checkout now preserves typed `CodeSymbol` definitions and individual SCIP
+references, including local symbols, repeated same-file uses and one-based UTF-16 columns.
+From a physical-file node, request incoming `definedBy` facts to discover its symbols; from a
+symbol, request incoming/outgoing `references` to inspect exact occurrences. Native lexical
+enclosure is not a call graph. Resolution distinguishes indexed definitions, declaration-only
+targets and absent indexed definitions. Local ordinal IDs are scoped to the exact index; refresh
+code evidence before comparing revisions. See [code evidence and limits](docs/ADR-032-scip-code-evidence.md).
+Explicit rule-to-symbol binding and static call analysis are still in the 1.0 work queue.
+
 The development checkout also supports paths between two exact IDs:
 
 ```sh

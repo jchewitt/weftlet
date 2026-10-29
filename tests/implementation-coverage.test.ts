@@ -132,8 +132,9 @@ describe('implementation coverage across presentation lanes', () => {
     }
     const pack = await f.query(facts, 'scip');
     expect(pack.coverage.counts.contractsAndInvariants).toBe(production.length);
-    expect(pack.coverage.counts.implementationAndConsumers).toBe(production.length);
-    expect(pack.coverage.counts.validationEvidence).toBe(tests.length);
+    expect(pack.coverage.counts.implementationAndConsumers).toBe(facts.filter(fact =>
+      !fact.provenance.path.endsWith('.spec.ts')).length);
+    expect(pack.coverage.counts.validationEvidence).toBe(facts.filter(fact => fact.provenance.path.endsWith('.spec.ts')).length);
     expect(pack.diagnostics.implementationGaps.items).toEqual([]);
   }, 45_000);
 

@@ -14,7 +14,8 @@ not close any of B1–B6 below. Resume B1 and the bounded B2 evaluation after th
 The maintainer now considers this the main reported consumer blocker and requests the next live
 TradePilot test after a new candidate. [The implementation queue](1.0-WORK-QUEUE.md) breaks B1–B6
 into bounded increments; B1a exact-node neighborhoods and B1b bounded paths are implemented for the next candidate.
-B2a's public comparison protocol is frozen; measured B2b results and the backend decision remain pending. This schedules acceptance;
+B2a's public comparison protocol is frozen; B2b's measured decision retains SCIP and improves its
+projection ([ADR 031](ADR-031-code-extractor-selection.md)). This schedules acceptance;
 it does not claim an additional private run or a full product-usefulness pass.
 
 The product goal is to let an agent starting with a task or code change retrieve the relevant
@@ -72,7 +73,7 @@ blockers take priority when its report arrives. Do not modify or audit its appli
 | --- | --- | --- |
 | **B1** | **Exact graph exploration.** Specify and add bounded node lookup/neighbor expansion and dependency-path exploration through MCP and the shared query layer. | An agent can start from a returned stable node ID, select relation/direction and inspect another business area. Return citations, authority, snapshot identity, incomplete scope, pagination and remaining frontier. Test branches, cycles, ambiguous labels, deleted nodes and stale/mismatched continuations. Keep CLI/MCP/viewer on the same facts; preserve existing `impact.scan`. |
 | **B2** | **Evaluate Graphify and current SCIP representation.** Run the fixed public comparison in [the research note](GRAPHIFY-EVALUATION.md) before choosing a code extraction backend or symbol schema. | Compare the current projection, richer use of raw SCIP and pinned Graphify on identical committed inputs. Measure correct/missing/false links, provenance, identity stability, costs and packaging. Produce a keep/improve/replace decision with evidence. Parallel use during evaluation does not mandate shipping two indexers. |
-| **B3** | **Resolve business-to-implementation links at symbol/function level.** After B2, define canonical scoped code identities and resolve explicit document paths/symbol references to exact code entities. Evaluate a separate bounded inference pass only where explicit evidence is insufficient. | Named functions, methods, aliases, overloads, same-name symbols and renamed/deleted targets resolve correctly or remain unresolved. Separate a cited declared mapping, a proposed inferred mapping and evidence of actual behavior. Record both document and code revisions/spans for derived links. A reviewer can follow a rule to its implementation and back. Code inference never supplies approval; full automatic documentation generation remains 2.0. |
+| **B3** | **Resolve business-to-implementation links at symbol/function level.** After B2, define canonical scoped code identities, retain same-file occurrences and resolve explicit document paths/symbol references to exact code entities. Add bounded static call analysis as a separate increment; evaluate a separate bounded inference pass only where explicit mapping evidence is insufficient. | Named functions, methods, aliases, overloads, same-name symbols and renamed/deleted targets resolve correctly or remain unresolved. Meet the same-file acceptance boundary below. Separate a cited declared mapping, a proposed inferred mapping and evidence of actual behavior. Record both document and code revisions/spans for derived links. A reviewer can follow a rule to its implementation and back. Code inference never supplies approval; full automatic documentation generation remains 2.0. |
 | **B4** | **Cross-boundary obligations.** Represent and retrieve producer guarantees and consumer requirements through explicit data/event contracts, including applicable stage, domain, units, freshness and version where sources provide them. | Public cases cover a queue handoff, a write/read handoff, compatible differing limits with revalidation, a real documented incompatibility, missing links and same-name unrelated domains. Retrieve both sides and the implementation evidence. Potential model findings remain uncertain; hard failures require explicit approved deterministic rules. A graph link or SHACL pass is not a compatibility verdict. General reconciliation/approval UI remains 2.0. |
 | **B5** | **Monorepo selection and coverage.** Assess diagnostics for selected services, client, shared packages, source aliases and excluded/unresolved code; improve the gaps found. | A configured multi-package TypeScript/TSX fixture and the consumer report identify which projects were selected, indexed and actually connected. Test barrel exports, independent service code, external unresolved dependencies and omitted projects. Missing resolution cannot be reported as zero impact or complete coverage. Cross-repository federation is a separate scope decision. |
 | **B6** | **End-to-end product acceptance and release decision.** Combine the public evidence, B1–B5 decisions and TradePilot's next candidate report; ship bounded candidate changes as needed. | Predeclare tasks, correct downstream business obligations/implementations, known unrelated matches and query budgets before measuring. Retain actual requests, follow-up decisions and citations. Assess helpfulness and misses separately from hydration success. Complete full hydration/repeat and supported release checks; review any remaining limitations before a versioned 1.0 publication. |
@@ -82,6 +83,41 @@ bounded B2 comparison; use that decision for B3; implement B4/B5 in independentl
 increments; close B6. Each implementation can ship in a minor candidate before 1.0. Changes to
 retrieval semantics, extraction/cache identity or snapshot compatibility need explicit decisions
 and regression evidence; no silent migration or history rewrite.
+
+## Same-file exploration acceptance
+
+The maintainer explicitly identified large files with many internal calls as a 1.0 concern after
+the B2 comparison. Retain SCIP and address this gap without waiting for an application rewrite.
+The following requirements extend B3; they do not change the frozen B2 cases or scores and are
+not implementation or private consumer validation results.
+
+1. Preserve local/private functions, methods, same-file references and multiple occurrences of
+   the same reference. Return exact source spans and enclosing callable where established;
+   file membership alone must not imply a call or make every function relevant.
+2. In a separately testable call-analysis increment, distinguish a statically resolved direct
+   call from a type use, passing a function as a value, or registering a callback. Retain caller,
+   callee, callsite, resolution basis and uncertainty. A static edge does not prove runtime
+   execution; unresolved dispatch/callback targets remain explicit.
+3. Starting with one exact function, let an agent retrieve incoming references/callers and
+   outgoing references/callees, follow a helper chain and inspect applicable documented rules
+   through the shared bounded API/MCP queries. Preserve direction, citations, authority, scope
+   and continuation. Avoid requiring the entire containing file as the initial context response.
+4. Use an independently authored public fixture of roughly 3,000 lines with meaningful internal
+   helper chains, unrelated methods, private/local functions, recursion, shadowed names and
+   repeated callsites. Include a cross-file caller and a similar-looking implementation with a
+   distinct identity. Predeclare expected retrievals and query budgets before measuring; verify
+   extraction and actual agent-facing query results rather than hand-assembled edges. Record
+   bounded response size and misses. File length is a workload characteristic, not an
+   architectural violation or proof of modularity.
+5. Check edits, line shifts, rename/delete, dirty overlays, historical evidence, strict RDF/SHACL
+   and shared-query parity. Preserve explicit rule-binding authority. Similar code or names do
+   not establish equivalent business behavior or justify merging identities; existing duplication
+   signals still require semantic review. Duplicate-behavior detection is not added by this task.
+
+Implement richer entities/occurrences first, then explicit document bindings and the separate
+call-analysis increment. Select the call producer using focused evidence; this does not select
+Graphify as a dependency or promise complete call/data-flow analysis. Agent usefulness still
+needs B6's live consumer evaluation after the candidate is published.
 
 ## Consumer report to reconcile when available
 

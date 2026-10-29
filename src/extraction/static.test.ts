@@ -147,14 +147,14 @@ describe('SCIP symbol extraction', () => {
           relative_path: 'src/search.ts',
           occurrences: [
             new runtime.scip.Occurrence({ range: [0, 13, 26], symbol, symbol_roles: 1 }),
-            new runtime.scip.Occurrence({ range: [0, 27, 33], symbol: fileLocal, symbol_roles: 1 }),
-            new runtime.scip.Occurrence({ range: [0, 34, 40], symbol: fileLocal, symbol_roles: 8 }),
+            new runtime.scip.Occurrence({ range: [0, 28, 34], symbol: fileLocal, symbol_roles: 1 }),
+            new runtime.scip.Occurrence({ range: [0, 44, 50], symbol: fileLocal, symbol_roles: 8 }),
           ],
         }),
         new runtime.scip.Document({
           relative_path: 'src/consumer.ts',
           occurrences: [
-            new runtime.scip.Occurrence({ range: [1, 5, 18], symbol, symbol_roles: 8 }),
+            new runtime.scip.Occurrence({ range: [1, 4, 17], symbol, symbol_roles: 8 }),
           ],
         }),
       ],
@@ -163,7 +163,7 @@ describe('SCIP symbol extraction', () => {
     const indexPath = join(root, 'index.scip');
     await writeFile(indexPath, index.serializeBinary());
     const files: Readonly<Record<string, string>> = {
-      'src/search.ts': 'export class SearchService {}\n',
+      'src/search.ts': 'export class SearchService { helper() { this.helper(); } }\n',
       'src/consumer.ts': "import { SearchService } from './search.js';\nnew SearchService();\n",
     };
     const repository = {
@@ -189,7 +189,7 @@ describe('SCIP symbol extraction', () => {
       mode: 'full',
       version: '0.4.0',
     }).extract(context);
-    expect(facts.map((fact) => [fact.predicate, fact.provenance.path])).toEqual([
+    expect(facts.filter(fact => !fact.codeOccurrence).map((fact) => [fact.predicate, fact.provenance.path])).toEqual([
       ['contains', 'src/search.ts'],
       ['consumes', 'src/consumer.ts'],
     ]);

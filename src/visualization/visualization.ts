@@ -1,4 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
+import { codeEvidenceDescription } from '../graph/code-description.js';
+import { sourceLocation } from '@weftlet/core';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, resolve } from 'node:path';
 
@@ -207,8 +209,8 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
       to: fact.object.id,
       label: fact.predicate,
       authority: contextPackEvidenceAuthority(fact),
-      provenance: `${fact.provenance.path}:${fact.provenance.startLine}`,
-      detail: `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}` +
+      provenance: `${sourceLocation(fact.provenance)}`,
+      detail: (codeEvidenceDescription(fact) ? `${codeEvidenceDescription(fact)}; ` : '') + `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}` +
         (sourceDescription ? `; ${sourceDescription}` : ''),
       source: fact.provenance,
       sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
