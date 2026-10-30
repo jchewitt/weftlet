@@ -179,14 +179,14 @@ describe('commit-keyed hydration', () => {
     dockerReady = true;
     const first = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(first.snapshot.manifest.extractorVersions).toMatchObject({
-      assembly: 'standalone-graph-v11', 'repository-node-identity': '1', 'document-linker': '2.0.0', 'repository-file-extractor': '2.0.0',
+      assembly: 'standalone-graph-v12', 'repository-node-identity': '1', 'document-linker': '2.0.0', 'repository-file-extractor': '2.0.0',
       'repository-contract-extractor': '1.2.0',
       'scip-symbol-extractor': '2.1.0', 'typescript-call-extractor': '1.0.0', 'document-obligation-extractor': '1.0.0', 'document-code-binding-extractor': '1.0.0',
     });
     expect(first.snapshot.facts.some((fact) => fact.predicate === 'references' &&
       fact.object.id === 'component:file:src/search.ts' && fact.provenance.startLine === 4)).toBe(true);
     // A previous assembly's saved evidence must remain addressable during a new refresh.
-    const legacyId = first.snapshot.manifest.snapshotId.replace('-graph-v11-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-', '-graph-v6-links-2.0.0-files-2.0.0-');
+    const legacyId = first.snapshot.manifest.snapshotId.replace('-graph-v12-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-', '-graph-v6-links-2.0.0-files-2.0.0-');
     expect(legacyId).not.toBe(first.snapshot.manifest.snapshotId);
     const legacy = { ...first.snapshot, manifest: { ...first.snapshot.manifest,
       snapshotId: legacyId, extractorVersions: { assembly: 'standalone-graph-v6', 'repository-file-extractor': '2.0.0', 'repository-contract-extractor': '1.1.0' } },

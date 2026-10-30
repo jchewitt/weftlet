@@ -251,7 +251,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       offset = token.offset;
     }
     const facts = allBalanced.slice(offset, offset + maxFacts);
-    const coverage = coverageForFacts(facts);
+    const coverage = coverageForFacts(facts, snapshot);
     const nextOffset = offset + facts.length;
     const continuation = nextOffset < allBalanced.length ? Buffer.from(JSON.stringify({
       snapshot: snapshot.manifest.snapshotId, digest: snapshot.manifest.contentDigest,

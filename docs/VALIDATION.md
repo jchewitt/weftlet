@@ -8,6 +8,32 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B5 monorepo code coverage, 2026-10-30
+
+[ADR 038](ADR-038-monorepo-code-coverage.md) records saved source selection separately from
+actual SCIP documents and graph connections. The [public protocol](../evaluations/monorepo-coverage/README.md)
+uses real committed multi-package TypeScript/TSX, aliases/barrels, an independent selected service,
+an omitted service, an empty source, declaration-only targets and an unresolved external call.
+Six integration tests pass, comparing every indexed flag to the normalized binary SCIP document
+list and the derived overview to the lossless RDF projection. Source selection differs from code
+roots: the real probe did not emit an imported file outside the selected entries, and the report
+retains that absence plus references without an indexed definition.
+
+Bounded package/file pagination, cursor binding, unknown legacy coverage, corrupted inventory,
+shared query/viewer overview, API/CLI/MCP equivalence, dirty unavailable-provider queries, unchanged
+semantic reuse and clean comparison pass. Draft rename/delete and expanded committed scope update
+coverage while preserving historical snapshots and current-diff ineligibility. Three inventory
+unit tests and 17 strict interface tests complement the six integration tests. The existing
+commit-keyed hydration regression also passes after the deliberate assembly 12 bump. Strict test
+typechecking passes, and architecture retains the existing 13 advisories without new baselines
+or exceptions. Full publication and hosted Linux/Windows results are recorded in the change PR
+after execution, including installed coverage API/CLI/MCP checks.
+
+No private application, paid/model request, dependency, inference approval or npm publication is
+part of this increment. Scope is regular committed TypeScript-family files grouped by physical
+package manifest boundaries, not arbitrary compiler projects, all languages or runtime/business
+completeness. B3b's inference decision and B6 qualification/live acceptance remain open.
+
 ## B4b selected contract comparison, 2026-10-30
 
 [ADR 037](ADR-037-selected-contract-compatibility.md) adds a read-only exact assertion-pair

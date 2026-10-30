@@ -4,6 +4,7 @@ import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ContextGraphConfig } from "../configuration/config.js";
 import { scipSourcePatterns } from '../configuration/scip-project.js';
+import { buildCodeInventory } from '../extraction/code-inventory.js';
 import type { ExtractionContext, GraphSnapshot } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { withCommittedTree } from "../repository/committed-tree.js";
@@ -126,6 +127,8 @@ export async function buildWorkingOverlay(
       digest: sha256(stableJson({ ...documents.documentSelection, digest: undefined, baseSha: head, overlayDigest })),
     } : undefined;
     const scip = await new ScipTypeScriptIndexer(config.scip, storageRoot).index(context);
+    const codeInventory = buildCodeInventory(await draftRepository.listEntriesAt(context.commitSha),
+      await draftRepository.listFilesAt(context.commitSha, config.codeRoots), config.codeRoots, config.scip.sourceProject, scip);
     const routing = await extractRoutingDeclarations(draftRepository, context, routingSources,
       { allowMissingSources: true });
     const uncapturedEndpoints = routing.referencedPaths.filter((path) => !inWorkingScope(path, roots));
@@ -153,7 +156,7 @@ export async function buildWorkingOverlay(
       const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
       return { ...draft, id: sha256(stableJson(draft)) };
     }).sort((a, b) => a.id.localeCompare(b.id));
-    return { facts, diagnostics, documents, documentSelection, retainedSubjects };
+    return { facts, diagnostics, documents, documentSelection, retainedSubjects, codeInventory };
   });
   const retained = extracted.retainedSubjects.map(fact => ({ ...fact, snapshotId }));
   const allFacts = [...retained, ...extracted.facts].sort((a, b) => a.id.localeCompare(b.id));
@@ -162,6 +165,7 @@ export async function buildWorkingOverlay(
     ...base,
     manifest: {
       ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
+      codeInventory: extracted.codeInventory, scipIndexDigest: extracted.codeInventory.scipIndexDigest,
       ...overlayDocumentManifest(extracted.documentSelection),
       extractorVersions: { ...base.manifest.extractorVersions,
         assembly: graphAssemblyIdentity,
@@ -174,6 +178,7 @@ export async function buildWorkingOverlay(
         [staticCallIdentity.id]: staticCallIdentity.version,
         ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
       generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson({ facts: allFacts, diagnostics: extracted.diagnostics,
+          codeInventory: extracted.codeInventory,
           ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) })),
     },
     facts: allFacts,

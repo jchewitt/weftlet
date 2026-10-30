@@ -142,6 +142,7 @@ export interface SnapshotManifest {
   readonly configurationDigest?: string;
   readonly scope?: readonly string[];
   readonly documentSelection?: DocumentSelectionRecord;
+  readonly codeInventory?: import('./code-coverage.js').CodeInventory;
   readonly ontologyVersion: string;
   readonly extractorVersions: Readonly<Record<string, string>>;
   readonly semanticModel: string;
@@ -295,6 +296,8 @@ export type ContextPackLane =
   | 'validationEvidence';
 
 export interface ContextPackCoverage {
+  /** Whole saved-source coverage, separate from counts on this returned fact page. */
+  readonly code?: import('./code-coverage.js').CodeCoverageOverview;
   /** Absent in older packs, whose counts described exclusive display lanes. */
   readonly scope?: 'returned-page';
   /** One returned relationship can support both implementation and contract coverage. */

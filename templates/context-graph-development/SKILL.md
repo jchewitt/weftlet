@@ -39,6 +39,12 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
    snapshot (`producerFactId`, `consumerFactId`). Retain both citations and inspect unknowns,
    competing declarations and any required revalidation. Numeric compatibility does not prove
    code fulfillment, runtime delivery or current-diff correctness; it never supplies a CI gate.
+   When available, `graph.coverage` pages saved package-boundary coverage, then files using
+   an exact returned `projectRoot`. Inspect requested versus actually indexed files, omitted
+   packages and unresolved/declaration-only targets. Follow `selection.continuation` with the
+   same arguments. Zero connections, missing inventory or completed pagination do not establish
+   complete resolution or no business impact. Its overview covers the saved snapshot, while
+   the ordinary coverage lane counts describe only the returned evidence page.
 6. Give subagents the bounded Context Pack, snapshot SHA, and unresolved assumptions.
 7. Query again after material diff changes. Historical saved evidence remains useful context but
    cannot satisfy current-diff validation or merge gates.

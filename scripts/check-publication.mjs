@@ -307,7 +307,7 @@ import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', st
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
-  extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode, SnapshotContractCompatibilityService,
+  extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode, SnapshotContractCompatibilityService, SnapshotCodeCoverageService,
   inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
@@ -432,6 +432,10 @@ if (JSON.stringify(attributed?.details?.provenance) !== JSON.stringify(conflicti
   throw new Error('Installed explicit identity attribution must preserve all source evidence');
 }
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
+const legacyCoverage = await new SnapshotCodeCoverageService({ read: async () => snapshot }).coverage({ snapshotId: context.snapshotId });
+if (legacyCoverage.overview.status !== 'unavailable' || legacyCoverage.overview.totals !== undefined) {
+  throw new Error('Installed coverage API must not invent zero coverage for legacy snapshots without inventory');
+}
 const compatibility = await new SnapshotContractCompatibilityService({ read: async () => snapshot }).assess({
   snapshotId: context.snapshotId, producerFactId: obligations.facts.find(fact => fact.predicate === 'emits').id,
   consumerFactId: obligations.facts.find(fact => fact.predicate === 'consumes').id });

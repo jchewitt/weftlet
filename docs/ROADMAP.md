@@ -8,9 +8,9 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 
 The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE.md) records
 three bounded public acceptance checks and the additional B1–B6 task list. B1 exact neighborhoods
-and bounded paths are implemented for the next candidate. Explicit function-level intent bindings are implemented; inferred-mapping decisions
-and monorepo coverage remain open before the official release decision. Explicit cross-boundary
-numeric comparisons are implemented for the next candidate.
+and bounded paths are implemented for the next candidate. Explicit function-level intent bindings,
+cross-boundary numeric comparisons and saved TypeScript/package coverage are implemented.
+The inferred-mapping decision and candidate/live acceptance remain before the official release decision.
 The measured [Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) selects a richer SCIP projection.
 The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
 identities, provenance and cache reuse. The requested Windows traversal → repeat → clean
@@ -24,8 +24,9 @@ Explicit document-to-symbol bindings are implemented in [ADR 033](ADR-033-docume
 proposal; its evaluation/deferral decision remains open. [ADR 035](ADR-035-static-call-evidence.md)
 implements B3c's bounded static call evidence. [ADR 036](ADR-036-contract-obligation-declarations.md)
 adds B4a's explicitly cited producer/consumer declarations. [ADR 037](ADR-037-selected-contract-compatibility.md)
-adds B4b's advisory selected-constraint assessment and public acceptance. Monorepo coverage and
-the inference proposal decision remain before candidate qualification.
+adds B4b's advisory selected-constraint assessment and public acceptance. [ADR 038](ADR-038-monorepo-code-coverage.md)
+adds B5's saved source inventory, package/file pagination and shared coverage overview.
+The inference proposal decision remains before candidate qualification.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is

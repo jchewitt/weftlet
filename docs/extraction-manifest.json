@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "263b5ef2faa1bad95c70f962e41a07fac6ea26c783d34484fb109fed36291e1b"
+      "destinationSha256": "bd0da7ce094987c3d847403105998b9a01f2d2fcc308bf1d1ec16feb8409b769"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "2fb7f1ad3c83571a357b84d097f128f5985b6471215c0c098640c1059b1bee7b"
+      "destinationSha256": "687d864a50ca131f40e4ba95033e0dac13166d642a4ea9183a90786b74de6b2c"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "b9d86ce84f02c1e6ce5fb2a669b0e9028ab1fa295bf70e66e4120f3b57ee1b46"
+      "destinationSha256": "18a7ca311e1ccbe425b094b24b32225f6d2b9d15c814c02df08c6efe2d04d15d"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "8b42315cd63c3395edbe2bc87ca28a6214f2d2f4e74934fbe2fe878fd469a94c"
+      "destinationSha256": "a4975cbf1c1ad8b2d2ab84264dd0c126377f30ad9fe9f62d685abcd872d801da"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "a1cfbc3fef98e92c1803dfe04e89999781a74445cf723ee044b988842df76986"
+      "destinationSha256": "94ef531314cb1a57313905fb1aee45d4bea8789ea6bc2b7ee988d716d87aadb3"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -311,21 +311,21 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "84b06595a727432e6088a2535799e6cc98e0a883f9181288ded1591a2737a454"
+      "destinationSha256": "b87bbd86171c81122150a21e86525017b7c17dafd8eade4f13405f588e9262b8"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "87cce887f8e58c0c7644d9f75c5ac5c62b243a4b168031cf0b97429de98b90a1"
+      "destinationSha256": "394bed3f59049a650ebb94a8ade4f1637b9540633e2f49d3a16ac336fb9c9d7b"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "6e4d816bd2a989bcb8771256cfe64772a440f95cbf8256ec6936ab35a34b386d"
+      "destinationSha256": "ea605895d6106960040559b634331741257a6b814cc85f6ebff829b0bf79d8c7"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -339,14 +339,14 @@
       "destinationPath": "tests/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "62950d0eae94dd69c9abdeaa273780fe01a577614ad71a0e1f8e55e26dccdb0f"
+      "destinationSha256": "574182d6ebff5464365488d8df02bc927ee48cd2bf3535f87ff27a0cd6b4bf87"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "737713722b7316565752197b28b602c0fe097f48cfa15bb5c778ffba8cd45ae5"
+      "destinationSha256": "24e24d4cd5a508624a6c8890cd8e20c633f0cff9e78adbd5cae29d787bbc2689"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "f0e7b9805058af983b0e07d5009543fe2837b128832ce8efcb470004d5e07885"
+      "destinationSha256": "b689b2285cc22fdcc89d5dd64ee91d0395a1751004c7970bf62f9edebd7162ce"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -479,7 +479,7 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "b9d18f37e2f7b6b9a6e9d05211260cf02083c5fb93b2f04944153d0d6999b8d8"
+      "destinationSha256": "790822f66e92d64ce79a0cee68593567085481cad3c3162083530a50e6f3f108"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "84bd6c38ba034930e028d0bf9e6849a2936a50823bc9672a37cda697d459729d"
+      "destinationSha256": "e02f2fad428b6f4202bd7542b78f7b2947f8540320b0cf213be3c7f5f2d47eb5"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -586,6 +586,7 @@
     ".changeset/explicit-symbol-bindings.md",
     ".changeset/precise-scip-occurrences.md",
     ".changeset/release-plan.json",
+    ".changeset/saved-monorepo-coverage.md",
     ".changeset/static-call-evidence.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -638,6 +639,7 @@
     "docs/ADR-035-static-call-evidence.md",
     "docs/ADR-036-contract-obligation-declarations.md",
     "docs/ADR-037-selected-contract-compatibility.md",
+    "docs/ADR-038-monorepo-code-coverage.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -778,6 +780,7 @@
     "evaluations/mapping-gaps/project/test/eligibility.test.ts",
     "evaluations/mapping-gaps/protocol.json",
     "evaluations/mapping-gaps/results/2026-10-29.json",
+    "evaluations/monorepo-coverage/README.md",
     "evaluations/static-calls/README.md",
     "evaluations/static-calls/results/2026-10-29.json",
     "evaluations/weftlet/baseline.json",
@@ -817,10 +820,12 @@
     "packages/core/CHANGELOG.md",
     "packages/core/src/bindings.ts",
     "packages/core/src/calls.ts",
+    "packages/core/src/code-coverage.ts",
     "packages/core/src/code-types.ts",
     "packages/core/src/code.test.ts",
     "packages/core/src/code.ts",
     "packages/core/src/compatibility.ts",
+    "packages/core/src/coverage-query.ts",
     "packages/core/src/exploration.ts",
     "packages/core/src/obligation-types.ts",
     "packages/core/src/obligations.test.ts",
@@ -910,6 +915,7 @@
     "src/application/hydration-plan.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
+    "src/application/saved-code-coverage.ts",
     "src/application/saved-compatibility.ts",
     "src/application/saved-evidence.ts",
     "src/application/saved-exploration.ts",
@@ -924,6 +930,8 @@
     "src/extraction/call-syntax.ts",
     "src/extraction/canonical-document-links.test.ts",
     "src/extraction/canonical-document-links.ts",
+    "src/extraction/code-inventory.test.ts",
+    "src/extraction/code-inventory.ts",
     "src/extraction/codex-auth.test.ts",
     "src/extraction/codex-auth.ts",
     "src/extraction/codex-command.test.ts",
@@ -970,6 +978,10 @@
     "src/graph/binding-rdf.ts",
     "src/graph/call-rdf.ts",
     "src/graph/call-shapes.ts",
+    "src/graph/code-coverage-projection.ts",
+    "src/graph/code-coverage-renderer.ts",
+    "src/graph/code-coverage-request.ts",
+    "src/graph/code-coverage.ts",
     "src/graph/code-description.ts",
     "src/graph/code-rdf.ts",
     "src/graph/compatibility-context.ts",
@@ -1007,6 +1019,8 @@
     "src/infrastructure/module-resolution.ts",
     "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
+    "src/interfaces/code-coverage.test.ts",
+    "src/interfaces/code-coverage.ts",
     "src/interfaces/doctor.ts",
     "src/interfaces/document-coverage.test.ts",
     "src/interfaces/document-coverage.ts",
@@ -1050,6 +1064,7 @@
     "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/compatibility-cases.ts",
     "tests/fixtures/compatibility-project.ts",
+    "tests/fixtures/monorepo-project.ts",
     "tests/fixtures/obligation-project.ts",
     "tests/fixtures/shacl.ts",
     "tests/fixtures/static-call-project.ts",
@@ -1060,6 +1075,7 @@
     "tests/identity-preflight.test.ts",
     "tests/implementation-coverage.test.ts",
     "tests/module-boundaries.test.ts",
+    "tests/monorepo-coverage.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf.test.ts",

@@ -54,7 +54,7 @@ export class SnapshotContractCompatibilityService implements ContractCompatibili
     const diagnostics = selectDiagnostics(snapshot, {}, facts, [], [], new Set(context.contractNodeIds));
     const assessment = await assessSelected(snapshot, facts, context, diagnostics);
     const plain = { snapshot: snapshotContext(snapshot.manifest), selection: request, facts,
-      coverage: coverageForFacts(facts), assessment, context, diagnostics };
+      coverage: coverageForFacts(facts, snapshot), assessment, context, diagnostics };
     return { ...plain, markdown: renderContractCompatibility(plain) };
   }
 }

@@ -429,6 +429,26 @@ This advisory assessment does not establish code fulfillment or a CI policy viol
 [comparison semantics and limits](docs/ADR-037-selected-contract-compatibility.md). The command
 reads saved evidence during edits without rebuilding it; it is pending the next npm candidate.
 
+Saved repository code coverage is separate from the returned-page relationship counts:
+
+```sh
+weftlet graph coverage --snapshot <snapshot-id> --max-items 20 --json
+weftlet graph coverage --snapshot <snapshot-id> --project services/api --max-items 50 --json
+```
+
+MCP `graph.coverage` accepts the same snapshot and an optional exact `projectRoot`; follow
+`selection.continuation` with identical arguments. It first pages package boundaries, then files
+within a chosen boundary. Reports distinguish `codeRoots`, requested SCIP entries, actual indexed
+documents, omitted files/packages, cross-package code references and unresolved/declaration-only
+targets. A selected directory or an import does not guarantee its files were indexed: configure
+`scip.sourceProject.include` and aliases for the intended code scope. Other indexer invocations
+retain unknown entry selection. Old snapshots without inventory report unknown coverage.
+The overview also appears in agent queries and the viewer; zero observations never prove no
+business impact. This is TypeScript-family source coverage grouped by nearest `package.json`,
+not universal language or compiler-project coverage. See [ADR 038](docs/ADR-038-monorepo-code-coverage.md).
+This feature requires a fresh snapshot from the next candidate (assembly 12); unchanged semantic
+artifacts remain reusable. Existing npm packages do not yet include it.
+
 The development checkout also supports paths between two exact IDs:
 
 ```sh
