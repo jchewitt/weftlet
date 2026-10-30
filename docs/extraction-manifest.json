@@ -773,6 +773,8 @@
     "evaluations/mapping-gaps/project/test/eligibility.test.ts",
     "evaluations/mapping-gaps/protocol.json",
     "evaluations/mapping-gaps/results/2026-10-29.json",
+    "evaluations/static-calls/README.md",
+    "evaluations/static-calls/results/2026-10-29.json",
     "evaluations/weftlet/baseline.json",
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
