@@ -8,6 +8,27 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B3b mapping gaps and Windows study reliability, 2026-10-29
+
+[ADR 034](ADR-034-mapping-gaps.md) records ten predeclared public cases, real SCIP/RDF/SHACL
+and exact agent queries. The clean evaluator run matches all ten states, publishes 111 facts,
+extracts eight documents cold and reuses all eight unchanged with identical snapshot identity
+and content digest. No misleading-name mapping or missed direct binding appears. Structural
+paths retain explicit truncation; they are not promoted into implementation claims. Public
+requests, responses, proofs, limits and measured timings are retained in the linked report.
+The provider is a fixed offline grammar; no paid request or model-quality result is claimed.
+
+GitHub PR #58's [retry](https://github.com/jchewitt/weftlet/actions/runs/40966207307) and
+[main checks](https://github.com/jchewitt/weftlet/actions/runs/40968675537) passed. Historical
+failed attempts remain visible. Their recurring native Windows frozen-study timeout motivated
+batched immutable Git reads, immutable fixture-input reuse and yielding between synchronous
+cases. All eight frozen-study cases pass locally without increasing the 30-second limit or
+changing frozen B2 inputs/results. Three new assessment tests and strict evaluator typechecking
+pass. Full local publication and hosted Windows/Linux checks are required for this change.
+
+The release version PR remains open. Browser interaction, live inference evaluation and private
+consumer acceptance remain separate; nothing in this assessment publishes an npm release.
+
 ## B3a explicit document-to-symbol bindings, 2026-10-29
 
 [ADR 033](ADR-033-document-symbol-bindings.md) adds cited explicit mappings after semantic and
