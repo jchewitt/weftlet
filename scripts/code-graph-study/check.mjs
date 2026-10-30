@@ -4,6 +4,7 @@ import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createGitLineEndingReader } from '../git-content.mjs';
+import { readCommittedInputs } from './committed-inputs.mjs';
 
 const directory = 'evaluations/code-graph';
 const lockPath = `${directory}/inputs.lock.json`;
@@ -87,7 +88,7 @@ export function checkStudy(root, ref) {
   if (ref && (!/^[a-f0-9]{40}$/.test(ref) || git(['rev-parse', `${ref}^{commit}`]).toString().trim() !== ref)) {
     fail('--ref requires a complete immutable commit SHA');
   }
-  // One tree read and one blob read per file: Windows process startup dominates repeated Git calls.
+  // One tree read, the inventory, then a single batch for its regular blobs.
   const entries = new Map(ref ? git(['ls-tree', '-r', '-z', ref]).toString().split('\0').filter(Boolean).map(entry => {
     const separator = entry.indexOf('\t');
     return [entry.slice(separator + 1), entry.slice(0, separator)];
@@ -132,6 +133,7 @@ export function checkStudy(root, ref) {
   if (paths.some(generated)) fail('Generated output cannot be a frozen input');
   unique(paths, 'frozen input');
   if (lock.digest !== hash(JSON.stringify(lock.inputs))) fail('Freeze inventory digest differs');
+  if (ref) for (const [path, bytes] of readCommittedInputs(root, entries, paths)) contents.set(path, bytes);
   for (const input of lock.inputs) {
     if (hash(read(input.path)) !== input.sha256) fail(`Frozen input changed: ${input.path}`);
   }

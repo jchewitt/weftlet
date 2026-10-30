@@ -5,15 +5,23 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { setImmediate } from 'node:timers/promises';
 import { afterEach, describe, expect, it } from 'vitest';
 import { checkStudy, safePath, validateLabels } from './check.mjs';
 import { createGitLineEndingReader } from '../git-content.mjs';
 import { loadConfig } from '../../src/configuration/config.js';
+import { decodeCommittedInputs } from './committed-inputs.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const study = 'evaluations/code-graph';
 const normalize = createGitLineEndingReader(root);
-const read = (path: string) => normalize(path, readFileSync(join(root, path)));
+// These public source inputs never change during this suite. Each disposable repository's
+// actual checks still read fresh bytes, including every dirty/CRLF/forged-inventory negative.
+const inputs = new Map<string, Buffer>();
+const read = (path: string) => {
+  if (!inputs.has(path)) inputs.set(path, normalize(path, readFileSync(join(root, path))));
+  return inputs.get(path)!;
+};
 const protocol = () => JSON.parse(read(`${study}/protocol.json`).toString());
 const suite = () => JSON.parse(read(`${study}/cases.json`).toString());
 const temps: string[] = [];
@@ -35,9 +43,24 @@ function fixture() {
   return { directory, git, sha: git('rev-parse', 'HEAD') };
 }
 
-afterEach(() => { for (const directory of temps.splice(0)) rmSync(directory, { recursive: true, force: true }); });
+afterEach(async () => {
+  for (const directory of temps.splice(0)) rmSync(directory, { recursive: true, force: true });
+  // Flush worker RPC between synchronous Git-heavy cases; do not block an entire suite's updates.
+  await setImmediate();
+});
 
 describe('frozen code-graph study', () => {
+  it('decodes exact binary/CRLF/empty blobs and rejects malformed Git batch frames', () => {
+    const first = 'a'.repeat(40), second = 'b'.repeat(40);
+    const content = Buffer.from([0, 255, 13, 10, 10, 42]);
+    const batch = Buffer.concat([Buffer.from(`${first} blob ${content.length}\n`), content,
+      Buffer.from(`\n${second} blob 0\n\n`)]);
+    expect(decodeCommittedInputs(batch, [first, second])).toEqual(new Map([[first, content], [second, Buffer.alloc(0)]]));
+    for (const bad of [batch.subarray(0, -1), Buffer.concat([batch, Buffer.from('extra')]),
+      Buffer.from(`${first} missing\n`), Buffer.from(`${first} blob 1048577\n`), Buffer.from(`${second} blob 0\n\n`)]) {
+      expect(() => decodeCommittedInputs(bad, [first, second])).toThrow();
+    }
+  });
   it('validates frozen anchors/configuration and typechecks both corpora without indexing or installing', async () => {
     expect(checkStudy(root).status).toBe('verified-inputs-only');
     const tsc = createRequire(import.meta.url).resolve('typescript/bin/tsc');
