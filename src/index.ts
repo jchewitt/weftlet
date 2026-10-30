@@ -29,3 +29,6 @@ export * from './graph/path-request.js';
 export * from './graph/paths-renderer.js';
 export * from './extraction/document-code-bindings.js';
 export * from './extraction/document-obligations.js';
+export * from './graph/compatibility.js';
+export * from './graph/compatibility-request.js';
+export * from './graph/compatibility-renderer.js';

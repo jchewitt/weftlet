@@ -415,6 +415,20 @@ do not establish fulfillment, runtime delivery or compatibility; ordinary prose 
 converted into this format. See [the declaration format and example](docs/ADR-036-contract-obligation-declarations.md).
 This addition is also pending the next npm candidate.
 
+For two retrieved obligation facts, the development checkout also supports:
+
+```sh
+weftlet graph compatibility --snapshot <snapshot-id> --producer-fact <fact-id> --consumer-fact <fact-id> --json
+```
+
+MCP `graph.compatibility` uses `snapshotId`, `producerFactId` and `consumerFactId`. It compares
+explicit numeric constraints with matching domain, measurement stage, units and contract version.
+Results distinguish compatible limits, an insufficient guarantee, disjoint limits, required
+consumer revalidation and unknowns. Both original citations and source approvals remain visible.
+This advisory assessment does not establish code fulfillment or a CI policy violation. See
+[comparison semantics and limits](docs/ADR-037-selected-contract-compatibility.md). The command
+reads saved evidence during edits without rebuilding it; it is pending the next npm candidate.
+
 The development checkout also supports paths between two exact IDs:
 
 ```sh

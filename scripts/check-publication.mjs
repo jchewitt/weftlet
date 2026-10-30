@@ -307,7 +307,7 @@ import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', st
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
-  extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode,
+  extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode, SnapshotContractCompatibilityService,
   inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
@@ -432,6 +432,14 @@ if (JSON.stringify(attributed?.details?.provenance) !== JSON.stringify(conflicti
   throw new Error('Installed explicit identity attribution must preserve all source evidence');
 }
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
+const compatibility = await new SnapshotContractCompatibilityService({ read: async () => snapshot }).assess({
+  snapshotId: context.snapshotId, producerFactId: obligations.facts.find(fact => fact.predicate === 'emits').id,
+  consumerFactId: obligations.facts.find(fact => fact.predicate === 'consumes').id });
+if (compatibility.assessment.status !== 'unknown' || !compatibility.assessment.reasons.includes('missing-context') ||
+    compatibility.assessment.gateEligible || compatibility.assessment.fulfillment !== 'not-evaluated' ||
+    compatibility.facts.length !== 2 || compatibility.facts.some(fact => !obligations.facts.some(original => original.id === fact.id))) {
+  throw new Error('Installed compatibility query must retain citations and report unknown absent numeric context');
+}
 const graph = new RdfEvidenceGraph(snapshot);
 const validationProgress = [];
 if (!(await graph.validate({ onProgress: event => validationProgress.push(event) })).conforms ||
@@ -664,6 +672,10 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     if (client.getServerVersion()?.name !== 'context-graph') throw new Error('MCP initialization failed');
     const tools = await client.listTools();
     if (!tools.tools.some((tool) => tool.name === 'impact.scan')) throw new Error('Missing impact.scan');
+    if (!tools.tools.some(tool => tool.name === 'graph.compatibility' && tool.annotations?.readOnlyHint)) throw new Error('Missing read-only graph.compatibility');
+    const compatibility = await client.callTool({ name: 'graph.compatibility', arguments: {
+      snapshotId: 'absent', producerFactId: 'producer', consumerFactId: 'consumer' } });
+    if (!compatibility.isError || !JSON.stringify(compatibility).includes('snapshot')) throw new Error('Missing evidence is not a compatibility verdict');
     const result = await client.callTool({ name: 'impact.scan', arguments: { capabilities: ['search'] } });
     if (!result.isError || !JSON.stringify(result).includes('snapshot')) {
       throw new Error('Empty installed consumer must report missing snapshot honestly');

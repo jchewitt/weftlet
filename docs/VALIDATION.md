@@ -8,6 +8,28 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B4b selected contract comparison, 2026-10-30
+
+[ADR 037](ADR-037-selected-contract-compatibility.md) adds a read-only exact assertion-pair
+assessment through API/CLI/MCP. [The public protocol](../evaluations/contract-compatibility/README.md)
+predeclares eleven source cases and retrieval bounds. Fifteen integration tests exercise actual
+committed Markdown extraction, real SCIP/RDF/SHACL, numeric compatibility/insufficiency/disjointness,
+required revalidation, unknowns, unrelated domains and competing assertions. They retain exact
+facts, source authority and endpoint revisions; retrieve consumer symbol/test references; and
+execute the public consumer freshness check separately from the graph verdict. Assessment never
+claims code fulfillment or CI eligibility. The pure arithmetic suite checks all 81 operator/boundary
+combinations against a finite-set oracle plus context negatives; interface tests reject malformed
+requests. There are 42 new deterministic tests across these three files.
+
+Unchanged hydration reuses all 23 semantic artifacts with unchanged snapshot identity/content.
+API/CLI/MCP JSON agrees while dirty and the configured provider/indexer are unavailable. Draft
+edits, document renames and deletions replace/invalidate declarations without changing saved
+committed evidence. Strict test typechecking and architecture checks pass (the existing 13
+advisories, with no new baseline or exceptions). Full publication and hosted checks are recorded
+in the change PR after execution. No private source, model request, new dependency, extraction
+identity change or npm publication is part of this increment. B5, the B3b inference decision and
+B6 candidate/live acceptance remain open; this is not a product-wide compatibility proof.
+
 ## B4a cited contract obligations, 2026-10-30
 
 [ADR 036](ADR-036-contract-obligation-declarations.md) adds optional explicit Markdown declarations

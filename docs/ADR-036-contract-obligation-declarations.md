@@ -1,6 +1,6 @@
 # ADR 036: Cited producer and consumer obligations
 
-Status: B4a implementation; validation recorded separately. B4b compatibility acceptance is next.
+Status: B4a implemented; validation recorded separately. B4b follows in [ADR 037](ADR-037-selected-contract-compatibility.md).
 
 ## Scope and choice
 
@@ -117,8 +117,8 @@ clean comparison, dirty queries and renamed/deleted draft declarations. An empty
 is deliberate: these structured assertions must come from the real declaration extractor.
 Fresh packed-consumer smoke uses the exported API and installed runtime assets.
 
-B4b still owns a bounded compatibility acceptance example, including consumer revalidation,
-an explicit documented incompatibility and missing evidence. Any hard failure must come from an
+B4b's bounded compatibility acceptance is implemented in [ADR 037](ADR-037-selected-contract-compatibility.md),
+including consumer revalidation, an explicit documented incompatibility and missing evidence. Any hard failure must come from an
 explicit approved deterministic policy; model findings remain tentative. No such policy or gate
 is introduced here. Live model quality, private consumer usefulness and browser interaction remain
 separate evidence. Release PR stays open until candidate qualification.
