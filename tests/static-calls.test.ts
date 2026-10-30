@@ -180,7 +180,8 @@ describe('static calls from committed source and exact SCIP evidence', () => {
 it('keeps constructors from .d.ts and ambient .ts namespaces declaration-only', async () => {
   const fixture = await staticCallFixture();
   try {
-    await writeFile(join(fixture.root, 'src/ambient.d.ts'), 'export declare class Declared { constructor(); }\n');
+    await writeFile(join(fixture.root, 'src/ambient.d.ts'),
+      'declare function decorate(value: number): any;\n@decorate(1)\nexport declare class Declared { constructor(); }\n');
     await writeFile(join(fixture.root, 'src/ambient-use.ts'),
       "import { Declared } from './ambient.js';\ndeclare namespace External { class Other {} }\n" +
       'export function makeDeclared() { return new Declared(); }\n' +
@@ -190,6 +191,7 @@ it('keeps constructors from .d.ts and ambient .ts namespaces declaration-only', 
     const constructed = calls(snapshot).filter(f => ['makeDeclared', 'makeOther'].includes(f.subject.label));
     expect(constructed).toHaveLength(2);
     expect(constructed.every(f => f.codeCall!.target === 'declaration-only' && f.codeCall!.syntax === 'construct')).toBe(true);
+    expect(calls(snapshot).some(f => f.provenance.path === 'src/ambient.d.ts')).toBe(false);
     expect(snapshot.diagnostics!.filter(d => d.reason.includes('no indexed callable body') &&
       d.provenance.some(p => p.path === 'src/ambient-use.ts'))).toHaveLength(2);
   } finally { await rm(fixture.root, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }

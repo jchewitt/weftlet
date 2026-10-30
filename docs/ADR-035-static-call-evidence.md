@@ -29,8 +29,8 @@ values. Invocation through a parameter, computed dispatch, value alias or unsupp
 produces a cited gap rather than an invented concrete target. Anonymous callbacks/initializers
 without an exact indexed callable identity do not inherit the enclosing method as their caller.
 Decorators/computed names remain in their enclosing evaluation context; instance field and static
-block initializers currently report gaps. Defaults are attributed to their callable. Syntax
-errors cause explicit file-level abstention. Implicit JSX factory, getter, operator and framework
+block initializers currently report gaps. Defaults are attributed to their callable. Ambient files/namespaces provide declarations only; their decorator/default syntax produces no
+runtime call assertions. Syntax errors cause explicit file-level abstention. Implicit JSX factory, getter, operator and framework
 invocations are not synthesized. This is neither complete data flow nor whole-program analysis.
 
 ## Shared evidence and compatibility

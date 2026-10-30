@@ -79,6 +79,8 @@ export function extractStaticCalls(sources: ReadonlyMap<string, string>, codeFac
         'The selected declaration has no indexed callable body; runtime implementation remains unknown.', [target]);
     };
     const walk = (node: ts.Node, caller: Caller) => {
+      // Ambient declarations describe types; decorators/default syntax there is not executed.
+      if (ts.canHaveModifiers(node) && ts.getModifiers(node)?.some(modifier => modifier.kind === ts.SyntaxKind.DeclareKeyword)) return;
       if (isCallable(node)) {
         const defs = factsAt(callableName(node), file, context.commitSha, 'definition');
         const ids = new Set(defs.map(f => f.subject.id));
@@ -100,7 +102,7 @@ export function extractStaticCalls(sources: ReadonlyMap<string, string>, codeFac
       if (ts.isCallExpression(node) || ts.isNewExpression(node)) emit(node, caller);
       ts.forEachChild(node, child => walk(child, caller));
     };
-    walk(file.source, { node: physical, definitions: [] });
+    if (!file.source.isDeclarationFile) walk(file.source, { node: physical, definitions: [] });
   }
   return { facts: facts.sort((a, b) => a.id.localeCompare(b.id)), diagnostics: diagnostics.sort((a, b) => a.id.localeCompare(b.id)) };
 }
