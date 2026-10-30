@@ -47,7 +47,7 @@ may be unknown. Revalidation accepts `required` or `not-required` on consumers o
 values stay absent in JSON/RDF and display as unknown. No default time unit, normalization,
 semantic equivalence, unit conversion or compatibility interpretation is performed.
 
-The endpoint is an exact repository-relative regular committed file. Its canonical physical
+The endpoint is an exact repository-relative regular committed UTF-8 file. Its canonical physical
 kind is retained, including Evidence for test/spec files. Existing indexed facts let agents
 continue into code, but the declaration establishes neither a particular function mapping nor
 implementation correctness. Function-level mappings remain the explicit selectors in ADR 033.
@@ -78,7 +78,9 @@ what was observed. Different limits at different stages are not automatically co
 Unknown fields, duplicate JSON keys, invalid paths, nonfinite values and unsupported enums
 produce cited extraction gaps with no partial declaration. Missing, symlink or submodule
 endpoints cannot create joins. Duplicate declaration IDs within a source retain every valid
-assertion and report ambiguity; no assertion silently wins. Contracts with only one role in
+assertion and report ambiguity; no assertion silently wins. Document and endpoint text must
+reproduce the committed Git blob ID, rejecting lossy non-UTF-8 decoding before citing its digest.
+Contracts with only one role in
 the selected structured declarations report the missing counterpart without claiming repository-
 wide absence. No text matching or implied route fills those gaps.
 

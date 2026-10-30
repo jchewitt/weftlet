@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -169,9 +170,10 @@ describe('cited obligations through real committed extraction and shared queries
     const context: ExtractionContext = { repositoryRoot: f.root, repositoryId: f.config.repositoryId, commitSha: snapshot.manifest.commitSha,
       ref: 'HEAD', snapshotId: 'diagnostic', changedPaths: [], deletedPaths: [], renamedPaths: {} };
     // The repository seam supplies exact committed content; no hand-assembled graph assertions are used.
+    const blob = (content: string) => createHash('sha1').update(`blob ${Buffer.byteLength(content)}\0`).update(content).digest('hex');
     const check = async (content: string, digest = sha256(content)) => extractDocumentObligations({
-      listEntriesAt: async () => [{ path: 'docs/test.md', type: 'blob', mode: '100644', objectId: 'a' },
-        { path: producer.endpoint, type: 'blob', mode: '100644', objectId: 'b' }],
+      listEntriesAt: async () => [{ path: 'docs/test.md', type: 'blob', mode: '100644', objectId: blob(content) },
+        { path: producer.endpoint, type: 'blob', mode: '100644', objectId: blob(obligationFiles[producer.endpoint]!) }],
       readFileAt: async (_sha, path) => path === 'docs/test.md' ? content : obligationFiles[producer.endpoint]!,
     }, context, [{ path: 'docs/test.md', content, digest, stableSemanticId: 'test', metadata: { sourceAuthority: 'inferred' } }]);
     const duplicateKey = document(producer).replace('"schemaVersion": 1,', '"schemaVersion": 1, "schemaVersion": 1,');
@@ -183,5 +185,20 @@ describe('cited obligations through real committed extraction and shared queries
     expect(duplicate.facts).toHaveLength(2); expect(duplicate.diagnostics.some(item => item.reason.includes('duplicate declaration ID'))).toBe(true);
     expect((await check('```markdown\n' + document(producer).replaceAll('```', '~~~') + '\n```')).facts).toEqual([]);
     await expect(check(document(producer).repeat(501))).rejects.toThrow('500-declaration');
+  });
+
+  it('rejects lossy endpoint decoding using the real committed blob identity', async () => {
+    const content = document({ ...producer, endpoint: 'payload.bin' });
+    await writeFile(join(f.root, 'payload.bin'), Buffer.from([0xff, 0x80, 0x00]));
+    await writeFile(join(f.root, 'docs/binary.md'), content);
+    await f.git('add', 'payload.bin', 'docs/binary.md');
+    await f.git('-c', 'user.name=Public fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', 'commit', '--quiet', '-m', 'Public binary endpoint negative');
+    const context: ExtractionContext = { repositoryRoot: f.root, repositoryId: f.config.repositoryId, commitSha: await f.git('rev-parse', 'HEAD'),
+      ref: 'HEAD', snapshotId: 'binary-negative', changedPaths: [], deletedPaths: [], renamedPaths: {} };
+    const result = await extractDocumentObligations(f.app.repository, context, [{ path: 'docs/binary.md', content,
+      digest: sha256(content), stableSemanticId: 'binary-negative', metadata: { sourceAuthority: 'declared' } }]);
+    expect(result.facts).toEqual([]);
+    expect(result.diagnostics[0]!.reason).toContain('lossless committed UTF-8');
+    expect(await f.app.snapshotStore.read(snapshot.manifest.snapshotId)).toEqual(snapshot);
   });
 });

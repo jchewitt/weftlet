@@ -1,4 +1,5 @@
 import { fromMarkdown } from 'mdast-util-from-markdown';
+import { createHash } from 'node:crypto';
 import type { Nodes } from 'mdast';
 import { obligationContractNode, parseObligationDeclaration, repositoryFileNode,
   type ExtractionContext, type GraphDiagnostic, type GraphFact, type SourceSpan } from '@weftlet/core';
@@ -9,6 +10,13 @@ import { sha256, stableJson } from '../infrastructure/util.js';
 
 export const documentObligationIdentity = { id: 'document-obligation-extractor', version: '1.0.0' } as const;
 interface DeclarationBlock { readonly content: string; readonly provenance: SourceSpan }
+
+/** Git names the original blob bytes. Reject text decoding that cannot reproduce them. */
+function matchesCommittedBlob(content: string, objectId: string): boolean {
+  const bytes = Buffer.from(content, 'utf8');
+  const algorithm = objectId.length === 64 ? 'sha256' : 'sha1';
+  return createHash(algorithm).update(`blob ${bytes.length}\0`).update(bytes).digest('hex') === objectId;
+}
 
 function blocks(source: BindingSource, commitSha: string): readonly DeclarationBlock[] {
   const result: DeclarationBlock[] = [];
@@ -42,7 +50,8 @@ export async function extractDocumentObligations(repository: Pick<GitRepository,
     diagnostics.push({ ...item, id: sha256(stableJson({ ...item, extractor: documentObligationIdentity })) });
   };
   for (const { source, blocks } of selected) {
-    if (!regular(source.path) || sha256(source.content) !== source.digest || await read(source.path) !== source.content) {
+    if (!regular(source.path) || sha256(source.content) !== source.digest || await read(source.path) !== source.content ||
+        !matchesCommittedBlob(source.content, entries.get(source.path)!.objectId)) {
       gap('source does not match regular committed bytes.', blocks.map(block => block.provenance), [repositoryFileNode(source.path).id]); continue;
     }
     if (source.metadata.sourceRole === 'validation') {
@@ -61,6 +70,9 @@ export async function extractDocumentObligations(repository: Pick<GitRepository,
         gap('endpoint is missing or is not a regular committed file; no relationship emitted.', [block.provenance], [subject.id, object.id]); continue;
       }
       const endpoint = await read(declaration.endpoint);
+      if (!matchesCommittedBlob(endpoint, entries.get(declaration.endpoint)!.objectId)) {
+        gap('endpoint cannot be read as lossless committed UTF-8 text; no relationship emitted.', [block.provenance], [subject.id, object.id]); continue;
+      }
       const assertion = { subject, object, predicate: declaration.role === 'guarantee' ? 'emits' as const : 'consumes' as const,
         provenance: block.provenance, extractor: documentObligationIdentity, confidence: 1,
         authority: 'inferred' as const, extractionReview: 'deterministic' as const, ...source.metadata,

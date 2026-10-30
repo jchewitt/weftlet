@@ -11,7 +11,7 @@ while identifying remaining native Windows issues.
 ## B4a cited contract obligations, 2026-10-30
 
 [ADR 036](ADR-036-contract-obligation-declarations.md) adds optional explicit Markdown declarations
-for producer guarantees and consumer requirements. Seven new public extraction/query tests pass
+for producer guarantees and consumer requirements. Eight new public extraction/query tests pass
 with real committed sources, TypeScript indexing, RDF/SHACL and an empty offline semantic provider.
 Fourteen public core-contract tests cover exact scoped identities, unknown fields and invalid input.
 The tests retain document fence spans and endpoint revisions, source approval separate from
@@ -21,7 +21,8 @@ navigation. Strict corruption checks and named/union SHACL parity pass. Repeat h
 all nine semantic artifacts with unchanged snapshot identity/content; clean comparison, dirty saved
 queries and draft document/endpoint edits, deletes and renames pass. Strict test typechecking passes.
 
-The full local deterministic suite passes **886 tests** (35 core + 851 toolkit/example/script),
+At `a070ca68a3354f425cf8b506bdd3d0a76df32f5b`, the full local deterministic suite passes
+**886 tests** (35 core + 851 toolkit/example/script),
 with one optional OML integration test skipped. Build, release-documentation consistency,
 architecture (the existing 13 advisories), inventory, licenses and fresh packed npm/npx consumer
 smoke pass. The installed consumer exercises the public obligation extractor and both contract
@@ -30,6 +31,11 @@ No new architecture baseline/exception, dependency, private consumer input or mo
 All 79 original imported path/hash pairs remain unchanged. B4b compatibility acceptance, inference
 proposal review, monorepo coverage and candidate/live qualification remain separate queue items.
 Structured declaration parsing does not prove fulfillment, delivery, compatibility or model quality.
+
+Final review additionally checks source and endpoint text against the committed Git blob ID,
+rejecting lossy non-UTF-8 decoding before recording a digest. A real committed binary negative
+raises the focused suite to eight tests; final build, all eight tests, strict typechecking and
+architecture checks pass. Final installed-consumer and hosted checks are recorded in PR #61.
 
 ## B3c static call evidence, 2026-10-29
 
