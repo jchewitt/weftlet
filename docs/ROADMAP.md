@@ -8,8 +8,9 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 
 The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE.md) records
 three bounded public acceptance checks and the additional B1–B6 task list. B1 exact neighborhoods
-and bounded paths are implemented for the next candidate. Explicit function-level intent bindings are implemented; inferred-mapping decisions,
-cross-boundary compatibility and monorepo coverage remain open before the official release decision.
+and bounded paths are implemented for the next candidate. Explicit function-level intent bindings are implemented; inferred-mapping decisions
+and monorepo coverage remain open before the official release decision. Explicit cross-boundary
+numeric comparisons are implemented for the next candidate.
 The measured [Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) selects a richer SCIP projection.
 The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
 identities, provenance and cache reuse. The requested Windows traversal → repeat → clean
@@ -22,8 +23,9 @@ Explicit document-to-symbol bindings are implemented in [ADR 033](ADR-033-docume
 [ADR 034](ADR-034-mapping-gaps.md) records the remaining mapping gaps and a bounded inference
 proposal; its evaluation/deferral decision remains open. [ADR 035](ADR-035-static-call-evidence.md)
 implements B3c's bounded static call evidence. [ADR 036](ADR-036-contract-obligation-declarations.md)
-adds B4a's explicitly cited producer/consumer declarations. B4b compatibility acceptance and
-monorepo coverage remain before candidate qualification.
+adds B4a's explicitly cited producer/consumer declarations. [ADR 037](ADR-037-selected-contract-compatibility.md)
+adds B4b's advisory selected-constraint assessment and public acceptance. Monorepo coverage and
+the inference proposal decision remain before candidate qualification.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is

@@ -8,3 +8,4 @@ export * from './code.js';
 export type { BindingEvidence, BindingSubjectEvidence, DocumentCodeBinding } from './bindings.js';
 export type { CodeCall } from './calls.js';
 export * from './obligations.js';
+export * from './compatibility.js';

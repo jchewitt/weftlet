@@ -35,6 +35,10 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
    work page. Inspect pending/depth-cut frontier and explicit work limits; depth exhaustion
    needs a deeper restart, and total-work exhaustion needs narrower scope or an intermediate
    node. A path is an association, not a business-compatibility or behavior verdict.
+   When available, `graph.compatibility` compares two exact obligation fact IDs from that
+   snapshot (`producerFactId`, `consumerFactId`). Retain both citations and inspect unknowns,
+   competing declarations and any required revalidation. Numeric compatibility does not prove
+   code fulfillment, runtime delivery or current-diff correctness; it never supplies a CI gate.
 6. Give subagents the bounded Context Pack, snapshot SHA, and unresolved assumptions.
 7. Query again after material diff changes. Historical saved evidence remains useful context but
    cannot satisfy current-diff validation or merge gates.
