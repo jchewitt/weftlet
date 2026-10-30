@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "repositoryRoot": ".",
+  "repositoryId": "public/mapping-gaps",
+  "namespace": "https://example.test/context/",
+  "semanticSources": [
+    "docs"
+  ],
+  "codeRoots": [
+    "src"
+  ],
+  "contractPatterns": [],
+  "evidenceRoots": [
+    "test"
+  ],
+  "semantic": {
+    "provider": "module",
+    "model": "offline-public-grammar",
+    "reasoningEffort": "medium",
+    "promptVersion": "generic-semantic-v3",
+    "extractorVersion": "1.1.0",
+    "adapterVersion": "1.1.0",
+    "ontologyVersion": "1.1.0",
+    "minimumConfidence": 0.7,
+    "failOnUnresolved": true,
+    "concurrency": 1,
+    "providerModule": "./provider.mjs",
+    "providerIdentity": "public-mapping-grammar:1"
+  },
+  "scip": {
+    "version": "0.4.0",
+    "command": "bundled-scip-typescript",
+    "args": [
+      "index",
+      "--no-global-caches"
+    ],
+    "sourceProject": {
+      "include": [
+        "src/ambiguous.ts",
+        "src/contracts.d.ts",
+        "src/credit.ts",
+        "src/eligibility.ts",
+        "src/limits.ts",
+        "src/refund.ts",
+        "src/renamed.ts",
+        "src/shipping.ts",
+        "src/undocumented.ts",
+        "test/eligibility.test.ts"
+      ],
+      "aliases": {}
+    }
+  },
+  "ontology": {
+    "backend": "rdf",
+    "toolVersion": "rdf-record-v1"
+  },
+  "runtimeEvidence": [],
+  "storagePath": ".context-graph",
+  "approvedIntentSources": [
+    "docs/**"
+  ]
+}

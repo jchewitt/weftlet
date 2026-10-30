@@ -5,7 +5,8 @@ The maintainer has requested additional [business-context baseline work](PRE-1.0
 before official 1.0: precise exploration, symbol-level implementation links, cross-boundary
 obligations, monorepo coverage and a measured Graphify/SCIP decision. Its A1–A3 public checks
 pass within recorded limits; B1 query mechanisms are implemented for the next candidate, while
-B2a's public comparison inputs are frozen; B2b's measurements and B3–B6 remain open. Both npm packages remain available for
+B2's measured decision retains SCIP. B3a explicit bindings and B3b's deterministic gap assessment
+are complete; inference decisions, B3c calls and B4–B6 remain open. Both npm packages remain available for
 TradePilot acceptance while this additional scope is assessed. The maintainer requested the
 next live test after a new candidate; [the implementation queue](1.0-WORK-QUEUE.md) tracks
 the intervening B1–B6 work.
