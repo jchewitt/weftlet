@@ -192,6 +192,7 @@ describe('SCIP symbol extraction', () => {
     expect(facts.filter(fact => !fact.codeOccurrence).map((fact) => [fact.predicate, fact.provenance.path])).toEqual([
       ['contains', 'src/search.ts'],
       ['consumes', 'src/consumer.ts'],
+      ['calls', 'src/consumer.ts'],
     ]);
 
     const snapshot: GraphSnapshot = {

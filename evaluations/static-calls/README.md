@@ -1,7 +1,7 @@
 # B3c static call observation
 
 Run `pnpm evaluate:calls` from the development checkout. The fixed public fixture and expected
-cases are in `tests/fixtures/static-call-project.ts`; the seven integration tests in
+cases are in `tests/fixtures/static-call-project.ts`; the eight integration tests in
 `tests/static-calls.test.ts` enforce the full acceptance boundary. No private repository or
 live model/provider is selected by this command. It accepts only an optional report path.
 

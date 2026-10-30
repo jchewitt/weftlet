@@ -16,6 +16,15 @@ export function callableName(node: Callable): ts.Node | undefined {
   return undefined;
 }
 
+/** Ambient declarations may occur in .ts namespaces too; they supply no runtime body. */
+export function isAmbient(node: ts.Node): boolean {
+  if (node.getSourceFile().isDeclarationFile) return true;
+  for (let current: ts.Node | undefined = node; current; current = current.parent) {
+    if (ts.canHaveModifiers(current) && ts.getModifiers(current)?.some(modifier => modifier.kind === ts.SyntaxKind.DeclareKeyword)) return true;
+  }
+  return false;
+}
+
 export function syntaxSpan(node: ts.Node, source: ts.SourceFile, digest: string, commitSha: string): SourceSpan {
   const start = source.getLineAndCharacterOfPosition(node.getStart(source));
   const end = source.getLineAndCharacterOfPosition(node.getEnd());

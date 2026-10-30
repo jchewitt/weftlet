@@ -2,7 +2,7 @@ import ts from 'typescript';
 import { repositoryFileNode, type BindingEvidence, type CodeCall, type ExtractionContext,
   type GraphDiagnostic, type GraphFact, type GraphNode } from '@weftlet/core';
 import { sha256, stableJson } from '../infrastructure/util.js';
-import { calleeToken, callableName, factsAt, isCallable, parseCallSource, syntaxSpan, type ParsedCallSource } from './call-syntax.js';
+import { calleeToken, callableName, factsAt, isAmbient, isCallable, parseCallSource, syntaxSpan, type ParsedCallSource } from './call-syntax.js';
 
 export const staticCallIdentity = { id: 'typescript-call-extractor', version: '1.0.0' } as const;
 type TargetKind = 'body' | 'declaration' | 'class';
@@ -36,8 +36,8 @@ export function extractStaticCalls(sources: ReadonlyMap<string, string>, codeFac
     const classify = (node: ts.Node) => {
       const name = isCallable(node) ? callableName(node) : ts.isClassDeclaration(node) || ts.isClassExpression(node) ? node.name :
         ts.isMethodSignature(node) ? node.name : undefined;
-      const kind: TargetKind | undefined = isCallable(node) ? node.body ? 'body' : 'declaration' :
-        ts.isClassDeclaration(node) || ts.isClassExpression(node) ? 'class' : ts.isMethodSignature(node) ? 'declaration' : undefined;
+      const kind: TargetKind | undefined = isCallable(node) ? node.body && !isAmbient(node) ? 'body' : 'declaration' :
+        ts.isClassDeclaration(node) || ts.isClassExpression(node) ? isAmbient(node) ? 'declaration' : 'class' : ts.isMethodSignature(node) ? 'declaration' : undefined;
       if (kind) for (const fact of factsAt(name, file, context.commitSha, 'definition')) {
         const values = kinds.get(fact.subject.id) ?? new Set(); values.add(kind); kinds.set(fact.subject.id, values);
       }

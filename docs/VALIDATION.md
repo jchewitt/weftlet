@@ -17,7 +17,7 @@ one cold semantic extraction, one repeat reuse and unchanged snapshot identity/c
 caller/callee query returns three callsites in two pages (19,181 bytes); the bounded helper-to-rule
 search exhausts its selected space with two paths and 52 candidate-edge examinations.
 
-Seven real-extraction acceptance tests cover private/local functions, recursive/repeated calls,
+Eight real-extraction acceptance tests cover private/local functions, recursive/repeated calls,
 shadowing, aliases, overloads, TSX, BOM/Unicode, callbacks/value uses, external/bodyless targets,
 decorators/initializers/defaults, source/proof validation, shared queries, line shifts, rename/delete
 and draft replacement. Negative SHACL/provenance/authority tests reject forged calls. Named and

@@ -142,7 +142,7 @@ describe('canonical physical-file producer composition', () => {
     for (const path of ['src/service.ts', 'src/service.spec.ts', 'src/service.test.ts']) {
       const facts = symbols.filter(fact => fact.provenance.path === path);
       expect(facts.length).toBeGreaterThan(0);
-      const physical = facts.filter(fact => !fact.codeOccurrence);
+      const physical = facts.filter(fact => !fact.codeOccurrence && !fact.codeCall);
       expect(physical.length).toBeGreaterThan(0);
       expect(physical.every(fact => fact.subject.id === repositoryFileNode(path).id &&
         fact.subject.kind === repositoryFileNode(path).kind)).toBe(true);
@@ -215,8 +215,8 @@ describe('canonical physical-file producer composition', () => {
     const overlay = await buildWorkingOverlay(f.repository, config, store, storage, base.manifest.snapshotId, agent);
     expect(await new RdfEvidenceGraph(overlay).validate()).toEqual({ conforms: true, issues: [] });
     expect(overlay.manifest.extractorVersions).toMatchObject({
-      assembly: 'standalone-graph-v9', 'repository-contract-extractor': '1.2.0',
-      'scip-symbol-extractor': '2.0.0',
+      assembly: 'standalone-graph-v10', 'repository-contract-extractor': '1.2.0',
+      'scip-symbol-extractor': '2.1.0', 'typescript-call-extractor': '1.0.0',
     });
     for (const path of ['src/service.ts', 'src/service.spec.ts', 'src/service.test.ts']) {
       const contract = overlay.facts.find(fact => fact.extractor.id === 'repository-contract-extractor' &&
