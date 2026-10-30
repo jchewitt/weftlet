@@ -276,7 +276,7 @@ try {
     writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
       join(consumer, 'src', 'consumer.ts'),
-      "import type { Greeting } from './contract.js';\nexport const greeting: Greeting = { text: 'hello' };\n",
+      "import type { Greeting } from './contract.js';\nexport const greeting: Greeting = { text: 'hello' };\nexport function greetingText() { return greeting.text; }\nexport function readGreeting() { return greetingText(); }\n",
     ),
   ]);
   runPnpm(['install', '--prefer-offline', '--ignore-scripts', '--no-frozen-lockfile'], consumer);
@@ -340,7 +340,12 @@ const sourceIndex = await new ScipTypeScriptIndexer({ version: '0.4.0', command:
   args: ['index', '--no-global-caches'], sourceProject: { include: ['src/**/*.ts', 'test/**/*.ts'],
     aliases: { '@fixture/contracts': 'src/contract.ts' } } }, join(root, '.context-graph'))
   .index({ ...context, snapshotId: 'publication-source-project' });
-const sourceFacts = await new ScipSymbolExtractor(repository, sourceIndex).extract(context);
+const sourceResult = await new ScipSymbolExtractor(repository, sourceIndex).extractWithDiagnostics(context);
+const sourceFacts = sourceResult.facts;
+if (!sourceFacts.some(fact => fact.predicate === 'calls' && fact.subject.label === 'readGreeting' &&
+    fact.object.label === 'greetingText' && fact.codeCall?.target === 'indexed-body') || !Array.isArray(sourceResult.diagnostics)) {
+  throw new Error('Installed package must parse calls with its packaged TypeScript dependency and retain indexed proofs');
+}
 const codeFacts = sourceFacts.filter(fact => fact.codeOccurrence);
 const codeDefinition = codeFacts.find(fact => fact.codeOccurrence.role === 'definition');
 if (!codeDefinition || !codeFacts.some(fact => fact.codeOccurrence.role === 'reference') ||

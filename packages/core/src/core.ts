@@ -17,7 +17,7 @@ export type GraphNodeKind =
 export const graphPredicates = Object.freeze([
   'realizes', 'implementedBy', 'consumes', 'emits', 'persistsTo', 'governedBy',
   'definedBy', 'verifiedBy', 'operationallyOwnedBy', 'decisionAuthority',
-  'routesThrough', 'authorizedBy', 'sourcedFrom', 'references', 'contains',
+  'routesThrough', 'authorizedBy', 'sourcedFrom', 'references', 'contains', 'calls',
 ] as const);
 
 export type GraphPredicate = typeof graphPredicates[number];
@@ -68,6 +68,7 @@ export interface GraphFact {
   /** Static occurrence evidence; a reference never establishes a call or observed execution. */
   readonly codeOccurrence?: import('./code-types.js').CodeOccurrence;
   readonly codeBinding?: import('./bindings.js').DocumentCodeBinding;
+  readonly codeCall?: import('./calls.js').CodeCall;
 }
 
 export interface SemanticArtifact {
@@ -204,6 +205,11 @@ export interface ExtractionContext {
 export interface FactExtractor {
   readonly identity: ExtractorIdentity;
   extract(context: ExtractionContext): Promise<readonly GraphFact[]>;
+  /** Optional complete result; callers should prefer it to preserve extraction gaps. */
+  extractWithDiagnostics?(context: ExtractionContext): Promise<{
+    readonly facts: readonly GraphFact[];
+    readonly diagnostics: readonly GraphDiagnostic[];
+  }>;
 }
 
 export interface SemanticSource {

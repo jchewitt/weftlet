@@ -20,6 +20,8 @@ import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, s
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { assembleDocumentCodeBindings } from './document-code-bindings.js';
 import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
+import { staticCallIdentity } from '../extraction/static-calls.js';
+import { extractEvidence } from './extractor-results.js';
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { repositoryNodeIdentityVersion } from '../extraction/repository-nodes.js';
 import { selectHydrationInputs, classifyHydratedFacts, documentSelectionIdentity } from './hydration-inputs.js';
@@ -211,11 +213,9 @@ export class ContextGraphHydrator {
     checkpoint();
     options.onProgress?.({ phase: 'index-typescript' });
     const scip = await this.dependencies.staticIndexer.index(context);
-    const extractorFacts = (
-      await Promise.all(
-        this.dependencies.extractorFactory(scip).map((extractor) => extractor.extract(context)),
-      )
-    ).flat();
+    const extracted = await extractEvidence(this.dependencies.extractorFactory(scip), context);
+    const extractorFacts = extracted.facts;
+    diagnostics.push(...extracted.diagnostics);
     const trackedPaths = await repository.listAllFilesAt(commitSha);
     const tracked = new Set(trackedPaths);
     for (const fact of semanticFacts) {
@@ -309,6 +309,7 @@ export class ContextGraphHydrator {
           ...documentExtractionVersions(config),
           [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
           [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
+          [staticCallIdentity.id]: staticCallIdentity.version,
           'repository-node-identity': String(repositoryNodeIdentityVersion),
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           [documentCodeBindingIdentity.id]: documentCodeBindingIdentity.version,

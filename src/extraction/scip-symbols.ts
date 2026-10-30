@@ -5,6 +5,7 @@ import type { GitRepository } from '../repository/git.js';
 import type { ScipIndexResult } from './scip-runtime.js';
 import { loadScipRuntime } from './scip-runtime.js';
 import { extractCodeOccurrences } from './scip-occurrences.js';
+import { extractStaticCalls } from './static-calls.js';
 import { sha256, stableJson } from '../infrastructure/util.js';
 
 interface ScipSite {
@@ -19,7 +20,7 @@ interface ScipSymbolSites {
   readonly references: Map<string, ScipSite>;
 }
 
-export const scipSymbolExtractorIdentity = { id: 'scip-symbol-extractor', version: '2.0.0' } as const;
+export const scipSymbolExtractorIdentity = { id: 'scip-symbol-extractor', version: '2.1.0' } as const;
 
 export class ScipSymbolExtractor implements FactExtractor {
   readonly identity = scipSymbolExtractorIdentity;
@@ -30,6 +31,10 @@ export class ScipSymbolExtractor implements FactExtractor {
   ) {}
 
   async extract(context: ExtractionContext): Promise<readonly GraphFact[]> {
+    return (await this.extractWithDiagnostics(context)).facts;
+  }
+
+  async extractWithDiagnostics(context: ExtractionContext) {
     const parsed = loadScipRuntime().scip.Index.deserializeBinary(await readFile(this.index.path));
     const symbols = new Map<string, ScipSymbolSites>();
     const sources = new Map<string, string>();
@@ -97,7 +102,9 @@ export class ScipSymbolExtractor implements FactExtractor {
         });
       }
     }
-    return [...facts, ...extractCodeOccurrences(parsed, sources, context, this.index.digest, this.identity)];
+    const occurrences = extractCodeOccurrences(parsed, sources, context, this.index.digest, this.identity);
+    const calls = extractStaticCalls(sources, occurrences, context);
+    return { facts: [...facts, ...occurrences, ...calls.facts], diagnostics: calls.diagnostics };
   }
 }
 

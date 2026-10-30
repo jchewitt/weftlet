@@ -44,6 +44,9 @@ importers:
       sparqljs:
         specifier: 3.7.4
         version: 3.7.4
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
     devDependencies:
       '@changesets/cli':
         specifier: 3.0.3
@@ -72,9 +75,6 @@ importers:
       tsx:
         specifier: 4.20.5
         version: 4.20.5
-      typescript:
-        specifier: 5.5.4
-        version: 5.5.4
       vitest:
         specifier: 3.2.4
         version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.11)(tsx@4.20.5)(yaml@2.9.1)

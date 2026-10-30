@@ -8,6 +8,7 @@ import { createRequire } from 'node:module';
 import { CG, RDF, XSD, evidenceShapes } from './shacl-shapes.js';
 import { measureValidationPhase, type GraphValidationProgress } from './validation-progress.js';
 import { addBindingEvidence, bindingEvidenceIssues } from './binding-rdf.js';
+import { addCallEvidence, callEvidenceIssues } from './call-rdf.js';
 import { addCodeEvidence, codeEvidenceIssues, invalidCodeRange } from './code-rdf.js';
 
 const { namedNode: iri, literal } = DataFactory;
@@ -60,6 +61,7 @@ export class RdfEvidenceGraph {
       this.dataset.addQuad(record, iri(CG + 'confidence'), literal(String(fact.confidence), iri(XSD + 'decimal')));
       addCodeEvidence(this.dataset, record, fact, nodeIri);
       addBindingEvidence(this.dataset, record, fact, factIri);
+      addCallEvidence(this.dataset, record, fact, factIri);
       for (const node of [fact.subject, fact.object]) {
         const term = iri(nodeIri(node.id));
         this.dataset.addQuad(term, iri(RDF + 'type'), iri(CG + 'Node'));
@@ -105,6 +107,8 @@ export class RdfEvidenceGraph {
     }));
     const byId = new Map(this.snapshot.facts.map(fact => [fact.id, fact]));
     for (const fact of this.snapshot.facts) {
+      for (const message of callEvidenceIssues(fact, byId)) issues.push({ category: 'extraction-gap',
+        focus: factIri(fact.id), path: CG + 'callTarget', message });
       for (const message of bindingEvidenceIssues(fact, byId)) issues.push({ category: 'extraction-gap',
         focus: factIri(fact.id), path: CG + 'bindingDefinition', message });
       for (const message of codeEvidenceIssues(fact)) issues.push({ category: 'extraction-gap',

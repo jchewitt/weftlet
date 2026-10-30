@@ -397,8 +397,14 @@ semantic/document-traversal scope and SCIP selection; they require no extra prov
 Validation documents stay outside intent extraction and can declare `verifiedBy`, not `implementedBy`.
 See [ADR 033](docs/ADR-033-document-symbol-bindings.md) for bounds and draft-overlay behavior.
 
-This capability is pending the next npm candidate. Inferred mapping assessment and actual static
-call analysis remain separate 1.0 work; ordinary SCIP references are not calls.
+These capabilities are pending the next npm candidate. The development checkout now also derives
+`calls` from actual TypeScript call/new syntax and exact SCIP identities. Query a function's
+incoming/outgoing `calls` to inspect callers/callees, or follow a bounded path using `calls` and
+`implementedBy`. Each assertion retains callsite and endpoint proofs, with explicit bodyless,
+external, optional and member-dispatch limits. Runtime execution is not implied. Values, callbacks
+and dynamic dispatch without a known target remain references and cited gaps. See
+[ADR 035](docs/ADR-035-static-call-evidence.md). The remaining inferred-mapping proposal is
+recorded separately in [ADR 034](docs/ADR-034-mapping-gaps.md).
 
 The development checkout also supports paths between two exact IDs:
 
