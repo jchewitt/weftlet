@@ -66,7 +66,8 @@
     "weftlet": "tsx src/cli.ts",
     "changeset": "changeset",
     "release:version": "node scripts/version-packages.mjs",
-    "benchmark:validation": "node scripts/validation-benchmark/run.mjs"
+    "benchmark:validation": "node scripts/validation-benchmark/run.mjs",
+    "evaluate:mappings": "tsx scripts/mapping-study/run.ts"
   },
   "engines": {
     "node": ">=24.0.0"

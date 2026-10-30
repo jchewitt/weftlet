@@ -1,4 +1,4 @@
-import type { GraphExplorationService, GraphFact, GraphPathQueryService, GraphSnapshot } from '@weftlet/core';
+import type { GraphExplorationService, GraphPathQueryService, GraphSnapshot } from '@weftlet/core';
 import { handleGraphNeighbors } from '../../src/interfaces/graph-exploration.js';
 import type { MappingCase, MappingProtocol, MappingState } from './protocol.js';
 
@@ -9,8 +9,8 @@ export async function measureMappingCase(
 ) {
   const facts = snapshot.facts;
   const definitions = facts.filter(f => f.codeOccurrence?.role === 'definition' &&
-    f.provenance.path === item.targetPath && f.object.label === item.targetName);
-  const targetIds = [...new Set(definitions.map(f => f.object.id))].sort();
+    f.provenance.path === item.targetPath && f.subject.label === item.targetName);
+  const targetIds = [...new Set(definitions.map(f => f.subject.id))].sort();
   const rulePresent = facts.some(f => f.subject.id === item.ruleId || f.object.id === item.ruleId);
   const mappings = facts.filter(f => f.codeBinding && f.subject.id === item.ruleId &&
     f.predicate === item.predicate && targetIds.includes(f.object.id));
@@ -46,10 +46,9 @@ export async function measureMappingCase(
     predicates: ['implementedBy', 'verifiedBy', 'references', 'contains', 'definedBy'] as const,
     maxDepth: budget.maxDepth, maxPaths: budget.maxPaths, maxSteps: budget.maxSteps } : null;
   const pathResponse = pathRequest ? await services.pathService.paths(pathRequest) : null;
-  const record = (f: GraphFact) => f; // Preserve original assertions/proofs, including review authority.
   return { id: item.id, observed, expected: item.expected, matchesExpected: observed === item.expected,
-    nextAction: item.nextAction, rulePresent, targetIds, definitions: definitions.map(record),
-    mappings: mappings.map(record), fileClaims: fileClaims.map(record), documentReferences: documentReferences.map(record),
+    nextAction: item.nextAction, rulePresent, targetIds, definitions,
+    mappings, fileClaims, documentReferences,
     diagnostics, forbiddenMappings, agentQuery: { pages,
       returnedBytes: Buffer.byteLength(JSON.stringify(pages.map(p => p.response))),
       pageBudgetExhausted: Boolean(continuation), allDirectMappingsReturned: mappings.every(f => returned.has(f.id)),

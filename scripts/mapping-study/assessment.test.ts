@@ -2,14 +2,13 @@ import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterAll, beforeAll, expect, it } from 'vitest';
+import { beforeAll, expect, it } from 'vitest';
 import { assessMappings } from './assessment.js';
 import { readMappingInputs } from './protocol.js';
 
 const inputs = fileURLToPath(new URL('../../evaluations/mapping-gaps', import.meta.url));
 let report: Awaited<ReturnType<typeof assessMappings>>;
 beforeAll(async () => { report = await assessMappings(inputs); }, 90_000);
-afterAll(() => { /* The assessor removes its temporary Git repository even on failure. */ });
 
 it('classifies independently frozen cases from actual extraction and agent queries', () => {
   expect(report.passed).toBe(true);
@@ -37,7 +36,7 @@ it('retains declaration, test and approval limits with exact document/code prove
     expect(binding.codeBinding!.definitions.length).toBeGreaterThan(0);
     for (const proof of binding.codeBinding!.definitions) {
       expect(proof.provenance).toMatchObject({ commitSha: report.manifest.commitSha });
-      expect(proof.provenance.contentDigest).toMatch(/^[a-f0-9]{64}$/);
+      expect(proof.provenance.digest).toMatch(/^[a-f0-9]{64}$/);
     }
     expect(binding.codeBinding!.subjectEvidence.every(p => p.extractionReview === 'unreviewed')).toBe(true);
   }
