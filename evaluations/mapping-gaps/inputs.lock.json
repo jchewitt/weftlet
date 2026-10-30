@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "inputs": [
+    {
+      "path": "protocol.json",
+      "sha256": "302f6e8ef781cdec6c483d67f02fdc6c0f43e142e53c85b5cff09f55b66390fd"
+    },
+    {
+      "path": "project/.gitattributes",
+      "sha256": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9"
+    },
+    {
+      "path": "project/.gitignore",
+      "sha256": "5f02e86691a23e0d708c6b7a4e7f5de72bca26dd74ae58a3ef8a2ae111b33ac5"
+    },
+    {
+      "path": "project/context-graph.config.json",
+      "sha256": "533381894d7ef94083800afdfa6a2bea3683e655481fc6426210bd2dc32c4bc6"
+    },
+    {
+      "path": "project/docs/ambiguous.md",
+      "sha256": "8bda00d87df66de78a5a12d7658e6f88ecb724f05c9bcd4570f325c7c4db8e97"
+    },
+    {
+      "path": "project/docs/credit.md",
+      "sha256": "76a04e033cbc44e0306809a4d47e6d5cd99b0a0f2af4b49323791fca94ff130a"
+    },
+    {
+      "path": "project/docs/declaration.md",
+      "sha256": "cb16cf9aa77ba83addf6975b73919f274ba702b7f59f8f73d8276d1eaadbe318"
+    },
+    {
+      "path": "project/docs/eligibility.md",
+      "sha256": "06928b67dc16ab6958aae8e3b7a5200617f7fd9f8ddeffacebe3c3dba7d5e645"
+    },
+    {
+      "path": "project/docs/excluded.md",
+      "sha256": "41f0a042bdac181ac55515eae0a345101b6176dc3dd82228d8eab62623b6eb5b"
+    },
+    {
+      "path": "project/docs/limits.md",
+      "sha256": "af2cbca2f6328a903a63f0fd463062bf4af4db23dda6be3665dbb7f6f8f630a0"
+    },
+    {
+      "path": "project/docs/refund.md",
+      "sha256": "44cd06c2ab54b3cba321636b668bdd96eb383922978915612a716eee43206ea3"
+    },
+    {
+      "path": "project/docs/stale.md",
+      "sha256": "0d62d9095d09c81a4c9a4e9163cd933d06aedfdbabc4c11d08bc6d4fb3d3b709"
+    },
+    {
+      "path": "project/package.json",
+      "sha256": "9abd2edf3a933c98966f349c323dd00b53f1afb473c96ff39c14cf4d72a132d4"
+    },
+    {
+      "path": "project/provider.mjs",
+      "sha256": "c8361f567cb02da0b5049f0be1891dd615e2007b91d9ebd7ed033ddde6eb4490"
+    },
+    {
+      "path": "project/src/ambiguous.ts",
+      "sha256": "20938b3bf744de429530da120959f3d1ef365d3adf71d0e1a6af095a6694d700"
+    },
+    {
+      "path": "project/src/contracts.d.ts",
+      "sha256": "053c3c917301c66ffcbea8114a7f7bc25956e66b8f832c2ed9531de44e99b511"
+    },
+    {
+      "path": "project/src/credit.ts",
+      "sha256": "2f5c12265029541c75bb107a2d116295d04dc68cb4707a5404765f42893b56de"
+    },
+    {
+      "path": "project/src/eligibility.ts",
+      "sha256": "eaccdf1eff398d7c2b9aa2010bae20d8849dc30fc43ae501851b744b459aa9a3"
+    },
+    {
+      "path": "project/src/excluded.ts",
+      "sha256": "7e93d04daae3e3b99aeda2f67afd4222f41ec4230b275c526e0fa09be0f8dd45"
+    },
+    {
+      "path": "project/src/limits.ts",
+      "sha256": "d362d819cd06a64b6e7afbef043d3ab4e6fcba55b631175e683d90d25dfe6574"
+    },
+    {
+      "path": "project/src/refund.ts",
+      "sha256": "0df0e0a62e6ec492fd3c122c3aa1dd53851d55d2d8cd5a4ebf4de46d0f66d9ad"
+    },
+    {
+      "path": "project/src/renamed.ts",
+      "sha256": "81c88971a3f7363ebbd7021bcaf2cfd26ff15abd302f8f21d89decf7ca291bd5"
+    },
+    {
+      "path": "project/src/shipping.ts",
+      "sha256": "065f5a90bc0a819a84921b2210274d8609b66276be3f86aea18d513c55d95688"
+    },
+    {
+      "path": "project/src/undocumented.ts",
+      "sha256": "a00e665b36ea9f02e362582f041c3d8c910316de4dc3aa91a9a9baec302cd8ef"
+    },
+    {
+      "path": "project/test/eligibility.test.ts",
+      "sha256": "d6404bb913cd5e16f4ce59a2d6127cb054ecaaca4f067385abfce35de24ce24a"
+    }
+  ]
+}

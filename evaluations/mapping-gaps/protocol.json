@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "c607787165759d9bc20a0a030648f6a32f110421",
+  "purpose": "Assess remaining business-to-symbol mapping gaps without evaluating model quality.",
+  "budget": {
+    "maxCases": 10,
+    "maxFacts": 25,
+    "maxPages": 8,
+    "maxPaths": 3,
+    "maxDepth": 4,
+    "maxSteps": 500
+  },
+  "cases": [
+    {
+      "id": "explicit-implementation",
+      "ruleId": "invariant:eligibility",
+      "document": "docs/eligibility.md",
+      "targetPath": "src/eligibility.ts",
+      "targetName": "allow",
+      "expected": "explicit-indexed-binding",
+      "nextAction": "none",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "explicit-test-declaration",
+      "ruleId": "invariant:eligibility",
+      "document": "docs/eligibility.md",
+      "targetPath": "test/eligibility.test.ts",
+      "targetName": "check",
+      "expected": "explicit-test-binding",
+      "nextAction": "test-execution-separate",
+      "predicate": "verifiedBy"
+    },
+    {
+      "id": "file-only-with-misleading-name",
+      "ruleId": "invariant:refund",
+      "document": "docs/refund.md",
+      "targetPath": "src/refund.ts",
+      "targetName": "restoreFunds",
+      "expected": "file-only-claim",
+      "nextAction": "mapping-proposal-candidate",
+      "forbiddenNames": [
+        "refund"
+      ],
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "named-prose-without-selector",
+      "ruleId": "invariant:credit",
+      "document": "docs/credit.md",
+      "targetPath": "src/credit.ts",
+      "targetName": "approveCredit",
+      "expected": "file-only-claim",
+      "nextAction": "explicit-syntax-or-cited-proposal",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "co-located-document-reference",
+      "ruleId": "invariant:quota",
+      "document": "docs/limits.md",
+      "targetPath": "src/limits.ts",
+      "targetName": "limit",
+      "expected": "document-symbol-reference-only",
+      "nextAction": "mapping-proposal-candidate",
+      "forbiddenNames": [
+        "retry"
+      ],
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "ambiguous-selector",
+      "ruleId": "invariant:choice",
+      "document": "docs/ambiguous.md",
+      "targetPath": "src/ambiguous.ts",
+      "targetName": "run",
+      "expected": "unresolved-selector",
+      "nextAction": "qualify-explicit-selector",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "excluded-from-index",
+      "ruleId": "invariant:permission",
+      "document": "docs/excluded.md",
+      "targetPath": "src/excluded.ts",
+      "targetName": "permit",
+      "expected": "unresolved-selector",
+      "nextAction": "fix-index-coverage",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "declaration-only",
+      "ruleId": "invariant:allowed",
+      "document": "docs/declaration.md",
+      "targetPath": "src/contracts.d.ts",
+      "targetName": "allowed",
+      "expected": "declaration-only-binding",
+      "nextAction": "index-real-implementation",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "stale-selector",
+      "ruleId": "invariant:renamed",
+      "document": "docs/stale.md",
+      "targetPath": "src/renamed.ts",
+      "targetName": "newEligibility",
+      "expected": "unresolved-selector",
+      "nextAction": "repair-source-declaration",
+      "predicate": "implementedBy"
+    },
+    {
+      "id": "undocumented-code",
+      "ruleId": "invariant:undocumented",
+      "targetPath": "src/undocumented.ts",
+      "targetName": "expire",
+      "expected": "intent-absent",
+      "nextAction": "owner-intent-required",
+      "predicate": "implementedBy"
+    }
+  ]
+}
