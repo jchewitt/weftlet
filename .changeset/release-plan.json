@@ -3,16 +3,23 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.6.1",
-      "previousVersion": "0.6.0"
+      "version": "0.7.0",
+      "previousVersion": "0.6.1"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.6.1",
-      "previousVersion": "0.6.0"
+      "version": "0.7.0",
+      "previousVersion": "0.6.1"
     }
   ],
   "changesets": [
-    "bounded-artifact-paths.md"
+    "bounded-evidence-paths.md",
+    "cited-contract-comparison.md",
+    "contract-obligations.md",
+    "exact-node-neighborhoods.md",
+    "explicit-symbol-bindings.md",
+    "precise-scip-occurrences.md",
+    "saved-monorepo-coverage.md",
+    "static-call-evidence.md"
   ]
 }

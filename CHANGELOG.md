@@ -1,5 +1,30 @@
 # @weftlet/toolkit
 
+## 0.7.0
+
+### Minor Changes
+
+- f3b0f99: Add bounded cited dependency paths through the public API, CLI and MCP, with exact saved-snapshot endpoints, direction/relation filters, resumable work pages and explicit depth/work frontiers. Preserve supporting assertions and evidence state. Share the same deterministic path engine with the offline viewer, including next-path controls; paths are associations rather than causal or business-compatibility verdicts.
+- 18f4e43: Add read-only graph.compatibility through the public API, CLI and MCP for two exact cited producer/consumer declarations. Report numeric subset, insufficient guarantee, disjoint constraints, required revalidation or explicit unknowns while retaining source authority, citations and saved evidence state. Assessments never prove code fulfillment or supply a CI gate.
+- 2ca707a: Extract explicitly cited producer guarantees and consumer requirements from selected Markdown documents. Preserve exact scoped queue/stored-data contract identities, optional documented constraints and unknowns through RDF, shared queries, viewer and draft overlays. These declarations do not establish implementation, delivery or compatibility. Refresh code/graph assembly while reusing unchanged semantic artifacts.
+- 01e6aa6: Add exact-node neighborhood exploration through the public query contract, CLI and MCP. Read an explicit saved snapshot with direction/relation filters, provenance-preserving pagination, remaining-neighbor counts and further-expansion hints. Preserve source/assertion authority and report checkout/overlay evidence state without rebuilding the graph.
+- c607787: Resolve explicit Markdown rule and test declarations to precise indexed symbols. Retain document, occurrence, definition and subject-evidence citations with separate approval/review state; report ambiguous or missing targets without guessing. Rebuild draft bindings on edits and preserve semantic cache reuse. Add public binding metadata, RDF validation and query/viewer source navigation.
+- 1d4381e: Retain SCIP code symbols and individual definition/reference spans, including local symbols and repeated same-file references. Expose exact UTF-16 locations, native lexical enclosure and unresolved/declaration-only evidence through RDF, graph exploration and the viewer. Preserve legacy file relationships; refresh code assembly to obtain the new evidence without invalidating semantic artifacts. These are static references, not call or execution claims.
+- 07e35e4: Record saved TypeScript source inventory and actual SCIP document observations, with paginated graph.coverage through the public API, CLI and MCP. Distinguish code roots, requested indexing entries, observed files, omitted packages, cross-package references and unresolved/declaration-only targets. Share the saved overview with evidence queries and the viewer without treating missing observations as zero impact. Refresh snapshots to assembly 12; unchanged semantic artifacts remain reusable and historical snapshots stay queryable with unknown inventory.
+- 2aaaf67: Add cited static TypeScript call edges using exact SCIP identities and AST call sites, with caller/callee proof metadata, unresolved-dispatch diagnostics, shared graph queries and draft-overlay invalidation. Preserve references and semantic artifact reuse; static calls never establish observed execution or approved intent.
+
+### Patch Changes
+
+- Updated dependencies [f3b0f99]
+- Updated dependencies [18f4e43]
+- Updated dependencies [2ca707a]
+- Updated dependencies [01e6aa6]
+- Updated dependencies [c607787]
+- Updated dependencies [1d4381e]
+- Updated dependencies [07e35e4]
+- Updated dependencies [2aaaf67]
+  - @weftlet/core@0.7.0
+
 ## 0.6.1
 
 ### Patch Changes
