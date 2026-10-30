@@ -40,7 +40,7 @@ export function staticCallProject() {
   ];
   // Actual public data rows make helper definitions distant. This is a location workload,
   // not a claim of 3,000 lines of algorithmic complexity or production performance.
-  while (lines.length < 2994) lines.push(`  { code: "public-${lines.length}", active: true },`);
+  while (lines.length < 2994) lines.push(`  "public-${lines.length}",`);
   lines.push('] as const;', 'export function unrelated(value: number) { return value * 7; }',
     'export function leaf(value: number) { return value < 0 ? 0 : value; }',
     'export function unicode() { const label = "😀"; return leaf(label.length); }');
