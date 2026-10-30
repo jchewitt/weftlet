@@ -8,6 +8,31 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B3c static call evidence, 2026-10-29
+
+[ADR 035](ADR-035-static-call-evidence.md) adds actual TypeScript call/new syntax joined to exact
+SCIP identities. The [public observation](../evaluations/static-calls/README.md) records clean
+commit `98eafa99375fdd1d37333409e4e666bf7f5b0924`: 237 facts, 33 calls and nine explicit gaps;
+one cold semantic extraction, one repeat reuse and unchanged snapshot identity/content. The
+caller/callee query returns three callsites in two pages (19,181 bytes); the bounded helper-to-rule
+search exhausts its selected space with two paths and 52 candidate-edge examinations.
+
+Eight real-extraction acceptance tests cover private/local functions, recursive/repeated calls,
+shadowing, aliases, overloads, TSX, BOM/Unicode, callbacks/value uses, external/bodyless targets,
+decorators/initializers/defaults, source/proof validation, shared queries, line shifts, rename/delete
+and draft replacement. Negative SHACL/provenance/authority tests reject forged calls. Named and
+union shape verdicts agree; full RDF projection preserves assertions. The semantic schema still
+rejects call assertions, and its provider/prompt/cache identity remains unchanged. No paid or
+private consumer request was used. Strict typechecking passes for the evaluator and tests.
+
+Architecture remains at the existing 13 advisory findings; no new baseline or exception was
+accepted. A bounded 10,000-fact synthetic shared-node SHACL smoke completed in about 2.25 seconds
+of validation with unchanged serialized evidence. That case contains ordinary facts, not a
+large call graph, and is not a comparative benchmark or private workload result. The new call
+shapes target call records directly. Complete local publication and hosted Windows/Linux checks
+are required before merge; the packed consumer now exercises the shipped parser and call proofs.
+All 79 original source path/hash pairs and frozen B2/B3b inputs/results remain unchanged.
+
 ## B3b mapping gaps and Windows study reliability, 2026-10-29
 
 [ADR 034](ADR-034-mapping-gaps.md) records ten predeclared public cases, real SCIP/RDF/SHACL

@@ -21,8 +21,15 @@ export function draftFacts(facts: readonly GraphFact[], snapshotId: string, base
     const draft = { ...fact, snapshotId, authority: 'draft' as const,
       ...(fact.codeBinding || fact.extractor.id === 'routing-declaration-extractor' || fact.sourceRole !== undefined ? { sourceAuthority: 'draft' as const } : {}),
       ...(fact.codeBinding ? { codeBinding: rewrite(fact.codeBinding) } : {}), provenance: span(fact.provenance) };
+    if (draft.codeCall) {
+      const proofs = (items: readonly { factId: string; provenance: SourceSpan }[]) => items.map(item => ({
+        factId: rewritten.get(item.factId)?.id ?? item.factId, provenance: span(item.provenance) }));
+      draft.codeCall = { ...draft.codeCall, callerDefinitions: proofs(draft.codeCall.callerDefinitions),
+        targetOccurrences: proofs(draft.codeCall.targetOccurrences), targetDefinitions: proofs(draft.codeCall.targetDefinitions) };
+    }
     const result = { ...draft, id: sha256(stableJson(draft)) }; rewritten.set(previousId, result);
     return result;
   };
-  return [...facts.filter(fact => !fact.codeBinding).map(make), ...facts.filter(fact => fact.codeBinding).map(make)];
+  return [...facts.filter(fact => !fact.codeBinding && !fact.codeCall).map(make),
+    ...facts.filter(fact => fact.codeCall).map(make), ...facts.filter(fact => fact.codeBinding).map(make)];
 }

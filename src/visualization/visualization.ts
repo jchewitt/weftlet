@@ -1,5 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { codeEvidenceDescription } from '../graph/code-description.js';
+import { evidenceSources } from './evidence-sources.js';
 import { sourceLocation } from '@weftlet/core';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, resolve } from 'node:path';
@@ -215,12 +216,7 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
         (sourceDescription ? `; ${sourceDescription}` : ''),
       source: fact.provenance,
       sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
-      ...(fact.codeBinding ? { bindingSources: [
-        ...fact.codeBinding.documentCitations.map(provenance => ({ role: 'document', provenance })),
-        ...fact.codeBinding.selectedOccurrences.map(proof => ({ role: 'selected occurrence', provenance: proof.provenance })),
-        ...fact.codeBinding.definitions.map(proof => ({ role: 'definition', provenance: proof.provenance })),
-        ...fact.codeBinding.subjectEvidence.map(proof => ({ role: 'subject evidence', provenance: proof.provenance })),
-      ].map(({ role, provenance }) => ({ provenance: `${role}: ${sourceLocation(provenance)} @ ${provenance.commitSha}`,
+      ...(fact.codeBinding || fact.codeCall ? { bindingSources: evidenceSources(fact).map(({ role, provenance }) => ({ provenance: `${role}: ${sourceLocation(provenance)} @ ${provenance.commitSha}`,
         sourceUrl: sourceLink(provenance, sourceUrlTemplate) })) } : {}),
     });
   }

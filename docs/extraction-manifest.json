@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "cd1b40a873371c1fb20599ae8dc5d1131ea4ba650c1f4151415e2cb038339d8d"
+      "destinationSha256": "eab5289d1e846769186cedba88bfde7c8a00a88d2c0550d1b37f41a336b37a7f"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "3f4d222b60fa351b7904e1408b65989482b3915b6b173bb1c6678f48e3e29e18"
+      "destinationSha256": "49671b6f559b0383fd8a78f5890576654c57a4a68f1b4731cb968767440a504f"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "4a7e6060b173b26b129885578d8c854999aad52a0130aba50be9c11a12bd5635"
+      "destinationSha256": "bfccd21edaf47a8d2a7b09c00a8257fb9c8aa0399e00fd696f99953419b074d4"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "d3b99a52b3ea0bc94938561adca0ed90b2c5944343b51e34aee3e90e98c3b385"
+      "destinationSha256": "a8d3b52aae18574689f31810c12e199c26bc1279d73d0270ab61f9fc41834295"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "be2f6a88b90d245fab3ff93f855b86f98ac8d069135a60f8477746ff8d3f8a6d"
+      "destinationSha256": "3f5e348a7ca981496077bd5d955b7b558edf1282fd9f479eb37499ebd393f955"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "f705ffccb9aca7be59a4fc2938e6ffbef28062c05c1e63c17a5b528fbe9566ec"
+      "destinationSha256": "41471336c6e81b7971da8f31b806eca414707c14c85cba8d745df752bbd10989"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "4c3d72087d768ac738fababfd8c54b13b0b865a981a57da980590e3c84a9e0e8"
+      "destinationSha256": "b7701c9caacf186376f6a73a96dee584e1325fd1c12396e08aef9dd059f5b21b"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "78443b22bc30e2313eba43093f03b7027d8f9019e24be8b05ab279078d126025"
+      "destinationSha256": "3e10e0de42d11e783847de30abc12ee2482da5d15249126c1834eaf53a996a94"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -472,7 +472,7 @@
       "destinationPath": "src/extraction/static.test.ts",
       "sourceSha256": "9def1cfe0fc0349ad59709555a63a9261d56ff7379f155fce58f26a552278fbc",
       "modified": true,
-      "destinationSha256": "bcfac714e51ec0ac81b47eddcd79bdf95c758d0ecc6f4ef15a0c1c2a7db3cffc"
+      "destinationSha256": "8b19847dbd3acabfcdb3d3cb3a79da1e22242df6e2f48a07ede68cca73493164"
     },
     {
       "sourcePath": "tools/context-graph/src/static.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "c6ef504ed2fccda3ab707ab0d3be90777a345bb6f856ffafe3623c2cf09429ed"
+      "destinationSha256": "0dad532da8b7c61c408c91e3e45e3a00ae8853e8a63024b71c5f85a30d598cc4"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -584,6 +584,7 @@
     ".changeset/explicit-symbol-bindings.md",
     ".changeset/precise-scip-occurrences.md",
     ".changeset/release-plan.json",
+    ".changeset/static-call-evidence.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -632,6 +633,7 @@
     "docs/ADR-032-scip-code-evidence.md",
     "docs/ADR-033-document-symbol-bindings.md",
     "docs/ADR-034-mapping-gaps.md",
+    "docs/ADR-035-static-call-evidence.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -771,6 +773,8 @@
     "evaluations/mapping-gaps/project/test/eligibility.test.ts",
     "evaluations/mapping-gaps/protocol.json",
     "evaluations/mapping-gaps/results/2026-10-29.json",
+    "evaluations/static-calls/README.md",
+    "evaluations/static-calls/results/2026-10-29.json",
     "evaluations/weftlet/baseline.json",
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
@@ -807,6 +811,7 @@
     "mcp-launcher.mjs",
     "packages/core/CHANGELOG.md",
     "packages/core/src/bindings.ts",
+    "packages/core/src/calls.ts",
     "packages/core/src/code-types.ts",
     "packages/core/src/code.test.ts",
     "packages/core/src/code.ts",
@@ -821,6 +826,7 @@
     "runtime-check.d.mts",
     "runtime-check.mjs",
     "scripts/benchmark-shacl.mjs",
+    "scripts/call-study/run.ts",
     "scripts/check-release-plan.mjs",
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
@@ -888,6 +894,7 @@
     "src/application/document-overlay.ts",
     "src/application/draft-facts.ts",
     "src/application/extraction-identity.ts",
+    "src/application/extractor-results.ts",
     "src/application/hydration-failure.ts",
     "src/application/hydration-inputs.ts",
     "src/application/hydration-plan.ts",
@@ -903,6 +910,7 @@
     "src/configuration/cache.test.ts",
     "src/configuration/document-traversal.ts",
     "src/configuration/scip-project.ts",
+    "src/extraction/call-syntax.ts",
     "src/extraction/canonical-document-links.test.ts",
     "src/extraction/canonical-document-links.ts",
     "src/extraction/codex-auth.test.ts",
@@ -939,6 +947,7 @@
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
     "src/extraction/semantic-sources.ts",
+    "src/extraction/static-calls.ts",
     "src/extraction/symbol-resolution.ts",
     "src/extraction/symbol-selectors.test.ts",
     "src/extraction/symbol-selectors.ts",
@@ -947,6 +956,8 @@
     "src/governance/physical-file-kinds.test.ts",
     "src/graph/authority.ts",
     "src/graph/binding-rdf.ts",
+    "src/graph/call-rdf.ts",
+    "src/graph/call-shapes.ts",
     "src/graph/code-description.ts",
     "src/graph/code-rdf.ts",
     "src/graph/coverage.test.ts",
@@ -996,6 +1007,7 @@
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
     "src/telemetry.ts",
+    "src/visualization/evidence-sources.ts",
     "src/visualization/path-parity.test.ts",
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
@@ -1011,6 +1023,7 @@
     "tests/fixtures/business-context-provider.mjs",
     "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/shacl.ts",
+    "tests/fixtures/static-call-project.ts",
     "tests/fixtures/symbol-bindings.ts",
     "tests/fixtures/traversal.ts",
     "tests/hydration-failure.test.ts",
@@ -1027,6 +1040,7 @@
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",
     "tests/snapshot-lifecycle.test.ts",
+    "tests/static-calls.test.ts",
     "tests/traversal-hydration.test.ts"
   ],
   "publicationAuthorization": {

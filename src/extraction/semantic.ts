@@ -10,7 +10,9 @@ import { runSemanticProcess, SemanticProviderError, type SemanticRunOptions } fr
 export { SemanticProviderError } from "./semantic-process.js";
 export type { SemanticRunOptions } from "./semantic-process.js";
 
-import { graphPredicates as predicates } from "@weftlet/core";
+import { graphPredicates } from "@weftlet/core";
+// Calls require indexed syntax/proofs. Keep the prose schema and its cache identity unchanged.
+const predicates = graphPredicates.filter(predicate => predicate !== 'calls');
 import type {
   ExtractionContext,
   GraphFact,
@@ -36,7 +38,7 @@ import {
 
 export interface ExtractedAssertion {
   readonly subject: { readonly id: string; readonly kind: GraphNodeKind; readonly label: string };
-  readonly predicate: GraphPredicate;
+  readonly predicate: Exclude<GraphPredicate, 'calls'>;
   readonly object: { readonly id: string; readonly kind: GraphNodeKind; readonly label: string };
   readonly citation: { readonly startLine: number; readonly endLine: number };
   readonly confidence: number;
@@ -93,7 +95,7 @@ function renderOml(key: string, assertions: readonly ExtractedAssertion[]): stri
     PersistenceModel: 'cg:PersistenceModel',
     Scope: 'cg:Scope',
   };
-  const relationByPredicate: Record<GraphPredicate, string> = {
+  const relationByPredicate: Record<ExtractedAssertion['predicate'], string> = {
     realizes: 'cg:realizes',
     implementedBy: 'cg:implementedBy',
     consumes: 'cg:consumes',
@@ -255,7 +257,7 @@ export function assertSemanticOutput(value: unknown, source: SemanticSource): as
   const lineCount = source.content.split('\n').length;
   for (const [index, assertion] of (output.assertions as unknown[]).entries()) {
     if (!record(assertion) || !node(assertion.subject) || !node(assertion.object) ||
-      !predicates.includes(assertion.predicate as GraphPredicate) || typeof assertion.confidence !== 'number' ||
+      !predicates.includes(assertion.predicate as (typeof predicates)[number]) || typeof assertion.confidence !== 'number' ||
       !Number.isFinite(assertion.confidence) || assertion.confidence < 0 || assertion.confidence > 1 || !record(assertion.citation)) {
       fail('Invalid semantic assertion');
     }

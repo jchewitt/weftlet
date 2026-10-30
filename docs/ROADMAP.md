@@ -8,7 +8,7 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 
 The maintainer's subsequent [pre-1.0 business-context baseline](PRE-1.0-BASELINE.md) records
 three bounded public acceptance checks and the additional B1–B6 task list. B1 exact neighborhoods
-and bounded paths are implemented for the next candidate. Explicit function-level intent bindings are implemented; inferred-mapping decisions, actual calls,
+and bounded paths are implemented for the next candidate. Explicit function-level intent bindings are implemented; inferred-mapping decisions,
 cross-boundary obligations and monorepo coverage remain open before the official release decision.
 The measured [Graphify/SCIP evaluation](GRAPHIFY-EVALUATION.md) selects a richer SCIP projection.
 The published 0.6.1 patch bounds physical artifact/temp names while retaining full logical
@@ -20,7 +20,9 @@ frozen and verified; B2b is measured with retained evidence and disclosed harnes
 [ADR 032](ADR-032-scip-code-evidence.md) implements B3a's code entities and precise occurrences.
 Explicit document-to-symbol bindings are implemented in [ADR 033](ADR-033-document-symbol-bindings.md).
 [ADR 034](ADR-034-mapping-gaps.md) records the remaining mapping gaps and a bounded inference
-proposal; its evaluation/deferral decision remains open. B3c's actual call analysis is next.
+proposal; its evaluation/deferral decision remains open. [ADR 035](ADR-035-static-call-evidence.md)
+implements B3c's bounded static call evidence. Producer/consumer obligations and monorepo
+coverage remain before candidate qualification.
 
 T09 shipped in 0.5.0 with T05a work, accepting the consumer's approved
 `semantic.timeoutMs: 600000`. The default remains 120000 and retry/cancellation behavior is

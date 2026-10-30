@@ -3,10 +3,11 @@ import { graphPredicates } from '@weftlet/core';
 import { graphNeighborsRequestFromArgs, graphNeighborsTool, handleGraphNeighbors } from './graph-exploration.js';
 import { semanticOutputSchema } from '../extraction/semantic.js';
 
-it('uses the same predicate vocabulary in semantic extraction and agent query schemas', () => {
+it('keeps static-only calls out of semantic extraction while allowing agent queries', () => {
   const schema = semanticOutputSchema(4) as { properties: { assertions: { items: { properties: { predicate: { enum: string[] } } } } } };
   expect(Object.isFrozen(graphPredicates)).toBe(true);
-  expect(schema.properties.assertions.items.properties.predicate.enum).toEqual(graphPredicates);
+  expect(schema.properties.assertions.items.properties.predicate.enum).toEqual(graphPredicates.filter(predicate => predicate !== 'calls'));
+  expect(graphNeighborsRequestFromArgs(['--snapshot', 'saved', '--node', 'code:x', '--predicate', 'calls']).predicates).toEqual(['calls']);
   expect(graphNeighborsTool.inputSchema.properties.predicates.items.enum).toEqual(graphPredicates);
 });
 
