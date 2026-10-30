@@ -81,7 +81,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
       snapshot: snapshotContext(manifest),
       focus: { nodeId: request.nodeId, status: incident.length ? 'present' : 'absent-from-snapshot' },
       facts,
-      coverage: coverageForFacts(facts),
+      coverage: coverageForFacts(facts, saved),
       diagnostics: selectDiagnostics(saved, {}, facts, [], [],
         new Set([request.nodeId, ...facts.flatMap(fact => [fact.subject.id, fact.object.id])])),
       selection: { version: GRAPH_NEIGHBORHOOD_VERSION, direction: request.direction, predicates: request.predicates,

@@ -72,11 +72,15 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
     } finally {
       await rm(temporary, { force: true });
     }
+    const bytes = await readFile(destination);
+    const indexedPaths = [...new Set(loadScipRuntime().scip.Index.deserializeBinary(bytes).documents
+      .map(document => document.relative_path.replaceAll('\\', '/')))].sort();
     return {
       path: destination,
-      digest: sha256(await readFile(destination)),
+      digest: sha256(bytes),
       mode: 'full',
       version: this.config.version,
+      indexedPaths,
     };
   }
 }

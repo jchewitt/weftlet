@@ -1,5 +1,6 @@
-import { repositoryFileNode, type ContextPackCoverage, type ContextPackLane, type GraphFact } from '@weftlet/core';
+import { repositoryFileNode, type ContextPackCoverage, type ContextPackLane, type GraphFact, type GraphSnapshot } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from './authority.js';
+import { projectCodeCoverage, codeCoverageDescription } from './code-coverage-projection.js';
 
 export const contextPackLanes: readonly ContextPackLane[] = [
   'productIntent',
@@ -59,9 +60,10 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
 }
 
 export function coverageDescription(coverage: ContextPackCoverage): string {
-  return coverage.scope === 'returned-page' && coverage.countsAreNonExclusive
+  const page = coverage.scope === 'returned-page' && coverage.countsAreNonExclusive
     ? 'Counts describe evidence on this returned page and may overlap; a code relationship can also describe a contract. They are not a percentage, a count of display groups, or proof that behavior is correct.'
     : 'Coverage scope and overlap metadata are unavailable for this Context Pack; re-query saved evidence for an explicit report.';
+  return `${page} ${codeCoverageDescription(coverage.code)}`;
 }
 
 /** Reporting only: never changes a fact's authority, identity, primary lane or stored bytes. */
@@ -80,7 +82,7 @@ export function isImplementationEvidence(fact: GraphFact): boolean {
   return nodes.some(node => node.kind === 'Component' && node.id === file.id);
 }
 
-export function coverageForFacts(facts: readonly GraphFact[]): ContextPackCoverage {
+export function coverageForFacts(facts: readonly GraphFact[], snapshot?: GraphSnapshot): ContextPackCoverage {
   const counts: Record<ContextPackLane, number> = {
     productIntent: 0, contractsAndInvariants: 0, implementationAndConsumers: 0, validationEvidence: 0,
   };
@@ -90,6 +92,7 @@ export function coverageForFacts(facts: readonly GraphFact[]): ContextPackCovera
     if (isImplementationEvidence(fact)) counts.implementationAndConsumers++;
   }
   return { scope: 'returned-page', countsAreNonExclusive: true, counts,
+    ...(snapshot ? { code: projectCodeCoverage(snapshot).overview } : {}),
     gaps: [
       ...contextPackLanes.filter(lane => counts[lane] === 0)
         .map(lane => `No ${lane} evidence appears on this returned page.`),

@@ -1,6 +1,7 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { ContextGraphConfig } from "../configuration/config.js";
 import { scipSourcePatterns } from '../configuration/scip-project.js';
+import { buildCodeInventory } from '../extraction/code-inventory.js';
 import type {
   ExtractionContext,
   FactExtractor,
@@ -216,6 +217,8 @@ export class ContextGraphHydrator {
     checkpoint();
     options.onProgress?.({ phase: 'index-typescript' });
     const scip = await this.dependencies.staticIndexer.index(context);
+    const codeInventory = buildCodeInventory(await repository.listEntriesAt(commitSha),
+      await repository.listFilesAt(commitSha, config.codeRoots), config.codeRoots, config.scip.sourceProject, scip);
     const extracted = await extractEvidence(this.dependencies.extractorFactory(scip), context);
     const extractorFacts = extracted.facts;
     diagnostics.push(...extracted.diagnostics);
@@ -292,6 +295,7 @@ export class ContextGraphHydrator {
       unresolved,
       diagnostics,
       semanticSources: selectedSemanticSources,
+      codeInventory,
       ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
     };
     const contentDigest = sha256(stableJson(logical));
@@ -305,6 +309,7 @@ export class ContextGraphHydrator {
         snapshotId,
         configurationDigest,
         scope: scopePaths,
+        codeInventory,
         ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {

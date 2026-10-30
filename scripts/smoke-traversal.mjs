@@ -32,6 +32,13 @@ export function createSemanticExtractor(config) {
     throw new Error('Installed traversal hydration must publish once and reuse unchanged module artifacts');
   }
   const pack = cli('impact', 'scan', '--owner-doc', 'role-owner.md', '--json');
+  const codeRequest = { snapshotId: first.snapshotId, projectRoot: '.', maxItems: 1 };
+  const codeCoverage = cli('graph', 'coverage', '--snapshot', first.snapshotId, '--project', '.', '--max-items', '1', '--json');
+  if (codeCoverage.overview.status !== 'recorded' || codeCoverage.overview.indexObservation !== 'recorded' ||
+      codeCoverage.overview.totals.indexed < 1 || codeCoverage.files.length !== 1 ||
+      !codeCoverage.selection.continuation || JSON.stringify(pack.coverage.code) !== JSON.stringify(codeCoverage.overview)) {
+    throw new Error('Installed code coverage must expose observed indexing and bounded saved file pages');
+  }
   if (JSON.stringify(pack.snapshot.documentSelection) !== JSON.stringify(plan.documentSelection) ||
       !pack.facts.some(fact => fact.provenance.path === 'empty-review.md' && fact.sourceRole === 'validation') ||
       !pack.facts.some(fact => fact.provenance.path === 'draft-plan.md' && fact.sourceRole === 'plan' &&
@@ -60,6 +67,11 @@ export function createSemanticExtractor(config) {
   const client = new Client({ name: 'installed-exploration', version: '1' });
   try {
     await client.connect(transport);
+    if (!(await client.listTools()).tools.some(tool => tool.name === 'graph.coverage' && tool.annotations?.readOnlyHint)) throw new Error('Missing read-only graph.coverage');
+    const coverageResponse = await client.callTool({ name: 'graph.coverage', arguments: codeRequest });
+    if (coverageResponse.isError || JSON.stringify(JSON.parse(coverageResponse.content[1].text)) !== JSON.stringify(codeCoverage)) {
+      throw new Error('Installed MCP and CLI source coverage differ');
+    }
     if (!(await client.listTools()).tools.some(tool => tool.name === 'graph.neighbors')) throw new Error('Missing graph.neighbors');
     const response = await client.callTool({ name: 'graph.neighbors', arguments: request });
     if (response.isError || JSON.stringify(JSON.parse(response.content[1].text)) !== JSON.stringify(neighborhood)) {

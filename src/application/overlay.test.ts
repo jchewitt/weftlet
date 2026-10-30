@@ -67,7 +67,7 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   expect(first.facts.some((fact) => fact.provenance.path === 'src/contract.ts')).toBe(true);
   expect(first.manifest.extractorVersions).toEqual({
     'repository-file-extractor': '2.0.0', 'fixture-source': 'original',
-    assembly: 'standalone-graph-v11', 'repository-contract-extractor': '1.2.0',
+    assembly: 'standalone-graph-v12', 'repository-contract-extractor': '1.2.0',
     'scip-symbol-extractor': '2.1.0', 'typescript-call-extractor': '1.0.0', 'document-obligation-extractor': '1.0.0', 'document-code-binding-extractor': '1.0.0',
   });
   if (!sourceProject) {

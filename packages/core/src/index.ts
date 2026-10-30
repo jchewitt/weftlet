@@ -9,3 +9,5 @@ export type { BindingEvidence, BindingSubjectEvidence, DocumentCodeBinding } fro
 export type { CodeCall } from './calls.js';
 export * from './obligations.js';
 export * from './compatibility.js';
+export * from './code-coverage.js';
+export * from './coverage-query.js';

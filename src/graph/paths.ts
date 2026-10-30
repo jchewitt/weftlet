@@ -55,7 +55,7 @@ export class SnapshotGraphPathService implements GraphPathQueryService {
     const plain: Omit<GraphPaths, 'markdown'> = {
       snapshot: snapshotContext(manifest),
       endpoints: { from: endpoint(request.fromNodeId), to: endpoint(request.toNodeId) },
-      paths: result.paths, facts, coverage: coverageForFacts(facts),
+      paths: result.paths, facts, coverage: coverageForFacts(facts, saved),
       diagnostics: selectDiagnostics(saved, {}, facts, [], [], new Set([request.fromNodeId, request.toNodeId,
         ...facts.flatMap(fact => [fact.subject.id, fact.object.id])])),
       search: { version: GRAPH_PATHS_VERSION, order: 'fact-id-depth-first', direction: request.direction,

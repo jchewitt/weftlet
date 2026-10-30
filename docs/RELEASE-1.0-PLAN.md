@@ -7,7 +7,8 @@ obligations, monorepo coverage and a measured Graphify/SCIP decision. Its A1–A
 pass within recorded limits; B1 query mechanisms are implemented for the next candidate, while
 B2's measured decision retains SCIP. B3a explicit bindings and B3b's deterministic gap assessment
 are complete; B3c static calls, B4a explicit obligations and B4b selected numeric comparison are
-implemented. Inference decisions and B5–B6 remain open. Both npm packages remain available for
+implemented, along with B5's saved TypeScript/package coverage. Inference decisions and B6
+remain open. Both npm packages remain available for
 TradePilot acceptance while this additional scope is assessed. The maintainer requested the
 next live test after a new candidate; [the implementation queue](1.0-WORK-QUEUE.md) tracks
 the intervening B1–B6 work.

@@ -15,6 +15,7 @@ import { parseImpactScanRequest } from "./request.js";
 import { graphNeighborsTool, handleGraphNeighbors } from './graph-exploration.js';
 import { graphPathsTool, handleGraphPaths } from './graph-paths.js';
 import { graphCompatibilityTool, handleGraphCompatibility } from './graph-compatibility.js';
+import { graphCoverageTool, handleCodeCoverage } from './code-coverage.js';
 
 async function main(): Promise<void> {
   const local = resolve('context-graph.config.json');
@@ -27,7 +28,7 @@ async function main(): Promise<void> {
     {
       capabilities: { tools: {} },
       instructions:
-        'Call impact.scan before non-leaf planning or implementation. Pass the active owner document and task/checklist text. Use graph.neighbors with a returned snapshotId and exact node ID for focused follow-up, and follow its continuation and frontier. Use graph.paths between two exact IDs for bounded cited paths; inspect depth/work truncation before concluding no path exists. Use graph.compatibility with two exact producer/consumer assertion IDs for an advisory numeric constraint comparison; it does not prove implementation or supply a CI verdict. Treat product-intent, contract, implementation, and validation coverage gaps as unresolved context, not permission to invent behavior.',
+        'Call impact.scan before non-leaf planning or implementation. Pass the active owner document and task/checklist text. Use graph.neighbors with a returned snapshotId and exact node ID for focused follow-up, and follow its continuation and frontier. Use graph.paths between two exact IDs for bounded cited paths; inspect depth/work truncation before concluding no path exists. Use graph.compatibility with two exact producer/consumer assertion IDs for an advisory numeric constraint comparison; it does not prove implementation or supply a CI verdict. Use graph.coverage to inspect selected, indexed and omitted package/file coverage before treating a query as complete. Treat product-intent, contract, implementation, and validation coverage gaps as unresolved context, not permission to invent behavior.',
     },
   );
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -35,6 +36,7 @@ async function main(): Promise<void> {
       graphNeighborsTool,
       graphPathsTool,
       graphCompatibilityTool,
+      graphCoverageTool,
       {
         name: impactScanToolName,
         description:
@@ -65,14 +67,16 @@ async function main(): Promise<void> {
     ],
   }));
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    if (![impactScanToolName, graphNeighborsTool.name, graphPathsTool.name, graphCompatibilityTool.name].includes(request.params.name)) {
+    if (![impactScanToolName, graphNeighborsTool.name, graphPathsTool.name, graphCompatibilityTool.name, graphCoverageTool.name].includes(request.params.name)) {
       return {
         content: [{ type: 'text', text: `Unknown tool: ${request.params.name}` }],
         isError: true,
       };
     }
     try {
-      const pack = request.params.name === graphCompatibilityTool.name
+      const pack = request.params.name === graphCoverageTool.name
+        ? await handleCodeCoverage(application.codeCoverageService, request.params.arguments ?? {})
+        : request.params.name === graphCompatibilityTool.name
         ? await handleGraphCompatibility(application.compatibilityService, request.params.arguments ?? {})
         : request.params.name === graphPathsTool.name
         ? await handleGraphPaths(application.pathService, request.params.arguments ?? {})

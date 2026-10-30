@@ -45,5 +45,7 @@ export interface ScipIndexResult {
   readonly digest: string;
   readonly mode: 'full' | 'package';
   readonly version: string;
+  /** Exact document paths observed in the normalized index, including zero-occurrence documents. */
+  readonly indexedPaths?: readonly string[];
 }
 

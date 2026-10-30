@@ -5,6 +5,8 @@ import { SnapshotGraphPathService } from '../graph/paths.js';
 import { SavedGraphPathService } from './saved-paths.js';
 import { SnapshotContractCompatibilityService } from '../graph/compatibility.js';
 import { SavedContractCompatibilityService } from './saved-compatibility.js';
+import { SnapshotCodeCoverageService } from '../graph/code-coverage.js';
+import { SavedCodeCoverageService } from './saved-code-coverage.js';
 import { SavedEvidenceQueryService } from "./saved-evidence.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { AgentSemanticScopeResolver, PreparedImpactQueryService } from "./agent-context.js";
@@ -128,6 +130,8 @@ export async function createContextGraphApplication(configPath: string) {
     pathService: new SavedGraphPathService(new SnapshotGraphPathService(snapshotStore),
       repository, sha256(stableJson(config)), expectedExtractors),
     compatibilityService: new SavedContractCompatibilityService(new SnapshotContractCompatibilityService(snapshotStore),
+      repository, sha256(stableJson(config)), expectedExtractors),
+    codeCoverageService: new SavedCodeCoverageService(new SnapshotCodeCoverageService(snapshotStore),
       repository, sha256(stableJson(config)), expectedExtractors),
     snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver, sha256(stableJson(config)), expectedExtractors),
     scopeResolver,
