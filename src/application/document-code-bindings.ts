@@ -8,6 +8,11 @@ import { matchesRepositoryGlob } from '../repository/glob.js';
 /** Uses the already selected committed scope; validation documents remain separately classified. */
 export async function assembleDocumentCodeBindings(repository: GitRepository, context: ExtractionContext,
   inputs: HydrationInputs, config: ContextGraphConfig, codeFacts: readonly GraphFact[], subjectFacts: readonly GraphFact[]) {
+  return extractDocumentCodeBindings(repository, context, await selectedDocumentSources(repository, context, inputs, config), codeFacts, subjectFacts);
+}
+
+export async function selectedDocumentSources(repository: GitRepository, context: ExtractionContext,
+  inputs: HydrationInputs, config: ContextGraphConfig): Promise<readonly BindingSource[]> {
   const byPath = new Map(inputs.sources.map(source => [source.path, source]));
   const evidence = inputs.documentEvidence;
   const classified = new Map(evidence?.classification.documents.map(document => [document.path, document]));
@@ -24,5 +29,5 @@ export async function assembleDocumentCodeBindings(repository: GitRepository, co
       sourceRole: classification.sourceRole, sourceOwnership: classification.ownership, sourcePolicyDigest: evidence!.classification.policyDigest }
       : { sourceAuthority: config.approvedIntentSources?.some(pattern => matchesRepositoryGlob(path, pattern)) ? 'declared' : 'inferred' } });
   }
-  return extractDocumentCodeBindings(repository, context, sources, codeFacts, subjectFacts);
+  return sources;
 }

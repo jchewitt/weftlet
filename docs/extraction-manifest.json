@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "bfccd21edaf47a8d2a7b09c00a8257fb9c8aa0399e00fd696f99953419b074d4"
+      "destinationSha256": "263b5ef2faa1bad95c70f962e41a07fac6ea26c783d34484fb109fed36291e1b"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "a8d3b52aae18574689f31810c12e199c26bc1279d73d0270ab61f9fc41834295"
+      "destinationSha256": "433ed0ff17591ba98bdb83aaf9a004af4e58edd77f1880dd1e2fdab568ac82ba"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "3f5e348a7ca981496077bd5d955b7b558edf1282fd9f479eb37499ebd393f955"
+      "destinationSha256": "652650eb3525f4333070c1533e4e7734d522077945b57cc6e5300172d86ba9dc"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -311,21 +311,21 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "41471336c6e81b7971da8f31b806eca414707c14c85cba8d745df752bbd10989"
+      "destinationSha256": "84b06595a727432e6088a2535799e6cc98e0a883f9181288ded1591a2737a454"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "b7701c9caacf186376f6a73a96dee584e1325fd1c12396e08aef9dd059f5b21b"
+      "destinationSha256": "87cce887f8e58c0c7644d9f75c5ac5c62b243a4b168031cf0b97429de98b90a1"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "1a23c2c6c63434949e0daaafd8582529b8ef48157cb2a7b43bd20bcc840ec4f1"
+      "destinationSha256": "11a1abc0446602d2f002dcf1e183c1dfd0483310621d2a5336d987e72b48e42a"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "0e7d87b5a23e0cd3f916b6f21792b595c7cdacd301bd7de67f58f8f5074ad5aa"
+      "destinationSha256": "f0e7b9805058af983b0e07d5009543fe2837b128832ce8efcb470004d5e07885"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "0dad532da8b7c61c408c91e3e45e3a00ae8853e8a63024b71c5f85a30d598cc4"
+      "destinationSha256": "de8c8008b97b64a21079fa031adb3e7c087fb790892eb7c8d7fe749dda7c36b4"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/bounded-evidence-paths.md",
     ".changeset/config.json",
+    ".changeset/contract-obligations.md",
     ".changeset/exact-node-neighborhoods.md",
     ".changeset/explicit-symbol-bindings.md",
     ".changeset/precise-scip-occurrences.md",
@@ -634,6 +635,7 @@
     "docs/ADR-033-document-symbol-bindings.md",
     "docs/ADR-034-mapping-gaps.md",
     "docs/ADR-035-static-call-evidence.md",
+    "docs/ADR-036-contract-obligation-declarations.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -816,6 +818,9 @@
     "packages/core/src/code.test.ts",
     "packages/core/src/code.ts",
     "packages/core/src/exploration.ts",
+    "packages/core/src/obligation-types.ts",
+    "packages/core/src/obligations.test.ts",
+    "packages/core/src/obligations.ts",
     "packages/core/src/paths.ts",
     "packages/core/src/repository-nodes.test.ts",
     "packages/core/src/repository-nodes.ts",
@@ -891,6 +896,7 @@
     "src/application/document-classification.test.ts",
     "src/application/document-code-bindings.ts",
     "src/application/document-coverage.ts",
+    "src/application/document-obligations.ts",
     "src/application/document-overlay.ts",
     "src/application/draft-facts.ts",
     "src/application/extraction-identity.ts",
@@ -922,6 +928,7 @@
     "src/extraction/document-code-bindings.ts",
     "src/extraction/document-evidence.test.ts",
     "src/extraction/document-evidence.ts",
+    "src/extraction/document-obligations.ts",
     "src/extraction/document-references.ts",
     "src/extraction/document-traversal.test.ts",
     "src/extraction/document-traversal.ts",
@@ -964,12 +971,15 @@
     "src/graph/coverage.ts",
     "src/graph/document-role-description.ts",
     "src/graph/document-roles.test.ts",
+    "src/graph/evidence-description.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
     "src/graph/neighborhood-renderer.ts",
     "src/graph/neighborhood-request.ts",
     "src/graph/neighborhood.test.ts",
     "src/graph/neighborhood.ts",
+    "src/graph/obligation-rdf.ts",
+    "src/graph/obligation-shapes.ts",
     "src/graph/path-request.ts",
     "src/graph/path-search.test.ts",
     "src/graph/path-search.ts",
@@ -984,6 +994,7 @@
     "src/graph/validation-progress.ts",
     "src/infrastructure/artifact-paths.ts",
     "src/infrastructure/module-resolution.ts",
+    "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/doctor.ts",
     "src/interfaces/document-coverage.test.ts",
@@ -1015,6 +1026,7 @@
     "tests/cache-adoption.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
+    "tests/contract-obligations.test.ts",
     "tests/document-coverage.test.ts",
     "tests/document-evidence.test.ts",
     "tests/document-source-rdf.test.ts",
@@ -1022,6 +1034,7 @@
     "tests/extractor-compatibility.test.ts",
     "tests/fixtures/business-context-provider.mjs",
     "tests/fixtures/code-evidence-project.ts",
+    "tests/fixtures/obligation-project.ts",
     "tests/fixtures/shacl.ts",
     "tests/fixtures/static-call-project.ts",
     "tests/fixtures/symbol-bindings.ts",

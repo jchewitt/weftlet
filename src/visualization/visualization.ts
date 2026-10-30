@@ -1,5 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { codeEvidenceDescription } from '../graph/code-description.js';
+import { factEvidenceDescription } from '../graph/evidence-description.js';
 import { evidenceSources } from './evidence-sources.js';
 import { sourceLocation } from '@weftlet/core';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -212,11 +212,11 @@ function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel
       label: fact.predicate,
       authority: contextPackEvidenceAuthority(fact),
       provenance: `${sourceLocation(fact.provenance)}`,
-      detail: (codeEvidenceDescription(fact) ? `${codeEvidenceDescription(fact)}; ` : '') + `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}` +
+      detail: (factEvidenceDescription(fact) ? `${factEvidenceDescription(fact)}; ` : '') + `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}` +
         (sourceDescription ? `; ${sourceDescription}` : ''),
       source: fact.provenance,
       sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
-      ...(fact.codeBinding || fact.codeCall ? { bindingSources: evidenceSources(fact).map(({ role, provenance }) => ({ provenance: `${role}: ${sourceLocation(provenance)} @ ${provenance.commitSha}`,
+      ...(fact.codeBinding || fact.codeCall || fact.contractObligation ? { bindingSources: evidenceSources(fact).map(({ role, provenance }) => ({ provenance: `${role}: ${sourceLocation(provenance)} @ ${provenance.commitSha}`,
         sourceUrl: sourceLink(provenance, sourceUrlTemplate) })) } : {}),
     });
   }

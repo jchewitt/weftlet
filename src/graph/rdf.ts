@@ -9,6 +9,7 @@ import { CG, RDF, XSD, evidenceShapes } from './shacl-shapes.js';
 import { measureValidationPhase, type GraphValidationProgress } from './validation-progress.js';
 import { addBindingEvidence, bindingEvidenceIssues } from './binding-rdf.js';
 import { addCallEvidence, callEvidenceIssues } from './call-rdf.js';
+import { addObligationEvidence, obligationEvidenceIssues } from './obligation-rdf.js';
 import { addCodeEvidence, codeEvidenceIssues, invalidCodeRange } from './code-rdf.js';
 
 const { namedNode: iri, literal } = DataFactory;
@@ -62,6 +63,7 @@ export class RdfEvidenceGraph {
       addCodeEvidence(this.dataset, record, fact, nodeIri);
       addBindingEvidence(this.dataset, record, fact, factIri);
       addCallEvidence(this.dataset, record, fact, factIri);
+      addObligationEvidence(this.dataset, record, fact);
       for (const node of [fact.subject, fact.object]) {
         const term = iri(nodeIri(node.id));
         this.dataset.addQuad(term, iri(RDF + 'type'), iri(CG + 'Node'));
@@ -107,6 +109,8 @@ export class RdfEvidenceGraph {
     }));
     const byId = new Map(this.snapshot.facts.map(fact => [fact.id, fact]));
     for (const fact of this.snapshot.facts) {
+      for (const message of obligationEvidenceIssues(fact, this.snapshot.manifest.repositoryId)) issues.push({ category: 'extraction-gap',
+        focus: factIri(fact.id), path: CG + 'obligationRole', message });
       for (const message of callEvidenceIssues(fact, byId)) issues.push({ category: 'extraction-gap',
         focus: factIri(fact.id), path: CG + 'callTarget', message });
       for (const message of bindingEvidenceIssues(fact, byId)) issues.push({ category: 'extraction-gap',

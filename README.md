@@ -406,6 +406,15 @@ and dynamic dispatch without a known target remain references and cited gaps. Se
 [ADR 035](docs/ADR-035-static-call-evidence.md). The remaining inferred-mapping proposal is
 recorded separately in [ADR 034](docs/ADR-034-mapping-gaps.md).
 
+Selected Markdown documents can now declare producer guarantees and consumer requirements in
+optional `weftlet-obligation` JSON fences. Both sides name an exact scoped/versioned queue or
+stored-data contract and a repository endpoint. Agents retrieve these through `emits`/`consumes`
+neighborhoods and paths, with the original statement, citations and any documented domain, stage,
+constraint/unit and consumer revalidation requirement. Missing fields remain unknown. Declarations
+do not establish fulfillment, runtime delivery or compatibility; ordinary prose is not automatically
+converted into this format. See [the declaration format and example](docs/ADR-036-contract-obligation-declarations.md).
+This addition is also pending the next npm candidate.
+
 The development checkout also supports paths between two exact IDs:
 
 ```sh

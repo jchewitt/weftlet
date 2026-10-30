@@ -20,6 +20,8 @@ import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, s
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { assembleDocumentCodeBindings } from './document-code-bindings.js';
 import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
+import { documentObligationIdentity } from '../extraction/document-obligations.js';
+import { assembleDocumentObligations } from './document-obligations.js';
 import { staticCallIdentity } from '../extraction/static-calls.js';
 import { extractEvidence } from './extractor-results.js';
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
@@ -175,6 +177,7 @@ export class ContextGraphHydrator {
     };
     // Validate committed routing inputs before invoking any provider or indexer.
     const routing = await extractRoutingDeclarations(repository, context, config.routingSources ?? []);
+    const obligations = await assembleDocumentObligations(repository, context, selection, config);
     const { hydrated, semanticExtracted, semanticReused } = await hydrateSemanticSources({
       sources, context, config: config.semantic, configurationDigest,
       hydrator: this.dependencies.semanticHydrator, forceRevision,
@@ -234,15 +237,15 @@ export class ContextGraphHydrator {
         matchesRepositoryGlob(source.path, pattern))).map((source) => source.path),
       { canonicalReferences: !config.documentTraversal });
     const bindings = await assembleDocumentCodeBindings(repository, context, selection, config, extractorFacts,
-      [...semanticFacts, ...extractorFacts, ...routing.facts]);
-    diagnostics.push(...documents.diagnostics, ...bindings.diagnostics);
+      [...semanticFacts, ...extractorFacts, ...routing.facts, ...obligations.facts]);
+    diagnostics.push(...documents.diagnostics, ...bindings.diagnostics, ...obligations.diagnostics);
     diagnostics.push(...routing.diagnostics, ...(selection.documentEvidence?.diagnostics ?? []));
     checkpoint();
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
     const structuralFacts = selection.documentEvidence?.facts.map(fact => ({ ...fact, snapshotId })) ?? [];
     const facts = [...semanticFacts, ...classifyHydratedFacts(documents.facts, selection.documentEvidence),
-      ...structuralFacts, ...extractorFacts, ...bindings.facts, ...routing.facts, ...runtimeFacts].sort(
+      ...structuralFacts, ...extractorFacts, ...bindings.facts, ...routing.facts, ...obligations.facts, ...runtimeFacts].sort(
       (left, right) => left.id.localeCompare(right.id),
     );
     const validationCounts: { factCount: number; nodeCount?: number } = { factCount: facts.length };
@@ -313,6 +316,7 @@ export class ContextGraphHydrator {
           'repository-node-identity': String(repositoryNodeIdentityVersion),
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           [documentCodeBindingIdentity.id]: documentCodeBindingIdentity.version,
+          [documentObligationIdentity.id]: documentObligationIdentity.version,
           ...(config.routingSources?.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}),
           semantic: config.semantic.extractorVersion,
           scip: scip.version,

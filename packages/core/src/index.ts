@@ -7,3 +7,4 @@ export * from './paths.js';
 export * from './code.js';
 export type { BindingEvidence, BindingSubjectEvidence, DocumentCodeBinding } from './bindings.js';
 export type { CodeCall } from './calls.js';
+export * from './obligations.js';

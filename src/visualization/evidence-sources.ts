@@ -2,6 +2,7 @@ import type { GraphFact, SourceSpan } from '@weftlet/core';
 
 /** Navigation uses the exact proof citations in the graph assertion. */
 export function evidenceSources(fact: GraphFact): readonly { role: string; provenance: SourceSpan }[] {
+  if (fact.contractObligation) return [{ role: 'declared endpoint file (not fulfillment evidence)', provenance: fact.contractObligation.endpointSource }];
   if (fact.codeBinding) return [
     ...fact.codeBinding.documentCitations.map(provenance => ({ role: 'document', provenance })),
     ...fact.codeBinding.selectedOccurrences.map(proof => ({ role: 'selected occurrence', provenance: proof.provenance })),

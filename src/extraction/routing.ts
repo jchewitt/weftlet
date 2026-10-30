@@ -1,4 +1,5 @@
 import { posix } from 'node:path';
+import { parseUniqueJson as uniqueJson } from '../infrastructure/unique-json.js';
 import type { ExtractionContext, GraphDiagnostic, GraphFact, GraphNode, SourceSpan } from '@weftlet/core';
 import { repositoryFileNode as fileNode } from '@weftlet/core';
 import type { GitRepository } from '../repository/git.js';
@@ -38,22 +39,11 @@ function repositoryPath(value: unknown): value is string {
 
 /** JSON.parse alone silently accepts duplicate keys, which would hide conflicting declarations. */
 function parseUniqueJson(content: string, path: string): unknown {
-  let parsed: unknown;
-  try { parsed = JSON.parse(content); }
-  catch { throw new Error(`Invalid routing source ${path}: malformed JSON`); }
-  const objects: (Set<string> | undefined)[] = [];
-  for (const token of content.matchAll(/"(?:\\.|[^"\\])*"|[{}\[\]]/g)) {
-    const value = token[0];
-    if (value === '{' || value === '[') objects.push(value === '{' ? new Set() : undefined);
-    else if (value === '}' || value === ']') objects.pop();
-    else if (/^\s*:/.test(content.slice(token.index! + value.length))) {
-      const keys = objects.at(-1)!;
-      const key = JSON.parse(value) as string;
-      if (keys.has(key)) throw new Error(`Invalid routing source ${path}: duplicate JSON key ${key}`);
-      keys.add(key);
-    }
+  try { return uniqueJson(content); }
+  catch (error) {
+    const reason = error instanceof Error && error.message === 'Duplicate JSON key' ? 'duplicate JSON key' : 'malformed JSON';
+    throw new Error(`Invalid routing source ${path}: ${reason}`);
   }
-  return parsed;
 }
 
 function parseRoutes(content: string, path: string): readonly RoutingDeclaration[] {

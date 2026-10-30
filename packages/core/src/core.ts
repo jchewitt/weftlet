@@ -69,6 +69,8 @@ export interface GraphFact {
   readonly codeOccurrence?: import('./code-types.js').CodeOccurrence;
   readonly codeBinding?: import('./bindings.js').DocumentCodeBinding;
   readonly codeCall?: import('./calls.js').CodeCall;
+  /** Cited declaration at a transport boundary; never an automatic compatibility verdict. */
+  readonly contractObligation?: import('./obligation-types.js').ContractObligation;
 }
 
 export interface SemanticArtifact {

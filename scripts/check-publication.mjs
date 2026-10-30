@@ -218,7 +218,13 @@ try {
   await mkdir(join(consumer, 'src'), { recursive: true });
   await mkdir(join(consumer, 'test'), { recursive: true });
   const fileDependency = (path) => `file:${path.replaceAll('\\', '/')}`;
+  const obligationDocument = ['# Public obligations', ...[
+    { id: 'write', role: 'guarantee', endpoint: 'src/consumer.ts', statement: 'Producer stores greeting data.' },
+    { id: 'read', role: 'requirement', endpoint: 'src/archive.ts', statement: 'Archive reads greeting data.' },
+  ].flatMap(item => ['', '```weftlet-obligation', JSON.stringify({ schemaVersion: 1, ...item,
+    contract: { scope: 'public-smoke', id: 'greeting', kind: 'stored-data', version: '1' } }), '```']), ''].join('\n');
   await Promise.all([
+    writeFile(join(consumer, 'obligations.md'), obligationDocument),
     writeFile(join(consumer, '.gitignore'), 'node_modules/\n.context-graph/\n'),
     writeFile(
       join(consumer, 'package.json'),
@@ -301,7 +307,8 @@ import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', st
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
-  extractDocumentCodeBindings, inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
+  extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode,
+  inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
@@ -392,7 +399,15 @@ if (bindings.diagnostics.length || bindings.facts.length !== 1 || bindings.facts
     bindings.facts[0].codeBinding.definitions[0].provenance.path !== 'src/consumer.ts' || bindings.facts[0].authority !== 'inferred') {
   throw new Error('Installed explicit document-to-symbol bindings must resolve against actual indexed evidence');
 }
-const facts = [...bindings.facts, ...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
+const obligationContent = execFileSync('git', ['show', context.commitSha + ':obligations.md'], { encoding: 'utf8' });
+const obligations = await extractDocumentObligations(new GitRepository(root), context, [{ path:'obligations.md', content:obligationContent,
+  digest:createHash('sha256').update(obligationContent).digest('hex'), stableSemanticId:'document:obligations.md', metadata:{sourceAuthority:'declared'} }]);
+if (obligations.facts.length !== 2 || obligations.diagnostics.length || obligations.facts.some(fact =>
+    fact.authority !== 'inferred' || fact.object.id !== obligationContractNode(context.repositoryId, fact.contractObligation.declaration.contract).id ||
+    fact.contractObligation.endpointSource.commitSha !== context.commitSha)) {
+  throw new Error('Installed obligation declarations must retain both contract sides, canonical identity and source/endpoint revisions');
+}
+const facts = [...bindings.facts, ...obligations.facts, ...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts, ...contractFacts];
 const preflight = assertGraphIdentities(facts, { repositoryId: context.repositoryId });
 if (!preflight.passed || preflight.shaclValidated || preflight.factCount !== facts.length) {
   throw new Error('Installed identity preflight must remain separate from full SHACL validation');
