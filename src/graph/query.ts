@@ -1,5 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { codeEvidenceDescription, unexpandedCodeDescription } from './code-description.js';
+import { unexpandedCodeDescription } from './code-description.js';
+import { factEvidenceDescription } from './evidence-description.js';
 import { sourceLocation } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from "./authority.js";
 import { RdfEvidenceGraph } from "./rdf.js";
@@ -83,7 +84,7 @@ function markdownFactDetails(fact: GraphFact): string {
   return `confidence ${fact.confidence}` +
     (fact.sourceAuthority ? `; source ${fact.sourceAuthority}; extraction ${fact.extractionReview ?? 'unknown'}` : '') +
     (document ? `; ${document}` : '') +
-    (codeEvidenceDescription(fact) ? `; ${codeEvidenceDescription(fact)}` : '');
+    (factEvidenceDescription(fact) ? `; ${factEvidenceDescription(fact)}` : '');
 }
 
 export class MarkdownContextPackRenderer implements ContextPackRenderer {

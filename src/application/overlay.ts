@@ -21,6 +21,8 @@ import { selectHydrationInputs, documentSelectionIdentity } from './hydration-in
 import { retainOverlayDocumentFact, overlayDocumentRoots, overlayDocumentManifest, overlayDocumentNotes } from './document-overlay.js';
 import { assembleDocumentCodeBindings } from './document-code-bindings.js';
 import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
+import { documentObligationIdentity } from '../extraction/document-obligations.js';
+import { assembleDocumentObligations } from './document-obligations.js';
 import { draftFacts } from './draft-facts.js';
 import { staticCallIdentity } from '../extraction/static-calls.js';
 import { extractEvidence } from './extractor-results.js';
@@ -29,7 +31,7 @@ import { documentEvidenceExtractorIdentity } from '../extraction/document-eviden
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
   'repository-file-extractor', 'repository-contract-extractor', 'scip-symbol-extractor',
-  routingExtractorIdentity.id, documentCodeBindingIdentity.id, staticCallIdentity.id,
+  routingExtractorIdentity.id, documentCodeBindingIdentity.id, staticCallIdentity.id, documentObligationIdentity.id,
 ]);
 
 /** Conservative code overlay: reindex implementation; invalidate changed prose, never synthesize intent. */
@@ -60,7 +62,8 @@ export async function buildWorkingOverlay(
   const roots = [...config.codeRoots, ...config.semanticSources, ...config.evidenceRoots,
     ...overlayDocumentRoots(config),
     ...config.contractPatterns, ...scipSourcePatterns(config.scip.sourceProject),
-    ...routingSources, ...baseRouting.referencedPaths];
+    ...routingSources, ...baseRouting.referencedPaths,
+    ...base.facts.flatMap(fact => fact.contractObligation ? [fact.contractObligation.declaration.endpoint] : [])];
   const excluded: string[] = [];
   for (const path of changed) {
     if (!inWorkingScope(path, roots)) {
@@ -113,6 +116,10 @@ export async function buildWorkingOverlay(
       renamedPaths: {},
     };
     const documents = await selectHydrationInputs(draftRepository, context.commitSha, config);
+    const obligations = await assembleDocumentObligations(draftRepository, context, documents, config);
+    if (obligations.facts.some(fact => !inWorkingScope(fact.contractObligation!.declaration.endpoint, roots))) {
+      throw new Error('Draft obligation endpoints are outside captured source scope; configure their scope before rebuilding');
+    }
     const documentSelection = documents?.documentSelection ? {
       ...documents.documentSelection,
       // Temporary Git commit timestamps are not evidence identity. Bind drafts to captured bytes.
@@ -140,9 +147,9 @@ export async function buildWorkingOverlay(
       fact.extractor.id !== 'otlp-runtime-evidence' && !affected.has(fact.provenance.path) &&
       ![fact.subject, fact.object].some(node => [...affected].some(path =>
         node.id === `component:file:${path}` || node.id === `document:${path}` || node.label === path)));
-    const bindings = await assembleDocumentCodeBindings(draftRepository, context, documents, config, codeFacts, [...retainedSubjects, ...codeFacts, ...routing.facts]);
-    const facts = draftFacts([...codeFacts, ...routing.facts, ...(documents.documentEvidence?.facts ?? []), ...bindings.facts], snapshotId, head);
-    const diagnostics = [...extraction.diagnostics, ...bindings.diagnostics, ...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
+    const bindings = await assembleDocumentCodeBindings(draftRepository, context, documents, config, codeFacts, [...retainedSubjects, ...codeFacts, ...routing.facts, ...obligations.facts]);
+    const facts = draftFacts([...codeFacts, ...routing.facts, ...obligations.facts, ...(documents.documentEvidence?.facts ?? []), ...bindings.facts], snapshotId, head);
+    const diagnostics = [...extraction.diagnostics, ...bindings.diagnostics, ...obligations.diagnostics, ...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
       const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
       return { ...draft, id: sha256(stableJson(draft)) };
     }).sort((a, b) => a.id.localeCompare(b.id));
@@ -159,15 +166,15 @@ export async function buildWorkingOverlay(
       extractorVersions: { ...base.manifest.extractorVersions,
         assembly: graphAssemblyIdentity,
         [documentCodeBindingIdentity.id]: documentCodeBindingIdentity.version,
+        [documentObligationIdentity.id]: documentObligationIdentity.version,
         ...documentExtractionVersions(config),
         [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version,
         [repositoryContractExtractorIdentity.id]: repositoryContractExtractorIdentity.version,
         [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
         [staticCallIdentity.id]: staticCallIdentity.version,
         ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
-      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(routingSources.length || config.documentTraversal
-        ? { facts: allFacts, diagnostics: extracted.diagnostics,
-          ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) } : allFacts)),
+      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson({ facts: allFacts, diagnostics: extracted.diagnostics,
+          ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) })),
     },
     facts: allFacts,
     invariants: base.invariants.map((rule) => ({

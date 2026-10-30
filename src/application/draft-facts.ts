@@ -27,6 +27,8 @@ export function draftFacts(facts: readonly GraphFact[], snapshotId: string, base
       draft.codeCall = { ...draft.codeCall, callerDefinitions: proofs(draft.codeCall.callerDefinitions),
         targetOccurrences: proofs(draft.codeCall.targetOccurrences), targetDefinitions: proofs(draft.codeCall.targetDefinitions) };
     }
+    if (draft.contractObligation) draft.contractObligation = { ...draft.contractObligation,
+      endpointSource: span(draft.contractObligation.endpointSource) };
     const result = { ...draft, id: sha256(stableJson(draft)) }; rewritten.set(previousId, result);
     return result;
   };

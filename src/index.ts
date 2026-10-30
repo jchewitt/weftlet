@@ -28,3 +28,4 @@ export * from './graph/paths.js';
 export * from './graph/path-request.js';
 export * from './graph/paths-renderer.js';
 export * from './extraction/document-code-bindings.js';
+export * from './extraction/document-obligations.js';

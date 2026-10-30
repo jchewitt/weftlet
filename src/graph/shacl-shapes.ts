@@ -1,5 +1,6 @@
 import { Parser } from 'n3';
 import { callShapes } from './call-shapes.js';
+import { obligationShapes } from './obligation-shapes.js';
 
 export const CG = 'https://context-graph.dev/record#';
 export const RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
@@ -12,6 +13,7 @@ export const evidenceShapes = new Parser().parse(`
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix xsd: <${XSD}>.
 ${callShapes}
+${obligationShapes}
 cg:FactShape a sh:NodeShape; sh:targetClass rdf:Statement;
  sh:property [ sh:path cg:record; sh:minCount 1; sh:maxCount 1; sh:datatype xsd:string ];
  sh:property [ sh:path rdf:subject; sh:minCount 1; sh:maxCount 1; sh:nodeKind sh:IRI ];

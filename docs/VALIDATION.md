@@ -8,6 +8,35 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## B4a cited contract obligations, 2026-10-30
+
+[ADR 036](ADR-036-contract-obligation-declarations.md) adds optional explicit Markdown declarations
+for producer guarantees and consumer requirements. Eight new public extraction/query tests pass
+with real committed sources, TypeScript indexing, RDF/SHACL and an empty offline semantic provider.
+Fourteen public core-contract tests cover exact scoped identities, unknown fields and invalid input.
+The tests retain document fence spans and endpoint revisions, source approval separate from
+assertion authority, missing endpoints/counterparts, unrelated scopes and unknown versions. Agent
+pagination/paths/impact and SPARQL projection expose the same facts; the viewer retains endpoint
+navigation. Strict corruption checks and named/union SHACL parity pass. Repeat hydration reuses
+all nine semantic artifacts with unchanged snapshot identity/content; clean comparison, dirty saved
+queries and draft document/endpoint edits, deletes and renames pass. Strict test typechecking passes.
+
+At `a070ca68a3354f425cf8b506bdd3d0a76df32f5b`, the full local deterministic suite passes
+**886 tests** (35 core + 851 toolkit/example/script),
+with one optional OML integration test skipped. Build, release-documentation consistency,
+architecture (the existing 13 advisories), inventory, licenses and fresh packed npm/npx consumer
+smoke pass. The installed consumer exercises the public obligation extractor and both contract
+sides alongside real SCIP/RDF/SHACL/MCP. Hosted Linux/Windows results are recorded in the change PR.
+No new architecture baseline/exception, dependency, private consumer input or model request is used.
+All 79 original imported path/hash pairs remain unchanged. B4b compatibility acceptance, inference
+proposal review, monorepo coverage and candidate/live qualification remain separate queue items.
+Structured declaration parsing does not prove fulfillment, delivery, compatibility or model quality.
+
+Final review additionally checks source and endpoint text against the committed Git blob ID,
+rejecting lossy non-UTF-8 decoding before recording a digest. A real committed binary negative
+raises the focused suite to eight tests; final build, all eight tests, strict typechecking and
+architecture checks pass. Final installed-consumer and hosted checks are recorded in PR #61.
+
 ## B3c static call evidence, 2026-10-29
 
 [ADR 035](ADR-035-static-call-evidence.md) adds actual TypeScript call/new syntax joined to exact
@@ -32,6 +61,11 @@ large call graph, and is not a comparative benchmark or private workload result.
 shapes target call records directly. Complete local publication and hosted Windows/Linux checks
 are required before merge; the packed consumer now exercises the shipped parser and call proofs.
 All 79 original source path/hash pairs and frozen B2/B3b inputs/results remain unchanged.
+
+B3c subsequently passed the complete local publication gate (865 deterministic tests), final-source
+focused/packed checks and [hosted PR Linux/Windows checks](https://github.com/jchewitt/weftlet/actions/runs/40991862219)
+at `00643bba3abb5899ed3d0c1ce92d991152bce7aa`. PR #60 merged as `2aaaf6749955162fa4b82a3f6ecfe8f98601e04e`;
+[main checks](https://github.com/jchewitt/weftlet/actions/runs/40992894407) also passed. No npm release was made.
 
 ## B3b mapping gaps and Windows study reliability, 2026-10-29
 
