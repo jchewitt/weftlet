@@ -1,13 +1,14 @@
-import { execFileSync } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { setImmediate } from 'node:timers/promises';
 import { afterEach, describe, expect, it } from 'vitest';
-import { checkStudy, safePath, validateLabels } from './check.mjs';
+import { safePath, validateLabels } from './check.mjs';
 import { createGitLineEndingReader } from '../git-content.mjs';
 import { loadConfig } from '../../src/configuration/config.js';
 import { decodeCommittedInputs } from './committed-inputs.mjs';
@@ -25,6 +26,19 @@ const read = (path: string) => {
 const protocol = () => JSON.parse(read(`${study}/protocol.json`).toString());
 const suite = () => JSON.parse(read(`${study}/cases.json`).toString());
 const temps: string[] = [];
+const execute = promisify(execFile);
+// Real Git-backed checks are synchronous. Run them outside the Vitest worker so
+// slow Windows process/filesystem operations cannot starve its RPC heartbeat.
+// Each command stays bounded; a case can perform several checks in sequence.
+const integrationTimeout = 180_000;
+async function checkStudy(directory: string, ref?: string) {
+  const script = `import { checkStudy } from ${JSON.stringify(new URL('./check.mjs', import.meta.url).href)};
+    process.stdout.write(JSON.stringify(checkStudy(process.argv[1], process.argv[2])));`;
+  const { stdout } = await execute(process.execPath,
+    ['--input-type=module', '--eval', script, directory, ...(ref ? [ref] : [])],
+    { timeout: 40_000, maxBuffer: 1024 * 1024 });
+  return JSON.parse(stdout);
+}
 
 function fixture() {
   const directory = mkdtempSync(join(tmpdir(), 'weftlet-code-study-'));
@@ -62,56 +76,57 @@ describe('frozen code-graph study', () => {
     }
   });
   it('validates frozen anchors/configuration and typechecks both corpora without indexing or installing', async () => {
-    expect(checkStudy(root).status).toBe('verified-inputs-only');
+    expect((await checkStudy(root)).status).toBe('verified-inputs-only');
     const tsc = createRequire(import.meta.url).resolve('typescript/bin/tsc');
     for (const corpus of protocol().corpora) {
       const { config } = await loadConfig(join(root, corpus.configTemplate));
       expect(config.semantic.provider).toBe('module');
-      execFileSync(process.execPath, [tsc, '--project', join(root, corpus.root, 'tsconfig.json')], { cwd: root });
+      await execute(process.execPath, [tsc, '--project', join(root, corpus.root, 'tsconfig.json')],
+        { cwd: root, timeout: 40_000 });
     }
-  }, 30_000);
+  }, integrationTimeout);
 
-  it('checks immutable committed bytes despite dirty files and rejects moving refs', () => {
+  it('checks immutable committed bytes despite dirty files and rejects moving refs', async () => {
     const { directory, sha } = fixture();
-    const clean = checkStudy(directory, sha);
+    const clean = await checkStudy(directory, sha);
     const source = join(directory, study, 'project/services/api/src/analyze.ts');
     writeFileSync(source, 'export const unexpected = 1;\n');
-    expect(() => checkStudy(directory)).toThrow('Frozen input changed');
-    expect(checkStudy(directory, sha)).toEqual(clean);
-    expect(() => checkStudy(directory, 'HEAD')).toThrow('immutable commit');
-  });
+    await expect(checkStudy(directory)).rejects.toThrow('Frozen input changed');
+    expect(await checkStudy(directory, sha)).toEqual(clean);
+    await expect(checkStudy(directory, 'HEAD')).rejects.toThrow('immutable commit');
+  }, integrationTimeout);
 
-  it('rejects extra files even when existing frozen inputs match', () => {
+  it('rejects extra files even when existing frozen inputs match', async () => {
     const { directory } = fixture();
     writeFileSync(join(directory, study, 'project/services/api/src/extra.ts'), 'export const extra = 1;\n');
-    expect(() => checkStudy(directory)).toThrow('missing or extra');
-  });
+    await expect(checkStudy(directory)).rejects.toThrow('missing or extra');
+  }, integrationTimeout);
 
-  it('accepts Git CRLF checkout conversion while preserving real content changes', () => {
+  it('accepts Git CRLF checkout conversion while preserving real content changes', async () => {
     const { directory, git } = fixture();
     git('config', 'core.autocrlf', 'true');
     const path = join(directory, 'tests/fixtures/business-context-provider.mjs');
     writeFileSync(path, readFileSync(path, 'utf8').replace(/\n/g, '\r\n'));
-    expect(checkStudy(directory).status).toBe('verified-inputs-only');
+    expect((await checkStudy(directory)).status).toBe('verified-inputs-only');
     writeFileSync(path, readFileSync(path, 'utf8') + '// changed\r\n');
-    expect(() => checkStudy(directory)).toThrow('Frozen input changed');
-  });
+    await expect(checkStudy(directory)).rejects.toThrow('Frozen input changed');
+  }, integrationTimeout);
 
-  it('rejects a forged inventory digest and unsafe paths before reading outside inputs', () => {
+  it('rejects a forged inventory digest and unsafe paths before reading outside inputs', async () => {
     const { directory } = fixture();
     const path = join(directory, study, 'inputs.lock.json');
     const lock = JSON.parse(readFileSync(path, 'utf8'));
     lock.inputs[0].sha256 = '0'.repeat(64);
     writeFileSync(path, JSON.stringify(lock));
-    expect(() => checkStudy(directory)).toThrow('inventory digest');
+    await expect(checkStudy(directory)).rejects.toThrow('inventory digest');
     for (const value of ['../secret', '/tmp/private', 'a/../../x', 'a\\b', 'a/.git/config', 'a//b']) {
       expect(() => safePath(value)).toThrow('Unsafe');
     }
     lock.inputs[0].path = '../secret';
     lock.digest = createHash('sha256').update(JSON.stringify(lock.inputs)).digest('hex');
     writeFileSync(path, JSON.stringify(lock));
-    expect(() => checkStudy(directory)).toThrow('Unsafe');
-  });
+    await expect(checkStudy(directory)).rejects.toThrow('Unsafe');
+  }, integrationTimeout);
 
   it('rejects ambiguous/missing anchors, duplicate contradictory labels and unknown targets', () => {
     const ambiguous = suite();

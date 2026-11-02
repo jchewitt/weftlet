@@ -232,7 +232,9 @@ it('rebuilds draft document structure and invalidates changed owners and incompl
   expect(deleted.diagnostics?.some(item => item.kind === 'implementationGaps')).toBe(true);
   expect(await app.store.readHead('default')).toEqual(base);
   expect(app.calls).toHaveLength(6);
-}, 60_000);
+// This case runs one committed hydration and three real indexed/RDF overlays.
+// Its deadline bounds the combined lifecycle, not one graph build's performance.
+}, 180_000);
 
 
 it.each(['workspace', 'user'] as const)('isolates traversal module artifacts from direct/changed policies and reuses unchanged %s inputs', async storageScope => {

@@ -1,7 +1,8 @@
 # ADR 039: Opt-in, unreviewed rule-to-function proposals
 
-Status: implementation and public protocol prepared, November 2, 2026. Live model accuracy,
-independent usefulness assessment and candidate qualification remain pending.
+Status: implementation and public protocol prepared, November 2, 2026. The maintainer authorized
+the 0.7.0 acceptance release with live proposal validation tentative and deferred. Live model
+accuracy and independent usefulness assessment remain unproven.
 
 ## Decision and scope
 
@@ -109,6 +110,10 @@ No canned result is semantic-quality evidence.
 
 [The predeclared live protocol](../evaluations/mapping-proposals/README.md) permits three bounded
 public requests only after usage approval. It separates target accuracy, abstention, output
-validity, infrastructure failure and independent rationale/usefulness review. A live result and
-maintainer review are needed before calling B3b qualified for the 1.0 candidate. B6 still owns
-consumer hydration/repeat and real agent usefulness; release PR #53 remains open.
+validity, infrastructure failure and independent rationale/usefulness review. On November 2,
+the maintainer requested publication before live integration testing. This scoped deferral permits
+the optional feature in the 0.7.0 acceptance candidate; it does not record a live proposal pass or
+official 1.0 approval. Existing consumer Codex hydration validates the established extraction flow,
+not this new proposal operation or its semantic accuracy. B6 still owns candidate hydration/repeat,
+real agent usefulness and the final 1.0 decision. The public three-request protocol remains
+available for later separately authorized evaluation; this release performs no model requests.
