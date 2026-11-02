@@ -22,6 +22,10 @@ const extractor = { id: 'PRIVATE_EXTRACTOR_SENTINEL', version: 'PRIVATE_VERSION_
 const source = 'import { task } from "./worker.js";\nexport const worker = () => task("PRIVATE_SOURCE_SENTINEL");\n';
 const label = 'PRIVATE_LABEL_SENTINEL';
 const prompt = 'PRIVATE_PROMPT_SENTINEL';
+// Cases create a Git fixture and launch up to three independently bounded CLI
+// processes. The case deadline must outlast their combined 30-second budgets,
+// otherwise cleanup can race an active process on slower Windows runners.
+const integrationTimeout = 120_000;
 
 afterEach(async () => {
   await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true })));
@@ -154,7 +158,7 @@ describe('identity preflight CLI', () => {
     expect(await readFile(join(storage, 'artifacts/semantic', artifacts[0]!))).toEqual(artifactBytes);
     expect(await readFile(join(root, 'provider-calls.txt'), 'utf8')).toBe('call\n');
     await assertPreserved();
-  }, 30_000);
+  }, integrationTimeout);
 
   it('includes exact local attribution only with explicit detail, including without the JSON flag', async () => {
     const { root, commitSha, priorFact, run, assertPreserved } = await fixture();
@@ -173,7 +177,7 @@ describe('identity preflight CLI', () => {
     for (const excluded of [root, 'PRIVATE_SOURCE_SENTINEL', label, prompt]) expect(response.stderr).not.toContain(excluded);
     expect(response.stderr).not.toContain('at ContextGraphHydrator');
     await assertPreserved();
-  }, 30_000);
+  }, integrationTimeout);
 
   it('uses the same private/explicit-detail error contract for a retained conflicting overlay fact', async () => {
     const { root, run, assertPreserved } = await fixture();
@@ -186,7 +190,7 @@ describe('identity preflight CLI', () => {
     expect(detailed.code).toBe(1); expect(detailed.stdout).toBe('');
     expect(JSON.parse(detailed.stderr).conflicts[0].details).toEqual({ nodeId });
     await assertPreserved();
-  }, 30_000);
+  }, integrationTimeout);
 
   it('reports phase timings for a valid graph, still runs full SHACL, and documents detail privacy', async () => {
     const { run, store } = await fixture('Evidence');
@@ -204,5 +208,5 @@ describe('identity preflight CLI', () => {
     expect(help.stderr).toBe('');
     expect(help.stdout).toContain('--validation-details explicitly includes local node/fact identities');
     expect(help.stdout).toContain('default reports use opaque references');
-  }, 30_000);
+  }, integrationTimeout);
 });

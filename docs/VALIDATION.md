@@ -20,6 +20,18 @@ viewer. No live model request or browser interaction was performed. Candidate co
 hydration/reuse, agent usefulness and browser inspection remain acceptance work; official 1.0
 is not approved by this disposition.
 
+Release PR follow-up: at `8880cbfc3ccc4dce59bbedb4bf7192c1f72c2b0a`, push run
+[41508871410](https://github.com/jchewitt/weftlet/actions/runs/41508871410) passed Linux
+(988 deterministic tests and packed-consumer smoke) and Windows (35 core + 846 selected tests).
+The duplicate PR run [41508881495](https://github.com/jchewitt/weftlet/actions/runs/41508881495)
+passed Linux but hit a 30-second aggregate CLI test timeout and cleanup EBUSY on Windows.
+Its single failed-job retry passed that test, then hit synchronous frozen-study test deadlines
+and a Vitest worker RPC timeout. The harness correction runs the actual Git-backed study checker
+and compiler in bounded asynchronous child processes, and gives multi-command cases an aggregate
+deadline longer than their individual command budgets. No assertion, frozen input, production
+validator, provider timeout or graph behavior is changed. Final hosted results belong to the
+corrected release PR head; the earlier failures are retained rather than recorded as passes.
+
 ## Environment and historical evidence
 
 Environment: Linux cloud, Node 24.19.0, pnpm 10.18.2. Source imported from
