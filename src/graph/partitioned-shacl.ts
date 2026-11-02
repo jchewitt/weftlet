@@ -11,12 +11,20 @@ const allowed = new Set(['targetClass', 'targetSubjectsOf', 'property', 'path', 
   'datatype', 'minLength', 'minInclusive', 'maxInclusive', 'hasValue', 'in', 'or', 'nodeKind', 'class']);
 
 export function assertPartitionLocalShapes(shapes: readonly Quad[]): void {
+  const propertyShapes = new Set(shapes.filter(quad => quad.predicate.value === SH + 'path')
+    .map(quad => quad.subject.value));
   for (const quad of shapes) {
     if (quad.predicate.value.startsWith(SH) && !allowed.has(quad.predicate.value.slice(SH.length))) {
       throw Error(`SHACL partition locality must be reviewed for ${quad.predicate.value}`);
     }
     if (quad.predicate.value === SH + 'path' && quad.object.termType !== 'NamedNode') {
       throw Error('SHACL partition locality requires direct predicate paths');
+    }
+    if (propertyShapes.has(quad.subject.value) && [SH + 'property', SH + 'or'].includes(quad.predicate.value)) {
+      throw Error('SHACL partition locality forbids nested value-shape traversal');
+    }
+    if (quad.predicate.value === RDF + 'type' && ![SH + 'NodeShape', SH + 'PropertyShape'].includes(quad.object.value)) {
+      throw Error('SHACL partition locality requires explicit reviewed targets');
     }
     if (!quad.predicate.value.startsWith(SH) && ![RDF + 'type', RDF + 'first', RDF + 'rest'].includes(quad.predicate.value)) {
       throw Error(`Unsupported SHACL partition vocabulary: ${quad.predicate.value}`);

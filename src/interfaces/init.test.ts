@@ -52,7 +52,7 @@ it('runs setup and config commands in a consumer without Git, providers or preex
   const root = await mkdtemp(join(tmpdir(), 'graph-init-cli-'));
   const cli = resolve('src/cli.ts');
   const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
-  const run = (...args: string[]) => execute(process.execPath, ['--import', tsx, cli, ...args], { cwd: root });
+  const run = (...args: string[]) => execute(process.execPath, ['--import', tsx, cli, ...args], { cwd: root, timeout: 30_000 });
   await expect(run('init')).rejects.toThrow('requires --yes');
   await expect(run('init', '--yes', '--semantic-source')).rejects.toThrow('requires a value');
   await expect(run('init', '--yes', '--unknown')).rejects.toThrow('Unknown init option');
@@ -65,4 +65,4 @@ it('runs setup and config commands in a consumer without Git, providers or preex
   expect(JSON.parse((await run('config', 'validate')).stdout).valid).toBe(true);
   await expect(readFile(join(root, '.gitignore'))).rejects.toThrow();
   await expect(run('init', '--yes')).rejects.toThrow('already exists');
-});
+}, 180_000); // Seven isolated CLI launches; each retains its own bounded deadline.

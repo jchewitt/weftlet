@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "f711ffb1daa45f3d6f8186dd6505143f938a80661f041f4e288c681d11be832b"
+      "destinationSha256": "76f40973bed8395d98f8bea5ec9ba95f593899502e05d08aea2f8cb137ac4a51"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",

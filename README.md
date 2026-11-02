@@ -247,6 +247,10 @@ snapshot JSON persistence/reload avoid a whole-graph string. Existing canonical 
 and immutable snapshot bytes are preserved. See [ADR 040](docs/ADR-040-bounded-graph-io.md) for the
 partition correctness boundary, public corpus regression and remaining memory limits.
 
+For large programmatic RDF exports, use `await graph.serializeTo(writable)` or consume
+`graph.serializeChunks()`. The `serialize()` convenience returns a single string and therefore
+remains subject to JavaScript's string-size limit.
+
 The 0.3.0 optimization built a complete temporary validation union. The measurements below describe
 that earlier implementation; they are not timings for the current richer code graph.
 

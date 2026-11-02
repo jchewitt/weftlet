@@ -25,8 +25,17 @@ Local Linux checks currently establish:
 The full suite exposed a corrupt-JSON error-class compatibility regression. The streaming
 reader now preserves SyntaxError classification for malformed/truncated input while retaining
 I/O errors as infrastructure failures; cache-adoption CLI and strict parser regressions pass.
-An overlapping local rebuild also interrupted a compiled benchmark subprocess; that result is
-not a product pass and is being rerun after the build. Full-suite disposition is pending.
+The full local pass before those fixes completed with 977 passes / 8 failures / 1 optional skip.
+All corrupt-artifact cases pass on rerun (44 cache/preview/storage tests plus 3 CLI cases).
+An overlapping local rebuild interrupted a compiled benchmark subprocess; its 6 tests pass after
+the build. Seven sequential CLI launches exceeded the old aggregate 30-second setup-test budget;
+the test now bounds each process to 30 seconds and the sequence to 180 seconds, retaining all
+assertions (3 setup tests pass). A subsequent 29-test RDF/setup run passes. These corrections
+do not change production operation deadlines. Complete hosted-suite disposition is pending.
+
+The optional broader test-source TypeScript check still reports existing diagnostics outside
+the production build. An isolated archive of the base commit has the same 42 diagnostics after
+normalizing checkout paths and ignoring its two absent-build-output errors; this patch adds none.
 
 The public capacity run uses 1,100 TypeScript modules with 40 functions each, actual SCIP and
 18 deterministic prose extractions, with zero live model calls. It produced 554,516 facts and

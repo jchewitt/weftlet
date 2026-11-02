@@ -10,6 +10,7 @@ import { cases, fact, snapshot } from './fixtures/shacl.js';
 import { largeTypeScriptProject } from './fixtures/large-typescript-project.js';
 import { stableJson } from '../src/infrastructure/util.js';
 import type { GraphSnapshot } from '@weftlet/core';
+import { sha256, stableJsonDigest } from '@weftlet/core';
 
 const normalized = (issues: readonly unknown[]) => issues.map(stableJson).sort();
 const terms = (store: Store) => {
@@ -42,6 +43,8 @@ it('retains real code/proof metadata and cross-partition class checks, including
   const f = await largeTypeScriptProject(2, 2);
   try {
     const first = (await f.app.hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).snapshot;
+    // Actual SCIP/prose records retain the legacy canonical hash, not only synthetic values.
+    expect(stableJsonDigest(first.facts)).toBe(sha256(stableJson(first.facts)));
     const call = first.facts.find(fact => fact.codeCall)!;
     const definitionId = call.codeCall!.targetDefinitions[0]!.factId;
     const invalid: GraphSnapshot[] = [
@@ -72,8 +75,15 @@ it('fails closed when shapes add traversal beyond the reviewed partition-local f
   expect(() => assertPartitionLocalShapes(evidenceShapes)).not.toThrow();
   const { namedNode: iri, quad, blankNode } = DataFactory;
   for (const added of [quad(iri('urn:shape'), iri('http://www.w3.org/ns/shacl#node'), iri('urn:nested')),
-    quad(blankNode(), iri('http://www.w3.org/ns/shacl#path'), blankNode())]) {
+    quad(blankNode(), iri('http://www.w3.org/ns/shacl#path'), blankNode()),
+    quad(iri('urn:shape'), iri('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), iri('http://www.w3.org/2000/01/rdf-schema#Class'))]) {
     expect(() => assertPartitionLocalShapes([...evidenceShapes, added])).toThrow(/locality/);
+  }
+  for (const predicate of ['property', 'or']) {
+    const valueShape = blankNode();
+    expect(() => assertPartitionLocalShapes([...evidenceShapes,
+      quad(valueShape, iri('http://www.w3.org/ns/shacl#path'), iri('urn:link')),
+      quad(valueShape, iri(`http://www.w3.org/ns/shacl#${predicate}`), blankNode())])).toThrow(/locality/);
   }
 });
 
