@@ -1,5 +1,5 @@
 import type { CodeCoverageReport, CodeCoverageRequest, CodeCoverageService, SnapshotStore } from '@weftlet/core';
-import { sha256, stableJson } from '../infrastructure/util.js';
+import { stableJsonDigest } from '../infrastructure/util.js';
 import { projectCodeCoverage } from './code-coverage-projection.js';
 import { parseCodeCoverageRequest } from './code-coverage-request.js';
 import { renderCodeCoverage } from './code-coverage-renderer.js';
@@ -27,7 +27,7 @@ export class SnapshotCodeCoverageService implements CodeCoverageService {
     if (new Set(facts.map(fact => fact.id)).size !== facts.length) throw Error('Duplicate fact identities prevent stable code coverage');
     const projected = projectCodeCoverage({ ...saved, facts });
     const { continuation, ...query } = request;
-    const binding = sha256(stableJson({ version, query, manifest: saved.manifest, facts, diagnostics: saved.diagnostics }));
+    const binding = stableJsonDigest({ version, query, manifest: saved.manifest, facts, diagnostics: saved.diagnostics });
     const fileView = request.projectRoot !== undefined;
     const files = fileView ? projected.files.filter(f => f.projectRoot === request.projectRoot) : [];
     const length = fileView ? files.length : projected.projects.length;

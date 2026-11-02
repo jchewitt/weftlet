@@ -11,6 +11,9 @@ importers:
       '@comunica/query-sparql':
         specifier: 5.4.1
         version: 5.4.1
+      '@discoveryjs/json-ext':
+        specifier: 1.1.0
+        version: 1.1.0
       '@modelcontextprotocol/sdk':
         specifier: 1.30.0
         version: 1.30.0(zod@4.6.7)
@@ -26,6 +29,9 @@ importers:
       '@sourcegraph/scip-typescript':
         specifier: 0.4.0
         version: 0.4.0
+      '@streamparser/json':
+        specifier: 0.0.26
+        version: 0.0.26
       '@weftlet/core':
         specifier: workspace:^
         version: link:packages/core
@@ -1199,6 +1205,10 @@ packages:
   '@dabh/diagnostics@2.0.9':
     resolution: {integrity: sha512-R6siwR65Hm+3yfgP7o8DKhNvputQAwfoz9zTc3kyDudnomj2/BcLmD+uGQQPICjuFUp8ounPBU+jmKsocwVVAg==}
 
+  '@discoveryjs/json-ext@1.1.0':
+    resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
+    engines: {node: '>=14.17.0'}
+
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
     engines: {node: '>=18'}
@@ -1808,6 +1818,9 @@ packages:
   '@sourcegraph/scip-typescript@0.4.0':
     resolution: {integrity: sha512-k+AtsrqmS41Sd5qjkZlHcmvoSQIvBOonRj4jpgp0KNFM6aqvMGpdSuPUqrUcg8ENTKjUbfaUVszgQwq3bCOvwA==}
     hasBin: true
+
+  '@streamparser/json@0.0.26':
+    resolution: {integrity: sha512-46597LNFI+MFdUnzX2QJWwmdTRdq0XVD+vVNJTtGVzIrnCuhG9pFo1OAzbNBqci8UJgk/X5KJZ6LcV+y7PTuDQ==}
 
   '@tpluscode/rdf-ns-builders@5.1.0':
     resolution: {integrity: sha512-gVH5Mc4tNWZD+SALr0OqgDH+MaMjjdNfiUfEGmsgEjgLokNzxQSf+Co8COvl+RSngUPNelx8BrqA+izE34Ttwg==}
@@ -7043,6 +7056,8 @@ snapshots:
       enabled: 2.0.0
       kuler: 2.0.0
 
+  '@discoveryjs/json-ext@1.1.0': {}
+
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
 
@@ -7453,6 +7468,8 @@ snapshots:
       google-protobuf: 3.21.4
       progress: 2.0.3
       typescript: 5.9.3
+
+  '@streamparser/json@0.0.26': {}
 
   '@tpluscode/rdf-ns-builders@5.1.0':
     dependencies:

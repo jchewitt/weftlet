@@ -1,5 +1,40 @@
 # Validation evidence
 
+## 0.7.0 large-graph field blocker follow-up, 2026-11-02
+
+Status: patch qualification in progress; not a published fix or consumer acceptance.
+[ADR 040](ADR-040-bounded-graph-io.md) records the encoding, storage and strict SHACL boundaries.
+The consumer's reported 561,777-fact failure occurs before SHACL at whole-graph canonical
+string construction. Its prior snapshots remain readable; no private inputs were imported here.
+
+Local Linux checks currently establish:
+
+- Production build and 38 core tests pass, including an independently checked canonical hash
+  larger than V8's actual string ceiling. Existing encoding and persisted-JSON digest semantics
+  are retained, including optional fields and Unicode boundaries.
+- 65 focused lifecycle, RDF parity, streaming-storage and release-documentation tests pass.
+  The frozen 0.7.0 reference verifies named/union quad sets, strict positive/negative verdicts,
+  cross-subject proof checks, SPARQL aggregates and lossless traversal projection. A separate
+  100,001-fact test removes the old projection ceiling without truncation.
+- Fresh packed-consumer installation passes setup, preview/cache adoption, traversal hydration
+  and reuse, real SCIP, RDF/SPARQL/SHACL, HTML/DOT/SVG assets and MCP.
+- Inventory and license checks pass; all 79 original source import path/SHA pairs are unchanged.
+  Architecture passes with 15 advisory findings: two additional complexity advisories in the
+  canonical digest visitor and RDF matching function. No baseline, exception or gate changed.
+
+The full suite exposed a corrupt-JSON error-class compatibility regression. The streaming
+reader now preserves SyntaxError classification for malformed/truncated input while retaining
+I/O errors as infrastructure failures; cache-adoption CLI and strict parser regressions pass.
+An overlapping local rebuild also interrupted a compiled benchmark subprocess; that result is
+not a product pass and is being rerun after the build. Full-suite disposition is pending.
+
+The public capacity run uses 1,100 TypeScript modules with 40 functions each, actual SCIP and
+18 deterministic prose extractions, with zero live model calls. It produced 554,516 facts and
+143,044 nodes and passed the former hash failure point. Full strict validation, persistence/read,
+complete streamed RDF round-trip, unchanged repeat and clean comparison are still running.
+No large-run performance or completion claim is made at this checkpoint. Native Windows field
+acceptance, live provider quality and optional openCAESAR runtime remain separate checks.
+
 ## 0.7.0 acceptance release disposition, 2026-11-02
 
 The maintainer authorized publishing the accumulated B1–B5 implementation for live TradePilot

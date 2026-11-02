@@ -233,6 +233,8 @@ export interface GraphStore {
 
 export interface SnapshotStore extends GraphStore {
   readHead(headName: string): Promise<GraphSnapshot | undefined>;
+  /** Optional bounded-memory read; implementations must still reject corrupt persisted JSON. */
+  readHeadManifest?(headName: string): Promise<GraphSnapshot['manifest'] | undefined>;
   updateHead(headName: string, snapshotId: string): Promise<void>;
 }
 

@@ -1,6 +1,6 @@
 import { snapshotContext } from './snapshot-context.js';
 import type { GraphExplorationService, GraphFact, GraphNeighborhood, GraphNeighborsRequest, SnapshotStore } from '@weftlet/core';
-import { sha256, stableJson } from '../infrastructure/util.js';
+import { stableJsonDigest } from '../infrastructure/util.js';
 import { RdfEvidenceGraph } from './rdf.js';
 import { coverageForFacts } from './coverage.js';
 import { parseGraphNeighborsRequest } from './neighborhood-request.js';
@@ -59,8 +59,8 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
     const { continuation: _continuation, ...query } = request;
     // Bind to actual projected facts too: even a corrupt store reusing a manifest digest
     // must not silently turn a saved continuation into a different neighborhood/frontier.
-    const binding = sha256(stableJson({ version: GRAPH_NEIGHBORHOOD_VERSION, query, manifest: saved.manifest,
-      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved }));
+    const binding = stableJsonDigest({ version: GRAPH_NEIGHBORHOOD_VERSION, query, manifest: saved.manifest,
+      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved });
     const offset = pageOffset(request.continuation, binding, selected.length, request.maxFacts);
     const facts = selected.slice(offset, offset + request.maxFacts);
     const end = offset + facts.length;

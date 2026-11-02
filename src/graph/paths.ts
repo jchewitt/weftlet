@@ -1,6 +1,6 @@
 import { snapshotContext } from './snapshot-context.js';
 import type { GraphPathQueryService, GraphPaths, GraphPathsRequest, SnapshotStore } from '@weftlet/core';
-import { sha256, stableJson } from '../infrastructure/util.js';
+import { stableJsonDigest } from '../infrastructure/util.js';
 import { RdfEvidenceGraph } from './rdf.js';
 import { coverageForFacts } from './coverage.js';
 import { selectDiagnostics } from './diagnostics.js';
@@ -34,8 +34,8 @@ export class SnapshotGraphPathService implements GraphPathQueryService {
     const all = await new RdfEvidenceGraph(saved).facts();
     if (new Set(all.map(fact => fact.id)).size !== all.length) throw new Error('Duplicate fact identities prevent stable graph.paths pagination');
     const { continuation, ...query } = request;
-    const binding = sha256(stableJson({ version: GRAPH_PATHS_VERSION, query, manifest: saved.manifest,
-      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved }));
+    const binding = stableJsonDigest({ version: GRAPH_PATHS_VERSION, query, manifest: saved.manifest,
+      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved });
     const offset = continuationOffset(continuation, binding);
     const selected = all.filter(fact => !request.predicates.length || request.predicates.includes(fact.predicate));
     const edges = selected.flatMap(fact => {

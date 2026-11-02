@@ -59,6 +59,14 @@ async function replace(root: string, path: string, transform: (text: string) => 
   await writeFile(target, transform(await readFile(target, 'utf8')));
 }
 
+it.each(['These capabilities are pending the next npm candidate.',
+  'The development checkout now preserves typed code symbols.',
+  'Coverage is for the next release:'])('rejects stale consumer feature status: %s', async label => {
+  const root = await fixture();
+  await replace(root, 'README.md', text => text + '\n' + label + '\n');
+  await expect(checkReleaseDocumentation(root)).rejects.toThrow('stale development-only feature label');
+});
+
 type Archive = { name: string; version: string; filename: string; path: string };
 type PackedChange = (name: string, directory: string) => Promise<void>;
 

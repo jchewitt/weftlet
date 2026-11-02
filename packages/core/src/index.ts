@@ -1,6 +1,7 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 export * from './core.js';
 export * from './util.js';
+export { stableJsonDigest, persistedJsonDigest } from './canonical-digest.js';
 export * from './repository-nodes.js';
 export * from './exploration.js';
 export * from './paths.js';

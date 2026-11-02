@@ -18,7 +18,7 @@ import type { OntologyCompiler } from "../extraction/ontology.js";
 import type { SemanticHydrator } from "../extraction/semantic.js";
 import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
 import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from '../extraction/static.js';
-import { sha256, stableJson } from "../infrastructure/util.js";
+import { sha256, stableJson, stableJsonDigest } from "../infrastructure/util.js";
 import { assembleDocumentCodeBindings } from './document-code-bindings.js';
 import { documentCodeBindingIdentity } from '../extraction/document-code-bindings.js';
 import { documentObligationIdentity } from '../extraction/document-obligations.js';
@@ -97,7 +97,7 @@ export class ContextGraphHydrator {
       .sort((left, right) => stableJson(left).localeCompare(stableJson(right)));
     return {
       commitSha,
-      digest: sha256(stableJson(references)),
+      digest: stableJsonDigest(references),
       references,
     };
   }
@@ -124,11 +124,12 @@ export class ContextGraphHydrator {
     }
     const { sources } = selection;
     await this.dependencies.ontologyCompiler.checkReady?.();
-    const prior = await snapshotStore.readHead(options.headName);
+    const prior = snapshotStore.readHeadManifest ? await snapshotStore.readHeadManifest(options.headName)
+      : (await snapshotStore.readHead(options.headName))?.manifest;
     const baseSha =
-      prior?.manifest.commitSha === commitSha
-        ? prior.manifest.baseSha
-        : (prior?.manifest.commitSha ?? (await repository.firstParent(commitSha)));
+      prior?.commitSha === commitSha
+        ? prior.baseSha
+        : (prior?.commitSha ?? (await repository.firstParent(commitSha)));
     const allRoots = [
       ...new Set([
         ...scopePaths,
@@ -155,8 +156,8 @@ export class ContextGraphHydrator {
       config.runtimeEvidence.length > 0
         ? `runtime-${runtimeRevision.digest.slice(0, 12)}`
         : undefined;
-    const configurationDigest = sha256(stableJson(config));
-    const scopeDigest = sha256(stableJson(scopePaths)).slice(0, 12);
+    const configurationDigest = stableJsonDigest(config);
+    const scopeDigest = stableJsonDigest(scopePaths).slice(0, 12);
     const effectiveSuffix = [`graph-v${graphAssemblyVersion}`, `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
       `contracts-${repositoryContractExtractorIdentity.version}`,
       `symbols-${scipSymbolExtractorIdentity.version}`,
@@ -188,7 +189,7 @@ export class ContextGraphHydrator {
     const diagnostics: GraphDiagnostic[] = hydrated.flatMap(({ source, artifact }) =>
       (artifact.diagnostics ?? []).map((item) => ({
         ...item,
-        id: sha256(stableJson({ artifact: artifact.key, diagnostic: item.id, path: source.path })),
+        id: stableJsonDigest({ artifact: artifact.key, diagnostic: item.id, path: source.path }),
         provenance: item.provenance.map((span) => ({
           ...span,
           path: source.path,
@@ -200,7 +201,7 @@ export class ContextGraphHydrator {
     const semanticFacts = classifyHydratedFacts(hydrated.flatMap(({ source, artifact }) =>
       artifact.facts.map((fact) => ({
         ...fact,
-        id: sha256(stableJson({ artifact: artifact.key, fact: fact.id, path: source.path })),
+        id: stableJsonDigest({ artifact: artifact.key, fact: fact.id, path: source.path }),
         provenance: {
           ...fact.provenance,
           path: source.path,
@@ -228,7 +229,7 @@ export class ContextGraphHydrator {
       for (const node of [fact.subject, fact.object]) {
         const path = /^(?:component:file:|document:)(.+)$/.exec(node.id)?.[1];
         if (path && !tracked.has(path)) diagnostics.push({
-          id: sha256(stableJson({ fact: fact.id, missing: path })),
+          id: stableJsonDigest({ fact: fact.id, missing: path }),
           kind: 'implementationGaps',
           reason: `Cited implementation path ${path} is absent from the committed repository.`,
           relatedNodeIds: [node.id], provenance: [fact.provenance], evidenceScope: 'snapshot-query',
@@ -298,7 +299,7 @@ export class ContextGraphHydrator {
       codeInventory,
       ...(selection.documentSelection ? { documentSelection: selection.documentSelection } : {}),
     };
-    const contentDigest = sha256(stableJson(logical));
+    const contentDigest = stableJsonDigest(logical);
     const snapshot: GraphSnapshot = {
       manifest: {
         schemaVersion: 1,
@@ -363,16 +364,18 @@ export class ContextGraphHydrator {
   }
 
   async compareClean(options: Omit<HydrationOptions, 'snapshotSuffix'>): Promise<HydrationResult> {
-    const current = await this.dependencies.snapshotStore.readHead(options.headName);
+    const store = this.dependencies.snapshotStore;
+    const current = store.readHeadManifest ? await store.readHeadManifest(options.headName)
+      : (await store.readHead(options.headName))?.manifest;
     if (!current) throw new Error('No incremental snapshot exists to compare');
     const clean = await this.hydrate({
       ...options,
       headName: `${options.headName}-clean`,
       snapshotSuffix: `clean-${Date.now()}`,
     });
-    if (clean.snapshot.manifest.contentDigest !== current.manifest.contentDigest) {
+    if (clean.snapshot.manifest.contentDigest !== current.contentDigest) {
       throw new Error(
-        `Clean hydration drift: ${current.manifest.contentDigest} != ${clean.snapshot.manifest.contentDigest}`,
+        `Clean hydration drift: ${current.contentDigest} != ${clean.snapshot.manifest.contentDigest}`,
       );
     }
     return clean;
