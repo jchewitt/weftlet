@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "workload": "Generated committed public TypeScript, actual SCIP, deterministic prose provider",
+  "environment": {
+    "os": "Linux x64",
+    "node": "24.19.0",
+    "pnpm": "10.18.2",
+    "nodeHeapLimitMiB": 8192,
+    "cpuQuota": 4,
+    "cgroupMemoryBytes": 34359738368
+  },
+  "command": "NODE_OPTIONS=--max-old-space-size=8192 pnpm exec tsx scripts/large-graph/run.ts 1100 40 --require-large",
+  "qualificationScope": "The capacity process started before the final negative-path shape/error guards and test-harness corrections. Those changes, and the newly embedded legacy-hash assertion, passed separately in hosted Linux/Windows checks at 4bc41fd1eee4169934fc8e50960bb60b7c8ff617. This is not an exact-final-head large-corpus rerun.",
+  "result": {
+    "status": "passed",
+    "elapsedMs": 8841003,
+    "modules": 1100,
+    "functions": 40,
+    "factCount": 554516,
+    "nodeCount": 143044,
+    "bytes": 1021806445,
+    "logicalCharacters": 938267270,
+    "rdfBytes": 5331139680,
+    "quadCount": 21522256,
+    "contentDigest": "2f75e3dbc16e7ca856d177264046034f40a1560b8a39e5df8b998c653c7b8e81",
+    "immutableDigest": "4f48702636a5499e2bfde70f2cca189d2d67836531180685515b4eb3d10ca3f2",
+    "providerCalls": 0,
+    "deterministicProviderExtractions": 18,
+    "repeatReused": 18,
+    "cleanReused": 18,
+    "extractorVersions": {
+      "assembly": "standalone-graph-v12",
+      "repository-contract-extractor": "1.2.0",
+      "scip-symbol-extractor": "2.1.0",
+      "typescript-call-extractor": "1.0.0",
+      "repository-node-identity": "1",
+      "document-linker": "2.0.0",
+      "document-code-binding-extractor": "1.0.0",
+      "document-obligation-extractor": "1.0.0",
+      "semantic": "1.1.0",
+      "scip": "0.4.0",
+      "ontology": "rdf-record-v1",
+      "repository-file-extractor": "2.0.0"
+    }
+  },
+  "legacyCanonicalDigestParity": {
+    "status": "passed",
+    "facts": 554516,
+    "canonicalCharacters": 938267270,
+    "digest": "e6965407b8a8d76ed6d2d7ef8d2daa0297059b5fb327723cd49e73233865c001",
+    "method": "legacy per-record stableJson plus exact array separators vs stableJsonDigest"
+  },
+  "completedPhases": [
+    {
+      "totalElapsedMs": 112233,
+      "phase": "validate-identities",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 1118
+    },
+    {
+      "totalElapsedMs": 138845,
+      "phase": "build-rdf-evidence",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 1
+    },
+    {
+      "totalElapsedMs": 344926,
+      "phase": "build-validation-union",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 206080,
+      "nodeCount": 143044
+    },
+    {
+      "totalElapsedMs": 2444694,
+      "phase": "validate-shacl",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 2099768,
+      "nodeCount": 143044
+    },
+    {
+      "totalElapsedMs": 3525345,
+      "phase": "validate-identities",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 754
+    },
+    {
+      "totalElapsedMs": 3555601,
+      "phase": "build-rdf-evidence",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 1
+    },
+    {
+      "totalElapsedMs": 3783233,
+      "phase": "build-validation-union",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 227631,
+      "nodeCount": 143044
+    },
+    {
+      "totalElapsedMs": 6008326,
+      "phase": "validate-shacl",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 2225093,
+      "nodeCount": 143044
+    },
+    {
+      "totalElapsedMs": 6340553,
+      "phase": "validate-identities",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 977
+    },
+    {
+      "totalElapsedMs": 6370727,
+      "phase": "build-rdf-evidence",
+      "status": "completed",
+      "factCount": 554516,
+      "nodeCount": 143044,
+      "elapsedMs": 0
+    },
+    {
+      "totalElapsedMs": 6575068,
+      "phase": "build-validation-union",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 204340,
+      "nodeCount": 143044
+    },
+    {
+      "totalElapsedMs": 8671949,
+      "phase": "validate-shacl",
+      "status": "completed",
+      "factCount": 554516,
+      "elapsedMs": 2096881,
+      "nodeCount": 143044
+    }
+  ],
+  "limitations": [
+    "Capacity and correctness regression; not a 30-minute hydration qualification.",
+    "Other local checks overlapped part of the run; this is not an isolated comparative performance benchmark.",
+    "No private consumer source, native Windows field acceptance, live model-quality evaluation, or optional openCAESAR runtime is claimed."
+  ]
+}

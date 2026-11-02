@@ -653,6 +653,7 @@
     "docs/architecture-baseline.json",
     "docs/architecture-policy.md",
     "docs/assessments/pre-1.0-2026-10-28.json",
+    "docs/benchmarks/large-graph-2026-11-02/result.json",
     "docs/benchmarks/validation-2026-10-28/README.md",
     "docs/benchmarks/validation-2026-10-28/large.json",
     "docs/benchmarks/validation-2026-10-28/lifecycle.json",

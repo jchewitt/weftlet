@@ -1,6 +1,7 @@
 # ADR 040: Preserve evidence while removing whole-graph string and RDF copies
 
-Status: implemented; large-corpus qualification in progress. Consumer acceptance remains open.
+Status: implemented; public large-corpus lifecycle and hosted Linux/Windows checks pass.
+Consumer acceptance remains open.
 
 ## Problem
 
@@ -79,8 +80,10 @@ node --max-old-space-size=8192 --import tsx scripts/large-graph/run.ts 1100 40 -
 ```
 
 The large run is deliberately separate from ordinary CI; its scaled fixture runs in CI.
-Full-run results must be recorded in VALIDATION.md before claiming qualification. Linux results
-do not establish native Windows consumer acceptance. This is a capacity regression, not a
+The [recorded full run](benchmarks/large-graph-2026-11-02/result.json) passes with 554,516 facts,
+a 1 GB snapshot and a complete 5.3 GB RDF export. Each strict SHACL pass takes about 35–37 minutes;
+this does not establish a 30-minute hydration budget. Linux capacity results do not establish
+native Windows consumer acceptance. See VALIDATION.md for source/checkpoint distinctions. This is a capacity regression, not a
 semantic-quality or universal performance guarantee. Parsed graph objects and indexes still use
 memory; a single very large record/identity can exceed a group target. Arbitrary SPARQL joins,
 sorts and aggregates have their own time/memory costs. There is no persistent graph database,

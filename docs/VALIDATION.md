@@ -2,7 +2,8 @@
 
 ## 0.7.0 large-graph field blocker follow-up, 2026-11-02
 
-Status: patch qualification in progress; not a published fix or consumer acceptance.
+Status: public capacity qualification and hosted Linux/Windows checks pass; patch release pending.
+Private consumer acceptance remains open.
 [ADR 040](ADR-040-bounded-graph-io.md) records the encoding, storage and strict SHACL boundaries.
 The consumer's reported 561,777-fact failure occurs before SHACL at whole-graph canonical
 string construction. Its prior snapshots remain readable; no private inputs were imported here.
@@ -47,29 +48,41 @@ passes 877 selected tests but times out in the four-command failure-reporting te
 The harness now retains each 20-second command limit, allows 100 seconds for the combined
 sequence and fixture setup, and aborts/waits for child closure before cleanup. All four local
 failure-reporting tests pass; this changes no production timeout or assertion.
+At `4bc41fd1`, both subsequent hosted runs
+[41545800490](https://github.com/jchewitt/weftlet/actions/runs/41545800490) and
+[41545807452](https://github.com/jchewitt/weftlet/actions/runs/41545807452) pass Linux and Windows,
+including the corrected test and fresh packed-consumer installation.
 
 The optional broader test-source TypeScript check still reports existing diagnostics outside
 the production build. An isolated archive of the base commit has the same 42 diagnostics after
 normalizing checkout paths and ignoring its two absent-build-output errors; this patch adds none.
 
-The public capacity run uses 1,100 TypeScript modules with 40 functions each, actual SCIP and
-18 deterministic prose extractions, with zero live model calls. It produced 554,516 facts and
-143,044 nodes and passed the former hash failure point. Its first complete strict SHACL pass
-succeeded in 2,099,768 ms (about 35 minutes), with other local checks running during part of that
-phase. The 1,021,806,445-byte snapshot was written and reloaded with its full fact count, content
-digest and provenance verified. Complete streamed RDF round-trip, unchanged repeat and clean
-comparison were still pending at that checkpoint. The complete 5,331,139,680-byte RDF export
-subsequently parsed successfully, retaining every record and its exact canonical digest; the
-bounded SPARQL query and full record projection also passed. An independent read of the saved
-554,516 facts confirms that 938,267,270 characters of logical-fact canonical encoding hash to
+The [public capacity result](benchmarks/large-graph-2026-11-02/result.json) passes the complete
+hydrate → strict validation → persist/read → unchanged repeat → clean comparison lifecycle.
+It uses 1,100 TypeScript modules with 40 functions each, actual SCIP, spec files and 18
+deterministic prose extractions, with zero live model calls. The run produced **554,516 facts /
+143,044 nodes**, a **1,021,806,445-byte snapshot**, and a **5,331,139,680-byte N-Quads export**
+containing 21,522,256 quads. Every exported record was parsed and matched by ID and canonical
+digest. Bounded real SPARQL and the complete record projection pass without dropping facts.
+
+All three full strict SHACL passes succeed: cold **2,099,768 ms**, repeat **2,225,093 ms**, and
+clean **2,096,881 ms** (about 35–37 minutes each). Both repeat and clean reuse all 18 artifacts
+with zero further extraction. Snapshot identity on repeat, logical/content digests, exact
+provenance, extractor versions, cache keys, original snapshot bytes and all semantic artifact
+bytes are retained. The complete harness took 8,841,003 ms, including three indexing/validation
+runs, large-file round trips, independent assertions and fixture cleanup. This establishes
+capacity/correctness, **not a 30-minute hydration budget** or private-workload performance.
+Other local checks overlapped part of the run; it is not an isolated comparative benchmark.
+
+An independent read of the saved 554,516 facts confirms that 938,267,270 characters of logical
+canonical encoding hash to
 `e6965407b8a8d76ed6d2d7ef8d2daa0297059b5fb327723cd49e73233865c001`
 under both the legacy per-record encoding with exact array separators and `stableJsonDigest`.
-That check is now included in the lifecycle harness; its smaller CI fixture passes.
-The unchanged repeat subsequently passes strict SHACL in 2,225,093 ms, reuses all 18 artifacts
-without extraction, and preserves snapshot identity, content/fact digests and immutable snapshot
-bytes. Clean comparison remains in progress. This run does not establish a 30-minute hydration budget.
-No complete large-lifecycle claim is made at this checkpoint. Native Windows field
-acceptance, live provider quality and optional openCAESAR runtime remain separate checks.
+That assertion is now also in the lifecycle harness; its scaled CI fixture passes.
+The long-running capacity process predates the final negative-path shape/error guards and
+harness corrections. Those changes pass separately in the hosted checks above; this is not
+claimed as an exact-final-head large-corpus rerun. Native Windows field acceptance, live provider
+quality and optional openCAESAR runtime remain separate checks.
 
 ## 0.7.0 acceptance release disposition, 2026-11-02
 
