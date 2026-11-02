@@ -2232,3 +2232,16 @@ selected tests, including global/local npm launcher installation, discovery, log
 plumbing, process-tree cancellation, CRLF inventories, storage/Git and all original MCP startup
 cases. The repository inventory and complete license checks also passed natively. This is focused
 Windows coverage, not a full native Windows publication gate or a live Codex account/model test.
+
+
+## November 2, 2026 — bounded mapping proposals (candidate work)
+
+The opt-in implementation in ADR 039 adds actual committed-source/SCIP planning, exact cited
+proposal validation, isolated immutable artifacts, Codex/module contracts, and CLI/MCP inspection.
+Deterministic fixture providers are canned transport controls, not a semantic comprehension test.
+Focused checks cover scope/authority negatives, missing/declaration-only/unindexed code, budgets,
+cache round trips, unavailable-provider reuse while dirty, historical rename/delete, cancellation,
+timeouts and concurrent publication. Codex transport/authentication is tested without model calls.
+The public three-request live protocol was predeclared before any live proposal measurement.
+Final local publication gates and hosted platform results belong in the implementation PR once
+executed. No live quality, token-cost, private consumer, browser or 1.0 acceptance is claimed here.

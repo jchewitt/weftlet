@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "inputs": [
+    {
+      "path": "tests/fixtures/mapping-project.ts",
+      "sha256": "8f55bdb4f93a25c2a6b152937e03ce643bfd95ec5772b051d71867702ef21a1d"
+    },
+    {
+      "path": "evaluations/mapping-proposals/protocol.json",
+      "sha256": "453b539b5272f35b8bb150cf9851d8a307019fbb5bde867a94aecf6e97f505f4"
+    }
+  ]
+}

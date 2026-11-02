@@ -11,3 +11,4 @@ export * from './obligations.js';
 export * from './compatibility.js';
 export * from './code-coverage.js';
 export * from './coverage-query.js';
+export type * from './mapping-proposals.js';

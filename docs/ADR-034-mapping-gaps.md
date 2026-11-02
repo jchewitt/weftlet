@@ -71,3 +71,10 @@ per file. Test fixture inputs are cached only where immutable; each disposable r
 dirty-content/CRLF checks still read fresh bytes. Yielding between synchronous cases lets worker
 updates flush. Binary/CRLF/empty blobs and malformed frames are covered. The original timeout,
 negative assertions, frozen B2 labels and Git-content safety checks are retained.
+
+## November 2 implementation decision
+
+The maintainer approved the bounded opt-in proposal recommendation. [ADR 039](ADR-039-mapping-proposals.md)
+records its separate operation, authority, exact code/source eligibility, provider and immutable
+cache contract. This supersedes the earlier pending implementation/deferral decision. It does not
+supply a live model-quality result or close B6 acceptance.

@@ -36,6 +36,9 @@ import { OtlpJsonRuntimeEvidenceProvider } from "../extraction/telemetry.js";
 import { SnapshotChecks } from "./snapshot-checks.js";
 import { resolveConsumerModule } from "../infrastructure/module-resolution.js";
 import { requiredSnapshotExtractorVersions } from './extraction-identity.js';
+import { MappingProposalService } from './mapping-proposals.js';
+import { FileMappingProposalStore } from '../storage/mapping-proposals.js';
+import { createMappingProvider, mappingProviderIdentity } from '../extraction/mapping-provider.js';
 
 const emptyAdapter: ContextGraphAdapter = {
   factExtractors: [],
@@ -136,5 +139,10 @@ export async function createContextGraphApplication(configPath: string) {
     snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver, sha256(stableJson(config)), expectedExtractors),
     scopeResolver,
     headName,
+    mappingProposalService: new MappingProposalService(repository, snapshotStore, new FileMappingProposalStore(storageRoot), {
+      repositoryId: config.repositoryId, configurationDigest: sha256(stableJson(config)), expectedExtractors,
+      providerIdentity: mappingProviderIdentity(config.semantic), timeoutMs: config.semantic.timeoutMs ?? 120_000,
+      provider: () => createMappingProvider(config.semantic, repositoryRoot),
+    }),
   };
 }

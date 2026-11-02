@@ -9,6 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { smokeMappingProposals } from './smoke-mapping-proposals.mjs';
 import { smokeTraversal } from './smoke-traversal.mjs';
 import { pnpmInvocation } from './package-manager.mjs';
 import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
@@ -687,6 +688,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
+  await smokeMappingProposals(installedRoot, documentConfig);
   console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
