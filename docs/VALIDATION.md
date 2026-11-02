@@ -31,6 +31,11 @@ and compiler in bounded asynchronous child processes, and gives multi-command ca
 deadline longer than their individual command budgets. No assertion, frozen input, production
 validator, provider timeout or graph behavior is changed. Final hosted results belong to the
 corrected release PR head; the earlier failures are retained rather than recorded as passes.
+At `39ca29f766563781281a57ff6a2194fa81d01267`, both Linux jobs and the push Windows job passed.
+The duplicate PR Windows job passed the corrected suites but exceeded the separate 60-second
+aggregate deadline for one hydration plus three indexed/RDF overlays in the traversal lifecycle
+case. That case now has a 180-second harness budget with every assertion retained. This is not
+a changed runtime deadline or a performance acceptance result; production code remains unchanged.
 
 ## Environment and historical evidence
 
