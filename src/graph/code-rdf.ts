@@ -1,10 +1,10 @@
 import { DataFactory, type Store, type NamedNode } from 'n3';
-import { repositoryFileNode, type GraphFact, type SourceSpan } from '@weftlet/core';
+import { repositoryFileNode, type GraphFact, type GraphNode, type SourceSpan } from '@weftlet/core';
 import { CG, RDF, XSD } from './shacl-shapes.js';
 
 const { namedNode: iri, literal } = DataFactory;
 
-export function addCodeEvidence(dataset: Store, record: NamedNode, fact: GraphFact, nodeIri: (id: string) => string): void {
+export function addCodeEvidence(dataset: Store, record: NamedNode, fact: GraphFact, nodeIri: (id: string) => string, includeNodes = true): void {
   const property = (subject: NamedNode, key: string, value: unknown) => {
     if (value === undefined) return;
     dataset.addQuad(subject, iri(CG + key), literal(String(value), iri(XSD + (typeof value === 'number' ? 'integer' : 'string'))));
@@ -23,16 +23,21 @@ export function addCodeEvidence(dataset: Store, record: NamedNode, fact: GraphFa
       for (const [key, value] of Object.entries(code.declarationRange)) property(range, key, value);
     }
   }
-  for (const node of [fact.subject, fact.object]) {
-    if (node.kind !== 'CodeSymbol' && node.codeSymbol === undefined) continue;
-    const term = iri(nodeIri(node.id));
-    dataset.addQuad(term, iri(RDF + 'type'), iri(CG + 'CodeSymbol'));
-    const value = node.codeSymbol;
-    if (value === undefined) continue; // The shape reports missing required metadata.
-    for (const [key, item] of Object.entries({ codeVersion: value.schemaVersion, codeProvider: value.provider,
-      codeRepository: value.repositoryId, nativeSymbol: value.nativeSymbol, codeIdentityScope: value.identityScope,
-      codeDocument: value.documentPath, codeIndex: value.indexDigest, codeResolution: value.resolution })) property(term, key, item);
-  }
+  if (includeNodes) for (const node of [fact.subject, fact.object]) addCodeNodeEvidence(dataset, node, nodeIri);
+}
+
+export function addCodeNodeEvidence(dataset: Store, node: GraphNode, nodeIri: (id: string) => string): void {
+  const property = (subject: NamedNode, key: string, value: unknown) => {
+    if (value !== undefined) dataset.addQuad(subject, iri(CG + key), literal(String(value), iri(XSD + (typeof value === 'number' ? 'integer' : 'string'))));
+  };
+  if (node.kind !== 'CodeSymbol' && node.codeSymbol === undefined) return;
+  const term = iri(nodeIri(node.id));
+  dataset.addQuad(term, iri(RDF + 'type'), iri(CG + 'CodeSymbol'));
+  const value = node.codeSymbol;
+  if (value === undefined) return; // The shape reports missing required metadata.
+  for (const [key, item] of Object.entries({ codeVersion: value.schemaVersion, codeProvider: value.provider,
+    codeRepository: value.repositoryId, nativeSymbol: value.nativeSymbol, codeIdentityScope: value.identityScope,
+    codeDocument: value.documentPath, codeIndex: value.indexDigest, codeResolution: value.resolution })) property(term, key, item);
 }
 
 export function invalidCodeRange(range: Pick<SourceSpan, 'startLine' | 'endLine' | 'startColumn' | 'endColumn' | 'columnEncoding'>): boolean {

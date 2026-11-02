@@ -115,6 +115,11 @@ function checkExamples(text, path, current) {
 
 function validateDocuments(documents, versions) {
   const current = versionMap(versions);
+  // Consumer README describes the packaged CLI. Keep future plans in the roadmap
+  // rather than leaving shipped command sections labelled as a future candidate.
+  if (/pending the next npm candidate|for the next release:|The development checkout (?:now |also )?(?:preserves|resolves|derives|supports)/i.test(documents.get('README.md'))) {
+    throw new Error('README.md: stale development-only feature label; align with shipped commands');
+  }
   for (const path of generatedPaths) {
     if (normalize(section(documents.get(path), path).text) !== renderReleaseDocumentation(path, versions)) {
       throw new Error(`${path}: stale generated release documentation; run the release documentation updater`);

@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "eab5289d1e846769186cedba88bfde7c8a00a88d2c0550d1b37f41a336b37a7f"
+      "destinationSha256": "3a3149ef683ffbbf3925ecd7975a7c0a5c24db66b4303f6044ba0fe94c9a1310"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "a655f7c89368fe1709208f56cd373b6371cb83fb6323002902311f16639df972"
+      "destinationSha256": "6783926fe77abf411925aac84328b11597716f65682457959b75bd5949addf42"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -150,14 +150,14 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "bd0da7ce094987c3d847403105998b9a01f2d2fcc308bf1d1ec16feb8409b769"
+      "destinationSha256": "b273b08720993c8195031f8b45af2e304705d9fe605aaeccd8546276bbf81789"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "d8eb8a4d25d18afa53ed5b4001cbb9af3e91e714def4b95d4b260bcdf974d821"
+      "destinationSha256": "506c545aad75289bb4bcc6cb24423e39ad58b5611f20cdae624904d1dc8fa034"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "f711ffb1daa45f3d6f8186dd6505143f938a80661f041f4e288c681d11be832b"
+      "destinationSha256": "76f40973bed8395d98f8bea5ec9ba95f593899502e05d08aea2f8cb137ac4a51"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -318,7 +318,7 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "394bed3f59049a650ebb94a8ade4f1637b9540633e2f49d3a16ac336fb9c9d7b"
+      "destinationSha256": "95b02709378ae5b37e2d3e3ae0ce80801fdb3385b0ec96f1e999ad5c59e5e9ae"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "4e52ee6a41192ae60f98ada522f27668115e145525c7afb6ec373b034c902f24"
+      "destinationSha256": "621f8e278fe52656c1621469afd50e6df79a23c98a4fae54776840541c308ab6"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "82945a91cc1e02970225e7f9247ee1e3526754462d0f29607a6543c9f07f1619"
+      "destinationSha256": "cb0d8647145961e57d0de7a52de58a1e5f29e813fabb4d7a07e2dae8f54ea63a"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/stream-large-evidence.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -633,6 +634,7 @@
     "docs/ADR-037-selected-contract-compatibility.md",
     "docs/ADR-038-monorepo-code-coverage.md",
     "docs/ADR-039-mapping-proposals.md",
+    "docs/ADR-040-bounded-graph-io.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -651,6 +653,7 @@
     "docs/architecture-baseline.json",
     "docs/architecture-policy.md",
     "docs/assessments/pre-1.0-2026-10-28.json",
+    "docs/benchmarks/large-graph-2026-11-02/result.json",
     "docs/benchmarks/validation-2026-10-28/README.md",
     "docs/benchmarks/validation-2026-10-28/large.json",
     "docs/benchmarks/validation-2026-10-28/lifecycle.json",
@@ -816,6 +819,8 @@
     "packages/core/CHANGELOG.md",
     "packages/core/src/bindings.ts",
     "packages/core/src/calls.ts",
+    "packages/core/src/canonical-digest.test.ts",
+    "packages/core/src/canonical-digest.ts",
     "packages/core/src/code-coverage.ts",
     "packages/core/src/code-types.ts",
     "packages/core/src/code.test.ts",
@@ -864,6 +869,8 @@
     "scripts/git-content.d.mts",
     "scripts/git-content.mjs",
     "scripts/inventory.test.ts",
+    "scripts/large-graph/lifecycle.ts",
+    "scripts/large-graph/run.ts",
     "scripts/mapping-proposal-study/run.ts",
     "scripts/mapping-study/assessment.test.ts",
     "scripts/mapping-study/assessment.ts",
@@ -1012,6 +1019,7 @@
     "src/graph/neighborhood.ts",
     "src/graph/obligation-rdf.ts",
     "src/graph/obligation-shapes.ts",
+    "src/graph/partitioned-shacl.ts",
     "src/graph/path-request.ts",
     "src/graph/path-search.test.ts",
     "src/graph/path-search.ts",
@@ -1020,6 +1028,9 @@
     "src/graph/paths.ts",
     "src/graph/ranking.test.ts",
     "src/graph/ranking.ts",
+    "src/graph/rdf-partitions.ts",
+    "src/graph/rdf-projection.ts",
+    "src/graph/rdf-records.ts",
     "src/graph/rdf.ts",
     "src/graph/shacl-shapes.ts",
     "src/graph/snapshot-context.ts",
@@ -1058,6 +1069,8 @@
     "src/storage/atomic-rename.ts",
     "src/storage/mapping-proposals.test.ts",
     "src/storage/mapping-proposals.ts",
+    "src/storage/streaming-json.test.ts",
+    "src/storage/streaming-json.ts",
     "src/telemetry.ts",
     "src/visualization/evidence-sources.ts",
     "src/visualization/path-parity.test.ts",
@@ -1078,9 +1091,11 @@
     "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/compatibility-cases.ts",
     "tests/fixtures/compatibility-project.ts",
+    "tests/fixtures/large-typescript-project.ts",
     "tests/fixtures/mapping-project.ts",
     "tests/fixtures/monorepo-project.ts",
     "tests/fixtures/obligation-project.ts",
+    "tests/fixtures/rdf-070-reference.ts",
     "tests/fixtures/shacl.ts",
     "tests/fixtures/static-call-project.ts",
     "tests/fixtures/symbol-bindings.ts",
@@ -1089,11 +1104,13 @@
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",
     "tests/implementation-coverage.test.ts",
+    "tests/large-graph-lifecycle.test.ts",
     "tests/mapping-proposals.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/monorepo-coverage.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",
+    "tests/rdf-scaling-parity.test.ts",
     "tests/rdf.test.ts",
     "tests/routing.test.ts",
     "tests/runtime.test.ts",

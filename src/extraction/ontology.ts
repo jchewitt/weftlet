@@ -1,9 +1,11 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+import { createReadStream, createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { DataFactory, Store, Writer } from 'n3';
 import { CG, nodeIri } from "../graph/rdf.js";
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -12,7 +14,6 @@ import type { ContextGraphConfig } from "../configuration/config.js";
 import type { SemanticArtifact, ExtractionContext } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { runProcess } from "../infrastructure/process.js";
-import { sha256, stableJson } from "../infrastructure/util.js";
 
 export interface OntologyCompileResult {
   readonly root: string;
@@ -184,13 +185,7 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
     const rdfRoot = join(work, 'build', 'rdf');
     const rdfFiles = await listRdfFiles(rdfRoot);
     if (rdfFiles.length === 0) throw new Error('openCAESAR produced no RDF files');
-    const digestParts = await Promise.all(
-      rdfFiles.map(async (path) => ({
-        path: relative(rdfRoot, path),
-        content: await readFile(path, 'utf8'),
-      })),
-    );
-    return { root: rdfRoot, rdfFiles, digest: sha256(stableJson(digestParts)) };
+    return { root: rdfRoot, rdfFiles, digest: await digestRdfFiles(rdfRoot, rdfFiles) };
   }
 }
 
@@ -208,14 +203,29 @@ export class DirectRdfOntologyCompiler implements OntologyCompiler {
       }
     }
     const writer = new Writer({ format: 'N-Triples' });
-    writer.addQuads(dataset.getQuads(null, null, null, null));
-    const text = await new Promise<string>((accept, reject) =>
-      writer.end((error, value) => error ? reject(error) : accept(value)));
-    const content = text.split('\n').filter(Boolean).sort().join('\n') + '\n';
+    const lines = Array.from(dataset, quad => writer.quadToString(quad.subject, quad.predicate, quad.object, quad.graph)).sort();
     const root = join(this.storageRoot, 'work', `rdf-${randomUUID()}`);
     await mkdir(root, { recursive: true });
     const path = join(root, 'semantic.nt');
-    await writeFile(path, content);
-    return { root, rdfFiles: [path], digest: sha256(content) };
+    const digest = createHash('sha256');
+    function* content() {
+      // The legacy empty dataset encodes a single newline too.
+      for (const line of lines.length ? lines : ['\n']) { digest.update(line); yield line; }
+    }
+    await pipeline(content(), createWriteStream(path, { flags: 'wx' }));
+    return { root, rdfFiles: [path], digest: digest.digest('hex') };
   }
+}
+
+/** Exact legacy stableJson([{content, path}, ...]) digest, including UTF-8 decoding/escaping. */
+export async function digestRdfFiles(root: string, files: readonly string[]): Promise<string> {
+  const hash = createHash('sha256').update('[');
+  for (const [index, path] of files.entries()) {
+    hash.update(`${index ? ',' : ''}{"content":"`);
+    for await (const chunk of createReadStream(path, { encoding: 'utf8' })) {
+      hash.update(JSON.stringify(chunk).slice(1, -1));
+    }
+    hash.update(`","path":${JSON.stringify(relative(root, path))}}`);
+  }
+  return hash.update(']').digest('hex');
 }

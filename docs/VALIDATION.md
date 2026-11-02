@@ -1,5 +1,89 @@
 # Validation evidence
 
+## 0.7.0 large-graph field blocker follow-up, 2026-11-02
+
+Status: public capacity qualification and hosted Linux/Windows checks pass; patch release pending.
+Private consumer acceptance remains open.
+[ADR 040](ADR-040-bounded-graph-io.md) records the encoding, storage and strict SHACL boundaries.
+The consumer's reported 561,777-fact failure occurs before SHACL at whole-graph canonical
+string construction. Its prior snapshots remain readable; no private inputs were imported here.
+
+Local Linux checks currently establish:
+
+- Production build and 38 core tests pass, including an independently checked canonical hash
+  larger than V8's actual string ceiling. Existing encoding and persisted-JSON digest semantics
+  are retained, including optional fields and Unicode boundaries.
+- 65 focused lifecycle, RDF parity, streaming-storage and release-documentation tests pass.
+  The frozen 0.7.0 reference verifies named/union quad sets, strict positive/negative verdicts,
+  cross-subject proof checks, SPARQL aggregates and lossless traversal projection. A separate
+  100,001-fact test removes the old projection ceiling without truncation.
+- Fresh packed-consumer installation passes setup, preview/cache adoption, traversal hydration
+  and reuse, real SCIP, RDF/SPARQL/SHACL, HTML/DOT/SVG assets and MCP.
+- Inventory and license checks pass; all 79 original source import path/SHA pairs are unchanged.
+  Architecture passes with 15 advisory findings: two additional complexity advisories in the
+  canonical digest visitor and RDF matching function. No baseline, exception or gate changed.
+
+The full suite exposed a corrupt-JSON error-class compatibility regression. The streaming
+reader now preserves SyntaxError classification for malformed/truncated input while retaining
+I/O errors as infrastructure failures; cache-adoption CLI and strict parser regressions pass.
+The full local pass before those fixes completed with 977 passes / 8 failures / 1 optional skip.
+All corrupt-artifact cases pass on rerun (44 cache/preview/storage tests plus 3 CLI cases).
+An overlapping local rebuild interrupted a compiled benchmark subprocess; its 6 tests pass after
+the build. Seven sequential CLI launches exceeded the old aggregate 30-second setup-test budget;
+the test now bounds each process to 30 seconds and the sequence to 180 seconds, retaining all
+assertions (3 setup tests pass). A subsequent 29-test RDF/setup run passes. These corrections
+do not change production operation deadlines. At `85361dbb` both hosted runs
+[41532316889](https://github.com/jchewitt/weftlet/actions/runs/41532316889) and
+[41532326444](https://github.com/jchewitt/weftlet/actions/runs/41532326444) pass Linux and Windows.
+Linux passes 38 core + 985 toolkit tests (1 optional ontology integration skipped), architecture,
+inventory, licenses and fresh packed-consumer smoke. Windows passes 38 core + 878 selected tests,
+inventory and licenses. The final local packed-consumer rerun also passes.
+
+At `d1498a4`, hosted push run
+[41542970652](https://github.com/jchewitt/weftlet/actions/runs/41542970652) passes both platforms.
+The duplicate PR run
+[41542976891](https://github.com/jchewitt/weftlet/actions/runs/41542976891) passes Linux; Windows
+passes 877 selected tests but times out in the four-command failure-reporting test at its
+30-second aggregate deadline, then encounters cleanup EBUSY with the child still using its cwd.
+The harness now retains each 20-second command limit, allows 100 seconds for the combined
+sequence and fixture setup, and aborts/waits for child closure before cleanup. All four local
+failure-reporting tests pass; this changes no production timeout or assertion.
+At `4bc41fd1`, both subsequent hosted runs
+[41545800490](https://github.com/jchewitt/weftlet/actions/runs/41545800490) and
+[41545807452](https://github.com/jchewitt/weftlet/actions/runs/41545807452) pass Linux and Windows,
+including the corrected test and fresh packed-consumer installation.
+
+The optional broader test-source TypeScript check still reports existing diagnostics outside
+the production build. An isolated archive of the base commit has the same 42 diagnostics after
+normalizing checkout paths and ignoring its two absent-build-output errors; this patch adds none.
+
+The [public capacity result](benchmarks/large-graph-2026-11-02/result.json) passes the complete
+hydrate → strict validation → persist/read → unchanged repeat → clean comparison lifecycle.
+It uses 1,100 TypeScript modules with 40 functions each, actual SCIP, spec files and 18
+deterministic prose extractions, with zero live model calls. The run produced **554,516 facts /
+143,044 nodes**, a **1,021,806,445-byte snapshot**, and a **5,331,139,680-byte N-Quads export**
+containing 21,522,256 quads. Every exported record was parsed and matched by ID and canonical
+digest. Bounded real SPARQL and the complete record projection pass without dropping facts.
+
+All three full strict SHACL passes succeed: cold **2,099,768 ms**, repeat **2,225,093 ms**, and
+clean **2,096,881 ms** (about 35–37 minutes each). Both repeat and clean reuse all 18 artifacts
+with zero further extraction. Snapshot identity on repeat, logical/content digests, exact
+provenance, extractor versions, cache keys, original snapshot bytes and all semantic artifact
+bytes are retained. The complete harness took 8,841,003 ms, including three indexing/validation
+runs, large-file round trips, independent assertions and fixture cleanup. This establishes
+capacity/correctness, **not a 30-minute hydration budget** or private-workload performance.
+Other local checks overlapped part of the run; it is not an isolated comparative benchmark.
+
+An independent read of the saved 554,516 facts confirms that 938,267,270 characters of logical
+canonical encoding hash to
+`e6965407b8a8d76ed6d2d7ef8d2daa0297059b5fb327723cd49e73233865c001`
+under both the legacy per-record encoding with exact array separators and `stableJsonDigest`.
+That assertion is now also in the lifecycle harness; its scaled CI fixture passes.
+The long-running capacity process predates the final negative-path shape/error guards and
+harness corrections. Those changes pass separately in the hosted checks above; this is not
+claimed as an exact-final-head large-corpus rerun. Native Windows field acceptance, live provider
+quality and optional openCAESAR runtime remain separate checks.
+
 ## 0.7.0 acceptance release disposition, 2026-11-02
 
 The maintainer authorized publishing the accumulated B1–B5 implementation for live TradePilot

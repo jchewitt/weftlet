@@ -11,7 +11,7 @@ export interface HydrationProgressEvent {
   readonly total?: number;
   readonly sourceId?: string;
   readonly elapsedMs?: number;
-  readonly status?: 'started' | 'completed' | 'failed';
+  readonly status?: 'started' | 'completed' | 'failed' | 'progress';
   readonly factCount?: number;
   readonly nodeCount?: number;
 }

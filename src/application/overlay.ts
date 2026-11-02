@@ -11,7 +11,7 @@ import { withCommittedTree } from "../repository/committed-tree.js";
 import { FileSnapshotStore } from "../storage/storage.js";
 import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer,
   repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from "../extraction/static.js";
-import { sha256, stableJson } from "../infrastructure/util.js";
+import { sha256, stableJsonDigest } from "../infrastructure/util.js";
 import { contextPackEvidenceAuthority } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
@@ -47,7 +47,7 @@ export async function buildWorkingOverlay(
 ): Promise<GraphSnapshot> {
   const base = await store.read(baseSnapshotId);
   if (!base || base.manifest.overlayDigest) throw new Error('Overlay requires a committed base snapshot');
-  if (base.manifest.configurationDigest !== sha256(stableJson(config))) {
+  if (base.manifest.configurationDigest !== stableJsonDigest(config)) {
     throw new Error('Overlay configuration must match its base snapshot');
   }
   const head = await repository.resolveRef('HEAD');
@@ -78,10 +78,10 @@ export async function buildWorkingOverlay(
     files: captured.map(({ path, content }) => ({ path, digest: content === null ? null : sha256(content) })),
     sourcePatterns: roots, excludedPaths: excluded,
   };
-  const overlayDigest = sha256(stableJson({ version: 2, ...overlayCapture }));
+  const overlayDigest = stableJsonDigest({ version: 2, ...overlayCapture });
   // Capture identity describes the same working bytes across extractor upgrades. Publication
   // identity also binds the extractor so rebuilding an old base cannot replace an old overlay.
-  const snapshotId = `${head}-overlay-${sha256(stableJson({
+  const snapshotId = `${head}-overlay-${stableJsonDigest({
     baseContentDigest: base.manifest.contentDigest, overlayDigest,
     assembly: graphAssemblyIdentity,
     repositoryFileExtractor: repositoryFileExtractorIdentity,
@@ -90,7 +90,7 @@ export async function buildWorkingOverlay(
     ...(routingSources.length ? { routingExtractor: routingExtractorIdentity } : {}),
     ...(config.documentTraversal ? { documentSelection: documentSelectionIdentity,
       documentEvidence: documentEvidenceExtractorIdentity } : {}),
-  })).slice(0, 32)}`;
+  }).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
   const extracted = await withCommittedTree(repository.root, head, async (root) => {
     for (const file of captured) {
@@ -124,7 +124,7 @@ export async function buildWorkingOverlay(
     const documentSelection = documents?.documentSelection ? {
       ...documents.documentSelection,
       // Temporary Git commit timestamps are not evidence identity. Bind drafts to captured bytes.
-      digest: sha256(stableJson({ ...documents.documentSelection, digest: undefined, baseSha: head, overlayDigest })),
+      digest: stableJsonDigest({ ...documents.documentSelection, digest: undefined, baseSha: head, overlayDigest }),
     } : undefined;
     const scip = await new ScipTypeScriptIndexer(config.scip, storageRoot).index(context);
     const codeInventory = buildCodeInventory(await draftRepository.listEntriesAt(context.commitSha),
@@ -154,7 +154,7 @@ export async function buildWorkingOverlay(
     const facts = draftFacts([...codeFacts, ...routing.facts, ...obligations.facts, ...(documents.documentEvidence?.facts ?? []), ...bindings.facts], snapshotId, head);
     const diagnostics = [...extraction.diagnostics, ...bindings.diagnostics, ...obligations.diagnostics, ...routing.diagnostics, ...(documents?.documentEvidence?.diagnostics ?? [])].map(({ id: _id, ...item }) => {
       const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
-      return { ...draft, id: sha256(stableJson(draft)) };
+      return { ...draft, id: stableJsonDigest(draft) };
     }).sort((a, b) => a.id.localeCompare(b.id));
     return { facts, diagnostics, documents, documentSelection, retainedSubjects, codeInventory };
   });
@@ -177,9 +177,9 @@ export async function buildWorkingOverlay(
         [scipSymbolExtractorIdentity.id]: scipSymbolExtractorIdentity.version,
         [staticCallIdentity.id]: staticCallIdentity.version,
         ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
-      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson({ facts: allFacts, diagnostics: extracted.diagnostics,
+      generatedAt: new Date().toISOString(), contentDigest: stableJsonDigest({ facts: allFacts, diagnostics: extracted.diagnostics,
           codeInventory: extracted.codeInventory,
-          ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) })),
+          ...(extracted.documentSelection ? { documentSelection: extracted.documentSelection } : {}) }),
     },
     facts: allFacts,
     invariants: base.invariants.map((rule) => ({

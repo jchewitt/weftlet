@@ -228,24 +228,31 @@ its sidecar policy is not automatically adopted by hydration. See
 
 Starting with **0.5.0**, identity preflight runs before ontology/RDF work.
 `hydrate --json --quiet` reports conflicts using opaque references; `--validation-details` explicitly
-includes local identities, producer versions and citations. Validation emits phase-boundary times
-and graph counts, without a percentage or live heartbeat. Full SHACL remains required after a
+includes local identities, producer versions and citations. Validation emits phase timings,
+graph counts and completed validation groups. These are not completion-time estimates. Full SHACL remains required after a
 passing preflight. See [ADR 021](docs/ADR-021-identity-preflight-and-validation-timing.md).
 
 Version 0.5.0 also accepts `semantic.timeoutMs: 600000` for an approved ten-minute extraction
 attempt; the default remains two minutes. See [provider limits and reuse](docs/PROVIDERS.md#limits-and-reuse)
 before retrying with compatible cached artifacts.
 
-Starting with 0.3.0, the toolkit indexes a temporary union to accelerate cold validation.
-The toolkit uses JavaScript `rdf-validate-shacl` and an in-memory
-N3 store. Each hydration validates the complete graph; semantic artifact reuse does not make
-validation incremental, and there is no validation-result cache, Rust engine or GraphDB service.
-Saved queries do not rerun SHACL.
+The toolkit uses JavaScript `rdf-validate-shacl` with bounded N3 subject groups. Each hydration
+validates the complete graph; semantic artifact reuse does not make validation incremental.
+There is no validation-result cache, Rust engine or GraphDB service. Saved queries do not rerun SHACL.
 
-The current shapes use subject/predicate/object values independently of graph names. Validation
-now builds one temporary union graph so repeated property lookups avoid scanning every named
-assertion graph. The same shapes and validator run against that union. The original named dataset,
-assertion records and provenance remain the source for SPARQL, queries and serialization.
+Complete identity groups preserve conflicting assertions, and graph-wide class membership retains
+cross-record proof checks. The same strict shapes run on every target. The RDF encoder also serves
+streamed N-Quads exports and SPARQL; traversal projections have SPARQL equivalence tests. Hashing and
+snapshot JSON persistence/reload avoid a whole-graph string. Existing canonical digests, cache keys
+and immutable snapshot bytes are preserved. See [ADR 040](docs/ADR-040-bounded-graph-io.md) for the
+partition correctness boundary, public corpus regression and remaining memory limits.
+
+For large programmatic RDF exports, use `await graph.serializeTo(writable)` or consume
+`graph.serializeChunks()`. The `serialize()` convenience returns a single string and therefore
+remains subject to JavaScript's string-size limit.
+
+The 0.3.0 optimization built a complete temporary validation union. The measurements below describe
+that earlier implementation; they are not timings for the current richer code graph.
 
 In bounded, single-run public experiments, 2,000 facts with unique subject/object nodes took
 31.50 seconds in the original SHACL path, compared with 0.153 seconds to build the union and
@@ -260,12 +267,11 @@ pnpm build
 pnpm benchmark:shacl
 ```
 
-The [T05 closeout](docs/ADR-027-validation-closeout.md) measures cold, repeated and changed inputs,
-plus worker, exact-result-key and Rust prototypes. Direct full validation remains the 1.0 choice:
+The historical [T05 closeout](docs/ADR-027-validation-closeout.md) measures cold, repeated and changed inputs,
+plus worker, exact-result-key and Rust prototypes:
 the 10,000-fact public cases measured about 2.9–5.7 seconds, with material memory use. These are
 fixture measurements, not a private consumer capacity guarantee. The prototypes are development
-tools, not runtime options; every hydration still performs full validation. Current progress reports
-phase boundaries because synchronous work blocks same-thread timers. Reproduce the lifecycle study
+tools, not runtime options; every hydration still performs full validation. Reproduce that lifecycle study
 from a development checkout with `pnpm benchmark:validation`; raw results and commands are linked
 from the ADR.
 
@@ -365,14 +371,14 @@ one-hop reads of saved evidence: no model or indexer is invoked. Each assertion 
 citations, authority and review state, including multiple assertions about the same edge.
 Page completion does not establish complete product coverage. See [the query contract](docs/ADR-029-exact-graph-neighborhoods.md).
 
-The development checkout now preserves typed `CodeSymbol` definitions and individual SCIP
+Starting with 0.7.0, Weftlet preserves typed `CodeSymbol` definitions and individual SCIP
 references, including local symbols, repeated same-file uses and one-based UTF-16 columns.
 From a physical-file node, request incoming `definedBy` facts to discover its symbols; from a
 symbol, request incoming/outgoing `references` to inspect exact occurrences. Native lexical
 enclosure is not a call graph. Resolution distinguishes indexed definitions, declaration-only
 targets and absent indexed definitions. Local ordinal IDs are scoped to the exact index; refresh
 code evidence before comparing revisions. See [code evidence and limits](docs/ADR-032-scip-code-evidence.md).
-The development checkout also resolves explicit Markdown symbol selectors in selected documents:
+Weftlet also resolves explicit Markdown symbol selectors in selected documents:
 
 ```md
 [helper](../src/worker.ts#weftlet-symbol=Engine.execute)
@@ -397,14 +403,14 @@ semantic/document-traversal scope and SCIP selection; they require no extra prov
 Validation documents stay outside intent extraction and can declare `verifiedBy`, not `implementedBy`.
 See [ADR 033](docs/ADR-033-document-symbol-bindings.md) for bounds and draft-overlay behavior.
 
-These capabilities are pending the next npm candidate. The development checkout now also derives
+Version 0.7.0 also derives
 `calls` from actual TypeScript call/new syntax and exact SCIP identities. Query a function's
 incoming/outgoing `calls` to inspect callers/callees, or follow a bounded path using `calls` and
 `implementedBy`. Each assertion retains callsite and endpoint proofs, with explicit bodyless,
 external, optional and member-dispatch limits. Runtime execution is not implied. Values, callbacks
 and dynamic dispatch without a known target remain references and cited gaps. See
-[ADR 035](docs/ADR-035-static-call-evidence.md). The remaining inferred-mapping proposal is
-recorded separately in [ADR 034](docs/ADR-034-mapping-gaps.md).
+[ADR 035](docs/ADR-035-static-call-evidence.md). Optional inferred-mapping proposals are available separately; see
+[ADR 039](docs/ADR-039-mapping-proposals.md).
 
 Selected Markdown documents can now declare producer guarantees and consumer requirements in
 optional `weftlet-obligation` JSON fences. Both sides name an exact scoped/versioned queue or
@@ -413,9 +419,9 @@ neighborhoods and paths, with the original statement, citations and any document
 constraint/unit and consumer revalidation requirement. Missing fields remain unknown. Declarations
 do not establish fulfillment, runtime delivery or compatibility; ordinary prose is not automatically
 converted into this format. See [the declaration format and example](docs/ADR-036-contract-obligation-declarations.md).
-This addition is also pending the next npm candidate.
+These declarations are supported starting with 0.7.0.
 
-For two retrieved obligation facts, the development checkout also supports:
+For two retrieved obligation facts, the published CLI supports:
 
 ```sh
 weftlet graph compatibility --snapshot <snapshot-id> --producer-fact <fact-id> --consumer-fact <fact-id> --json
@@ -427,7 +433,7 @@ Results distinguish compatible limits, an insufficient guarantee, disjoint limit
 consumer revalidation and unknowns. Both original citations and source approvals remain visible.
 This advisory assessment does not establish code fulfillment or a CI policy violation. See
 [comparison semantics and limits](docs/ADR-037-selected-contract-compatibility.md). The command
-reads saved evidence during edits without rebuilding it; it is pending the next npm candidate.
+reads saved evidence during edits without rebuilding it and is available starting with 0.7.0.
 
 Saved repository code coverage is separate from the returned-page relationship counts:
 
@@ -483,8 +489,8 @@ ahead of repeated detail and shared-import context. Ranking changes ordering, no
 the reachable scope. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
 
-This source includes a [coverage reporting correction](docs/ADR-024-implementation-coverage.md)
-for the next release: code relationships displayed under contracts also count as implementation
+The published toolkit includes a [coverage reporting correction](docs/ADR-024-implementation-coverage.md)
+that counts code relationships displayed under contracts as implementation
 evidence. New reports identify `coverage.scope: "returned-page"` and `countsAreNonExclusive: true`.
 Counts can overlap and describe returned evidence; they are not completeness percentages or proof
 that behavior is correct. Document/model claims and test-only evidence do not establish production

@@ -3,7 +3,10 @@ export type GraphValidationPhase = 'validate-identities' | 'build-rdf-evidence' 
 
 export interface GraphValidationProgress {
   readonly phase: GraphValidationPhase;
-  readonly status: 'started' | 'completed' | 'failed';
+  readonly status: 'started' | 'completed' | 'failed' | 'progress';
+  /** Completed bounded RDF subject groups, when available. */
+  readonly completed?: number;
+  readonly total?: number;
   /** Wall time for this phase, not a completion estimate or in-phase heartbeat. */
   readonly elapsedMs: number;
   readonly factCount: number;

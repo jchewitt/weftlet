@@ -1,28 +1,30 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { mkdir, readFile, writeFile, link, rm } from 'node:fs/promises';
+import { mkdir, writeFile, link, rm } from 'node:fs/promises';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
 import { atomicRename } from './atomic-rename.js';
 import { physicalArtifactKey, temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
+import { readJsonFile, readJsonProperty, writeJsonFile } from './streaming-json.js';
 
 async function readJson<T>(path: string): Promise<T | undefined> {
   try {
-    return JSON.parse(await readFile(path, 'utf8')) as T;
+    return await readJsonFile<T>(path);
   } catch (error) {
     if ((error as { code?: string }).code === 'ENOENT') return undefined;
     throw error;
   }
 }
 
-async function readWithLegacyPath<T>(path: string, legacyPath: string): Promise<T | undefined> {
-  const current = await readJson<T>(path);
+async function readWithLegacyPath<T>(path: string, legacyPath: string,
+  read: (path: string) => Promise<T | undefined> = readJson<T>): Promise<T | undefined> {
+  const current = await read(path);
   if (current !== undefined || path === legacyPath) return current;
   // No old file could have this component on supported filesystems. Do not attempt an
   // overlong fallback after a normal cache miss; other I/O/corruption errors still propagate.
   if (Buffer.byteLength(basename(legacyPath)) > 255) return undefined;
   if (process.platform === 'win32' && /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(basename(legacyPath))) return undefined;
-  return readJson<T>(legacyPath);
+  return read(legacyPath);
 }
 
 async function atomicJson(path: string, value: unknown): Promise<void> {
@@ -68,9 +70,9 @@ export class FileSnapshotStore implements SnapshotStore {
 
   async write(snapshot: GraphSnapshot): Promise<void> {
     const destination = snapshotPath(this.root, snapshot.manifest.snapshotId);
-    const prior = await this.read(snapshot.manifest.snapshotId);
+    const prior = await this.readManifest(snapshot.manifest.snapshotId);
     if (prior) {
-      if (prior.manifest.contentDigest !== snapshot.manifest.contentDigest) {
+      if (prior.contentDigest !== snapshot.manifest.contentDigest) {
         throw new Error(`Refusing to overwrite immutable snapshot ${snapshot.manifest.snapshotId} with different content`);
       }
       return; // Preserve an existing legacy file without copying or rewriting its bytes.
@@ -78,13 +80,13 @@ export class FileSnapshotStore implements SnapshotStore {
     await mkdir(dirname(destination), { recursive: true });
     const temporary = temporaryArtifactPath(destination);
     try {
-      await writeFile(temporary, JSON.stringify(snapshot), { flag: 'wx' });
+      await writeJsonFile(temporary, snapshot);
       // Linking a complete file publishes atomically without ever replacing a winner.
       await link(temporary, destination);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-      const existing = await this.read(snapshot.manifest.snapshotId);
-      if (existing?.manifest.contentDigest !== snapshot.manifest.contentDigest) {
+      const existing = await this.readManifest(snapshot.manifest.snapshotId);
+      if (existing?.contentDigest !== snapshot.manifest.contentDigest) {
         throw new Error(
           `Refusing to overwrite immutable snapshot ${snapshot.manifest.snapshotId} with different content`,
         );
@@ -98,17 +100,40 @@ export class FileSnapshotStore implements SnapshotStore {
     return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true));
   }
 
+  private readManifest(snapshotId: string): Promise<GraphSnapshot['manifest'] | undefined> {
+    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true), async path => {
+      try {
+        const manifest = await readJsonProperty<GraphSnapshot['manifest']>(path, 'manifest');
+        if (!manifest || typeof manifest.contentDigest !== 'string') throw Error('Invalid snapshot manifest');
+        return manifest;
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined;
+        throw error;
+      }
+    });
+  }
+
   async readHead(headName: string): Promise<GraphSnapshot | undefined> {
+    const snapshotId = await this.headId(headName);
+    return snapshotId ? this.read(snapshotId) : undefined;
+  }
+
+  async readHeadManifest(headName: string): Promise<GraphSnapshot['manifest'] | undefined> {
+    const snapshotId = await this.headId(headName);
+    return snapshotId ? this.readManifest(snapshotId) : undefined;
+  }
+
+  private async headId(headName: string): Promise<string | undefined> {
     const key = safeKey(headName);
     const head = await readWithLegacyPath<{ snapshotId: string }>(
       join(this.root, 'heads', `${physicalArtifactKey(key)}.json`),
       join(this.root, 'heads', `${key}.json`),
     );
-    return head ? this.read(head.snapshotId) : undefined;
+    return head?.snapshotId;
   }
 
   async updateHead(headName: string, snapshotId: string): Promise<void> {
-    if (!(await this.read(snapshotId))) throw new Error('Cannot point a head to an absent snapshot');
+    if (!(await this.readManifest(snapshotId))) throw new Error('Cannot point a head to an absent snapshot');
     return atomicJson(join(this.root, 'heads', `${physicalArtifactKey(safeKey(headName))}.json`), { snapshotId });
   }
 }
@@ -144,7 +169,7 @@ export class SemanticArtifactStore {
     await mkdir(dirname(path), { recursive: true });
     const temporary = temporaryArtifactPath(path);
     try {
-      await writeFile(temporary, JSON.stringify(artifact), { flag: 'wx' });
+      await writeJsonFile(temporary, artifact);
       await link(temporary, path);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
