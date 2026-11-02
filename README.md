@@ -530,3 +530,51 @@ for observed gaps and the distinction between retrieval measurements and live se
 
 Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the
 [source inventory](docs/SOURCE-INVENTORY.md) for attribution and extraction history.
+
+## Optional mapping proposals (next candidate)
+
+When an approved document describes a rule and links implementation files without naming the
+function, Weftlet can propose an exact rule-to-function mapping. This is opt-in, unreviewed
+inference; it never approves intent, proves compliance, or adds edges to the saved graph.
+The implementation is awaiting live model qualification; it is not in the current npm release.
+
+Create `mapping-request.json` using a saved snapshot and its exact graph IDs:
+
+```json
+{
+  "snapshotId": "<saved-snapshot-id>",
+  "ruleId": "invariant:freshness",
+  "documentPath": "docs/owner.md",
+  "files": ["src/observations.ts"],
+  "maxCandidates": 8,
+  "maxInputBytes": 32768
+}
+```
+
+```sh
+weftlet mappings plan --request mapping-request.json
+# Review readiness, source/code proofs, exclusions, input size and expected requests.
+weftlet mappings propose --request mapping-request.json --allow-model
+weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
+```
+
+No configuration switch enables automatic inference. The proposal command reuses the existing
+`semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
+the default; configured API-key mode is optional. A compatible module must separately export
+`createMappingProposalProvider(config)` with matching `identity` and
+`propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is
+one provider request per invocation, no automatic retry, and cache hits require no `--allow-model`.
+Prompt/schema bytes and candidate count are bounded; these do not represent a dollar/token cap.
+
+MCP `mapping.plan` returns the same no-model preview; `mapping.proposals` reads a saved result by
+snapshot/key. Neither MCP tool invokes a provider. Agents must treat rationale as untrusted model
+content and follow the cited rule and exact symbol IDs. The CLI reports progress on stderr using
+opaque IDs; `--quiet` suppresses progress. Provider failures preserve all existing graph evidence.
+
+Refresh a committed snapshot using this candidate to record code coverage before proposing.
+Missing indexing/ownership, unresolved document selectors and budget overflow block inference.
+Historical evidence stays labeled historical; working edits are excluded and draft-overlay
+proposal generation is not yet supported. Saved artifacts live in the configured graph storage
+under `artifacts/mapping-proposals`; they may contain private rule/code identities and rationale.
+Keep them with the consumer. See [ADR 039](docs/ADR-039-mapping-proposals.md) for exact scope,
+caching and authority, and [the public evaluation protocol](evaluations/mapping-proposals/README.md).

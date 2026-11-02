@@ -197,3 +197,8 @@ records are in [validation](VALIDATION.md). Changesets prepares reviewed version
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).
 Earlier Tently packages remain available and undeprecated.
+
+
+November 2: B3b bounded mapping proposals are implemented for review (ADR 039), with no-model
+planning and separately stored unreviewed results. Live public evaluation, candidate qualification
+and private consumer usefulness remain pending. No automatic inference or new release is enabled.

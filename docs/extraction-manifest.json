@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "49671b6f559b0383fd8a78f5890576654c57a4a68f1b4731cb968767440a504f"
+      "destinationSha256": "13cfba9a91c5ecbc6155e161246bd2981c75c570a612ac4a4d17ca52a375c413"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -157,7 +157,7 @@
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
       "modified": true,
-      "destinationSha256": "687d864a50ca131f40e4ba95033e0dac13166d642a4ea9183a90786b74de6b2c"
+      "destinationSha256": "d8eb8a4d25d18afa53ed5b4001cbb9af3e91e714def4b95d4b260bcdf974d821"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "18a7ca311e1ccbe425b094b24b32225f6d2b9d15c814c02df08c6efe2d04d15d"
+      "destinationSha256": "ac0208902432d9b47ceb34cc346bf1ef82f95d806ca7c7877566e9fa2602f0e8"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "a4975cbf1c1ad8b2d2ab84264dd0c126377f30ad9fe9f62d685abcd872d801da"
+      "destinationSha256": "a57cccd4c3d087d988d809818b5fe3ffc211f33c96dee684cf7c7d709e7d95b5"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "94ef531314cb1a57313905fb1aee45d4bea8789ea6bc2b7ee988d716d87aadb3"
+      "destinationSha256": "f711ffb1daa45f3d6f8186dd6505143f938a80661f041f4e288c681d11be832b"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "ea605895d6106960040559b634331741257a6b814cc85f6ebff829b0bf79d8c7"
+      "destinationSha256": "ea907c52ab0fb0fdf1e29af6b44445bc95ac942841c9e8647503ce69b275190d"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -339,14 +339,14 @@
       "destinationPath": "tests/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "574182d6ebff5464365488d8df02bc927ee48cd2bf3535f87ff27a0cd6b4bf87"
+      "destinationSha256": "b97b316f3a9a96de60235275724e8997ee881d498abbcedb2408a1129cbb4fdb"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "24e24d4cd5a508624a6c8890cd8e20c633f0cff9e78adbd5cae29d787bbc2689"
+      "destinationSha256": "a9e8c4cf480b348ffd2794ddf781128229f99da8d416e829153446989d32c4d8"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "e02f2fad428b6f4202bd7542b78f7b2947f8540320b0cf213be3c7f5f2d47eb5"
+      "destinationSha256": "8315467bc5e73c1538e8172914aa52390f144d6ca38eaf8df24548c598871a00"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/bounded-evidence-paths.md",
+    ".changeset/bounded-mapping-proposals.md",
     ".changeset/cited-contract-comparison.md",
     ".changeset/config.json",
     ".changeset/contract-obligations.md",
@@ -640,6 +641,7 @@
     "docs/ADR-036-contract-obligation-declarations.md",
     "docs/ADR-037-selected-contract-compatibility.md",
     "docs/ADR-038-monorepo-code-coverage.md",
+    "docs/ADR-039-mapping-proposals.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -780,6 +782,9 @@
     "evaluations/mapping-gaps/project/test/eligibility.test.ts",
     "evaluations/mapping-gaps/protocol.json",
     "evaluations/mapping-gaps/results/2026-10-29.json",
+    "evaluations/mapping-proposals/README.md",
+    "evaluations/mapping-proposals/inputs.lock.json",
+    "evaluations/mapping-proposals/protocol.json",
     "evaluations/monorepo-coverage/README.md",
     "evaluations/static-calls/README.md",
     "evaluations/static-calls/results/2026-10-29.json",
@@ -827,6 +832,7 @@
     "packages/core/src/compatibility.ts",
     "packages/core/src/coverage-query.ts",
     "packages/core/src/exploration.ts",
+    "packages/core/src/mapping-proposals.ts",
     "packages/core/src/obligation-types.ts",
     "packages/core/src/obligations.test.ts",
     "packages/core/src/obligations.ts",
@@ -864,8 +870,10 @@
     "scripts/evaluation/run.ts",
     "scripts/evaluation/score.test.ts",
     "scripts/evaluation/score.ts",
+    "scripts/git-content.d.mts",
     "scripts/git-content.mjs",
     "scripts/inventory.test.ts",
+    "scripts/mapping-proposal-study/run.ts",
     "scripts/mapping-study/assessment.test.ts",
     "scripts/mapping-study/assessment.ts",
     "scripts/mapping-study/measure.ts",
@@ -889,6 +897,7 @@
     "scripts/release-records.test.ts",
     "scripts/release.mjs",
     "scripts/restore-publication-state.mjs",
+    "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/update-inventory.mjs",
     "scripts/validation-benchmark/execution.mjs",
@@ -913,6 +922,8 @@
     "src/application/hydration-failure.ts",
     "src/application/hydration-inputs.ts",
     "src/application/hydration-plan.ts",
+    "src/application/mapping-proposals.ts",
+    "src/application/mapping-service.ts",
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/saved-code-coverage.ts",
@@ -946,6 +957,13 @@
     "src/extraction/document-traversal.test.ts",
     "src/extraction/document-traversal.ts",
     "src/extraction/document.test.ts",
+    "src/extraction/mapping-candidates.ts",
+    "src/extraction/mapping-output.ts",
+    "src/extraction/mapping-plan.ts",
+    "src/extraction/mapping-prompt.ts",
+    "src/extraction/mapping-provider.test.ts",
+    "src/extraction/mapping-provider.ts",
+    "src/extraction/mapping-request.ts",
     "src/extraction/module-request.test.ts",
     "src/extraction/module-request.ts",
     "src/extraction/providers.test.ts",
@@ -1016,6 +1034,7 @@
     "src/graph/snapshot-context.ts",
     "src/graph/validation-progress.ts",
     "src/infrastructure/artifact-paths.ts",
+    "src/infrastructure/json-digest.ts",
     "src/infrastructure/module-resolution.ts",
     "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
@@ -1036,6 +1055,8 @@
     "src/interfaces/identity-preflight.test.ts",
     "src/interfaces/init.test.ts",
     "src/interfaces/init.ts",
+    "src/interfaces/mapping-proposals.test.ts",
+    "src/interfaces/mapping-proposals.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
     "src/repository/git-entries.test.ts",
@@ -1044,6 +1065,8 @@
     "src/storage/artifact-paths.test.ts",
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
+    "src/storage/mapping-proposals.test.ts",
+    "src/storage/mapping-proposals.ts",
     "src/telemetry.ts",
     "src/visualization/evidence-sources.ts",
     "src/visualization/path-parity.test.ts",
@@ -1064,6 +1087,7 @@
     "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/compatibility-cases.ts",
     "tests/fixtures/compatibility-project.ts",
+    "tests/fixtures/mapping-project.ts",
     "tests/fixtures/monorepo-project.ts",
     "tests/fixtures/obligation-project.ts",
     "tests/fixtures/shacl.ts",
@@ -1074,6 +1098,7 @@
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",
     "tests/implementation-coverage.test.ts",
+    "tests/mapping-proposals.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/monorepo-coverage.test.ts",
     "tests/physical-file-kinds.test.ts",

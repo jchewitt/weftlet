@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "status": "predeclared-live-evaluation-pending",
+  "scope": "Public committed rule-to-function proposal fixture; no consumer repository",
+  "cases": [
+    { "id": "freshness", "documentPath": "docs/owner.md", "files": ["src/observations.ts"], "ruleId": "invariant:freshness", "expected": ["acceptObservation"], "forbidden": ["checkFreshness", "retention"], "basis": "The body compares ageSeconds with 60; the matching-name decoy always returns true." },
+    { "id": "conflicting-limit", "documentPath": "docs/retention.md", "files": ["src/observations.ts"], "ruleId": "invariant:retention", "expected": [], "forbidden": ["acceptObservation", "checkFreshness", "retention"], "basis": "No body implements exactly 30-day retention and removal; a 14-day boolean predicate is insufficient." },
+    { "id": "missing-behavior", "documentPath": "docs/verification.md", "files": ["src/verification.ts"], "ruleId": "invariant:verification", "expected": [], "forbidden": ["verifySignature"], "basis": "The signature-named function delegates to a declaration without a body; cryptographic validation is not established." }
+  ],
+  "limits": { "requests": 3, "maxCandidates": 8, "maxInputBytes": 32768, "timeoutMs": 120000, "automaticRetries": 0 },
+  "qualification": "All predeclared exact target/abstention expectations must hold with valid citations and zero forbidden mappings. This is a bounded live check, not a general semantic accuracy or autonomous-agent usefulness claim.",
+  "baseline": "Existing file-level associations return context but no exact implementedBy CodeSymbol edge. Explicit Markdown bindings remain the deterministic alternative (ADR 033/034). Proposed targets stay separate and unreviewed.",
+  "remaining": ["Independent citation and rationale review", "Agent task usefulness in B6", "Consumer acceptance", "Broader semantic quality"]
+}
