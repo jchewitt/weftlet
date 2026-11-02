@@ -31,7 +31,12 @@ An overlapping local rebuild interrupted a compiled benchmark subprocess; its 6 
 the build. Seven sequential CLI launches exceeded the old aggregate 30-second setup-test budget;
 the test now bounds each process to 30 seconds and the sequence to 180 seconds, retaining all
 assertions (3 setup tests pass). A subsequent 29-test RDF/setup run passes. These corrections
-do not change production operation deadlines. Complete hosted-suite disposition is pending.
+do not change production operation deadlines. At `85361dbb` both hosted runs
+[41532316889](https://github.com/jchewitt/weftlet/actions/runs/41532316889) and
+[41532326444](https://github.com/jchewitt/weftlet/actions/runs/41532326444) pass Linux and Windows.
+Linux passes 38 core + 985 toolkit tests (1 optional ontology integration skipped), architecture,
+inventory, licenses and fresh packed-consumer smoke. Windows passes 38 core + 878 selected tests,
+inventory and licenses. The final local packed-consumer rerun also passes.
 
 The optional broader test-source TypeScript check still reports existing diagnostics outside
 the production build. An isolated archive of the base commit has the same 42 diagnostics after
@@ -39,9 +44,19 @@ normalizing checkout paths and ignoring its two absent-build-output errors; this
 
 The public capacity run uses 1,100 TypeScript modules with 40 functions each, actual SCIP and
 18 deterministic prose extractions, with zero live model calls. It produced 554,516 facts and
-143,044 nodes and passed the former hash failure point. Full strict validation, persistence/read,
-complete streamed RDF round-trip, unchanged repeat and clean comparison are still running.
-No large-run performance or completion claim is made at this checkpoint. Native Windows field
+143,044 nodes and passed the former hash failure point. Its first complete strict SHACL pass
+succeeded in 2,099,768 ms (about 35 minutes), with other local checks running during part of that
+phase. The 1,021,806,445-byte snapshot was written and reloaded with its full fact count, content
+digest and provenance verified. Complete streamed RDF round-trip, unchanged repeat and clean
+comparison were still pending at that checkpoint. The complete 5,331,139,680-byte RDF export
+subsequently parsed successfully, retaining every record and its exact canonical digest; the
+bounded SPARQL query and full record projection also passed. An independent read of the saved
+554,516 facts confirms that 938,267,270 characters of logical-fact canonical encoding hash to
+`e6965407b8a8d76ed6d2d7ef8d2daa0297059b5fb327723cd49e73233865c001`
+under both the legacy per-record encoding with exact array separators and `stableJsonDigest`.
+That check is now included in the lifecycle harness; its smaller CI fixture passes.
+Repeat and clean comparison remain in progress. This run does not establish a 30-minute hydration budget.
+No complete large-lifecycle claim is made at this checkpoint. Native Windows field
 acceptance, live provider quality and optional openCAESAR runtime remain separate checks.
 
 ## 0.7.0 acceptance release disposition, 2026-11-02

@@ -31,14 +31,18 @@ export async function corpusLifecycle(modules: number, functions: number, requir
     const factDigest = persistedJsonDigest(first.snapshot.facts);
     const logicalFactsDigest = stableJsonDigest(first.snapshot.facts.map(({ snapshotId: _, ...fact }) => fact));
     let logicalCharacters = 2 + Math.max(0, factCount - 1);
+    const legacyDigest = createHash('sha256').update('[');
     const expectedRecords = new Map<string, string>();
     const nodeCount = new Set(first.snapshot.facts.flatMap(fact => [fact.subject.id, fact.object.id])).size;
     assert.equal(extractorVersions.assembly, 'standalone-graph-v12');
     assert(first.snapshot.facts.some(fact => fact.predicate === 'calls'));
     assert(first.snapshot.facts.some(fact => fact.object.kind === 'Evidence' && fact.provenance.path.endsWith('.spec.ts')));
-    for (const fact of first.snapshot.facts) {
+    for (const [index, fact] of first.snapshot.facts.entries()) {
       const { snapshotId: _, ...logicalFact } = fact;
-      logicalCharacters += stableJson(logicalFact).length;
+      const legacyRecord = stableJson(logicalFact);
+      logicalCharacters += legacyRecord.length;
+      if (index) legacyDigest.update(',');
+      legacyDigest.update(legacyRecord);
       expectedRecords.set(fact.id, sha256(stableJson(fact)));
       assert.equal(fact.provenance.commitSha, first.snapshot.manifest.commitSha);
       assert.equal(fact.provenance.digest, sha256(files[fact.provenance.path]!));
@@ -46,6 +50,7 @@ export async function corpusLifecycle(modules: number, functions: number, requir
         assert.equal(fact.authority, 'inferred'); assert.equal(fact.extractionReview, 'unreviewed');
       }
     }
+    assert.equal(logicalFactsDigest, legacyDigest.update(']').digest('hex'));
     const path = join(app.storageRoot, 'snapshots', physicalArtifactKey(snapshotId) + '.json');
     const bytes = (await stat(path)).size, immutableDigest = await fileDigest(path);
     if (requireLarge) {
