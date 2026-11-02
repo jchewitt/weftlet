@@ -349,8 +349,8 @@ context-graph impact scan --config context-graph.config.json --capability search
 context-graph visualize --config context-graph.config.json --capability search --output graph.html
 ```
 
-**Development feature for the next candidate:** for precise follow-up, copy the returned
-snapshot ID and a node ID from a cited fact (not yet included in npm 0.6.1):
+**Available starting with 0.7.0:** for precise follow-up, copy the returned
+snapshot ID and a node ID from a cited fact:
 
 ```sh
 weftlet graph neighbors --snapshot <snapshot-id> --node <node-id> --direction both --max-facts 20 --json
@@ -446,10 +446,10 @@ retain unknown entry selection. Old snapshots without inventory report unknown c
 The overview also appears in agent queries and the viewer; zero observations never prove no
 business impact. This is TypeScript-family source coverage grouped by nearest `package.json`,
 not universal language or compiler-project coverage. See [ADR 038](docs/ADR-038-monorepo-code-coverage.md).
-This feature requires a fresh snapshot from the next candidate (assembly 12); unchanged semantic
-artifacts remain reusable. Existing npm packages do not yet include it.
+This feature requires a fresh snapshot from 0.7.0 or later (assembly 12); unchanged semantic
+artifacts remain reusable.
 
-The development checkout also supports paths between two exact IDs:
+The CLI also supports paths between two exact IDs:
 
 ```sh
 weftlet graph paths --snapshot <snapshot-id> --from <node-id> --to <node-id> --direction both --max-depth 8 --json
@@ -531,12 +531,14 @@ for observed gaps and the distinction between retrieval measurements and live se
 Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the
 [source inventory](docs/SOURCE-INVENTORY.md) for attribution and extraction history.
 
-## Optional mapping proposals (next candidate)
+## Optional mapping proposals (0.7.0)
 
 When an approved document describes a rule and links implementation files without naming the
 function, Weftlet can propose an exact rule-to-function mapping. This is opt-in, unreviewed
 inference; it never approves intent, proves compliance, or adds edges to the saved graph.
-The implementation is awaiting live model qualification; it is not in the current npm release.
+Live model accuracy and usefulness validation are tentative and deferred to acceptance testing.
+The maintainer authorized including this optional feature in the 0.7.0 acceptance candidate;
+existing Codex hydration results do not establish the quality of these new proposals.
 
 Create `mapping-request.json` using a saved snapshot and its exact graph IDs:
 

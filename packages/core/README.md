@@ -32,11 +32,11 @@ sources. This API is available starting with 0.4.0; it is absent from 0.3.0.
 
 Licensed under Apache-2.0; see LICENSE and NOTICE for attribution.
 
-This development checkout adds the neutral exploration contracts `GraphNeighborsRequest`,
+Version 0.7.0 adds the neutral exploration contracts `GraphNeighborsRequest`,
 `GraphNeighborhood` and `GraphExplorationService` for exact-node one-hop reads. `graphPredicates` supplies the
 shared runtime relation vocabulary used by extraction and query inputs. The toolkit supplies
 the RDF-backed implementation; core does not load a graph database, provider or repository.
 
 `GraphPathsRequest`, `GraphPaths` and `GraphPathQueryService` describe bounded cited paths between
 exact snapshot endpoints, including work/depth limits, continuation and unexplored frontier.
-They are also development contracts for the next candidate.
+These contracts are available starting with 0.7.0.

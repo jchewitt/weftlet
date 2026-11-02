@@ -1,5 +1,27 @@
 # Validation evidence
 
+## 0.7.0 acceptance release disposition, 2026-11-02
+
+The maintainer authorized publishing the accumulated B1–B5 implementation for live TradePilot
+acceptance before running the new optional proposal integration. Its live model accuracy and
+usefulness validation are **tentative and deferred**. Earlier HDesk and reported consumer Codex
+hydration remain evidence for the established extraction flow at their recorded versions; they
+do not establish a live pass for the new proposal operation or this candidate.
+
+Implementation commit `ff053c23585809bbee1931c65cd411b70bb1af18` passed hosted Linux/Windows checks
+in run [41502699634](https://github.com/jchewitt/weftlet/actions/runs/41502699634). The initial
+0.7.0 version PR head `7b20066635547e2bd73dd1d017d3818ba1fdc5ee` also passed both hosted jobs in
+run [41502753047](https://github.com/jchewitt/weftlet/actions/runs/41502753047). Final release
+documentation, archive preparation, npm publication and exact source tags are verified by the
+release PR and publishing workflow; this source checkpoint does not claim their completion.
+
+The public pipeline extraction/SCIP/RDF test was rerun successfully to generate the saved HTML
+viewer. No live model request or browser interaction was performed. Candidate consumer
+hydration/reuse, agent usefulness and browser inspection remain acceptance work; official 1.0
+is not approved by this disposition.
+
+## Environment and historical evidence
+
 Environment: Linux cloud, Node 24.19.0, pnpm 10.18.2. Source imported from
 `fda97e0146099543aeaa6b338ef2b0e9fab0d1d6`. No source application was built or changed.
 
