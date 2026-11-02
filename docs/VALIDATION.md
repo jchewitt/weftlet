@@ -38,6 +38,16 @@ Linux passes 38 core + 985 toolkit tests (1 optional ontology integration skippe
 inventory, licenses and fresh packed-consumer smoke. Windows passes 38 core + 878 selected tests,
 inventory and licenses. The final local packed-consumer rerun also passes.
 
+At `d1498a4`, hosted push run
+[41542970652](https://github.com/jchewitt/weftlet/actions/runs/41542970652) passes both platforms.
+The duplicate PR run
+[41542976891](https://github.com/jchewitt/weftlet/actions/runs/41542976891) passes Linux; Windows
+passes 877 selected tests but times out in the four-command failure-reporting test at its
+30-second aggregate deadline, then encounters cleanup EBUSY with the child still using its cwd.
+The harness now retains each 20-second command limit, allows 100 seconds for the combined
+sequence and fixture setup, and aborts/waits for child closure before cleanup. All four local
+failure-reporting tests pass; this changes no production timeout or assertion.
+
 The optional broader test-source TypeScript check still reports existing diagnostics outside
 the production build. An isolated archive of the base commit has the same 42 diagnostics after
 normalizing checkout paths and ignoring its two absent-build-output errors; this patch adds none.
@@ -55,7 +65,9 @@ bounded SPARQL query and full record projection also passed. An independent read
 `e6965407b8a8d76ed6d2d7ef8d2daa0297059b5fb327723cd49e73233865c001`
 under both the legacy per-record encoding with exact array separators and `stableJsonDigest`.
 That check is now included in the lifecycle harness; its smaller CI fixture passes.
-Repeat and clean comparison remain in progress. This run does not establish a 30-minute hydration budget.
+The unchanged repeat subsequently passes strict SHACL in 2,225,093 ms, reuses all 18 artifacts
+without extraction, and preserves snapshot identity, content/fact digests and immutable snapshot
+bytes. Clean comparison remains in progress. This run does not establish a 30-minute hydration budget.
 No complete large-lifecycle claim is made at this checkpoint. Native Windows field
 acceptance, live provider quality and optional openCAESAR runtime remain separate checks.
 

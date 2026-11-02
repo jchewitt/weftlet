@@ -13,6 +13,7 @@ const execute = promisify(execFile);
 const cli = resolve('src/cli.ts');
 const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
 const temporaryRoots: string[] = [];
+const activeCommands = new Map<Promise<unknown>, AbortController>();
 const privateText = 'PRIVATE_SOURCE_SENTINEL';
 const privateError = 'PRIVATE_PROVIDER_SENTINEL';
 const privateCredential = 'PRIVATE_CREDENTIAL_SENTINEL';
@@ -21,6 +22,10 @@ const privateCredential = 'PRIVATE_CREDENTIAL_SENTINEL';
 const fixtureTimeoutMs = 2000;
 
 afterEach(async () => {
+  // Vitest does not cancel an in-flight execFile when a test deadline expires.
+  // Wait for the child to close before removing its cwd, especially on Windows.
+  for (const controller of activeCommands.values()) controller.abort();
+  await Promise.allSettled(activeCommands.keys());
   await Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
 
@@ -77,10 +82,20 @@ async function fixture(mode: 'timeout' | 'error') {
   const snapshotPath = join(root, '.context-graph/snapshots/prior.json');
   const priorHead = await readFile(headPath);
   const priorSnapshot = await readFile(snapshotPath);
-  const run = (...args: string[]) => execute(process.execPath, ['--import', tsx, cli, ...args], {
-    cwd: root, env: { ...process.env, WEFTLET_TEST_SECRET: privateCredential },
-    timeout: 20_000, maxBuffer: 2 * 1024 * 1024,
-  });
+  const run = (...args: string[]) => {
+    const controller = new AbortController();
+    const execution = execute(process.execPath, ['--import', tsx, cli, ...args], {
+      cwd: root, env: { ...process.env, WEFTLET_TEST_SECRET: privateCredential },
+      timeout: 20_000, maxBuffer: 2 * 1024 * 1024, signal: controller.signal,
+    });
+    const closed = new Promise<void>((resolve) => execution.child.once('close', () => resolve()));
+    const command = execution.finally(async () => {
+      await closed;
+      activeCommands.delete(command);
+    });
+    activeCommands.set(command, controller);
+    return command;
+  };
   const assertPreserved = async () => {
     expect(await readFile(headPath)).toEqual(priorHead);
     expect(await readFile(snapshotPath)).toEqual(priorSnapshot);
@@ -102,6 +117,8 @@ function assertSafe(output: string, root: string) {
 }
 
 describe('semantic hydration failure CLI', () => {
+  // Four independent CLI starts each retain their 20-second subprocess bound;
+  // their combined deadline also includes fixture setup and filesystem checks.
   it('reports a safe timeout, maps its source in local preview and retains completed artifacts and the old head', async () => {
     const { root, commitSha, run, assertPreserved } = await fixture('timeout');
     const first = await failure(run('hydrate'));
@@ -139,7 +156,7 @@ describe('semantic hydration failure CLI', () => {
     expect((await readFile(join(root, 'calls.txt'), 'utf8')).trim().split('\n'))
       .toEqual(['docs/a.md', 'docs/b.md', 'docs/b.md']);
     await assertPreserved();
-  }, 30_000);
+  }, 100_000);
 
   it('sanitizes arbitrary provider exceptions without labeling them as timeouts', async () => {
     const { root, run, assertPreserved } = await fixture('error');
