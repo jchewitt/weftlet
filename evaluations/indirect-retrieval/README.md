@@ -43,7 +43,7 @@ pnpm evaluate:indirect /tmp/indirect-repeat.json --saved-public-root <retained-p
 
 The runner rejects changed fixture source bytes. Fresh extraction may have environment-specific
 SCIP artifact identity; use the same saved graph for a policy comparison. The baseline's report
-format includes its full manifest and original page IDs; the candidate includes a fixture digest
+format includes its full manifest and original page metadata; the candidate includes a fixture digest
 and preservation summary. Both use the same budgets, target IDs and evidence, not a reduced sample.
 
 The earlier call-backed 36-relationship test remains a separate regression. This focused public
