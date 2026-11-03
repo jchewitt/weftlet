@@ -55,7 +55,10 @@ export async function measureRetrieval(snapshot: GraphSnapshot, query: ImpactQue
       returned.push(...result.facts);
       pages.push({ returned: result.facts.length, rankingVersion: result.exploration?.rankingVersion,
         reachableFacts: result.exploration?.reachableFacts, depthLimitReached: result.exploration?.depthLimitReached,
-        truncated: result.exploration?.truncated });
+        truncated: result.exploration?.truncated,
+        expectedFiles: item.files.length,
+        expectedFilesSuggested: item.files.filter(path => result.suggestedFiles.includes(path)).length,
+        expectedFilesCited: item.files.filter(path => result.facts.some(fact => fact.provenance.path === path)).length });
       continuation = result.exploration?.continuation;
       assert(continuation, 'Public corpus must retain more evidence than the fixed three-page budget');
     }

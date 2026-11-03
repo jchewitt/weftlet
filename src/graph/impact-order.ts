@@ -26,7 +26,7 @@ const compare = (a: ImpactOrderRow, b: ImpactOrderRow) => b.focus - a.focus ||
 
 /** One source per turn within a distance/family bucket, without adding an
  * unbounded source ordinal to graph distance. Every input row is retained. */
-function sourceQueue(rows: ImpactOrderRow[]) {
+export function sourceQueue(rows: ImpactOrderRow[]) {
   const sources = new Map<string, ImpactOrderRow[]>();
   for (const row of rows.sort(compare)) {
     const group = sources.get(row.fact.provenance.path) ?? [];

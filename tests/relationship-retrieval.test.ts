@@ -25,7 +25,7 @@ it('retrieves specific caller/worker relationships from real extraction at the u
       expect(item.relationships.every(relation => relation.inSnapshot > 0)).toBe(true);
       expect(item.pages.every(page => page.reachableFacts! > 180 && page.truncated)).toBe(true);
     }
-    expect(measured.typeScriptLibraryAssertions).toBeLessThan(450);
+    expect(measured.typeScriptLibraryAssertions).toBe(0);
     // Query repetition is byte-preserving and has deterministic page boundaries.
     expect(await measureRetrieval(snapshot!, fixture.app.queryService)).toEqual(measured);
     const libraryFact = snapshot!.facts.find(referencesTypeScriptLibrary)!;

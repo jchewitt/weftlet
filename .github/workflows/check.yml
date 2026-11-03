@@ -42,4 +42,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Real extraction and fixed-budget relationship retrieval
-        run: pnpm exec vitest run tests/relationship-retrieval.test.ts tests/indirect-retrieval.test.ts src/graph/impact-order.test.ts
+        run: pnpm exec vitest run tests/relationship-retrieval.test.ts tests/indirect-retrieval.test.ts tests/same-group-retrieval.test.ts src/graph/impact-order.test.ts src/graph/impact-affinity.test.ts

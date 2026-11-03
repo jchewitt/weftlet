@@ -491,6 +491,9 @@ ahead of repeated detail and shared-import context. Ranking changes ordering, no
 the reachable scope. Calls, cross-file references (including those without call proof) and file
 consumers share turns across distance groups, with source diversity within each group. Local
 detail has its own turns; unindexed symbol hubs follow local evidence unless explicitly queried.
+[Shared-symbol specificity](docs/ADR-043-shared-symbol-specificity.md) also gives turns to
+indexed consumers sharing a selectively referenced symbol with the producer. File-scope
+joins alone do not supply that signal. Equal evidence can still exceed a bounded page budget.
 These are ordering signals, not new assertions or proof of execution. All evidence remains in
 the reachable set. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.

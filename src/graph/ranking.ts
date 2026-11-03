@@ -2,9 +2,11 @@ import type { GraphFact, GraphNode } from '@weftlet/core';
 import { stableJson } from '../infrastructure/util.js';
 import { impactRankingSignals } from './impact-signals.js';
 import { orderImpactRows } from './impact-order.js';
+import { sharedSymbolAffinity } from './impact-affinity.js';
+import { interleaveAffinity } from './impact-affinity-order.js';
 
 /** Binds continuation offsets to the ordering policy; changing this requires restarting a scan. */
-export const IMPACT_RANKING_VERSION = 'local-relationship-waves-v3';
+export const IMPACT_RANKING_VERSION = 'shared-symbol-witnesses-v4';
 
 export function factSearchText(fact: GraphFact): string {
   return [fact.subject.id, fact.subject.label, fact.predicate, fact.object.id,
@@ -81,5 +83,5 @@ export function rankImpactFacts(
       tie: stableTie(fact),
     };
   });
-  return orderImpactRows(rows);
+  return interleaveAffinity(rows, orderImpactRows(rows), sharedSymbolAffinity(facts, direct, anchorTerms));
 }
