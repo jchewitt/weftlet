@@ -70,7 +70,8 @@
     "benchmark:validation": "node scripts/validation-benchmark/run.mjs",
     "evaluate:mappings": "tsx scripts/mapping-study/run.ts",
     "evaluate:calls": "tsx scripts/call-study/run.ts",
-    "evaluate:proposals": "tsx scripts/mapping-proposal-study/run.ts"
+    "evaluate:proposals": "tsx scripts/mapping-proposal-study/run.ts",
+    "evaluate:indirect": "tsx scripts/indirect-retrieval-study/run.ts"
   },
   "engines": {
     "node": ">=24.0.0"

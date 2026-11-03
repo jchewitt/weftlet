@@ -1,0 +1,1779 @@
+{
+  "snapshot": {
+    "schemaVersion": 1,
+    "repositoryId": "public/indirect-retrieval",
+    "ref": "HEAD",
+    "commitSha": "5eb17f1dae00b19738616aaa03a900eb5193f1e2",
+    "snapshotId": "5eb17f1dae00b19738616aaa03a900eb5193f1e2-graph-v12-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-837391f93f8fd901-4f53cda18c2b",
+    "configurationDigest": "837391f93f8fd901fd211196f765d04cb4ce444c9410c53f6f60d8635ee06b63",
+    "scope": [],
+    "codeInventory": {
+      "version": "committed-code-inventory-v1",
+      "scipIndexDigest": "3a80d1733a37ad08156030040a98f6f4029cd0fad88f43ff059d1780aa32325e",
+      "selection": "source-project",
+      "indexObservation": "recorded",
+      "codeRoots": [
+        "src"
+      ],
+      "includePatterns": [
+        "src/**/*.ts"
+      ],
+      "projects": [
+        {
+          "root": ".",
+          "manifest": {
+            "path": "package.json",
+            "blobId": "1e567952b95ec61750ddc86a60aafc75f7d90231"
+          }
+        }
+      ],
+      "files": [
+        {
+          "path": "src/catalog.ts",
+          "blobId": "e96e6ca5d3ef64745c4829666e98402dd9ad2ba3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/engine.ts",
+          "blobId": "01f497b68e71d5f1669f3e60160e34afe40c00c0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-000.ts",
+          "blobId": "d1d6aa646409db9378aa2b3bb80ffdbab18435a7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-001.ts",
+          "blobId": "cd6bd6bea9f64aca0d3307c7e6a98aff40ff30a3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-002.ts",
+          "blobId": "d28dcb372e504cdb2cb9aca7964e5b21c4942c7a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-003.ts",
+          "blobId": "d4b48e586e65aad799a39e7d559df446ec5a72de",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-004.ts",
+          "blobId": "d80f81382680a8b5346cc1ea8f5dc341d3d0ef53",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-005.ts",
+          "blobId": "c021808d9154d78e6a8b65d57753f68f2ac99952",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-006.ts",
+          "blobId": "ed5c4ccd69e4d731c3f0f82f324120e4516c4a4c",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-007.ts",
+          "blobId": "4f6132a004b37dc2a5ffb9cd8bfcad95d1735527",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-008.ts",
+          "blobId": "9a21ad25fdc069a4aa72ad880666e908eb65d6a1",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-009.ts",
+          "blobId": "4f1345d9f0da75c79da69e1087db2d52f8d46703",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-010.ts",
+          "blobId": "8e27ddeeda8cdf64a9fb12889ab6993eb52b9695",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-011.ts",
+          "blobId": "1b4ae6777c21cdb933631c3de810bc8d99a8b2d0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-012.ts",
+          "blobId": "a3f7eaf692aee1ed7842f48fd6743d9b6610507a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-013.ts",
+          "blobId": "3bd5fd6805db82392fbf463e201c8d6f720db2c5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-014.ts",
+          "blobId": "2e7dad68cda97a28144357c3245540abb3a4fc48",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-015.ts",
+          "blobId": "d9b45ae7b391045bc0f30e52805108600ca1471a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-016.ts",
+          "blobId": "8d32d270fe174e1a7f7793047ebf1ee3d30955f6",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-017.ts",
+          "blobId": "fa7c2a29cc7b06a6f30416cd2d5b6b677c2d1b3e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-018.ts",
+          "blobId": "0ac1486750235aaeef9790991eb5a73de4aae2b0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-019.ts",
+          "blobId": "2dfbf6c304799aab253613effc02a2ae38275abd",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-020.ts",
+          "blobId": "c50a753e16326584adfddf76b04d777a05c91633",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-021.ts",
+          "blobId": "d2aca731d751966ac3073fb0bb114a5d75de43eb",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-022.ts",
+          "blobId": "347f8b180d88a2b8598cb7de2fe01393685c13e3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-023.ts",
+          "blobId": "233e29ea1f691e26468a4a3f39eff812273b5c08",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-024.ts",
+          "blobId": "daaa18ce42343e501ca1beadda6e562fe8ff85aa",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-025.ts",
+          "blobId": "e28db2041f9afcadaa73ea67ff75794c4bcface7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-026.ts",
+          "blobId": "95174e8608c5f9f70ff33e63ef5b4078dbd139dc",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-027.ts",
+          "blobId": "dd1376e23d6517f6b1f038d18ffcabad8b4da178",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-028.ts",
+          "blobId": "fa3ac1bab7db2d4d65c2d1fe25e8ac66b6b7c378",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-029.ts",
+          "blobId": "8ae850dad157960a8a92665b168b3ae65703157b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-030.ts",
+          "blobId": "65bcbd38697cc34fd0a975d089896af87f14d99b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-031.ts",
+          "blobId": "abe4e8a31cb9b146a16f3f5c209adf025f494924",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-032.ts",
+          "blobId": "e97729171866d7ca462c04046fd7863b6d5c5c11",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-033.ts",
+          "blobId": "238761f1a08f2704ec70baadb35f1f1b02f508f5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-034.ts",
+          "blobId": "39a8f423cf847388d14454ca08c3509c4af71db2",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-035.ts",
+          "blobId": "ed61982fa72b173fe1f958d5487b9f4b171a8729",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-036.ts",
+          "blobId": "80ca076816fe1d0be90edbea9fc0d1e695dd092f",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-037.ts",
+          "blobId": "8c5393e7a594980beab1a2958d4fd802ccac2290",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-038.ts",
+          "blobId": "def408bdf0d9086314d4681687357e69ec33c603",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-039.ts",
+          "blobId": "2e6790ed6eb5a026e98f0831fb29f1dc1a0e371e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-040.ts",
+          "blobId": "2879014acd14f9e53a961cae85e5200c11b2b364",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-041.ts",
+          "blobId": "d08fee6cfe394f398c705c818deb03f1c099b659",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-042.ts",
+          "blobId": "0b8b43a332af2f1a6576355603625b1d4f70a792",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-043.ts",
+          "blobId": "141a570f20a3aa5fa90229554e62a92c22059af8",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-044.ts",
+          "blobId": "be0e91f426b934a8e3ed8ce759fa460544586a33",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-045.ts",
+          "blobId": "3640d6c377257593f98e29adc01f0bcf9cd165b9",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-046.ts",
+          "blobId": "92b92781831256fc8460ba8ca62aa9ed1d427ba4",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-047.ts",
+          "blobId": "e8e6e6c93d376c3ce8202865bbba885817edf50e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-048.ts",
+          "blobId": "d1d6aa646409db9378aa2b3bb80ffdbab18435a7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-049.ts",
+          "blobId": "cd6bd6bea9f64aca0d3307c7e6a98aff40ff30a3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-050.ts",
+          "blobId": "d28dcb372e504cdb2cb9aca7964e5b21c4942c7a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-051.ts",
+          "blobId": "d4b48e586e65aad799a39e7d559df446ec5a72de",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-052.ts",
+          "blobId": "d80f81382680a8b5346cc1ea8f5dc341d3d0ef53",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-053.ts",
+          "blobId": "c021808d9154d78e6a8b65d57753f68f2ac99952",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-054.ts",
+          "blobId": "ed5c4ccd69e4d731c3f0f82f324120e4516c4a4c",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-055.ts",
+          "blobId": "4f6132a004b37dc2a5ffb9cd8bfcad95d1735527",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-056.ts",
+          "blobId": "9a21ad25fdc069a4aa72ad880666e908eb65d6a1",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-057.ts",
+          "blobId": "4f1345d9f0da75c79da69e1087db2d52f8d46703",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-058.ts",
+          "blobId": "8e27ddeeda8cdf64a9fb12889ab6993eb52b9695",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-059.ts",
+          "blobId": "1b4ae6777c21cdb933631c3de810bc8d99a8b2d0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-060.ts",
+          "blobId": "a3f7eaf692aee1ed7842f48fd6743d9b6610507a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-061.ts",
+          "blobId": "3bd5fd6805db82392fbf463e201c8d6f720db2c5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-062.ts",
+          "blobId": "2e7dad68cda97a28144357c3245540abb3a4fc48",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-063.ts",
+          "blobId": "d9b45ae7b391045bc0f30e52805108600ca1471a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-064.ts",
+          "blobId": "8d32d270fe174e1a7f7793047ebf1ee3d30955f6",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-065.ts",
+          "blobId": "fa7c2a29cc7b06a6f30416cd2d5b6b677c2d1b3e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-066.ts",
+          "blobId": "0ac1486750235aaeef9790991eb5a73de4aae2b0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-067.ts",
+          "blobId": "2dfbf6c304799aab253613effc02a2ae38275abd",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-068.ts",
+          "blobId": "c50a753e16326584adfddf76b04d777a05c91633",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-069.ts",
+          "blobId": "d2aca731d751966ac3073fb0bb114a5d75de43eb",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-070.ts",
+          "blobId": "347f8b180d88a2b8598cb7de2fe01393685c13e3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-071.ts",
+          "blobId": "233e29ea1f691e26468a4a3f39eff812273b5c08",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-072.ts",
+          "blobId": "daaa18ce42343e501ca1beadda6e562fe8ff85aa",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-073.ts",
+          "blobId": "e28db2041f9afcadaa73ea67ff75794c4bcface7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-074.ts",
+          "blobId": "95174e8608c5f9f70ff33e63ef5b4078dbd139dc",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-075.ts",
+          "blobId": "dd1376e23d6517f6b1f038d18ffcabad8b4da178",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-076.ts",
+          "blobId": "fa3ac1bab7db2d4d65c2d1fe25e8ac66b6b7c378",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-077.ts",
+          "blobId": "8ae850dad157960a8a92665b168b3ae65703157b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-078.ts",
+          "blobId": "65bcbd38697cc34fd0a975d089896af87f14d99b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-079.ts",
+          "blobId": "abe4e8a31cb9b146a16f3f5c209adf025f494924",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-080.ts",
+          "blobId": "e97729171866d7ca462c04046fd7863b6d5c5c11",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-081.ts",
+          "blobId": "238761f1a08f2704ec70baadb35f1f1b02f508f5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-082.ts",
+          "blobId": "39a8f423cf847388d14454ca08c3509c4af71db2",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-083.ts",
+          "blobId": "ed61982fa72b173fe1f958d5487b9f4b171a8729",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-084.ts",
+          "blobId": "80ca076816fe1d0be90edbea9fc0d1e695dd092f",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-085.ts",
+          "blobId": "8c5393e7a594980beab1a2958d4fd802ccac2290",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-086.ts",
+          "blobId": "def408bdf0d9086314d4681687357e69ec33c603",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-087.ts",
+          "blobId": "2e6790ed6eb5a026e98f0831fb29f1dc1a0e371e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-088.ts",
+          "blobId": "2879014acd14f9e53a961cae85e5200c11b2b364",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-089.ts",
+          "blobId": "d08fee6cfe394f398c705c818deb03f1c099b659",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-090.ts",
+          "blobId": "0b8b43a332af2f1a6576355603625b1d4f70a792",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-091.ts",
+          "blobId": "141a570f20a3aa5fa90229554e62a92c22059af8",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-092.ts",
+          "blobId": "be0e91f426b934a8e3ed8ce759fa460544586a33",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-093.ts",
+          "blobId": "3640d6c377257593f98e29adc01f0bcf9cd165b9",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-094.ts",
+          "blobId": "92b92781831256fc8460ba8ca62aa9ed1d427ba4",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-095.ts",
+          "blobId": "e8e6e6c93d376c3ce8202865bbba885817edf50e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-096.ts",
+          "blobId": "d1d6aa646409db9378aa2b3bb80ffdbab18435a7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-097.ts",
+          "blobId": "cd6bd6bea9f64aca0d3307c7e6a98aff40ff30a3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-098.ts",
+          "blobId": "d28dcb372e504cdb2cb9aca7964e5b21c4942c7a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-099.ts",
+          "blobId": "d4b48e586e65aad799a39e7d559df446ec5a72de",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-100.ts",
+          "blobId": "d80f81382680a8b5346cc1ea8f5dc341d3d0ef53",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-101.ts",
+          "blobId": "c021808d9154d78e6a8b65d57753f68f2ac99952",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-102.ts",
+          "blobId": "ed5c4ccd69e4d731c3f0f82f324120e4516c4a4c",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-103.ts",
+          "blobId": "4f6132a004b37dc2a5ffb9cd8bfcad95d1735527",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-104.ts",
+          "blobId": "9a21ad25fdc069a4aa72ad880666e908eb65d6a1",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-105.ts",
+          "blobId": "4f1345d9f0da75c79da69e1087db2d52f8d46703",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-106.ts",
+          "blobId": "8e27ddeeda8cdf64a9fb12889ab6993eb52b9695",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-107.ts",
+          "blobId": "1b4ae6777c21cdb933631c3de810bc8d99a8b2d0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-108.ts",
+          "blobId": "a3f7eaf692aee1ed7842f48fd6743d9b6610507a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-109.ts",
+          "blobId": "3bd5fd6805db82392fbf463e201c8d6f720db2c5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-110.ts",
+          "blobId": "2e7dad68cda97a28144357c3245540abb3a4fc48",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-111.ts",
+          "blobId": "d9b45ae7b391045bc0f30e52805108600ca1471a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-112.ts",
+          "blobId": "8d32d270fe174e1a7f7793047ebf1ee3d30955f6",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-113.ts",
+          "blobId": "fa7c2a29cc7b06a6f30416cd2d5b6b677c2d1b3e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-114.ts",
+          "blobId": "0ac1486750235aaeef9790991eb5a73de4aae2b0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-115.ts",
+          "blobId": "2dfbf6c304799aab253613effc02a2ae38275abd",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-116.ts",
+          "blobId": "c50a753e16326584adfddf76b04d777a05c91633",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-117.ts",
+          "blobId": "d2aca731d751966ac3073fb0bb114a5d75de43eb",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-118.ts",
+          "blobId": "347f8b180d88a2b8598cb7de2fe01393685c13e3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-119.ts",
+          "blobId": "233e29ea1f691e26468a4a3f39eff812273b5c08",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-120.ts",
+          "blobId": "daaa18ce42343e501ca1beadda6e562fe8ff85aa",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-121.ts",
+          "blobId": "e28db2041f9afcadaa73ea67ff75794c4bcface7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-122.ts",
+          "blobId": "95174e8608c5f9f70ff33e63ef5b4078dbd139dc",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-123.ts",
+          "blobId": "dd1376e23d6517f6b1f038d18ffcabad8b4da178",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-124.ts",
+          "blobId": "fa3ac1bab7db2d4d65c2d1fe25e8ac66b6b7c378",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-125.ts",
+          "blobId": "8ae850dad157960a8a92665b168b3ae65703157b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-126.ts",
+          "blobId": "65bcbd38697cc34fd0a975d089896af87f14d99b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-127.ts",
+          "blobId": "abe4e8a31cb9b146a16f3f5c209adf025f494924",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-128.ts",
+          "blobId": "e97729171866d7ca462c04046fd7863b6d5c5c11",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-129.ts",
+          "blobId": "238761f1a08f2704ec70baadb35f1f1b02f508f5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-130.ts",
+          "blobId": "39a8f423cf847388d14454ca08c3509c4af71db2",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-131.ts",
+          "blobId": "ed61982fa72b173fe1f958d5487b9f4b171a8729",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-132.ts",
+          "blobId": "80ca076816fe1d0be90edbea9fc0d1e695dd092f",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-133.ts",
+          "blobId": "8c5393e7a594980beab1a2958d4fd802ccac2290",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-134.ts",
+          "blobId": "def408bdf0d9086314d4681687357e69ec33c603",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-135.ts",
+          "blobId": "2e6790ed6eb5a026e98f0831fb29f1dc1a0e371e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-136.ts",
+          "blobId": "2879014acd14f9e53a961cae85e5200c11b2b364",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-137.ts",
+          "blobId": "d08fee6cfe394f398c705c818deb03f1c099b659",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-138.ts",
+          "blobId": "0b8b43a332af2f1a6576355603625b1d4f70a792",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-139.ts",
+          "blobId": "141a570f20a3aa5fa90229554e62a92c22059af8",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-140.ts",
+          "blobId": "be0e91f426b934a8e3ed8ce759fa460544586a33",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-141.ts",
+          "blobId": "3640d6c377257593f98e29adc01f0bcf9cd165b9",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-142.ts",
+          "blobId": "92b92781831256fc8460ba8ca62aa9ed1d427ba4",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-143.ts",
+          "blobId": "e8e6e6c93d376c3ce8202865bbba885817edf50e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-144.ts",
+          "blobId": "d1d6aa646409db9378aa2b3bb80ffdbab18435a7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-145.ts",
+          "blobId": "cd6bd6bea9f64aca0d3307c7e6a98aff40ff30a3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-146.ts",
+          "blobId": "d28dcb372e504cdb2cb9aca7964e5b21c4942c7a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-147.ts",
+          "blobId": "d4b48e586e65aad799a39e7d559df446ec5a72de",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-148.ts",
+          "blobId": "d80f81382680a8b5346cc1ea8f5dc341d3d0ef53",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-149.ts",
+          "blobId": "c021808d9154d78e6a8b65d57753f68f2ac99952",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-150.ts",
+          "blobId": "ed5c4ccd69e4d731c3f0f82f324120e4516c4a4c",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-151.ts",
+          "blobId": "4f6132a004b37dc2a5ffb9cd8bfcad95d1735527",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-152.ts",
+          "blobId": "9a21ad25fdc069a4aa72ad880666e908eb65d6a1",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-153.ts",
+          "blobId": "4f1345d9f0da75c79da69e1087db2d52f8d46703",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-154.ts",
+          "blobId": "8e27ddeeda8cdf64a9fb12889ab6993eb52b9695",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-155.ts",
+          "blobId": "1b4ae6777c21cdb933631c3de810bc8d99a8b2d0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-156.ts",
+          "blobId": "a3f7eaf692aee1ed7842f48fd6743d9b6610507a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-157.ts",
+          "blobId": "3bd5fd6805db82392fbf463e201c8d6f720db2c5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-158.ts",
+          "blobId": "2e7dad68cda97a28144357c3245540abb3a4fc48",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-159.ts",
+          "blobId": "d9b45ae7b391045bc0f30e52805108600ca1471a",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-160.ts",
+          "blobId": "8d32d270fe174e1a7f7793047ebf1ee3d30955f6",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-161.ts",
+          "blobId": "fa7c2a29cc7b06a6f30416cd2d5b6b677c2d1b3e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-162.ts",
+          "blobId": "0ac1486750235aaeef9790991eb5a73de4aae2b0",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-163.ts",
+          "blobId": "2dfbf6c304799aab253613effc02a2ae38275abd",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-164.ts",
+          "blobId": "c50a753e16326584adfddf76b04d777a05c91633",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-165.ts",
+          "blobId": "d2aca731d751966ac3073fb0bb114a5d75de43eb",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-166.ts",
+          "blobId": "347f8b180d88a2b8598cb7de2fe01393685c13e3",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-167.ts",
+          "blobId": "233e29ea1f691e26468a4a3f39eff812273b5c08",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-168.ts",
+          "blobId": "daaa18ce42343e501ca1beadda6e562fe8ff85aa",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-169.ts",
+          "blobId": "e28db2041f9afcadaa73ea67ff75794c4bcface7",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-170.ts",
+          "blobId": "95174e8608c5f9f70ff33e63ef5b4078dbd139dc",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-171.ts",
+          "blobId": "dd1376e23d6517f6b1f038d18ffcabad8b4da178",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-172.ts",
+          "blobId": "fa3ac1bab7db2d4d65c2d1fe25e8ac66b6b7c378",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-173.ts",
+          "blobId": "8ae850dad157960a8a92665b168b3ae65703157b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-174.ts",
+          "blobId": "65bcbd38697cc34fd0a975d089896af87f14d99b",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-175.ts",
+          "blobId": "abe4e8a31cb9b146a16f3f5c209adf025f494924",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-176.ts",
+          "blobId": "e97729171866d7ca462c04046fd7863b6d5c5c11",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-177.ts",
+          "blobId": "238761f1a08f2704ec70baadb35f1f1b02f508f5",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-178.ts",
+          "blobId": "39a8f423cf847388d14454ca08c3509c4af71db2",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-179.ts",
+          "blobId": "ed61982fa72b173fe1f958d5487b9f4b171a8729",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-180.ts",
+          "blobId": "80ca076816fe1d0be90edbea9fc0d1e695dd092f",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-181.ts",
+          "blobId": "8c5393e7a594980beab1a2958d4fd802ccac2290",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-182.ts",
+          "blobId": "def408bdf0d9086314d4681687357e69ec33c603",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-183.ts",
+          "blobId": "2e6790ed6eb5a026e98f0831fb29f1dc1a0e371e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-184.ts",
+          "blobId": "2879014acd14f9e53a961cae85e5200c11b2b364",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-185.ts",
+          "blobId": "d08fee6cfe394f398c705c818deb03f1c099b659",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-186.ts",
+          "blobId": "0b8b43a332af2f1a6576355603625b1d4f70a792",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-187.ts",
+          "blobId": "141a570f20a3aa5fa90229554e62a92c22059af8",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-188.ts",
+          "blobId": "be0e91f426b934a8e3ed8ce759fa460544586a33",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-189.ts",
+          "blobId": "3640d6c377257593f98e29adc01f0bcf9cd165b9",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-190.ts",
+          "blobId": "92b92781831256fc8460ba8ca62aa9ed1d427ba4",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/parts/setup-191.ts",
+          "blobId": "e8e6e6c93d376c3ce8202865bbba885817edf50e",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        },
+        {
+          "path": "src/worker.ts",
+          "blobId": "c9d53b105f44b5e8a8deabab9c6b578d2c25f654",
+          "projectRoot": ".",
+          "codeRootSelected": true,
+          "requested": "included",
+          "indexed": true
+        }
+      ],
+      "otherIndexedFiles": 0,
+      "digest": "b4794ba4c97987a5eeb9b2f73b81640afd35dcb1759ca645258d3fe6204cf397"
+    },
+    "ontologyVersion": "1.1.0",
+    "extractorVersions": {
+      "assembly": "standalone-graph-v12",
+      "repository-contract-extractor": "1.2.0",
+      "scip-symbol-extractor": "2.1.0",
+      "typescript-call-extractor": "1.0.0",
+      "repository-node-identity": "1",
+      "document-linker": "2.0.0",
+      "document-code-binding-extractor": "1.0.0",
+      "document-obligation-extractor": "1.0.0",
+      "semantic": "1.1.0",
+      "scip": "0.4.0",
+      "ontology": "rdf-record-v1",
+      "repository-file-extractor": "2.0.0"
+    },
+    "semanticModel": "gpt-6-astra",
+    "semanticPromptVersion": "generic-semantic-v3",
+    "generatedAt": "2026-11-03T14:56:34.515Z",
+    "contentDigest": "686f82b214bc99e5042ce7d29c70596694901858c04a9343db19cc3616a6303e",
+    "runtimeEvidenceDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "semanticArtifactKeys": [],
+    "scipIndexDigest": "3a80d1733a37ad08156030040a98f6f4029cd0fad88f43ff059d1780aa32325e",
+    "rdfDigest": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  "facts": 9038,
+  "direct": 150,
+  "reachable": 9038,
+  "returned": 180,
+  "files": 178,
+  "targets": [
+    {
+      "id": "c367f11c214522e19e4d1fc258517231d14556c43b306aec88a3bb10f937790c",
+      "predicate": "references",
+      "round": 2,
+      "order": 1,
+      "penalty": 0,
+      "score": 20,
+      "rank": 3704,
+      "returned": false,
+      "fact": {
+        "subject": {
+          "id": "code:symbol:v1:a6fb7354f508cc735a75735e445f26f306ac5547f1966c245b43d66618cbef8a",
+          "kind": "CodeSymbol",
+          "label": "processBatch",
+          "codeSymbol": {
+            "schemaVersion": 1,
+            "provider": "scip-typescript",
+            "repositoryId": "public/indirect-retrieval",
+            "nativeSymbol": "scip-typescript npm public-indirect-retrieval 1.0.0 src/`worker.ts`/processBatch().",
+            "identityScope": "repository",
+            "resolution": "indexed-definition"
+          }
+        },
+        "predicate": "references",
+        "object": {
+          "id": "code:symbol:v1:e2e54bf712bad44560662709f162bdbaa666b5a34b64f1654b445d9c016eb00f",
+          "kind": "CodeSymbol",
+          "label": "evaluate",
+          "codeSymbol": {
+            "schemaVersion": 1,
+            "provider": "scip-typescript",
+            "repositoryId": "public/indirect-retrieval",
+            "nativeSymbol": "scip-typescript npm public-indirect-retrieval 1.0.0 src/`engine.ts`/Engine#evaluate().",
+            "identityScope": "repository",
+            "resolution": "indexed-definition"
+          }
+        },
+        "provenance": {
+          "path": "src/worker.ts",
+          "startLine": 7,
+          "startColumn": 33,
+          "endLine": 7,
+          "endColumn": 41,
+          "columnEncoding": "utf-16",
+          "digest": "0a6d3367e1971602fe74eb1260be22ddb29966db7298f81421aaea97df06f14c",
+          "commitSha": "5eb17f1dae00b19738616aaa03a900eb5193f1e2"
+        },
+        "codeOccurrence": {
+          "schemaVersion": 1,
+          "role": "reference",
+          "locationKind": "name",
+          "nativeRoles": 0,
+          "enclosure": "native-range",
+          "enclosingSymbolId": "code:symbol:v1:a6fb7354f508cc735a75735e445f26f306ac5547f1966c245b43d66618cbef8a"
+        },
+        "extractor": {
+          "id": "scip-symbol-extractor",
+          "version": "2.1.0"
+        },
+        "authority": "implemented",
+        "extractionReview": "deterministic",
+        "confidence": 1,
+        "id": "c367f11c214522e19e4d1fc258517231d14556c43b306aec88a3bb10f937790c",
+        "snapshotId": "5eb17f1dae00b19738616aaa03a900eb5193f1e2-graph-v12-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-837391f93f8fd901-4f53cda18c2b"
+      }
+    },
+    {
+      "id": "86ab30e68a90657886b42ac387dd69c85ad861ec5a3cc8533f1123ab5772c474",
+      "predicate": "consumes",
+      "round": 2,
+      "order": 0,
+      "penalty": 0,
+      "score": 12,
+      "rank": 1760,
+      "returned": false,
+      "fact": {
+        "id": "86ab30e68a90657886b42ac387dd69c85ad861ec5a3cc8533f1123ab5772c474",
+        "subject": {
+          "id": "component:file:src/worker.ts",
+          "label": "src/worker.ts",
+          "kind": "Component"
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "symbol:scip:4a1d2700e918ebfedac9cf98763855f8f5fe54f8a6253cf86aaab521d6849426",
+          "kind": "Contract",
+          "label": "scip-typescript npm public-indirect-retrieval 1.0.0 src/`engine.ts`/Engine#evaluate().",
+          "attributes": {
+            "scipIndexDigest": "3a80d1733a37ad08156030040a98f6f4029cd0fad88f43ff059d1780aa32325e"
+          }
+        },
+        "provenance": {
+          "path": "src/worker.ts",
+          "startLine": 7,
+          "endLine": 7,
+          "digest": "0a6d3367e1971602fe74eb1260be22ddb29966db7298f81421aaea97df06f14c",
+          "commitSha": "5eb17f1dae00b19738616aaa03a900eb5193f1e2"
+        },
+        "extractor": {
+          "id": "scip-symbol-extractor",
+          "version": "2.1.0"
+        },
+        "confidence": 1,
+        "snapshotId": "5eb17f1dae00b19738616aaa03a900eb5193f1e2-graph-v12-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-837391f93f8fd901-4f53cda18c2b"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "rankingVersion": "local-relationships-diversity-v2",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargets": [
+        "code:symbol:v1:8b7f2d86b8d08e9f766ca01f3aa3e0c4c4eddadb899fb9372b901db3999c124b"
+      ],
+      "unexpandedCodeTargetCount": 1,
+      "unexpandedCodeTargetsTruncated": false,
+      "returned": 60,
+      "reachableFacts": 9038,
+      "maxDepth": 3,
+      "depthLimitReached": false,
+      "truncated": true,
+      "continuation": "eyJzbmFwc2hvdCI6IjVlYjE3ZjFkYWUwMGIxOTczODYxNmFhYTAzYTkwMGViNTE5M2YxZTItZ3JhcGgtdjEyLWxpbmtzLTIuMC4wLWZpbGVzLTIuMC4wLWNvbnRyYWN0cy0xLjIuMC1zeW1ib2xzLTIuMS4wLTgzNzM5MWY5M2Y4ZmQ5MDEtNGY1M2NkYTE4YzJiIiwiZGlnZXN0IjoiNjg2ZjgyYjIxNGJjOTllNTA0MmNlN2QyOWM3MDU5NjY5NDkwMTg1OGMwNGE5MzQzZGIxOWNjMzYxNmE2MzAzZSIsInF1ZXJ5IjoiMGMyZmU3ZjMyZGNmNjU2N2ZkZWM0NmY5ZjQwODY1MGY4NGM3ZmQ4ZmZiYmMwNTUxYWQyMWM3NzgyNTcxMzc2MCIsInJhbmtpbmciOiJsb2NhbC1yZWxhdGlvbnNoaXBzLWRpdmVyc2l0eS12MiIsIm9mZnNldCI6NjB9"
+    },
+    {
+      "rankingVersion": "local-relationships-diversity-v2",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargets": [
+        "code:symbol:v1:8b7f2d86b8d08e9f766ca01f3aa3e0c4c4eddadb899fb9372b901db3999c124b"
+      ],
+      "unexpandedCodeTargetCount": 1,
+      "unexpandedCodeTargetsTruncated": false,
+      "returned": 60,
+      "reachableFacts": 9038,
+      "maxDepth": 3,
+      "depthLimitReached": false,
+      "truncated": true,
+      "continuation": "eyJzbmFwc2hvdCI6IjVlYjE3ZjFkYWUwMGIxOTczODYxNmFhYTAzYTkwMGViNTE5M2YxZTItZ3JhcGgtdjEyLWxpbmtzLTIuMC4wLWZpbGVzLTIuMC4wLWNvbnRyYWN0cy0xLjIuMC1zeW1ib2xzLTIuMS4wLTgzNzM5MWY5M2Y4ZmQ5MDEtNGY1M2NkYTE4YzJiIiwiZGlnZXN0IjoiNjg2ZjgyYjIxNGJjOTllNTA0MmNlN2QyOWM3MDU5NjY5NDkwMTg1OGMwNGE5MzQzZGIxOWNjMzYxNmE2MzAzZSIsInF1ZXJ5IjoiMGMyZmU3ZjMyZGNmNjU2N2ZkZWM0NmY5ZjQwODY1MGY4NGM3ZmQ4ZmZiYmMwNTUxYWQyMWM3NzgyNTcxMzc2MCIsInJhbmtpbmciOiJsb2NhbC1yZWxhdGlvbnNoaXBzLWRpdmVyc2l0eS12MiIsIm9mZnNldCI6MTIwfQ"
+    },
+    {
+      "rankingVersion": "local-relationships-diversity-v2",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargets": [
+        "code:symbol:v1:8b7f2d86b8d08e9f766ca01f3aa3e0c4c4eddadb899fb9372b901db3999c124b"
+      ],
+      "unexpandedCodeTargetCount": 1,
+      "unexpandedCodeTargetsTruncated": false,
+      "returned": 60,
+      "reachableFacts": 9038,
+      "maxDepth": 3,
+      "depthLimitReached": false,
+      "truncated": true,
+      "continuation": "eyJzbmFwc2hvdCI6IjVlYjE3ZjFkYWUwMGIxOTczODYxNmFhYTAzYTkwMGViNTE5M2YxZTItZ3JhcGgtdjEyLWxpbmtzLTIuMC4wLWZpbGVzLTIuMC4wLWNvbnRyYWN0cy0xLjIuMC1zeW1ib2xzLTIuMS4wLTgzNzM5MWY5M2Y4ZmQ5MDEtNGY1M2NkYTE4YzJiIiwiZGlnZXN0IjoiNjg2ZjgyYjIxNGJjOTllNTA0MmNlN2QyOWM3MDU5NjY5NDkwMTg1OGMwNGE5MzQzZGIxOWNjMzYxNmE2MzAzZSIsInF1ZXJ5IjoiMGMyZmU3ZjMyZGNmNjU2N2ZkZWM0NmY5ZjQwODY1MGY4NGM3ZmQ4ZmZiYmMwNTUxYWQyMWM3NzgyNTcxMzc2MCIsInJhbmtpbmciOiJsb2NhbC1yZWxhdGlvbnNoaXBzLWRpdmVyc2l0eS12MiIsIm9mZnNldCI6MTgwfQ"
+    }
+  ]
+}

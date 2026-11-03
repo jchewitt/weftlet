@@ -3,6 +3,10 @@ import { graphPredicates } from '@weftlet/core';
 import { graphPathsRequestFromArgs, graphPathsTool, handleGraphPaths } from './graph-paths.js';
 
 it('shares normalized bounded requests and predicate vocabulary between CLI and MCP', async () => {
+  expect(graphPathsTool.description).toContain('Shortest-first');
+  expect(graphPathsTool.description).toContain('exact target');
+  expect(graphPathsTool.description).toContain('not proof of causality');
+  expect(graphPathsTool.description).not.toMatch(/depth-first/i);
   expect(graphPathsTool.inputSchema.properties.predicates.items.enum).toEqual(graphPredicates);
   const request = graphPathsRequestFromArgs(['--snapshot', 's', '--from', 'a', '--to', 'b', '--direction', 'both',
     '--predicate', 'references', '--max-depth', '12', '--max-paths', '2', '--max-steps', '10', '--json', '--config', 'local.json']);
