@@ -1,5 +1,49 @@
 # Validation evidence
 
+## Indirect-ranking patch: public comparison, 2026-11-03
+
+[ADR 042](ADR-042-indirect-local-relationships.md) and the
+[frozen comparison](../evaluations/indirect-retrieval/README.md) cover the remaining query-only
+ranking change. Actual TypeScript extraction produces both second-hop assertions without a
+saved call proof for the reference. At unchanged depth three / 3 × 60 facts, their ranks move
+from 3,704 / 1,760 to **17 / 15**. The 9,038 stored/reachable assertions and 150 direct matches
+are unchanged. All 180 results remain in the denominator; source diversity changes from 178
+to 71 files. The four saved evidence files retain exact bytes during the comparison. No private
+source, semantic/model calls, new extraction or larger query budgets enter that comparison.
+
+The prior 36-target call-backed regression and direct-path/exhaustive-oracle/viewer parity tests
+pass locally. The MCP path description now reflects shortest-first traversal with exact-target
+priority and retains the warning that static paths are not causality. Full release qualification
+is recorded separately on the change PR. **Private two-target ranking acceptance stays open.**
+Existing snapshots and caches need no refresh; impact continuation must restart after upgrading.
+
+## 0.7.2 private replay: paths closed, indirect ranking open, 2026-11-03
+
+The maintainer reports that the same saved endpoints now return two exact stored single-edge
+paths (`references` and `calls`) on page one at outgoing depth three / 1,000 steps. The CLI and
+fresh stdio MCP agree, and truncation/continuation remains truthful. **Close the direct-path
+consumer report.** This establishes cited static paths, not exhaustive discovery or runtime causality.
+
+The remaining ranking ticket concerns second-hop local `references` and legacy file `consumes`
+assertions without a saved call whose target-occurrence proof cites the reference. Both still
+exist and are reachable in expansion round two. Neither receives the unindexed-symbol penalty.
+Do not invent a `calls` fact or change extraction to address this query-order finding.
+
+On unchanged private inputs and budgets, 0.7.1 → 0.7.2 improves page-one file suggestion/source
+citation from 11/12 to 12/12 and library assertions from 378/540 to 0/540. The two target
+assertions remain absent from the first 180 PM results. Their calculated ranks improve from
+24,801 / 69,207 to 23,052 / 3,447; v2 scores are 34 / 9, relationship-order values 1 / 0, and
+22,791 / 3,295 assertions have strictly lower scores. The first 180 cover 158 provenance files.
+These measurements implicate the interaction of distance, relationship category and source
+diversity under broad local competition; they do not identify one scoring term as the sole cause.
+
+The consumer reproduced all 180 CLI fact IDs in order, with 360 direct matches and 420,837
+reachable assertions. All three queries retain their prior reachable counts. All 20 stored-file
+fingerprints match; no rehydration, model calls or extra pages were used. This private two-target
+case is distinct from the earlier public 36-relationship denominator, which remains valid for its
+call-backed fixture. A new public regression must include broad anchors, many local competitor
+files, and both exact second-hop assertions without call proof at depth three / 3 × 60 facts.
+
 ## 0.7.1 consumer follow-up and bounded retrieval patch, 2026-11-03
 
 **Maintainer-reported consumer pass:** the published 0.7.1 toolkit hydrates, strictly validates,

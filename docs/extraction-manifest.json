@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "5ca2ea1f62e6b8393e731f761a1732a8ccf464948a905ab9fe246ae5d941dda8"
+      "destinationSha256": "afa05c6969947dedbac5f5e52d53dffd8c037ad221bf2525a454630b29b2cdac"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -388,14 +388,14 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "20f0766299e66d4b5e7bc4577b6b0937c5bf87f2f1858f7b0205172231f0bb4c"
+      "destinationSha256": "4a87d3be19769dee26ffafc1b876d877f39dec921ffa89dcd011c7a3cfb9667e"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "b689b2285cc22fdcc89d5dd64ee91d0395a1751004c7970bf62f9edebd7162ce"
+      "destinationSha256": "8c13b32499f0b830cd02bfc281c37c32fd6387aa3b98a325e6a60d3706b64528"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/indirect-local-relationships.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -635,6 +636,7 @@
     "docs/ADR-039-mapping-proposals.md",
     "docs/ADR-040-bounded-graph-io.md",
     "docs/ADR-041-bounded-relationship-retrieval.md",
+    "docs/ADR-042-indirect-local-relationships.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -748,6 +750,10 @@
     "evaluations/dispatch/routing-baseline.json",
     "evaluations/dispatch/routing-protocol.md",
     "evaluations/dispatch/routing.config.json",
+    "evaluations/indirect-retrieval/README.md",
+    "evaluations/indirect-retrieval/baseline.json",
+    "evaluations/indirect-retrieval/candidate.json",
+    "evaluations/indirect-retrieval/protocol.md",
     "evaluations/mapping-gaps/README.md",
     "evaluations/mapping-gaps/inputs.lock.json",
     "evaluations/mapping-gaps/project/.gitattributes",
@@ -872,6 +878,8 @@
     "scripts/evaluation/score.ts",
     "scripts/git-content.d.mts",
     "scripts/git-content.mjs",
+    "scripts/indirect-retrieval-study/measure.ts",
+    "scripts/indirect-retrieval-study/run.ts",
     "scripts/inventory.test.ts",
     "scripts/large-graph/lifecycle.ts",
     "scripts/large-graph/run.ts",
@@ -1019,6 +1027,8 @@
     "src/graph/evidence-description.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
+    "src/graph/impact-order.test.ts",
+    "src/graph/impact-order.ts",
     "src/graph/impact-signals.ts",
     "src/graph/neighborhood-renderer.ts",
     "src/graph/neighborhood-request.ts",
@@ -1098,6 +1108,7 @@
     "tests/fixtures/code-evidence-project.ts",
     "tests/fixtures/compatibility-cases.ts",
     "tests/fixtures/compatibility-project.ts",
+    "tests/fixtures/indirect-retrieval-project.ts",
     "tests/fixtures/large-typescript-project.ts",
     "tests/fixtures/mapping-project.ts",
     "tests/fixtures/monorepo-project.ts",
@@ -1112,6 +1123,7 @@
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",
     "tests/implementation-coverage.test.ts",
+    "tests/indirect-retrieval.test.ts",
     "tests/large-graph-lifecycle.test.ts",
     "tests/mapping-proposals.test.ts",
     "tests/module-boundaries.test.ts",

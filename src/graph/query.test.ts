@@ -82,7 +82,7 @@ describe('impact scan facade', () => {
     const request = { capabilities: ['search'], maxFacts: 17 };
     const first = await service.scan(request);
     const version = first.exploration?.rankingVersion;
-    expect(version).toBe('local-relationships-diversity-v2');
+    expect(version).toBe('local-relationship-waves-v3');
     expect(first.markdown).toContain(`Ranking: ${version}`);
     let page = first;
     const collected = [...first.facts];
@@ -97,7 +97,7 @@ describe('impact scan facade', () => {
     expect(new Set(collected.map((fact) => fact.id))).toEqual(new Set(snapshot.facts.map((fact) => fact.id)));
     expect(collected.slice(0, 200)).toEqual(direct.facts);
     const token = JSON.parse(Buffer.from(first.exploration!.continuation!, 'base64url').toString('utf8'));
-    for (const ranking of [undefined, 'proximity-diversity-v1', 'old-ordering']) {
+    for (const ranking of [undefined, 'proximity-diversity-v1', 'local-relationships-diversity-v2', 'old-ordering']) {
       const continuation = Buffer.from(JSON.stringify({ ...token, ranking })).toString('base64url');
       await expect(service.scan({ ...request, continuation })).rejects.toThrow('restart the scan');
     }

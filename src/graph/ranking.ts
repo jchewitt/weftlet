@@ -1,9 +1,10 @@
 import type { GraphFact, GraphNode } from '@weftlet/core';
 import { stableJson } from '../infrastructure/util.js';
 import { impactRankingSignals } from './impact-signals.js';
+import { orderImpactRows } from './impact-order.js';
 
 /** Binds continuation offsets to the ordering policy; changing this requires restarting a scan. */
-export const IMPACT_RANKING_VERSION = 'local-relationships-diversity-v2';
+export const IMPACT_RANKING_VERSION = 'local-relationship-waves-v3';
 
 export function factSearchText(fact: GraphFact): string {
   return [fact.subject.id, fact.subject.label, fact.predicate, fact.object.id,
@@ -75,26 +76,10 @@ export function rankImpactFacts(
         (distance.get(fact.subject.id) ?? Infinity) + cost(fact, true),
         (distance.get(fact.object.id) ?? Infinity) + cost(fact, false))),
       relationshipOrder: signals.relationshipOrder(fact),
+      contextOnly: signals.contextOnly(fact),
       focus: focus.filter((term) => text.includes(term)).length,
       tie: stableTie(fact),
     };
   });
-  const lexical = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
-  const compare = (a: typeof rows[number], b: typeof rows[number]) =>
-    a.relationshipOrder - b.relationshipOrder || b.focus - a.focus || lexical(a.tie, b.tie) || lexical(a.fact.id, b.fact.id);
-  // Allocate each source's early slots to relationships before local occurrence
-  // detail. Otherwise hundreds of nearer variable references consume a file's
-  // diversity allowance before its file-to-symbol consumer can be considered.
-  // Final ordering below still charges distance and shared-library penalties.
-  rows.sort((a, b) => costs.get(a.fact)! - costs.get(b.fact)! ||
-    a.relationshipOrder - b.relationshipOrder || a.proximity - b.proximity || compare(a, b));
-  const counts = new Map<string, number>();
-  const diverse = rows.map((row) => {
-    const seen = counts.get(row.fact.provenance.path) ?? 0;
-    counts.set(row.fact.provenance.path, seen + 1);
-    // Each additional fact from one source costs one ordinary edge. Details stay on later pages.
-    return { ...row, score: row.proximity + seen };
-  });
-  return diverse.sort((a, b) => a.score - b.score || compare(a, b))
-    .map(({ fact, score }) => ({ fact, score }));
+  return orderImpactRows(rows);
 }

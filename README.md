@@ -486,10 +486,11 @@ pending re-extraction. Queries compare captured file digests with current workin
 report subsequent edits separately from captured and excluded changes. Older overlays without
 capture metadata have unknown freshness. Historical or draft evidence cannot validate a current diff.
 
-Impact queries [rank nearby consumers and varied evidence sources](docs/ADR-041-bounded-relationship-retrieval.md)
+Impact queries [give near and indirect relationships bounded turns](docs/ADR-042-indirect-local-relationships.md)
 ahead of repeated detail and shared-import context. Ranking changes ordering, not saved facts or
-the reachable scope. Saved local calls, their exact references and consumer relationships precede dense local-variable
-detail within each source; unindexed symbol hubs receive a penalty unless explicitly queried.
+the reachable scope. Calls, cross-file references (including those without call proof) and file
+consumers share turns across distance groups, with source diversity within each group. Local
+detail has its own turns; unindexed symbol hubs follow local evidence unless explicitly queried.
 These are ordering signals, not new assertions or proof of execution. All evidence remains in
 the reachable set. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.

@@ -4,7 +4,6 @@ import type { GraphFact, GraphNode } from '@weftlet/core';
 export function impactRankingSignals(facts: readonly GraphFact[], anchorTerms: readonly string[]) {
   const definitions = new Map<string, Set<string>>();
   const callsiteReferences = new Set<string>();
-  const callableNativeSymbols = new Set<string>();
   const localCall = (fact: GraphFact) => fact.predicate === 'calls' && fact.codeCall !== undefined &&
     fact.codeCall.target !== 'external' && fact.codeCall.targetDefinitions.length > 0;
   for (const fact of facts) {
@@ -14,7 +13,6 @@ export function impactRankingSignals(facts: readonly GraphFact[], anchorTerms: r
     }
     if (localCall(fact)) {
       for (const proof of fact.codeCall!.targetOccurrences) callsiteReferences.add(proof.factId);
-      if (fact.object.codeSymbol) callableNativeSymbols.add(fact.object.codeSymbol.nativeSymbol);
     }
   }
   const explicit = (node: GraphNode) => anchorTerms.some(term =>
@@ -34,15 +32,19 @@ export function impactRankingSignals(facts: readonly GraphFact[], anchorTerms: r
   };
   const relationshipOrder = (fact: GraphFact) => {
     if (localCall(fact) || callsiteReferences.has(fact.id)) return 0;
-    if (fact.predicate === 'consumes' && fact.object.id.startsWith('symbol:scip:') &&
-        callableNativeSymbols.has(fact.object.label)) return 0;
     if (fact.codeOccurrence?.role === 'reference') {
       if (explicit(fact.object)) return 0;
       const targetPaths = definitions.get(fact.object.id);
-      if (targetPaths && [...targetPaths].some(path => path !== fact.provenance.path)) return 1;
+      // A saved reference across repository files is useful without a native
+      // call proof. This only changes its query order, never its predicate.
+      if (targetPaths && [...targetPaths].some(path => path !== fact.provenance.path)) return 0;
     }
     if (fact.codeOccurrence || fact.codeCall) return 2;
+    if (fact.predicate === 'contains' && (fact.subject.kind === 'Project' ||
+      fact.object.kind === 'CodeSymbol' || fact.object.id.startsWith('symbol:scip:'))) return 2;
     return 0; // Keep intent, queue/data contracts, validation and legacy adapter relations available.
   };
-  return { penalty, seedNodes, relationshipOrder };
+  const contextOnly = (fact: GraphFact) => [fact.subject, fact.object].some(node =>
+    hub(node) || (node.id.startsWith('contract:module:') && !explicit(node)));
+  return { penalty, seedNodes, relationshipOrder, contextOnly };
 }

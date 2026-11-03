@@ -4,7 +4,7 @@ import { parseGraphPathsRequest } from '../graph/path-request.js';
 
 export const graphPathsTool = {
   name: 'graph.paths',
-  description: 'Explore simple cited paths between exact node IDs in an explicit saved snapshot. Depth-first assertion order, not shortest/causal paths. Follow continuation with identical selectors; inspect depth/work limits and unexplored frontier. No hydration or model calls.',
+  description: 'Explore simple cited paths between exact node IDs in an explicit saved snapshot. Shortest-first traversal, prioritizing edges to the exact target; static paths are not proof of causality. Follow continuation with identical selectors; inspect depth/work limits and unexplored frontier. No hydration or model calls.',
   inputSchema: {
     type: 'object' as const, additionalProperties: false, required: ['snapshotId', 'fromNodeId', 'toNodeId'],
     properties: {

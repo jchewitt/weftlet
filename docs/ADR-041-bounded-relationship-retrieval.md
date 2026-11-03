@@ -1,6 +1,7 @@
 # ADR 041: useful relationships within bounded retrieval
 
 Status: query-only patch; validation and publication status are recorded in VALIDATION.md.
+Impact ordering is superseded by [ADR 042](ADR-042-indirect-local-relationships.md); path ordering remains in effect.
 
 ## Evidence and scope
 
