@@ -23,42 +23,59 @@ export function searchEvidencePaths(edges: readonly PathEdge[], start: string, t
   validateBounds();
   const adjacency = new Map<string, PathEdge[]>();
   const nodeIds = new Set<string>();
-  for (const edge of [...edges].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)) {
+  // Building adjacency already visits every input edge. Prefer closing edges in
+  // that index; candidate examination below still counts every selected edge.
+  for (const edge of [...edges].sort((a, b) => Number(b.to === target) - Number(a.to === target) ||
+    (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))) {
     const entries = adjacency.get(edge.from) ?? [];
     entries.push(edge); adjacency.set(edge.from, entries);
     nodeIds.add(edge.from); nodeIds.add(edge.to);
   }
   const paths: EvidencePath[] = [];
-  const stack: { nodeId: string; next: number; via?: string }[] =
-    nodeIds.has(start) && nodeIds.has(target) && start !== target ? [{ nodeId: start, next: 0 }] : [];
+  type Prefix = { nodeId: string; next: number; depth: number; via?: string; parent?: Prefix };
+  // At most one prefix is allocated per examined edge, bounded by searchLimit.
+  // Parent links retain distinct simple paths without copying whole path arrays.
+  const queue: Prefix[] = nodeIds.has(start) && nodeIds.has(target) && start !== target
+    ? [{ nodeId: start, next: 0, depth: 0 }] : [];
+  let head = 0;
   const depthExamples: PathFrontier['depthLimited']['examples'][number][] = [];
   let depthCount = 0;
   let totalSteps = 0;
   const trim = () => {
-    while (stack.length && stack.at(-1)!.next >= (adjacency.get(stack.at(-1)!.nodeId)?.length ?? 0)) stack.pop();
+    while (head < queue.length && queue[head]!.next >= (adjacency.get(queue[head]!.nodeId)?.length ?? 0)) head++;
+  };
+  const prefixPath = (frame: Prefix): EvidencePath => {
+    const nodeIds: string[] = [], factIds: string[] = [];
+    for (let cursor: Prefix | undefined = frame; cursor; cursor = cursor.parent) {
+      nodeIds.push(cursor.nodeId);
+      if (cursor.via !== undefined) factIds.push(cursor.via);
+    }
+    return { nodeIds: nodeIds.reverse(), factIds: factIds.reverse() };
   };
   const step = (): EvidencePath | undefined => {
-    const frame = stack.at(-1)!;
+    const frame = queue[head]!;
     const edge = adjacency.get(frame.nodeId)![frame.next++]!;
     totalSteps++;
-    if (stack.some(item => item.nodeId === edge.to)) return;
-    const viaFactIds = stack.slice(1).map(item => item.via!);
-    if (viaFactIds.length === options.maxDepth) {
+    for (let cursor: Prefix | undefined = frame; cursor; cursor = cursor.parent) {
+      if (cursor.nodeId === edge.to) return;
+    }
+    if (frame.depth === options.maxDepth) {
       depthCount++;
-      if (depthExamples.length < 20) depthExamples.push({ nodeId: frame.nodeId, viaFactIds,
+      if (depthExamples.length < 20) depthExamples.push({ nodeId: frame.nodeId, viaFactIds: prefixPath(frame).factIds,
         nextFactId: edge.id, nextNodeId: edge.to });
     } else if (edge.to === target) {
-      return { nodeIds: [...stack.map(item => item.nodeId), target], factIds: [...viaFactIds, edge.id] };
-    } else {
-      stack.push({ nodeId: edge.to, next: 0, via: edge.id });
+      const path = prefixPath(frame);
+      return { nodeIds: [...path.nodeIds, target], factIds: [...path.factIds, edge.id] };
+    } else if (adjacency.has(edge.to)) {
+      queue.push({ nodeId: edge.to, next: 0, depth: frame.depth + 1, via: edge.id, parent: frame });
     }
   };
   trim();
-  // Reconstruct only bounded search state. Never accept a caller-supplied stack or facts.
+  // Reconstruct bounded search state; never accept a caller-supplied queue or facts.
   const replay = () => {
     let replayPageSteps = 0;
     let replayPagePaths = 0;
-    while (totalSteps < offset && stack.length) {
+    while (totalSteps < offset && head < queue.length) {
       if (step()) replayPagePaths++;
       replayPageSteps++;
       if (replayPagePaths === options.maxPaths || replayPageSteps === options.maxSteps) {
@@ -66,31 +83,37 @@ export function searchEvidencePaths(edges: readonly PathEdge[], start: string, t
       }
       trim();
     }
-    if (totalSteps !== offset || (offset && (!stack.length || replayPagePaths || replayPageSteps))) {
+    if (totalSteps !== offset || (offset && (head === queue.length || replayPagePaths || replayPageSteps))) {
       throw new Error('Invalid path continuation boundary');
     }
   };
   replay();
   if (!offset && start === target && (nodeIds.has(start) || knownNodeIds?.has(start))) paths.push({ nodeIds: [start], factIds: [] });
-  while (stack.length && paths.length < options.maxPaths && totalSteps - offset < options.maxSteps && totalSteps < searchLimit) {
+  while (head < queue.length && paths.length < options.maxPaths && totalSteps - offset < options.maxSteps && totalSteps < searchLimit) {
     const path = step();
     if (path) paths.push(path);
     trim();
   }
-  const pending = stack.flatMap((frame, index) => {
+  const pending: PathFrontier['pending'][number][] = [];
+  let pendingCount = 0;
+  for (let index = head; index < queue.length; index++) {
+    const frame = queue[index]!;
     const entries = adjacency.get(frame.nodeId) ?? [];
-    return frame.next < entries.length ? [{ nodeId: frame.nodeId,
-      viaFactIds: stack.slice(1, index + 1).map(item => item.via!), nextFactId: entries[frame.next]!.id,
-      remainingCandidates: entries.length - frame.next }] : [];
-  });
-  const exhaustedWithinDepth = stack.length === 0;
+    if (frame.next >= entries.length) continue;
+    pendingCount++;
+    if (pending.length < 32) pending.push({ nodeId: frame.nodeId,
+      viaFactIds: prefixPath(frame).factIds, nextFactId: entries[frame.next]!.id,
+      remainingCandidates: entries.length - frame.next });
+  }
+  const exhaustedWithinDepth = head === queue.length;
   const stopReason = () => {
     if (exhaustedWithinDepth) return 'exhausted' as const;
     if (totalSteps === searchLimit) return 'search-limit' as const;
     if (paths.length === options.maxPaths) return 'path-page-limit' as const;
     return 'work-page-limit' as const;
   };
-  return { paths, frontier: { pending, depthLimited: { count: depthCount, examples: depthExamples,
+  return { paths, frontier: { pending, pendingCount, omittedPending: pendingCount - pending.length,
+    depthLimited: { count: depthCount, examples: depthExamples,
     omitted: depthCount - depthExamples.length } }, search: { searchLimit, replayedSteps: offset,
     examinedSteps: totalSteps - offset, totalSteps, stopReason: stopReason(), exhaustedWithinDepth,
     depthLimitReached: depthCount > 0, truncated: !exhaustedWithinDepth || depthCount > 0 } };

@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "0a47b52a4b8b852572adb9104ea383b243793342ef62f58126991e2f8054284c"
+      "destinationSha256": "ec62c4f777f06806517050ef72ff1d7b19156f46246abbe6820e17b907a18310"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -388,7 +388,7 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "7b6653f767c2e7445ec19f0cafc9d3fe97494ae139835ec63d335a7210e62c6c"
+      "destinationSha256": "20f0766299e66d4b5e7bc4577b6b0937c5bf87f2f1858f7b0205172231f0bb4c"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/bounded-relationship-retrieval.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -634,6 +635,7 @@
     "docs/ADR-038-monorepo-code-coverage.md",
     "docs/ADR-039-mapping-proposals.md",
     "docs/ADR-040-bounded-graph-io.md",
+    "docs/ADR-041-bounded-relationship-retrieval.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -779,6 +781,10 @@
     "evaluations/mapping-proposals/inputs.lock.json",
     "evaluations/mapping-proposals/protocol.json",
     "evaluations/monorepo-coverage/README.md",
+    "evaluations/relationship-retrieval/README.md",
+    "evaluations/relationship-retrieval/baseline.json",
+    "evaluations/relationship-retrieval/candidate.json",
+    "evaluations/relationship-retrieval/protocol.md",
     "evaluations/static-calls/README.md",
     "evaluations/static-calls/results/2026-10-29.json",
     "evaluations/weftlet/baseline.json",
@@ -894,6 +900,8 @@
     "scripts/release-records.test.ts",
     "scripts/release.mjs",
     "scripts/restore-publication-state.mjs",
+    "scripts/retrieval-study/preservation.ts",
+    "scripts/retrieval-study/run.ts",
     "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/update-inventory.mjs",
@@ -1012,6 +1020,7 @@
     "src/graph/evidence-description.ts",
     "src/graph/identity-preflight.test.ts",
     "src/graph/identity-preflight.ts",
+    "src/graph/impact-signals.ts",
     "src/graph/neighborhood-renderer.ts",
     "src/graph/neighborhood-request.ts",
     "src/graph/neighborhood.test.ts",
@@ -1095,6 +1104,7 @@
     "tests/fixtures/monorepo-project.ts",
     "tests/fixtures/obligation-project.ts",
     "tests/fixtures/rdf-070-reference.ts",
+    "tests/fixtures/relationship-retrieval-project.ts",
     "tests/fixtures/shacl.ts",
     "tests/fixtures/static-call-project.ts",
     "tests/fixtures/symbol-bindings.ts",
@@ -1111,6 +1121,7 @@
     "tests/rdf-ontology.test.ts",
     "tests/rdf-scaling-parity.test.ts",
     "tests/rdf.test.ts",
+    "tests/relationship-retrieval.test.ts",
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
     "tests/semantic-cache-reuse.test.ts",

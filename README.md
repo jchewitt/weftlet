@@ -468,7 +468,9 @@ the search's total ceiling is 100,000 examinations. Responses report replay work
 Follow `search.continuation` with identical inputs even if a work page contains no completed
 path. Depth cuts and total-work exhaustion remain explicit without pretending all dependencies
 were checked; inspect `frontier` and restart with greater depth or narrower endpoints/relations.
-Paths are deterministic cited associations, not shortest routes or proof of business compatibility.
+Paths enumerate shorter cited routes first, prioritizing a direct connection before unrelated branches.
+They are associations, not proof of business compatibility. Pending frontiers report exact counts
+and up to 32 examples with explicit omissions; candidate-work and depth limits still apply.
 The HTML viewer uses the same engine and continuation on its displayed facts and selected layers.
 See [path semantics and limits](docs/ADR-030-bounded-evidence-paths.md).
 
@@ -484,9 +486,12 @@ pending re-extraction. Queries compare captured file digests with current workin
 report subsequent edits separately from captured and excluded changes. Older overlays without
 capture metadata have unknown freshness. Historical or draft evidence cannot validate a current diff.
 
-Impact queries [rank nearby consumers and varied evidence sources](docs/ADR-012-impact-ranking.md)
+Impact queries [rank nearby consumers and varied evidence sources](docs/ADR-041-bounded-relationship-retrieval.md)
 ahead of repeated detail and shared-import context. Ranking changes ordering, not saved facts or
-the reachable scope. Responses identify the ranking version; after a ranking upgrade, restart
+the reachable scope. Saved local calls, their exact references and consumer relationships precede dense local-variable
+detail within each source; unindexed symbol hubs receive a penalty unless explicitly queried.
+These are ordering signals, not new assertions or proof of execution. All evidence remains in
+the reachable set. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
 
 The published toolkit includes a [coverage reporting correction](docs/ADR-024-implementation-coverage.md)

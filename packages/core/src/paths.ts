@@ -20,13 +20,16 @@ export interface EvidencePath {
 }
 
 export interface PathFrontier {
-  /** Unexamined adjacency candidates on each active DFS prefix, not a count of paths. */
+  /** Bounded examples of unexamined adjacency prefixes, not a count of valid paths. */
   readonly pending: readonly {
     readonly nodeId: string;
     readonly viaFactIds: readonly string[];
     readonly nextFactId: string;
     readonly remainingCandidates: number;
   }[];
+  /** Total unexamined prefixes; omitted in legacy depth-first responses. */
+  readonly pendingCount?: number;
+  readonly omittedPending?: number;
   readonly depthLimited: {
     readonly count: number;
     readonly examples: readonly {
@@ -53,7 +56,7 @@ export interface GraphPaths {
   readonly diagnostics: ContextPack['diagnostics'];
   readonly search: {
     readonly version: string;
-    readonly order: 'fact-id-depth-first';
+    readonly order: 'fact-id-depth-first' | 'shortest-first-target-first';
     readonly direction: GraphDirection;
     readonly predicates: readonly GraphPredicate[];
     readonly maxDepth: number;

@@ -1,5 +1,41 @@
 # Validation evidence
 
+## 0.7.1 consumer follow-up and bounded retrieval patch, 2026-11-03
+
+**Maintainer-reported consumer pass:** the published 0.7.1 toolkit hydrates, strictly validates,
+persists and reloads TradePilot's 561,777 facts / 174,710 nodes. Unchanged repeat preserves the
+snapshot and all 18 semantic artifacts. This closes the reported whole-string capacity blocker
+for that workload; it is not general query-usefulness or official 1.0 acceptance.
+
+**Maintainer-reported remaining defect:** a direct connection was absent from a work-limited
+path page, and relevant worker `references`/`consumes` assertions were absent from three 60-fact
+impact pages at depth three. A read-only consumer diagnostic independently reproduced all
+180 query IDs and the 420,837 reachable count. Both assertions exist in that same snapshot,
+are reached in expansion round two, and were ranked at 24,801 and 69,207. This establishes
+ranking displacement for those assertions. No private source or graph was accessed here.
+
+**Public patch evidence:** [ADR 041](ADR-041-bounded-relationship-retrieval.md) and the
+[frozen comparison](../evaluations/relationship-retrieval/README.md) record query-only changes.
+On the same strictly validated 15,549-fact public TypeScript snapshot, both policies retain
+5,128 reachable assertions per case and the full 540 returned-assertion denominator. Expected
+call, callsite-reference and legacy-consumer retrieval improves from **0/36 to 36/36**;
+12/12 file discovery is unchanged. TypeScript standard-library references change from
+450/540 to 0/540 on those bounded pages. Library facts remain stored/reachable, and explicit
+library-symbol queries pass. Seven evidence files, including all three semantic artifacts,
+retain their exact byte digests after rescoring. No hydration or model calls occur in comparison.
+
+A fresh public extraction/strict-publication test passes with all 36 targets, exact repeated
+page IDs and unchanged evidence bytes. The high-branching query-service regression returns the
+same cited direct edge as impact.scan on page one at depth three, three paths and 1,000 steps,
+with explicit pending/omitted frontier counts. Exhaustive four-node path and shared viewer
+parity checks pass. Extraction/assembly identities, canonical hashing, storage and strict SHACL
+constraints are unchanged. Old query cursors require restart; old snapshots need no refresh.
+
+Full release qualification and hosted platform results are recorded after completion below.
+Private fixed-budget retrieval acceptance remains open; the public comparison is not a claim
+about TradePilot's new result positions. Browser interaction and live provider quality retain
+their existing separate validation status.
+
 ## 0.7.0 large-graph field blocker follow-up, 2026-11-02
 
 Status: public capacity qualification and hosted Linux/Windows checks pass; patch release pending.

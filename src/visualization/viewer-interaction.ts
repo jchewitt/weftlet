@@ -105,7 +105,7 @@ export function viewerScript(): string {
           if (!nextPath.disabled) status.textContent += ' Continue to examine remaining branches.';
           if (result.search.depthLimitReached) status.textContent += ' Depth limit reached; increase depth and restart.';
           if (result.search.stopReason === 'search-limit') status.textContent += ' Narrow the selection or choose an intermediate node.';
-          status.textContent += ' Pending prefixes: ' + result.frontier.pending.length + '; depth-limited extensions: ' + result.frontier.depthLimited.count + '.';
+          status.textContent += ' Pending prefixes: ' + result.frontier.pendingCount + ' (' + result.frontier.omittedPending + ' examples omitted); depth-limited extensions: ' + result.frontier.depthLimited.count + '.';
           search.value = ''; cluster.value = ''; document.getElementById('neighbors-only').checked = false;
           update();
         } catch (error) { clearPath(); status.textContent = error.message; update(); }

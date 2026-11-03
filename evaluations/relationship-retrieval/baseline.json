@@ -1,0 +1,1928 @@
+{
+  "schemaVersion": 1,
+  "status": "public-fixed-budget-relationship-retrieval",
+  "fixtureDigest": "8ba34a90d7c69cedd576cb67f4618b5e9c4918ff43c3313f1558ef58f418db6e",
+  "snapshotDigest": "653aa9a2488764ad3f343d4d0c1e021ac824a16c73e62c97aaa215670a4d3a25",
+  "factCount": 15549,
+  "extractorVersions": {
+    "assembly": "standalone-graph-v12",
+    "repository-contract-extractor": "1.2.0",
+    "scip-symbol-extractor": "2.1.0",
+    "typescript-call-extractor": "1.0.0",
+    "repository-node-identity": "1",
+    "document-linker": "2.0.0",
+    "document-code-binding-extractor": "1.0.0",
+    "document-obligation-extractor": "1.0.0",
+    "semantic": "1.1.0",
+    "scip": "0.4.0",
+    "ontology": "rdf-record-v1",
+    "repository-file-extractor": "2.0.0"
+  },
+  "semanticExtracted": 3,
+  "liveModelCalls": 0,
+  "unindexedSymbolExamples": [
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.iterable.d.ts`/Set#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.symbol.wellknown.d.ts`/Map#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.core.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2022.array.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es5.d.ts`/Math#max().",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.collection.d.ts`/Set.",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2019.array.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es5.d.ts`/Math#"
+  ],
+  "budget": {
+    "maxDepth": 3,
+    "maxFacts": 60,
+    "maxPages": 3
+  },
+  "cases": [
+    {
+      "domain": "analysis",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        }
+      ],
+      "returnedAssertions": 180,
+      "typeScriptLibraryAssertions": 150,
+      "sourceFiles": [
+        {
+          "path": "src/analysis/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/analysis/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "f18694c8cd2c2ac7c9821d123d556876a07526c9f6aec6d27fcd5efd11cf2c09",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "calls",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "159e73f08b2e0b4c94309d2829fccb65639f9d87dd9cf6aee4b3c0967e61db98",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "03d17612672bf15bc020505e023a34589088947df0a6d6dfe00b72b3c425a253",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "e02404bdbe312e655a172a0259c31fea4ef7c179c199f43e8e929b0509cfa451",
+                    "provenance": {
+                      "path": "src/analysis/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "03d17612672bf15bc020505e023a34589088947df0a6d6dfe00b72b3c425a253",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "references",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "2f8a21529b1c0775fa2048ab4f2993d18fda51fb5aa5173aa4f0c1d5a1296613",
+              "subject": "component:file:src/analysis/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:76a48a9bd1bb0061f4f4317a8f92e645cb54628346523345a024be6e2ed1a6b3",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "f06e036e23a472e77b7c50f7c92adf4cd92d9ae96df070b6337285a1e3ce765c",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "calls",
+              "object": "code:symbol:v1:7b13e843e0648cc2f16f1ff66d8862167bb344a2d7dc95e727b22c62e956656b",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "159e73f08b2e0b4c94309d2829fccb65639f9d87dd9cf6aee4b3c0967e61db98",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "b3c54d01986f43fc0b8a5e88f53b3bf419d87b3e365b559bff8c93ee941a67ea",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "6ea2faea798487749d38af8a3a38398182ce80e74e59281cf2a4dfaf45a0b560",
+                    "provenance": {
+                      "path": "src/analysis/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "ac5672d50591f5ee88f03b945577b2e50883bf4b78a424b760f4e79fb4d20f76",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "b3c54d01986f43fc0b8a5e88f53b3bf419d87b3e365b559bff8c93ee941a67ea",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "references",
+              "object": "code:symbol:v1:7b13e843e0648cc2f16f1ff66d8862167bb344a2d7dc95e727b22c62e956656b",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "73069771c5f13cd44ce1c42f78bef9a201558008dd48194260ef5ed7c9b5e3be",
+              "subject": "component:file:src/analysis/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:369cdf332dd45b28bc14883b7ed2ec5d85857f3f84d5b4aad570058327e7384a",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "fbe1fe98ef4fbead8840212a4ec06849271badecda2f98046aa77841ece3b087",
+              "subject": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "predicate": "calls",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "2f8b43867cf747cd9bbc6d41197cc214107112a5687ae88116da4ad59de4c489",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "ff7d11063fa97ae7244ae909ba60f3be3599d1c3f75dca914bc2601df6d058c0",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "e02404bdbe312e655a172a0259c31fea4ef7c179c199f43e8e929b0509cfa451",
+                    "provenance": {
+                      "path": "src/analysis/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "ff7d11063fa97ae7244ae909ba60f3be3599d1c3f75dca914bc2601df6d058c0",
+              "subject": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "predicate": "references",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "e6f16048a24e61833edd9e27212fbf99a626c7d200fd198341dab596c83b8ce6",
+              "subject": "component:file:src/analysis/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:76a48a9bd1bb0061f4f4317a8f92e645cb54628346523345a024be6e2ed1a6b3",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "ab78eae27151bff7671a6f23bc9bbb793c28d3671d7d0a07b3b14423e4a097ac",
+              "subject": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d",
+              "predicate": "calls",
+              "object": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "6aeb9a1dd61081b485d137e96ff0fab92b36931651782d6dc6f18903f52d2a01",
+                    "provenance": {
+                      "path": "test/analysis.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "549086e4751f60d0e22781c9eba558cc64a78dae71b74bff81b9f0c3524f5382",
+                    "provenance": {
+                      "path": "test/analysis.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "2f8b43867cf747cd9bbc6d41197cc214107112a5687ae88116da4ad59de4c489",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "549086e4751f60d0e22781c9eba558cc64a78dae71b74bff81b9f0c3524f5382",
+              "subject": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d",
+              "predicate": "references",
+              "object": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "37b01376ee2cd79577881e87c2e9d25aa8342ab7e7c4adcf6392e46372e2c393",
+              "subject": "component:file:test/analysis.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:eb3d00baa776c8f952d5c136396a811752624d8b3ea1d6662ac4619879dfa2b3",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "delivery",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        }
+      ],
+      "returnedAssertions": 180,
+      "typeScriptLibraryAssertions": 150,
+      "sourceFiles": [
+        {
+          "path": "src/delivery/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/delivery/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "4702d450a260080c9460645b1f7a9e28a9820e37d6432b911ab8789db595fd71",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "calls",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "ce88ef426649ee73635354ebe6abb04cfa478aad6ce38d26cc1010dad0f3875f",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "64ba6f5ef77bd8287313a6c771d53cc207f116e916620a215f86d48861288ff5",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "a34b6f2de7b0ec1ab68e74333b95df0a02bafeaa78bb429b703852a8fc15be67",
+                    "provenance": {
+                      "path": "src/delivery/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "64ba6f5ef77bd8287313a6c771d53cc207f116e916620a215f86d48861288ff5",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "references",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "a2a36736ffb66e0925050e606cbfe986d3942ae631677bf31957b7507d8dba3a",
+              "subject": "component:file:src/delivery/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:e09d9350dbfd99a9d3a9302fb2a054b1a6151b661901ef576477879e6c6ebbe6",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "deee57c9e6cd725ac46f346b3664f1a63b98539ed34663d6a057097fd16fad63",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "calls",
+              "object": "code:symbol:v1:f7398eba09670d80c9aeacba2e4c6ed77ac91c91aca858f16127c99d6b88d690",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "ce88ef426649ee73635354ebe6abb04cfa478aad6ce38d26cc1010dad0f3875f",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "a414ea5435d8e4be22494d93692bb2929ae3dc0270d76515da0353f91464cc79",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "3aca1af2daf2e8d8a7bf6992febc192999d4f495adfdf14c8c737334fea8a65a",
+                    "provenance": {
+                      "path": "src/delivery/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "84286b656c5bb5a0f1aba6043eb7eef233980b84622462dcf9ede15512836136",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "a414ea5435d8e4be22494d93692bb2929ae3dc0270d76515da0353f91464cc79",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "references",
+              "object": "code:symbol:v1:f7398eba09670d80c9aeacba2e4c6ed77ac91c91aca858f16127c99d6b88d690",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "5d12301e2fa530e52e3abe87d3f4998f18dd1d0e90573ce0e4f1b35b67e34da5",
+              "subject": "component:file:src/delivery/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:983270b93ea0ab65da6f25f37840eb2d1d3e9e71f8997fb1dc07282586a9536f",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "1c20ec20ffc318dbf51de873a6596af57b26b9cb28fe8650ab3421b5482258c9",
+              "subject": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "predicate": "calls",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "d8f765aa0bf13c48ff7aa55b9d1437a40ae30b49844d78cbba8f675b19318506",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "9b5dcaf22bc232dafd204075d2e0939fb6f4f24e992b4dc4b155d46c05a29a65",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "a34b6f2de7b0ec1ab68e74333b95df0a02bafeaa78bb429b703852a8fc15be67",
+                    "provenance": {
+                      "path": "src/delivery/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "9b5dcaf22bc232dafd204075d2e0939fb6f4f24e992b4dc4b155d46c05a29a65",
+              "subject": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "predicate": "references",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "c5f28e537a3546ba1229e3bf3df75606e35a3e44e2c639930a8b92e24eabc704",
+              "subject": "component:file:src/delivery/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:e09d9350dbfd99a9d3a9302fb2a054b1a6151b661901ef576477879e6c6ebbe6",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "5a9537d4479bf8b186f0d964194d2383d0ad9e5da83f647787cad8b39bac2cdf",
+              "subject": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a",
+              "predicate": "calls",
+              "object": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "f5a5b210eb27f6f76800329180652dff4c33d0cd6a0e70e0dbc3e02b40caf360",
+                    "provenance": {
+                      "path": "test/delivery.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "e720fbfb11110d3c7c4f75dedd86488a79befde5d33363e3638201d6613c9849",
+                    "provenance": {
+                      "path": "test/delivery.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "d8f765aa0bf13c48ff7aa55b9d1437a40ae30b49844d78cbba8f675b19318506",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "e720fbfb11110d3c7c4f75dedd86488a79befde5d33363e3638201d6613c9849",
+              "subject": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a",
+              "predicate": "references",
+              "object": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "1f1d0262e138504a199c5f2e259e07de5d74e2a4773d886c860aa779a44847a0",
+              "subject": "component:file:test/delivery.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:5c9fa622ef50cf22b816b825ba05a701d4b752ef183a50f06cc189a480bacca2",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "learning",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "proximity-diversity-v1",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true
+        }
+      ],
+      "returnedAssertions": 180,
+      "typeScriptLibraryAssertions": 150,
+      "sourceFiles": [
+        {
+          "path": "src/learning/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/learning/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "57bf7b7c7d589815577575c0fc61f659ea5025c103ee5fd55cdd4ded8a35ce99",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "calls",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bf51a7d2e9b365fc196bd37d6a9c34e10ef57f9b44532481838bff3d9bbe81a9",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "9cab30728134c1738133ac5db3d00f0f5a3807496327fd22eab322180ec8ec79",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "664d78a960179cbd62f16c6413f0c945bc2e63eabbd26e6edf3c018543a182e2",
+                    "provenance": {
+                      "path": "src/learning/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "9cab30728134c1738133ac5db3d00f0f5a3807496327fd22eab322180ec8ec79",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "references",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "35469b4f66709ef9bdf2e2060ae5d0ff4ca281a033a11b710896c61082d0f1db",
+              "subject": "component:file:src/learning/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:0c18f12670e85ec61eb5b7c13bd25d89da640da212155ffcab7e9581be96d48b",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "a03b9b167907ca89313829cdbcdaebf7121dfa863dc8891be7c993dda40abf74",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "calls",
+              "object": "code:symbol:v1:8592ce6ffe67892a48c8a7e231fe1416f1fb31efe15c832cbcf4edcdf140fddc",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bf51a7d2e9b365fc196bd37d6a9c34e10ef57f9b44532481838bff3d9bbe81a9",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "d214f91c3ee798d263d4a95dec09ea8fdacd4f46f0852e5e674319e4e33e7d3c",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "20ff0fed04742b573372b09a2569e0164075a351354280579c6abd9f43c535cc",
+                    "provenance": {
+                      "path": "src/learning/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "4d740436f14de5e01e5e02c7dfc148a180f18b64325e790ecbe9e1ec234d68f6",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "d214f91c3ee798d263d4a95dec09ea8fdacd4f46f0852e5e674319e4e33e7d3c",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "references",
+              "object": "code:symbol:v1:8592ce6ffe67892a48c8a7e231fe1416f1fb31efe15c832cbcf4edcdf140fddc",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "5f064a132fe1484d2c67d1140b4f5a70461a228302a6d677234539e757f22552",
+              "subject": "component:file:src/learning/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:9f4a2194bd365313896f4667cde53b95a8cb105f64f9f24dcb571c0270a9032e",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "aa6347131438cd38f6649ecc2f1945adc77ddcc92a7f424be799efca54dad0e8",
+              "subject": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "predicate": "calls",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "81bf8c6365a1aea1f290c1b7d19958b33ffc6e34806532bfdd956262f08cf55e",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "5d371dc27a437821f00a91c484f42dbc4ddb15309caa09bd8ce5181d30fef363",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "664d78a960179cbd62f16c6413f0c945bc2e63eabbd26e6edf3c018543a182e2",
+                    "provenance": {
+                      "path": "src/learning/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "5d371dc27a437821f00a91c484f42dbc4ddb15309caa09bd8ce5181d30fef363",
+              "subject": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "predicate": "references",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "c74ce8eaafa53aaf89723c87882cdf98dea0b8555e609af5b7e6fedaf21e60ba",
+              "subject": "component:file:src/learning/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:0c18f12670e85ec61eb5b7c13bd25d89da640da212155ffcab7e9581be96d48b",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "7730a479101578693d58feb5e2676a8af97a8a7a9ab7ddd72c36a0b90716c118",
+              "subject": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98",
+              "predicate": "calls",
+              "object": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bd6e0ed736cf5a4ddf63948a11146553c84565855ad2f3c5dd1af07d785c036b",
+                    "provenance": {
+                      "path": "test/learning.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "050e0f685819a41cb102acfd8e915a8b09a5c586c3b19eb6fab78308a87152c7",
+                    "provenance": {
+                      "path": "test/learning.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "81bf8c6365a1aea1f290c1b7d19958b33ffc6e34806532bfdd956262f08cf55e",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "050e0f685819a41cb102acfd8e915a8b09a5c586c3b19eb6fab78308a87152c7",
+              "subject": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98",
+              "predicate": "references",
+              "object": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": false,
+          "firstPage": null,
+          "witnesses": [
+            {
+              "id": "866ddcb6e6b38d398cd3040816888d372fb255eab7d6cbd942f2b78296d283fa",
+              "subject": "component:file:test/learning.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:d1daf934d23f0ec1a7826f3c317a1565447aebd7d44c0e8d080b40a96939f687",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "returnedAssertions": 540,
+  "typeScriptLibraryAssertions": 450,
+  "expectedRelationships": 36,
+  "retrievedRelationships": 0
+}

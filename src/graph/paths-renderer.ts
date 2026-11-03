@@ -19,7 +19,7 @@ export function renderGraphPaths(result: Omit<GraphPaths, 'markdown'>): string {
     `Direction: ${search.direction}; predicates: ${search.predicates.join(', ') || 'all'}; order: ${search.order}`,
     `Depth: ${search.maxDepth}; paths on page: ${result.paths.length}/${search.maxPaths}; stop: ${search.stopReason}; truncated: ${search.truncated}`,
     `Candidate steps: ${search.examinedSteps} new + ${search.replayedSteps} replay; ${search.totalSteps}/${search.searchLimit} total ceiling.`,
-    `Unexamined prefixes: ${frontier.pending.length}; depth-limited extensions: ${frontier.depthLimited.count} (${frontier.depthLimited.omitted} examples omitted).`,
+    `Unexamined prefixes: ${frontier.pendingCount ?? frontier.pending.length} (${frontier.omittedPending ?? 0} examples omitted); depth-limited extensions: ${frontier.depthLimited.count} (${frontier.depthLimited.omitted} examples omitted).`,
     ...(search.continuation ? [`Continuation (same request): ${search.continuation}`] : []),
     ...(search.depthLimitReached ? ['Depth limit reached: restart with a larger maxDepth or explore a frontier node. Continuation does not lift the depth bound.'] : []),
     ...(search.stopReason === 'search-limit' ? ['Total search limit reached: narrow the relations or explore an intermediate node; no further continuation is available.'] : []),
