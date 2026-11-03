@@ -228,7 +228,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       const tier = tiers.get(score) ?? [];
       tier.push(fact); tiers.set(score, tier);
     }
-    // Balance evidence lanes among similarly ranked facts, not across unrelated distance tiers.
+    // Balance evidence lanes within each ordering wave; retain the scorer's wave boundaries.
     const allBalanced = [...tiers.values()].flatMap((tier) => [
       ...selectBalancedFacts(tier, tier.length),
       ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
