@@ -31,7 +31,8 @@ with explicit pending/omitted frontier counts. Exhaustive four-node path and sha
 parity checks pass. Extraction/assembly identities, canonical hashing, storage and strict SHACL
 constraints are unchanged. Old query cursors require restart; old snapshots need no refresh.
 
-Full release qualification and hosted platform results are recorded after completion below.
+Exact-head release qualification and hosted platform results are recorded on
+[PR 67](https://github.com/jchewitt/weftlet/pull/67); the evidence above records the local focused checks.
 Private fixed-budget retrieval acceptance remains open; the public comparison is not a claim
 about TradePilot's new result positions. Browser interaction and live provider quality retain
 their existing separate validation status.

@@ -41,8 +41,8 @@ diversity heuristic:
 - A citation-only match seeds local endpoints before unresolved symbol endpoints. Referencing a
   common library symbol in a changed function must not make all its co-users distance-zero peers.
 - Edges touching a `CodeSymbol` with `no-indexed-definition` cost at least eight, and assertions
-  touching such a symbol receive eight additional ordering points. Exact node/label/native-symbol
-  anchor matches exempt that node. Missing definitions are not classified as proven libraries;
+  touching such a symbol receive eight additional ordering points. Explicit node/label/native-symbol
+  anchor-text matches exempt that node. Missing definitions are not classified as proven libraries;
   omitted repository code can also be unindexed. All those assertions remain retrievable.
 - Allocate early slots within each provenance source to saved local `calls`, their exact cited
   reference proofs, and legacy file-to-symbol consumers matching saved local callable identities.
