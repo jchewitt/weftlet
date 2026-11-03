@@ -202,14 +202,14 @@ Verify the matching public version in a fresh disposable project after publicati
 
 ```sh
 npm init -y
-npx --yes @weftlet/toolkit@0.7.3 init --yes
-npx --yes @weftlet/toolkit@0.7.3 config validate
+npx --yes @weftlet/toolkit@0.7.4 init --yes
+npx --yes @weftlet/toolkit@0.7.4 config validate
 ```
 
 For local installation, use both prepared archives from the same reviewed release:
 
 ```sh
-npm install --save-dev "/path/to/weftlet/.release/weftlet-core-0.7.3.tgz" "/path/to/weftlet/.release/weftlet-toolkit-0.7.3.tgz"
+npm install --save-dev "/path/to/weftlet/.release/weftlet-core-0.7.4.tgz" "/path/to/weftlet/.release/weftlet-toolkit-0.7.4.tgz"
 ```
 <!-- weftlet:release:end -->
 
