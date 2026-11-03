@@ -195,7 +195,7 @@ describe('implementation coverage across presentation lanes', () => {
     expect(first.facts[0]!.provenance.path).toBe(source!.path);
     expect(first.coverage).toMatchObject({ scope: 'returned-page', countsAreNonExclusive: true,
       counts: { implementationAndConsumers: 0 } });
-    expect(first.exploration).toMatchObject({ rankingVersion: 'local-relationship-waves-v3', truncated: true,
+    expect(first.exploration).toMatchObject({ rankingVersion: 'shared-symbol-witnesses-v4', truncated: true,
       reachableFacts: facts.length });
     const pageGap = first.diagnostics.implementationGaps.items.find(item => item.id === 'query-implementationGaps');
     expect(pageGap?.reason).toContain('this returned page');
@@ -208,7 +208,7 @@ describe('implementation coverage across presentation lanes', () => {
       if (pages.length > facts.length) throw new Error('Pagination did not terminate');
       const page = await handleImpactScan(service, { ...request,
         continuation: pages.at(-1)!.exploration!.continuation });
-      expect(page.exploration?.rankingVersion).toBe('local-relationship-waves-v3');
+      expect(page.exploration?.rankingVersion).toBe('shared-symbol-witnesses-v4');
       expect(page.coverage).toMatchObject({ scope: 'returned-page', countsAreNonExclusive: true });
       pages.push(page);
     }

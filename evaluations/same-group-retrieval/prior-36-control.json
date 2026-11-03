@@ -1,0 +1,2501 @@
+{
+  "schemaVersion": 1,
+  "status": "public-fixed-budget-relationship-retrieval",
+  "fixtureDigest": "8ba34a90d7c69cedd576cb67f4618b5e9c4918ff43c3313f1558ef58f418db6e",
+  "snapshotDigest": "653aa9a2488764ad3f343d4d0c1e021ac824a16c73e62c97aaa215670a4d3a25",
+  "factCount": 15549,
+  "extractorVersions": {
+    "assembly": "standalone-graph-v12",
+    "repository-contract-extractor": "1.2.0",
+    "scip-symbol-extractor": "2.1.0",
+    "typescript-call-extractor": "1.0.0",
+    "repository-node-identity": "1",
+    "document-linker": "2.0.0",
+    "document-code-binding-extractor": "1.0.0",
+    "document-obligation-extractor": "1.0.0",
+    "semantic": "1.1.0",
+    "scip": "0.4.0",
+    "ontology": "rdf-record-v1",
+    "repository-file-extractor": "2.0.0"
+  },
+  "semanticExtracted": 3,
+  "liveModelCalls": 0,
+  "unindexedSymbolExamples": [
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.iterable.d.ts`/Set#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.symbol.wellknown.d.ts`/Map#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.core.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2022.array.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es5.d.ts`/Math#max().",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2015.collection.d.ts`/Set.",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es2019.array.d.ts`/Array#",
+    "scip-typescript npm typescript 5.9.3 lib/`lib.es5.d.ts`/Math#"
+  ],
+  "budget": {
+    "maxDepth": 3,
+    "maxFacts": 60,
+    "maxPages": 3
+  },
+  "cases": [
+    {
+      "domain": "analysis",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 3,
+          "expectedFilesCited": 3
+        }
+      ],
+      "returnedAssertions": 180,
+      "returnedFactIds": [
+        "f3b3a5dcdb6bdac38e534f4bcaadbaa2f069343a65117ef59000bb9c8910a8e1",
+        "3bad1daf3d34c03576a3e86fa4e5e7e3c82a9f1850a18772f1919f1ac1c786b2",
+        "f18694c8cd2c2ac7c9821d123d556876a07526c9f6aec6d27fcd5efd11cf2c09",
+        "ab78eae27151bff7671a6f23bc9bbb793c28d3671d7d0a07b3b14423e4a097ac",
+        "a607edfde79ba568185ae4e1e238018c5a83a2661aa4bef2726efa59fe1980f5",
+        "05f568c6d44dce2c5da575a87b00eaa9371e7f72051dc62fe9cdf229e96ba76f",
+        "fbe1fe98ef4fbead8840212a4ec06849271badecda2f98046aa77841ece3b087",
+        "858b2875dd880a7cf1b8a7e133f78c82244f6c0a484cd9c99442123b51971771",
+        "031546609b795a65337acf56f33e96ac47ec5fc895ca54adbc380198b5706fe4",
+        "f3282992e4a68389d99cc37b1b1e368b41d843d49adcdade30cbefb69983f0f5",
+        "8e5f8699752216c526e7e416e216f1689f1dc969ec413df101a4fb5a0469541b",
+        "e3127bd7c310ef094ad524696d2053174e416f060f5034a7acc2a044dcde127f",
+        "7a5f712b6d7d30fffeb8da4197948e364854022ee9b2b8ff1b1a730a2a8fead1",
+        "e51e6c7d2e523e46003e20564902cb264317b0588104178d484408069044844e",
+        "f06e036e23a472e77b7c50f7c92adf4cd92d9ae96df070b6337285a1e3ce765c",
+        "4cbeddcd3d95e1a535cf981a9b449889e2d30938c2244b0131c6feb06a770b38",
+        "d7beba0d241d51add3134ef2d44de2d643c9750f73294edcf5d25ea86c94cde8",
+        "1c99432cac42f8155c42a7140f3054dcefa2a958f25440f5c230162ef27a875a",
+        "2f8a21529b1c0775fa2048ab4f2993d18fda51fb5aa5173aa4f0c1d5a1296613",
+        "03d17612672bf15bc020505e023a34589088947df0a6d6dfe00b72b3c425a253",
+        "8eea5cd7fddff2499a2ff11ef10bfa2d53819f7a91d5d2726e4c9dc58783412a",
+        "e6f16048a24e61833edd9e27212fbf99a626c7d200fd198341dab596c83b8ce6",
+        "ff7d11063fa97ae7244ae909ba60f3be3599d1c3f75dca914bc2601df6d058c0",
+        "a5aa50f5ac940abe98e807635821ad4ac3d2d2d5a6816aec7228b6a06ac2f02d",
+        "e3de782fa065d979fa6cc54c4d69e56b5bad4a588560de10348c7d9fcb4646a6",
+        "5fe0b829763c16aa99624154e4a2043491138ede4b8773ef157eb5c972a344c0",
+        "99f35acd35a9a82fff28b464fd637b193dc1a50a63c95652fa70ed657a384166",
+        "0e9d6bce7e5e9d7837d900e648317f4c2977e8c412217266c0026c9a2ed0cdbb",
+        "1cd9688c050e17c23a85af8158dffd0ca3b33a6046493f65d94caf8182ea8371",
+        "ef2b7be59a36e1ba9ec4ca00b5fe0ae3519d9b79fb9cca63b9461c784ccf91fb",
+        "e596c81b25cc8d226b9525b612aeb7ea8a5f4171c555a841782c4c464533b213",
+        "6dc8bc5ccc2d1d3ee3ef473fa7e11c31ad4c14cecf1bc4182101edf974fded45",
+        "37b01376ee2cd79577881e87c2e9d25aa8342ab7e7c4adcf6392e46372e2c393",
+        "b8641100d6e95fb4bd1f3bfc4d8b6629ce997619a936d5df2c5c69e5c85d8d1b",
+        "33ad9e550247979114048d74a7a57270c34040e282772f26a1b01435affee901",
+        "73069771c5f13cd44ce1c42f78bef9a201558008dd48194260ef5ed7c9b5e3be",
+        "e50434d284b896a193bae27c29c4e0db875410202c51d1962728b1ac6650c78e",
+        "549086e4751f60d0e22781c9eba558cc64a78dae71b74bff81b9f0c3524f5382",
+        "dfe5cbba70a0b54b887d85bff964dd79ebf00ae0aa8c8e363607142bb1d403ec",
+        "ef0b905b0a8825d74e61f59ce9bf08f359660ddad06acfb633979475539be0b3",
+        "764444227149346737990dbf44f593e2ae05f61f5a5825a69be44ddeefe74371",
+        "9adbad6d0e85d287b0ff473bbf1e8bdacb69f2b214c74983ba4e528615e877ea",
+        "5e686083a57743c705924fe56480e6a9e885561c629f016d80cc2188b0b503a3",
+        "76a408cedc86090b2e124b2c07d9faac34cc681e366ea1e983b82d6e70be81af",
+        "b3c54d01986f43fc0b8a5e88f53b3bf419d87b3e365b559bff8c93ee941a67ea",
+        "2cda3a9557cfb7537d1dc85a4dbfdd1c39b653c5732c28e5bcc93980c567adc0",
+        "129d562dfc26d1f4399832d900e3bf556c85673a921c34edb9f05f2059125f06",
+        "b7e73d575e12ac1b6783fc63493a4667aec505ffae0971b2585cc67ba1805361",
+        "012d5bb15fe0d5cb821b049f0ae886c0aa1ef5bd957385893bda68a0ae2b687e",
+        "2365e2242c8a0baf926bad3c0e9b936b2466542ee06220f675d48a86648f433a",
+        "8a3baeb133202df9327b1cbcd0a92991c7ebcbb4d53887f92b5af0c5e964036a",
+        "9fa3e542ea4bf267bf12c064e2defce2a1f4793c1b88460da846d3295a521011",
+        "2185302bceb2e1810ee7904b36b7afdf531b73901cdd5f5c2b6de1b3588f2749",
+        "e02404bdbe312e655a172a0259c31fea4ef7c179c199f43e8e929b0509cfa451",
+        "57395f01c356ba088fb57ee01aa552b2842c97fb8570537c5d96c8d7fd9b4642",
+        "df3d44009900252dfea86a2b7baf25b3caee76397a6b1780c826f4a768d100b8",
+        "ea339c90b1ca45bc77dd2c6d0a4af6e629a9c2a90567ec3bd74930b164abb99b",
+        "73f0717c14546e89e73fab63be402ed72bd588dfecb930099d91c5946dadd4d8",
+        "b76f60a1472c5944efde91de487ddb34f9fa54b2c3c3010d031817992b747ad3",
+        "6fd642630e3268ace8268b6574f663e38d3e56000da93862a07a4259ce91f2f3",
+        "059adebeb66134c06e3d9dcb282e1d61beb6e4606a7c00be635a00240b0e863b",
+        "fb9596cf915d632be7bb998a9fdf9e9de1bce0f4b05e51eb4764e33672e7a0e8",
+        "4c233db3561c46f5a9741da90f0890fc9824ca0a97f74ef51225531afa357465",
+        "089c3480ba3a4cede353342c9731bf17e8c1c805942c590abc7641693296d3fe",
+        "3c70961f554855a457a709b29569e20bcc6b69866eddff3c1574a694418425fd",
+        "ed0acab5ada786ac01dcfe810c0e04f31fb209b185e296ab34b068fce312c4c3",
+        "a3c0084b8158f6621d5ff520e1fe5987390d8ac9428b99b5864ede80d5df1486",
+        "ebf6bf847c8a25a38195a7fc9506439f9296005552ff8bfc19ee27c84facf43d",
+        "3f840701f0730952a8bf450d5b423efc12b4b43596079af8ef7b140b0a6fb560",
+        "556f7da72bab6b39b90ed121c6f7e2914192010c1d3d80902c29f6f61b6df5b0",
+        "7bd6849fbeb054f80ec5f773d00652d68dc0134331a57313ddcb00115460e1e5",
+        "251fcffcbebbb992545dbaaf74a0d92c479bcfc9abe80eb3d5de5d637b739a57",
+        "3405fb73aa9e995cfed5fc0014db97e1c917815ff5195198a96e273d9a623508",
+        "f590fe36a92ac6c976282b757518ba2d42946dae05a73c8911d714bc764dfcef",
+        "230d92e6a79581b5f486a19d07964923832e30f2bda9739e6b473d95c0139735",
+        "66b621edc1a39ab405ffc3bcefc9b8b5be78762b464c0b72d211cd33c942179f",
+        "567ec64d5a897a7dd3cdeec53b9cc0b09f886b2ce45506c354f0f3cac444e531",
+        "ed1ad693e1dcc2acdeddd1cea0ba99bdd69311906651c66e199f7c680ad1e03f",
+        "f0c194c341e337f5aea0dfcea1f0a98966644fffb41481af9de49aefebe1a56a",
+        "8b6a60aba1c3e91c80de9d7a946cbb83fe5310151e4e1029152fc3e17d8438f2",
+        "9d85c2fcd0fe6afd893ba77a8e1fd4d3da0ad5e5902fc1233dd2768b9e41a31a",
+        "1596e2c0236b94c831500369fa97c70c94f07a93e321c7c6b7ebbaf289c5af00",
+        "e0112786408a86e60c16040f2f8317c2f0a054a179b0fdc494744a9300fdc1da",
+        "cfcf65f0c959377311f93f4bc1954d17acfd8caf0adafae8ef3d99db8c2c4ef1",
+        "6ea2faea798487749d38af8a3a38398182ce80e74e59281cf2a4dfaf45a0b560",
+        "58dd2d5d3fac0d5a5250a91c0819afba54de780812edf2b10c58c52e56600977",
+        "4be41b13912cebe2fbdb20b4f53ce82bf6fad8c37ac75cdcee152ea98093cf93",
+        "eaed71f5f4a7d0b142a4c189f1d0352322f97b3453ba4d7ef14f3b3b7fb98fdb",
+        "129509e3aca575e8cc115a2831391d4bc838babe5eb3bca0a323a7fc78c66fd8",
+        "822437d591401624640f4eefc3f45ce819e42e864e4ddde674415d9afed048a7",
+        "3d226cb9b4f88d061f428917dd83e5fdad583aa085eb5912a2c44ddbc00300d4",
+        "78bad0e4055860aa8e60deb3cd4bf1e0907054c0c0d461d3f09192f3cabde8e9",
+        "3e3f5186cfabde1e4550222fae6ebb2f4c2d597a459f42939aff52b24f38641a",
+        "2f2197471afe8dd695dd4cd970cc89a123cb31d9f3c0a62c1d615a2c10fab9a0",
+        "19209f6f833c189113e149641af24f3382b5bfebd50948b5ec5841e1e80d4087",
+        "4275a42c6be3cdea9d5b87d2be67ede8d4c8f7554f0154e73cdf10d40d50963f",
+        "663d1b7165947c00f7bed7be449f6033ed9e2dcebc62eb24cf14957ec93c531b",
+        "39977f60f6b7a2325f5fd9dae8b7d69e23ffcf5c4419f12281892feba1d19153",
+        "ded428396400a4183f3eb1699b2d2cf5642f52fdab6e57824628aca36453d9c5",
+        "e15782d00e591be4797e2f30a43fb213fe262b88065914957ccb1e61a927bc20",
+        "4c9864827f2a82c7ac169b42ea081a96453e1324ce6b054f356f0163174a5523",
+        "0fa0e596c98d2713744bb2130012bcc398506382af8d576785fe912b15caf9d9",
+        "55c0915d7239b21ca195a3ea8e5e37c161eb1863fc0c75aedc472e80a01658f1",
+        "4e96abefac71b7e1ec00d014b5bd635dff95945c385c38a3c32eb3a1989a1d64",
+        "37bb21d0de2478f57a73c0b79b88ca7b4243185e8565aa35cab12371274b2ef3",
+        "34e60e128065278cf21d8fa8342c2d4fff6f96bca0aec8edfe922e98d242f8fb",
+        "20c07a14f611c2050cbd7afe24f5ab9dd25801b9ccd03a1566b8eece1a529ef9",
+        "5ac40e40862962390ac7e94d1de9b6c07754b3e7cde417a52f479c8403343b5e",
+        "3cd9cc88ab8867a9fe71736df02eac4f9f4cb24bf3e615487c2b1f5678ef0e37",
+        "2aedc6c519b3ccfe341881b0c0fb0c281dceb3f447e234328cf50e33bc435862",
+        "990dd61d4574d25b372e151f962fffffeb0546527043bf41753d67a28287cc4c",
+        "995630fc284fd6053c7e6acc53a6e4fcf05e9c6be81e6751fbdf2afab7c4ccfd",
+        "4ac541efe832020cf255061676147b87ec336b96f040549f2a951826a4bb6a9f",
+        "9770bd4c4936c5861fc6ac8ddb4dc0d4888d3e9f2199002fc02714dc30136bd3",
+        "6aeb9a1dd61081b485d137e96ff0fab92b36931651782d6dc6f18903f52d2a01",
+        "227a3ea6e529a4bd5fd63092798eb80ece190a7c576471ef3ebd88330210fb9c",
+        "c45257f1dded73a6ebdba956a89f07d0c4d843b3dadc50e44d372c9f6b7c8a80",
+        "12b9f4a209f0e4e191e3776d19629379ba5591e86eaeddbfc1e363db3d140bbc",
+        "a787fb6187fd83ac6b7358743b815235bb9000a84150352e671aa67194f0989b",
+        "834fa5adaf64cb73285aa2027adc9177b0790dd8be6c0081083b6633ad5db50f",
+        "b207f90fe3256db4757a80a8be3ace3c485acee7576376aa4959cdccce0e60f4",
+        "b9fee69e9362a3f39411634c46de6c88acae5a8f097e2f150af79183f590e3b6",
+        "50f4e2a21b78390b261d8685c6e2fef94f9fc98f8587aa563e3f1fdb94a5e41b",
+        "b9dcf2c3b1707459b9b5c9f6e468a9f66f7788f77c8d924f81a33f6c01e1ee02",
+        "318291a38da04c761775c71e5adc78756e95e5c775823bd82a8201f831f4c528",
+        "a4894565e9079ac116b81e5bb0b23fe30b5de92cfb6be5240c45581ac11c0773",
+        "0fb9ed5bb1912e6a11ed42f7f26d6f5a6ab1f52af5d28650ee0bb665b228fe72",
+        "b6118847b96f4df1dbed1c07761ff7cc738def96ed8589dd93513558e5705748",
+        "423b539fcee73639f0cbed58c4b287d87fa48bf47f527ed8a75d8e9135e47016",
+        "223b44e8d1e60191821e50051159c807f5003959c6611a9e870dc8206c4a367e",
+        "0e6c29f0706f77c374fc93af8b7cf5ef998a496d85d9a5405b36b55074338846",
+        "76c8a376d79bf5c449542067d0880160a25d55601da36cc436f23fc160278f9c",
+        "f5a7db6ed7ff3b8b272976c4d19a6200af568d3b351a4e95133a9ec998f01ab4",
+        "5fdfa7b40d5dd7d99393167151340a3e4ee9ef134ac39b54282b2cf52cf78fb8",
+        "d19a9386105aa37ce6d6cfa33914f16f39544bde2e8c88c3996db3de23c4c7e4",
+        "7f3dcd4140ecf932fe0345c97ea25a97371d1b2391c7ebcb4c3b858b9eec163d",
+        "1868272c2221e19c01b394019d7c4a7c71eb4bff0875adcfa7f64e343866a6ee",
+        "4a4e979d8511d7c1e8a62558494a8cb85a97b3d068900770f7302b03092294f7",
+        "7c132985360a858884e5fd7cab463d2df8ed66dce417f841e5a7cb15985c2b7d",
+        "6a51aca19b27e6534201326ab120890c7818964d0fa4e5cb098484ed839747be",
+        "d67efcd55e61e4348ee7ef38c2f428cefd6a6deb8d1ae4d0cda41a2234493d43",
+        "17cc655222069a0cdcbe3843847939e78d02787ed0cf2a7a0e69701cf2391e38",
+        "04ba7f7742ecb7476f1ddd0c7c048f8fce0c345651d9a796baf2fdf7b613e015",
+        "45b6aabf7b7de6cd885d7fe3342842a917a4bf91ea2d53a1df1b81b3f7e7e68c",
+        "b5d868e14a13c5335846a7657e2ddfbaad3c6560562013a1882bae409ce4dc6f",
+        "ceefcfcc49505e7137769637e5a45a8d8179a443cd534a2f30ec83fe22550a5e",
+        "df59e9b8fa6092cb289a55532d8a42da08a7ffc8e90f1fb5bd3a5ddd7631d672",
+        "20749e543b4fa0158bcb7d941246e3c34fc812b7abb3aaf21986d139ad7dfbaa",
+        "6e05ba565fa336f61012c47650733c1115211289f06a5a426e1ae432051e0ec2",
+        "ee69a4e7eb35ff4723daeaa024fa6fcc2bb4ef8e029d9bf47a92788e49588daa",
+        "37a3a43ec334a10dbaf6dd9115858d7277008e3e86d0b19c19e667683674db4b",
+        "3254d8fb26a727ec73e43f0bb23000a11858c38987db31bf70df28da5826dd67",
+        "47fbe8f42cada73e174ddcbc6c20c8cecbc5c3f14e11e46a1e8d97a9692a2867",
+        "dbce51e2934c4ed8647e46abe60b6406b49d74ae94042ef80828df0c6c5661a5",
+        "d7a2802e846afe21d49e055f907db9ad21a1c8cd55e6625b18a6ef697981b1c0",
+        "d24306c85aa3198f423ae68e182f84b0a3c34b924b29f34ab8fc395416e499ca",
+        "602104a3b9ce2f308bb014988ff7c330506bf42d0717e662298611eeda1f290f",
+        "dfafbc5f10647600df3e6f7705f3b0fbf23b6fa730edfba05cda3446981bfd56",
+        "fa92355fd08e3ad5b8fb5eb3836893bbe90ee4cd99b1fa5e60a29fe443f83c14",
+        "3d7ed58d72983309a74a5d0c66a5ff55d5059e47c35847df62e67976d1a3d584",
+        "7f29b0ddfd2edadf3db2cb4094f00cee5f547de39e0a22b5548e2267969c8678",
+        "36178abae45da1567357e2f801cf5cd79d0c83b48160734480ef41e1c91fde6a",
+        "91ec162edff5b21c3fb69620da28749b6b2d30599160db820ef57848d71f7bfd",
+        "159e73f08b2e0b4c94309d2829fccb65639f9d87dd9cf6aee4b3c0967e61db98",
+        "2b34ee62ffd4eb5c0dc146e7a7c032997b217492e91cdd461a0fa5474e1029f8",
+        "2189dc37ac31679e4077149bbf38f25fb734f227606ad570c6f5e08fa60574fc",
+        "160f2b04f50972347fba652d52e124857da48ec0ad06568a476252f47ed37fa0",
+        "43f0dd6a79b7a20e23058860b9b73b6001c3c29b8aaa675e1f79a75d0980f900",
+        "98850eb3563ea9e744dc7ebdc7819956f28d4750d9f912accb8d655028de53cd",
+        "af47671ceefaafab33188ecdace73c30421b5349026b038933ddac866c2790bd",
+        "b29b519f622f7008ee4e2f3149ff9c95c69197366686d2180a4208ec0842ba75",
+        "79b78029688a1db733f5918c288ed6d093436f44fd6882619ae27260059e9ad0",
+        "3e1d3d1f94c72e13c9084561580f9363c73ea6716f723e8d57b2d52758184790",
+        "1418bf02f5b2becf8c005df432b4b70afcb11975c128ceafa64b3a77a15e4562",
+        "dd8f9857048971b92ccedea22bd33b0fcd6bcee7ab45a684500a7910f64a11e0",
+        "713f683ea559905a097f17ddcfe56e49ddffc38ae5a58ede633ace46e9484307",
+        "3a9639f89c81f8b78bf47d8c4c18adec8f7a71e640376056765d53ebd2b014ef",
+        "5f1625b777ad9c3ec39ada1d7a8c513d940e0661019f720dac0a7bf5c3774dfd",
+        "71581e3d04faf9d8b31918da82e4e3e5076440b5ac0c4b5ded83193849476c21",
+        "2c0157c31fb7526de953c28db68aebe89a4854ce2d130a769e13c542fbb373ea"
+      ],
+      "typeScriptLibraryAssertions": 0,
+      "sourceFiles": [
+        {
+          "path": "src/analysis/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/analysis/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "f18694c8cd2c2ac7c9821d123d556876a07526c9f6aec6d27fcd5efd11cf2c09",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "calls",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "159e73f08b2e0b4c94309d2829fccb65639f9d87dd9cf6aee4b3c0967e61db98",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "03d17612672bf15bc020505e023a34589088947df0a6d6dfe00b72b3c425a253",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "e02404bdbe312e655a172a0259c31fea4ef7c179c199f43e8e929b0509cfa451",
+                    "provenance": {
+                      "path": "src/analysis/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "03d17612672bf15bc020505e023a34589088947df0a6d6dfe00b72b3c425a253",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "references",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "2f8a21529b1c0775fa2048ab4f2993d18fda51fb5aa5173aa4f0c1d5a1296613",
+              "subject": "component:file:src/analysis/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:76a48a9bd1bb0061f4f4317a8f92e645cb54628346523345a024be6e2ed1a6b3",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "f06e036e23a472e77b7c50f7c92adf4cd92d9ae96df070b6337285a1e3ce765c",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "calls",
+              "object": "code:symbol:v1:7b13e843e0648cc2f16f1ff66d8862167bb344a2d7dc95e727b22c62e956656b",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "159e73f08b2e0b4c94309d2829fccb65639f9d87dd9cf6aee4b3c0967e61db98",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "b3c54d01986f43fc0b8a5e88f53b3bf419d87b3e365b559bff8c93ee941a67ea",
+                    "provenance": {
+                      "path": "src/analysis/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "6ea2faea798487749d38af8a3a38398182ce80e74e59281cf2a4dfaf45a0b560",
+                    "provenance": {
+                      "path": "src/analysis/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "ac5672d50591f5ee88f03b945577b2e50883bf4b78a424b760f4e79fb4d20f76",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "b3c54d01986f43fc0b8a5e88f53b3bf419d87b3e365b559bff8c93ee941a67ea",
+              "subject": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8",
+              "predicate": "references",
+              "object": "code:symbol:v1:7b13e843e0648cc2f16f1ff66d8862167bb344a2d7dc95e727b22c62e956656b",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:f1c1ce254689d38f0ef8e4bbfee4d9afec70851490dd37250a457222ceef71b8"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "73069771c5f13cd44ce1c42f78bef9a201558008dd48194260ef5ed7c9b5e3be",
+              "subject": "component:file:src/analysis/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:369cdf332dd45b28bc14883b7ed2ec5d85857f3f84d5b4aad570058327e7384a",
+              "provenance": {
+                "path": "src/analysis/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "fbe1fe98ef4fbead8840212a4ec06849271badecda2f98046aa77841ece3b087",
+              "subject": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "predicate": "calls",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "2f8b43867cf747cd9bbc6d41197cc214107112a5687ae88116da4ad59de4c489",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "ff7d11063fa97ae7244ae909ba60f3be3599d1c3f75dca914bc2601df6d058c0",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "e02404bdbe312e655a172a0259c31fea4ef7c179c199f43e8e929b0509cfa451",
+                    "provenance": {
+                      "path": "src/analysis/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "ff7d11063fa97ae7244ae909ba60f3be3599d1c3f75dca914bc2601df6d058c0",
+              "subject": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "predicate": "references",
+              "object": "code:symbol:v1:25b025caf552c651cf21f9e08259ad700ad5651fa72b0da506fcdea087d36aff",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/analysis/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "e6f16048a24e61833edd9e27212fbf99a626c7d200fd198341dab596c83b8ce6",
+              "subject": "component:file:src/analysis/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:76a48a9bd1bb0061f4f4317a8f92e645cb54628346523345a024be6e2ed1a6b3",
+              "provenance": {
+                "path": "src/analysis/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "ab78eae27151bff7671a6f23bc9bbb793c28d3671d7d0a07b3b14423e4a097ac",
+              "subject": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d",
+              "predicate": "calls",
+              "object": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "6aeb9a1dd61081b485d137e96ff0fab92b36931651782d6dc6f18903f52d2a01",
+                    "provenance": {
+                      "path": "test/analysis.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "549086e4751f60d0e22781c9eba558cc64a78dae71b74bff81b9f0c3524f5382",
+                    "provenance": {
+                      "path": "test/analysis.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "2f8b43867cf747cd9bbc6d41197cc214107112a5687ae88116da4ad59de4c489",
+                    "provenance": {
+                      "path": "src/analysis/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "549086e4751f60d0e22781c9eba558cc64a78dae71b74bff81b9f0c3524f5382",
+              "subject": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d",
+              "predicate": "references",
+              "object": "code:symbol:v1:0153b70f2ddb8b5ca4d253a632ef07aa4d6dbb1d6641177f10694cca36a787fe",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:81a2040dc114c600b4dbf557215efaf02c1d4268d5d2fa74919b5195dfda047d"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/analysis.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "37b01376ee2cd79577881e87c2e9d25aa8342ab7e7c4adcf6392e46372e2c393",
+              "subject": "component:file:test/analysis.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:eb3d00baa776c8f952d5c136396a811752624d8b3ea1d6662ac4619879dfa2b3",
+              "provenance": {
+                "path": "test/analysis.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "fe8ab03d5aac4a7597d296566dab37b8cd28911ee14f81eac1e3efc713a263f9",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "delivery",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 3,
+          "expectedFilesCited": 3
+        }
+      ],
+      "returnedAssertions": 180,
+      "returnedFactIds": [
+        "bb4f3b5c4cb2d1be07c6ee2cbf634505cc19fbce523eba8164b3d0781d23d5d8",
+        "0a5b2842a6326a9ec5dd2d4a1ab5ae5f4850e6fa262d0f1c123bf49e205cd64c",
+        "4702d450a260080c9460645b1f7a9e28a9820e37d6432b911ab8789db595fd71",
+        "5a9537d4479bf8b186f0d964194d2383d0ad9e5da83f647787cad8b39bac2cdf",
+        "f0f9efa8134544b5a1431fa03b00b9adae648cf8354d8ff9533821e5dc24535b",
+        "6502064452a2fdfc8f39ba3085b83096489be17a6374cdb4e8bdbef7bc4f694a",
+        "1c20ec20ffc318dbf51de873a6596af57b26b9cb28fe8650ab3421b5482258c9",
+        "dd5cebf3e7b09627f29d89f069d229ed432a7bf894883bcce1db5e42aca015f4",
+        "a21aeaa3eac580653198214142aa46bbd650d246f0e2c533fcd62016cabfda28",
+        "e10ffa45ea8683d088fecf3c79b7afd4fd0308d6bddf684dedf40647c2356f55",
+        "1f1d0262e138504a199c5f2e259e07de5d74e2a4773d886c860aa779a44847a0",
+        "5602617b96194990ab50d8992b36d4880fb379c7c960bf770114bdcaf81196de",
+        "b676d98ead13034693a4761379f4629e2ae5168bd847568d44e2d409eb200eb6",
+        "deee57c9e6cd725ac46f346b3664f1a63b98539ed34663d6a057097fd16fad63",
+        "6797bc02a80677cbb4a8fd468e32a73639715bb52c21a3e24d502f3d544a95e3",
+        "9f93f0f4e86c1a3112666c1534aab424904acca2c20e92f84d52ca504dc06caa",
+        "2685cb606810446a667b0a87c78a7cb0751c362f8ea91904409edcf152c6dea6",
+        "39f323893a1b733e84af4db6f6966a05b9a487fb5322dca0b72207a0ad1a9400",
+        "a2a36736ffb66e0925050e606cbfe986d3942ae631677bf31957b7507d8dba3a",
+        "64ba6f5ef77bd8287313a6c771d53cc207f116e916620a215f86d48861288ff5",
+        "8bee5b0f30a18a092bdd1f3b9ff30db8a1dae1ca902be33780af76d6ca04b1cf",
+        "c5f28e537a3546ba1229e3bf3df75606e35a3e44e2c639930a8b92e24eabc704",
+        "9b5dcaf22bc232dafd204075d2e0939fb6f4f24e992b4dc4b155d46c05a29a65",
+        "07a341198030d493e9317eea7815143a4246034af55a06d7df8e04f89140d80c",
+        "3d4465739ab5d2c9954503dbaa9a97047f45dd2eb964396a43b9b702c73fd5a6",
+        "cf90ed200a7ef7c9c0a0e10b065febde4a742d7026190aa16aad3e8ce116e538",
+        "6d9d4d6261f0452c5c83ee517229360e32f9abcf23be9bcb90c8352c94c21094",
+        "5d12301e2fa530e52e3abe87d3f4998f18dd1d0e90573ce0e4f1b35b67e34da5",
+        "424367383ab25a3c6e6bd39c293761c7ec4cd649a70a29fe4146553575ed2d17",
+        "16da416356afe5b382b50a80fc9180a7608322a52b6c9d2cdd7ddc6973d76ef9",
+        "6eef19962b1d2401f9c1ee7adf8ebea6c4a58f4ec065a68f4c233a9b35f80a3c",
+        "64df380dc3a942308cc20d590dd5c9a9fb954022b9264b17ea7b621d5d8fb73d",
+        "8ff9101311c45def8a394d1b988c74b09e3727822603e62a8c9277cf375b2a5e",
+        "178548c6b7ce95588c3356cb8b6d8b1d0b4e8b1d2ae840559ce859615d85d1ca",
+        "beecd8f7db813ad11abd632a840e9a4984ca50ab0a35a2a35656d35fa17f73dd",
+        "44b7572879706a358ac13f38ec7726225a324717d85352730befaaf32fbedc14",
+        "1556b8998af07259aa15550170fcc06540346b5903e8a0c307c1fee83b272402",
+        "d1672af4440983cdf462bc609b42f71438fd6237597f46b9ee9e8c6a94bc25f4",
+        "6526ed3d535dfe914bf13db2c924d99adc2ea1f0e402f1a996b5993f0bc555dd",
+        "f6d90c6d24c172595e8cb2c154b01793b1944da2e14c95f63be0d97be18fc6d8",
+        "bed74615ba2b61c3693d793f553e883e3b9dc08be984780d26909696323036cf",
+        "3a04ee2665c4602779e648f14b0d369b5202b08f365228d04b8d9f7c1fc64d3d",
+        "e720fbfb11110d3c7c4f75dedd86488a79befde5d33363e3638201d6613c9849",
+        "84f57d692e9f86fdee86ef35cce7e01a9ec0fff76e4d650693752203566c3121",
+        "41749b61ffebcc882843fc74e3a7ca9597520eb3c44642549fdee3f1d148aef5",
+        "272229bfc1fd9a89d4008db959e5d1046517d1067d188c65d444cf7700c99ead",
+        "d0f3101a301d407b5daa2b6f39b356e858fad870458cd3bb4d6d7369affa8958",
+        "a414ea5435d8e4be22494d93692bb2929ae3dc0270d76515da0353f91464cc79",
+        "c4f2eb65c3300fcdc623b3099ca3d71ea4273b89c4fbd5a079764fc83235be14",
+        "6664aefbaa57f093263f16487cec52dd0b4d6e6e4628752a8565966f9c938a6a",
+        "ff364977bb8e94d85fdca2226d36d57ef53ee2476011d37662611d07f5d0c24d",
+        "103d6c2e033f30f1ec5207a935050332cb85db4c10f6cef5820d5d54daa94563",
+        "d4daafe887ce3f6d60c3cfb4b48d6c416ea265111d198374b081531e897decab",
+        "a34b6f2de7b0ec1ab68e74333b95df0a02bafeaa78bb429b703852a8fc15be67",
+        "7dd5e1f3ac4634dc47600091ecbae529e1320466893b583c05a8e5d87da747d3",
+        "fcadf3cc877833bbce0506ef64ac0a1b62bd260f4cecb0fe59ef7eae6f7d0f7a",
+        "31a2c9f81b12f1e7fd976cbfe6feaceaed4b21e077960159b9addd41d66108fe",
+        "932eb75583e88b8d62518994f21664f7c9a492e57746f3213dea5e25f7306c56",
+        "a7cb8a751008580eefb2195131cfa1d08b693ed3573cd35e087c30ac8ff7f758",
+        "377c61f0ed54f4afebf6e074d2b6b51c7e288b806465e073d534decbb373a840",
+        "fcd4501e796d897c18921468798da2dba070039f91f9a4c142fb7e90d13f12ac",
+        "e9d80c4ef082a048f10da46773c80563c205564c01e1f676253346f759fc7337",
+        "cba19962e7f96da06973003d24fb469c5a562c648840496bac0e1b0b02e4980a",
+        "61ce272ec99f97c19ce36c9eac43e2ec2030ce7df3207c88abac2cef081b8a68",
+        "37fc6da86f6aae4bf740b998ce075af30fd89d63658a72a702f8bd2e8a30f329",
+        "1d719be97478777a3429f5dbb4dcca3d31c1cf4454fbc70680f7618dcf387935",
+        "35bfacfbb3c674ef6b4ad1f4ff9ebeeded0680c482b44df0acacb357495262cd",
+        "c581ae7c77e41bf1a3007ce45fc0b56db94a7b180c4fd5f68171e87e331b7ffa",
+        "ef6d9f08c1b37453e7991ebaee36f61cb0f7df80d7da012159309fb7123d8949",
+        "163d08e6af6a60513225b75b8a9df31ca8d382d113031b24a8ece93a8bf84aef",
+        "9914005214b76e90b95ae0aa775ee6d4a4a38679895af72c6ccb971737a27dd6",
+        "932a30818d037513c40f8313e0c866dcdad5c38f7874930daafeded9fbebdc4a",
+        "02acae729a15384ed3ab6a41196cc4a644c02a3da3f09298b7f861dc68d28a4d",
+        "17a413cce60e04635a6befe5201a48c65ad15d3a6fb0e6ffb1f6745d34a5f282",
+        "9cfac8f306e4b4060ed2e393d2066fb124483eb4b81af4afdabbbe8ad3676232",
+        "0dc14b45620c02dfd6824a7c308f730a25c0ebe58c4e6886d1075260e8538cb8",
+        "3f8ef66b0298e87f249b2b3f1cce502a20d25bd287f76e7b7e499a598695f0fe",
+        "2faa45a0185d8233098daf10d8ab10bafedec84a649b3f8fe2d87c61ef547ad5",
+        "69ad931699e1f01b6f1eead1571e2d31207b6b94676f27c1f4197b124ca04395",
+        "3e8a89380ba890e38479c53f6254f3bec5154e71c1f10a3a7b8e77e8052c5109",
+        "a14fcc1ff82c6f7add56d470f8da01fb03efaef9ebdd8e779fdce8ad07ee81a7",
+        "e578a521039a2318b9dd1e42d7902980962327dcdd00519c97faa6d0e723d472",
+        "65d49fdb08b8e694f6a22fb3148d807894bd985560dc17761ca15004cefa2dfd",
+        "91759398a62c57a60110b683ca55c72d6ddd57c8be5a800d09a6ff97a7504cfe",
+        "3aca1af2daf2e8d8a7bf6992febc192999d4f495adfdf14c8c737334fea8a65a",
+        "0360fa6612ecc0d09b124aa14ac904c16c219dc80a1d4d092a5b0edb493f17a0",
+        "c5ce58bbcc4f686fb96e048d3c80addcaf6a6db995538943c21aeabf924511fe",
+        "d70d5ed52c878188274d9b0ee241387aafd4f31b336eb09eff69144bdc462db9",
+        "112938d49a2842ef1c038f90c5db9646cea6ae25c0ea58a12401fde3181c6061",
+        "e4d427650f408c46fab215446ac4ec843724c7df9be4902e54851775b35dd78a",
+        "acde7f0d85f0cd84ffa0310b68b8052f33484020a6561e28596357004a535578",
+        "c4047adb14acbb92212e69b629ef18ef69222c74b1111ee4477ee148b0ea299d",
+        "92e8b4d0f228959633893b79a3158d62edb750871d55d706ea617c21a480f819",
+        "fac5bb2dd723ccb81429a71d10a75341ea4ca4c05a1fbd73a407d564f29a5ed9",
+        "9a67cb213f2b72856edb04858b9e96469acab2f8dc5b48c3edfc0b9f1da9de2d",
+        "83f694fe40e394d4819cb9af758e06385c7d39545de727626ed2ba10e45f241e",
+        "71fc6d3bcde31ae70b8e558b3521637f9c72640bda2449a01b3f24f68986b509",
+        "31cc3287b51907cfb6b54d6c65fb715cf7f6b444ccdc1e14c67b78dc874ea708",
+        "92a42eba25646c6295b41764036b330ebf9de59bde80b784789e6f9736008a31",
+        "06486786885075b092276eca807f794318a976c60c694e7850924f1bbba46681",
+        "66ae3586b1e29a2c494efea8d0eac895ee233dddc3a6a3308a129d06069dc793",
+        "7bede42b6ed12a63550b13812ea597a30f647c9d76914e126431721397761956",
+        "25814effc328aa5ae4835600af62853f6aa4e53fbff746c4a486e1306f753288",
+        "676635982badfa215835a6d071bfd1c731ab06e8f1556da9cc04494fd43d95e5",
+        "a3c7fc636051a509ed0cc191d37561280e8aa3d94d60dfdbfc9a6b87c3ba5468",
+        "8afeb8382e4828cfd9d14ee9e960b0ca75fcbfab71a0fe32c096b39c61cfd697",
+        "1a3afe75dd5ede7343e06991955e32d747c9cf54ba93faf8cff294fb114b11ca",
+        "73c08730b23d9a4c16573e8e87e63ac69b03d6efb6d5c764fec7c48c8d530692",
+        "3c7230b1d7c2022e8968c2880393d7b70ca50858cdf83e8e1a1dcba253d7a570",
+        "e3af7e918b3a32362f1d9d04bcc74f22cea29cbbe29f761bdaef01c04a8b382a",
+        "e9ea54e0efb4dad7d2d4458dc138bdbdccd81f118e636fa2bd78143f86c9ee15",
+        "fe59e6f6539884d8cb2c63c83c0601fc677139153663af2b5d6eae3a9e6c50e2",
+        "e294c1140e0e2b7edff65ca9eee5e72e8f80f0fd019df08f09c8ab019363adda",
+        "363f7364f36bf6081b63260e9040794062c8528db1c363eac5f87f10b57c6ba0",
+        "f5a5b210eb27f6f76800329180652dff4c33d0cd6a0e70e0dbc3e02b40caf360",
+        "3528db05c076b9b73a8d2a89788c7b86eb7ba0884fbaf448f51d25a7cb316da3",
+        "25ea45e9bef7d270363b9de69aada9659676337ab506def52db8199dbc1372c9",
+        "c4e0551f59e402f8d9e4b2ca18ca799ff335b84f53b6dc1f1baa1b3230aa5f46",
+        "2b1722a213428f725be9caaea215f4ad0764343652fe2f188e05d0de599f7cdc",
+        "b082276fcdc56a0bd79ffe91d794a59851715b81418e96da7571c61e6d300801",
+        "9086d00356b4f52d5fb71df9e7e3bd9bee016abfc3335957961cee483e1a2b32",
+        "0c85a130c4d7114da9f7528779980dd78d4b899d7866dc5279e09fb609d9f438",
+        "9751e86498faeaf72825c04cb8277f30d836ded5e0e95230c3301f7ba32cfef2",
+        "3fc1c0bb96bea353a71f5afac09f51c77faf8dd316c6e39e62077b24c6d2701f",
+        "fd767495814131ce2527d488537fd3e6ade96228afdf13969af70b3e32ef4983",
+        "8cd6364694bc01bb92833789e75e6f654cfe92a85408dcb6383f127996346172",
+        "5d6c332a930cb9a09e109278f187f91549ca85b3017642cf612c7f787182f295",
+        "5c3fa99e90b4da9d9251ccb5d9372a093ab9c3c60665752ca19057cccb6b9d9a",
+        "3ed80bb3c8b5f79b8994eeb3db4bb67981f9b81a5edd6d6be037892176e9d407",
+        "754c96ebc8f80d9bd84983d912356cffdbf150187a6dde015e12568dfd729755",
+        "3e8707e011ac4e34914faafe02933b2c3b1be552e3885ed4acca55eeade6c597",
+        "47516eea810e0db632eb432b281df79894efb7128e19782b7f9e89d5995851fe",
+        "f84bd3fce48b68d6464fc4fb5cf43565ee804bc293c1135d8ec4127e13a33249",
+        "29cd9f5abb876e95b461affec989c546b8dbae436d8fca0fb6407b2db1014064",
+        "acee0b5411118e2c76afaac3b1e8f69f57ec6f3c908f2db25748155aa80f738e",
+        "dac901cf8e27d3001e45e168d25553f35bace828d2a2098fe81979ef643125c3",
+        "6c57bde02e6d7289066c69b23ddf3c5b03d5e9e45afa86e9f75a779384d741be",
+        "69de4dc1d4d8d38d1a3280531573d5df0bec940e611c113f7b51ffd761e62f21",
+        "89d2c8299d00fd44282e765514a6e5312916abdfac480ae13d750558bbc98462",
+        "422081a8128b023ae153d2b807533d9426949091fd05a5fbeebdf8280cd166be",
+        "a07790b95409869d1a2a5a566cdf162cd1df0e0f7f1bb16b650e59f130378473",
+        "950e63648f92884eaba49384d6202b91316c59ffdddcd5756434d7ec884365e1",
+        "c6091d26c94a1c15d306e8d3701bf582cee23fe42d57cec9df68f1db5f83987f",
+        "6073518e4cdd481aece551f2d8ffd5d30a0e88576267e8f97165afbad3429e78",
+        "3279ba3851362de49ce5ca71e18e70de57d55fef81b6fa5c7bd4b446c7ab67f0",
+        "e7953c9694ace6b0925425fe5720c176b1998d3df328c1ea53698df3f6192b05",
+        "bf32f4f5a09e571100c72c18282dc33319bdfcb5f8f0ed4c18cb52f186c4c0b5",
+        "d787042d6ba11ee5b60ccea930db74c1f6bb6b3300e1075cf9eaa5f8d0502809",
+        "9a1cdce55fc827e50635671fa5ce347e645ee050ac1bffa974aed08b1eebc65c",
+        "4e40c972223de2a88ba3974657efd86536243f804b38e0eee59e9605f6eaef7f",
+        "01fa41cfa58c752657d5dc6343376f7b3e87d0ea6bacb5d7be48c948f3685df0",
+        "c25576394d2dc2430b65845e6fee97156c8f2196f40e8492fde523979c603b26",
+        "66fd3847765f0ed63d2e9d1a7509d46bee5ac3545cc9a23de95403012f4ae3a3",
+        "2f7139d9b91421af3af9e30249236d7e558c9ee377b6d424aea4e4cd73e0d900",
+        "f7be337bb01dbbf2d5a54f3fa06b2bf22a93b06f16a1e990b89708d5ffdb8306",
+        "a712feab1e33c672622eb36377f7d3b8c26ecb01bd586aa8853e446202360bfe",
+        "2de726ad0efcdf68b937140b1069e2510366bfff5aef244c7ff7c589150a6aca",
+        "824d2badbc5a577dfc598e68c87536e014f286860700dcb7cdb155c482f50f6d",
+        "c58fc9b663e0b2777a63f9f3a31405cf17dccff566de4ba867717bcd252093f1",
+        "9c5bb41cd5ed5a94eb53f186885bc45fa5ee517941bc8bf2b562482165ee427d",
+        "526b69714d8613428c4edd9f6f7db2ab8d0937d9abffc5e6a6bb5fee819c7034",
+        "b955cddf930859cb33a76df6d37f845ee7583edd161bf79938e2a91d1d3ec165",
+        "aade5302e32192d3c1349cd92285c428d59c92203d550ce9de7bbacf80e38927",
+        "ce88ef426649ee73635354ebe6abb04cfa478aad6ce38d26cc1010dad0f3875f",
+        "1751fb177301035e21398998b0349cb7db4ee142f8f0014dbb5be4e451e0977e",
+        "b2d4c46cf77907e959c9d3eea7cafa3c7dc86dcd9200c16657840f879cef9781",
+        "af4beff746175a69430616ba7dd62d173358c4b8f9815b19f05a9dab30edff0b",
+        "4c62ec1962cef681845ef433d32ad8d03106eef4fb61121fa0982f16d38200c5",
+        "3094e3902948aa3ff51c15e569739b8037f462666b8540f5112befb685837e44",
+        "fe74da008efe90afa7b4da062e6c21a8e0c9b4606c4772d79131e0f4a6276e6d",
+        "bdb16ad0f27dafbc40b8f3b4ee30213613427f505eaa1fa8026fa012866a7a41",
+        "77af2482cb4bfc640bb3c4fe1755353e6b2f02f9e440d88f893ca093f569a9a7",
+        "3ef637d43bb546bf08ceada5d6300febfc35810e678496abaee9ee8ffc23b52b",
+        "de3e5a06a29b3e3f5c67f740c8d0419a727255eb533bb7ecc58c3f3e49c7bfa2",
+        "b53d3ed9fb67f25ab95402ab7f4c371f4ea52bf2757be9f874fba8932d83c44c",
+        "c1587c907f7862fc82bf2069f8589ee1ed7e62db6f117a0357a76bf5db3a37ba",
+        "63fdb9ffaff7987fff45cd259a9185b1cf18935e188b96c33646669c04ee5663",
+        "08a5722c3d3e0c946bb4d5ad94494876c18fafd7664fb6ba8d282a550564a3ac",
+        "027bbaeb06c3363704112e14e0a3f1742510c919f1c964ac34ceb821c1d81e6e",
+        "1028771322f894084f544fe2ac6b43f97bf7efe7bf0b1a1b1399b109734a9dd0"
+      ],
+      "typeScriptLibraryAssertions": 0,
+      "sourceFiles": [
+        {
+          "path": "src/delivery/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/delivery/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "4702d450a260080c9460645b1f7a9e28a9820e37d6432b911ab8789db595fd71",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "calls",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "ce88ef426649ee73635354ebe6abb04cfa478aad6ce38d26cc1010dad0f3875f",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "64ba6f5ef77bd8287313a6c771d53cc207f116e916620a215f86d48861288ff5",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "a34b6f2de7b0ec1ab68e74333b95df0a02bafeaa78bb429b703852a8fc15be67",
+                    "provenance": {
+                      "path": "src/delivery/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "64ba6f5ef77bd8287313a6c771d53cc207f116e916620a215f86d48861288ff5",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "references",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "a2a36736ffb66e0925050e606cbfe986d3942ae631677bf31957b7507d8dba3a",
+              "subject": "component:file:src/delivery/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:e09d9350dbfd99a9d3a9302fb2a054b1a6151b661901ef576477879e6c6ebbe6",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "deee57c9e6cd725ac46f346b3664f1a63b98539ed34663d6a057097fd16fad63",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "calls",
+              "object": "code:symbol:v1:f7398eba09670d80c9aeacba2e4c6ed77ac91c91aca858f16127c99d6b88d690",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "ce88ef426649ee73635354ebe6abb04cfa478aad6ce38d26cc1010dad0f3875f",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "a414ea5435d8e4be22494d93692bb2929ae3dc0270d76515da0353f91464cc79",
+                    "provenance": {
+                      "path": "src/delivery/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "3aca1af2daf2e8d8a7bf6992febc192999d4f495adfdf14c8c737334fea8a65a",
+                    "provenance": {
+                      "path": "src/delivery/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "84286b656c5bb5a0f1aba6043eb7eef233980b84622462dcf9ede15512836136",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "a414ea5435d8e4be22494d93692bb2929ae3dc0270d76515da0353f91464cc79",
+              "subject": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9",
+              "predicate": "references",
+              "object": "code:symbol:v1:f7398eba09670d80c9aeacba2e4c6ed77ac91c91aca858f16127c99d6b88d690",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:9761d2bfaa583c8c003a3fe0239b9a8dce4c0ba5ae2456b0547c2389154c45f9"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "5d12301e2fa530e52e3abe87d3f4998f18dd1d0e90573ce0e4f1b35b67e34da5",
+              "subject": "component:file:src/delivery/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:983270b93ea0ab65da6f25f37840eb2d1d3e9e71f8997fb1dc07282586a9536f",
+              "provenance": {
+                "path": "src/delivery/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "1c20ec20ffc318dbf51de873a6596af57b26b9cb28fe8650ab3421b5482258c9",
+              "subject": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "predicate": "calls",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "d8f765aa0bf13c48ff7aa55b9d1437a40ae30b49844d78cbba8f675b19318506",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "9b5dcaf22bc232dafd204075d2e0939fb6f4f24e992b4dc4b155d46c05a29a65",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "a34b6f2de7b0ec1ab68e74333b95df0a02bafeaa78bb429b703852a8fc15be67",
+                    "provenance": {
+                      "path": "src/delivery/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "9b5dcaf22bc232dafd204075d2e0939fb6f4f24e992b4dc4b155d46c05a29a65",
+              "subject": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "predicate": "references",
+              "object": "code:symbol:v1:46687382030e86609df5c2f2ae959c91df8c16d75e0d3338e82b35f52266e130",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/delivery/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "c5f28e537a3546ba1229e3bf3df75606e35a3e44e2c639930a8b92e24eabc704",
+              "subject": "component:file:src/delivery/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:e09d9350dbfd99a9d3a9302fb2a054b1a6151b661901ef576477879e6c6ebbe6",
+              "provenance": {
+                "path": "src/delivery/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "5a9537d4479bf8b186f0d964194d2383d0ad9e5da83f647787cad8b39bac2cdf",
+              "subject": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a",
+              "predicate": "calls",
+              "object": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "f5a5b210eb27f6f76800329180652dff4c33d0cd6a0e70e0dbc3e02b40caf360",
+                    "provenance": {
+                      "path": "test/delivery.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "e720fbfb11110d3c7c4f75dedd86488a79befde5d33363e3638201d6613c9849",
+                    "provenance": {
+                      "path": "test/delivery.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "d8f765aa0bf13c48ff7aa55b9d1437a40ae30b49844d78cbba8f675b19318506",
+                    "provenance": {
+                      "path": "src/delivery/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "e720fbfb11110d3c7c4f75dedd86488a79befde5d33363e3638201d6613c9849",
+              "subject": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a",
+              "predicate": "references",
+              "object": "code:symbol:v1:c52bb4500b078f81a317d8abc900f49b0c674d39b0d55292af393fe64367c471",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:6f8aff5a45df2536e0027122fd2a4899f936aba2efa2087c2d15f74c5eb8e32a"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/delivery.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "1f1d0262e138504a199c5f2e259e07de5d74e2a4773d886c860aa779a44847a0",
+              "subject": "component:file:test/delivery.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:5c9fa622ef50cf22b816b825ba05a701d4b752ef183a50f06cc189a480bacca2",
+              "provenance": {
+                "path": "test/delivery.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "5b9620a6d7ca8563ce10288634c7be218382fec6d5bc3b19cde97eadc0a3a5a0",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "learning",
+      "pages": [
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 4,
+          "expectedFilesCited": 4
+        },
+        {
+          "returned": 60,
+          "rankingVersion": "shared-symbol-witnesses-v4",
+          "reachableFacts": 5128,
+          "depthLimitReached": true,
+          "truncated": true,
+          "expectedFiles": 4,
+          "expectedFilesSuggested": 3,
+          "expectedFilesCited": 3
+        }
+      ],
+      "returnedAssertions": 180,
+      "returnedFactIds": [
+        "a794e857c24feacbc7ab19e8b0ae69547cef448c467962c7fc02327a38ba9e90",
+        "35469b4f66709ef9bdf2e2060ae5d0ff4ca281a033a11b710896c61082d0f1db",
+        "57bf7b7c7d589815577575c0fc61f659ea5025c103ee5fd55cdd4ded8a35ce99",
+        "7730a479101578693d58feb5e2676a8af97a8a7a9ab7ddd72c36a0b90716c118",
+        "21660b1b2a67a24a289eb59f529c94cefceed5560aeee488c38396a165369f9e",
+        "c74ce8eaafa53aaf89723c87882cdf98dea0b8555e609af5b7e6fedaf21e60ba",
+        "aa6347131438cd38f6649ecc2f1945adc77ddcc92a7f424be799efca54dad0e8",
+        "3e07c9c0f11f7858a0a027021998c1f95e299c05591d1f08c5788dfeec8ab30d",
+        "7ee9365e8c10442d599d153afca89c9ab4642a27ffc07d24adbee73f85235d4d",
+        "54feb7d096383681ef2981b4d3a7addb0b99de4c278e00e73e42d209767ce3f6",
+        "55017fe9e8a2ea90a4354b130accf7efec07397a48f0941f77af35c9a8d3bbd4",
+        "c74fd4dea65e9fb4ddc03f09feb23fe93affea9762d655616350cbde826abf73",
+        "5f5173d1d010110e42a4b98bd4010ec996b6e6cc035e50e0c44f106bc9383857",
+        "a03b9b167907ca89313829cdbcdaebf7121dfa863dc8891be7c993dda40abf74",
+        "1cca7e77172d12489a20844950f4b2f7d419becdf8cdc68a4806230bb563b179",
+        "b1f38ae337099a451a279dfb3921cdf1c4620b1ed528572d2501fae5fdb55611",
+        "7bcded232972180bbd1aacfa5c1e98ce1c64a8a98cff4a8e253d932ae6bd38fd",
+        "3761a7730c807c287f497124642d778681a8e6a09dcbd77d66100bfea87214f7",
+        "76512a29a15b41a980a2765c26b5eaaf47da8811f3f43dff979a1dfbbf09a2e6",
+        "9cab30728134c1738133ac5db3d00f0f5a3807496327fd22eab322180ec8ec79",
+        "8d2c21d8792aea992139decfb88a45bdf31c80480016334a56c0437621ce2361",
+        "6e5cac21517d843808b8aa842c969a51e4d8fff8db7e62ff99e62003c4a888a5",
+        "5d371dc27a437821f00a91c484f42dbc4ddb15309caa09bd8ce5181d30fef363",
+        "34c016317734491cc6d258b7295f2e302d67517e4adacc455c75d38096e8e301",
+        "50d9fd3e2b56ad7e7c9407e93e94ac2c369086c5c182c9a95bdf764e37c6f787",
+        "b5367e788b222e1e76a14aad11c8250fa799937d4d9bce14936ab11ff49cffcd",
+        "b2f10133e0852b4d2a787c0ceddd0447d02c388f9e6a94666936a8aed2629646",
+        "c12add8f77d3d9dbbdf483059c5c76d32fcfb54704d2bffb28b1e0162f3d0c1a",
+        "9aefd7811b9c7e500c3e4d32ee31ab76ce769938c2152930e0117d1af1189e2f",
+        "80b08b6951f7a9df7672b2b1b7c2b7343febe96318a9a99189fe3b563bc125f9",
+        "f48c01a20b3b655d2b0d3067b629dd3134de2a0242abc6af29ad0851c069d8d6",
+        "3e275ac26e90d36ef99a8fce7a61a86f9c84f65a1362712899ff584214ee4a24",
+        "9df0a10c6c43f1886653ac6822d035a4e97476062e4371a2defd99289421c46a",
+        "162d9f5e1cec2241b9ee69d9e0cdb2d81750df4c6bef799cc953b672231ecd8c",
+        "866ddcb6e6b38d398cd3040816888d372fb255eab7d6cbd942f2b78296d283fa",
+        "5f064a132fe1484d2c67d1140b4f5a70461a228302a6d677234539e757f22552",
+        "849bf59ec8acf7ab510d35c6a0e32fc9327cabf33cf77a6cc9e951f674c9bf2e",
+        "00efd361931abf871c0cf5ff8a6b63aa44c841e051f76428036a98409b9f2fe4",
+        "2dc8e96c7f6dd53496d58f090443c74a9968ce930efabe880fad58ff68104ce4",
+        "b094d5a5525f5f7a1d8412925ce32bf8e6020acb6cdb93e010fa27a5973ab01a",
+        "4cdfb247237bb3ab7f0b9eb2b7d88235dbdcff1b2d42b0c0dfe879a8d6a1547c",
+        "df46fad1b5250349cd9ccf581a7d56b09b85d58a87ad64eb0f8272ab72d4f394",
+        "050e0f685819a41cb102acfd8e915a8b09a5c586c3b19eb6fab78308a87152c7",
+        "7a8fba4233e93d523950d4a264aac2723444b810e710bacab1cd6e175937e9b0",
+        "0364e6b8eeb0c96ed26923839c144cecae61f9377cddf67c3948d7d511c2d487",
+        "f753bd37c335ad9f0c3795298fd89bfc35476cb5fb0656a8203928771b85b7b3",
+        "aabac63a6f27b3f11fc51fe134f85616481804468ba6f64dc04beb76385c5910",
+        "d214f91c3ee798d263d4a95dec09ea8fdacd4f46f0852e5e674319e4e33e7d3c",
+        "f0cf5788938c8032ee027670fe5ca47b5ff4bcfac0d8b42b52ae03056898d277",
+        "b93bc89b77136af50ba03a7358ead2f1f1951831dc74e33206b2c464b14e7a11",
+        "41024ac609e8b2bc5cd0b13d8003fdcdcc76c59ac5caec3d175451ad90342d20",
+        "9766d270600915af8c684a15ed4cde1bf2037f021a02e914c4761c4a1b933bb3",
+        "09f7f740f37d69c597e7aa171e2fbc37797b9af060ed5996faeb210aa3e2a720",
+        "664d78a960179cbd62f16c6413f0c945bc2e63eabbd26e6edf3c018543a182e2",
+        "66198bd0a3ccbb061815d29566b8d9851d8c97514532797afb4f6c7f43108c26",
+        "59cb5e44e82031390d6839494c5c63c965cb3d1a8fe839c7416b53f0f41adc28",
+        "65b0c664966fddb35e553054f34be24b3c99da15b065be8ea2ee12320480dc0b",
+        "aa8a938432ac477c571b5392d0f59b87462dc0853f79972cacaf4a205bcaea3c",
+        "9f130fb1bb5034620f5e59b03cd36b3fba9acd134b97fa816d712f1f1e1d12fa",
+        "b7084f17c62b7047fa4c8afd04e6af55b95e89fcb783b4d0a1a530a5e69a51ba",
+        "2df25271cf262e8d14f4af0d6e4633b1cfe4cee9043a9da1ccf7066274fa25af",
+        "4f05f69d577f8c6e72f361aa412823e00eff15b0e60ba06b7beb89b26e4b277e",
+        "4a421602f9a49692bc86294beaf9cea1fd9d08d8b95dddcfa2488c6e499555d9",
+        "5477f3d4c9d7cbfddc6d411a62b0a21a8be499a780db64b449be56e6d46dd0a2",
+        "9b08b88b5f0c17c5a6f0a30248b04da9d8ceb4727362d2d2147fb2a10811d290",
+        "471c6b18b66b9864ba7845bffee0c305f6aa56b5abf931008f2b30b831651712",
+        "5618d3106ae8ddcb3a8c3b3111f8224ffddf515359977b2a231b31dc5a5d7771",
+        "cfe88dbfb5c1cddb9a5691f272c4b5c143921e72c5b226ce67c1bfbfe51d4df4",
+        "102063cd05d2d7aaebe73520775b5c590eb9e631fb799e43666068c4fe149d24",
+        "8e0dea8434ffcfd4f664b8e73887ea2b7bc58ece4a97bcb4ee1621036829e683",
+        "4637ca1171825def0e2d36cf6c8d7fc0e22af854377566e26c39ff38724016e0",
+        "825193b3cf978b0bf825f45302c5cdf76a2d40987ef700f0b16bc37be25040a2",
+        "350a307582514b7a8edc583c7a17cbd299681fb245c4094a97274bb208fa5597",
+        "3c72046c935f23e7d2f06e2cc6693a227c5de2abc4b9778fb643be8bd00d7238",
+        "ee463d7a30a8dd1f18e58dad60d705daaee664e518fda7cd485a1ba5d5b0b995",
+        "9916362728d588941717eff176f782b9bd2898fb3da0a34f18c63b68de0d7091",
+        "048cb18e2a8dc4f92df46ad506754ab04bdc40e114c8c0239fc4a8b26b94852d",
+        "154880df3a2c89e9d55f1ed1f75a5d9053b234a05517c59ac344d9e3a0a1fe15",
+        "15853d679bcf356955897fd2dc7c6c4e5c64b3552c58ed071c3df50982ad2c25",
+        "4982a44cae42a29dbe35b4f65546d870424ce3f5846ab921db2f873405daa864",
+        "bbfc98fa8d89c1220fa51a14bc171a84f4c77fef554fb1cebd6a04d2e4a4fe42",
+        "760eb4e62359e1316c75300922c2599a2c093830bad4b0e98c028ad38176249e",
+        "ce72f534b687a3ca60e0316ca71412e768f1b5aaf31e332d8b1b44ece17af7f4",
+        "e5337ce6ef1c25892eea39375b3b691f9e71057c307228f597c851256f4b53a4",
+        "20ff0fed04742b573372b09a2569e0164075a351354280579c6abd9f43c535cc",
+        "ba0c53849f23653a3451c8a6a792f9ae363a6055912c34b1d9fc91646e25407d",
+        "bf34f013dcd19fde41af1e05ff10b680eb87fbfa62fdeb1dea725aa3bfad19f4",
+        "fc2e61992b3297bd6981d04017c7c671a658521b48ab7ed54da2536fe7025e8e",
+        "3fca9d72efdf8a7fcb06d9541babf246af722ac17c32f1a01d75079d8f693bc2",
+        "e908a3fb7499a40695cea6cf87165513c6a460e0c96a1be0e4b11ac2f4ed11c8",
+        "a78520aef520d35dcf18e9398e6508a470b2b39e3f574ed51cd103e3b1cf8d00",
+        "c4b5114cfa028a5ac14953d45ed25de58e322e83301f1fd42015840aaddc9277",
+        "fc09a55219d2b9a69c1888b17d9b0a12cc424e26a4294e4a1825e3572334ed82",
+        "9b79a3c4d47ced9f490f2f46ebd61df10dae1812498caf53952b6bdf3dbf31a8",
+        "c68fadc95679276de22c242e4d551650b34944a7fc4b7087686239c595a3c8f8",
+        "a96996837a216ea7bbda3c5333a91c07a095b048a7e496b8328a9f0bef353474",
+        "96f32539ed29b2b06e8a7ed7d4169ce48ece26611760dff8a53a0a7014ba08c0",
+        "1232ac733507bed2124ae4927866a44e740e3abc35daefb7ba3b9513088321c2",
+        "a48d9004c4ae042b17a8e19cecd08412251413790b8748a674a0c1d56b6bed77",
+        "04c64d286e0a9dad0652721354a83e720f79a893643e59ab66321091a0ea9b6a",
+        "206e9bfd46e56be065ced976cd738a73abd195a075a80e296679d896aa75297c",
+        "60223a922356f789d4824e55ebf3afd4d05f8b88e6e2361522ceb10c5375376f",
+        "fd482271bf0503082771b9aea0d1d82817fa72576fdff083f74e932a72d7ed8e",
+        "69fa0504d7c11fc84d19a2980180bdf453a5b7d1e98b5a276f15a24ef7889616",
+        "642c48dedae6ffdf5aa4e61c4f1092687d14f78262135ad12fb59bdb490fd412",
+        "29ce43dcd9efa7cac038b6099154d14f49ca5ade6953fefc5dc9bdb27cc99e59",
+        "70cb7c10cfdc3d89f0894daad745686c094da8419ff3c09a98bcde7409ebd881",
+        "76cbb5926110d7cf66c31140f06f77feaa8d0ba612115f6ceca1a9893211d825",
+        "c524d8b7efe4c035adfdb9eb466a0ed953d23c067a45e52c2291e65416f76586",
+        "4c6b40373cbee6692ed229bd63a0dd9373e0d7004d77424cf1a8f7d73469e9f9",
+        "aaf145bd83114b97269146151d90ef50a643254aef7f344b5434c88ca09e0d03",
+        "61a9bda5ed0b62b32e2d97df3df5b44d373ee0789844d5870610184533a09abb",
+        "2231cc59089171ec35f7f6af17497b5158922d28284333ce5629b884b54d8c4b",
+        "c553af93a5e981290c55b1186c42fc91c91e05456652ae5aee46364172fdc6cd",
+        "bd6e0ed736cf5a4ddf63948a11146553c84565855ad2f3c5dd1af07d785c036b",
+        "eba97e6489fa61a62c7e31267d964220ad4ab7516a173f8070c02f953e060dad",
+        "20f2152adc9515a810b8fab944aa95ee3f3c311c71fa3040dae4b3d182a311c4",
+        "254cd0b3d5edaceae2f1caddc1e3a8f0844e380cba9f0bf6bd65541f0cb4e9fd",
+        "d5c6accc775e678a7ae4f48bd76722d9641ff4393a70f397c1b807df3f75133f",
+        "df95984c23d1e91559baeed5a375f24fa55117b87c2298e84886725ee8d0c301",
+        "107e93bc904a4da23c42b122af045afdf0b739288e54e9d7a5a4ce9f79e5c13f",
+        "5b251c23e04daa1fd872c538c823a9c4a7bf7823808522bbfb0160f24fb3fb82",
+        "35b8750b641e2617e13ea791182a7b8a895e85fbaf3ef994e905908cfdc06dd4",
+        "70b5b3bcf9ccfb67d29a36e8af6cffc236cc6e83356f54111476128ad28aaf4b",
+        "879e286ec9d058667927f83e593021eb360908538c6fe19bee62accbc2e798e4",
+        "5c1408840929591c7a4b6d59d57f7d4bc1a326414386519cedcb84ebe6051e58",
+        "0a7c28a5aa03390704efe83042a53de1ab9fbf73f96fffa55fc2d6c821528022",
+        "778f6a8ff93d509a9d8c165ba70405cb60c6180423d1934ae3892c74c79ef2f8",
+        "d096558c7dcde7e685d31a89b633a1b6483d7e7fde87caecdb305abe399a8aa1",
+        "8838692a1a9e953f46f6663e4bfc899ad9b8ca2a28a554bbc6e9d6d7753ac0db",
+        "43009966625d96aa3ee147bebb2504a8280777a0da0c4f4e27bc7bfa05f90ddb",
+        "8f1b3912dcd8bcbedf3c30f4611e319d8602f1b641fc0e896a56db9d062735ae",
+        "095f7ccccf8c7c468cfcf0f31f213f2abd2e96b8ab2ac95b54e1012d9a590890",
+        "8a4b9eeea4080037509f9be99253e76407673fe1db0c04c628dcc90d3043219f",
+        "bba891b17b4384f75d03cbe9a92b5956bb450fe761967dd70d16b95e39112103",
+        "c29b3da626a977bfaa035fed08b9ddf3b1ffd1b0c2da289f5d99e6ddfc5e23cb",
+        "7307e712d62419c063a898b65565ba11e5657e014f5aa75014b3935275450531",
+        "0096878ef17264da3b1613508fb28b731caeae4ca4d4177cee466e7ade2ed361",
+        "01e0cbb7d502152ce3d528bc49d087807b0ee226740d4c51e43346d8d0eacd08",
+        "0e4d10d903cc8d283800326564d961e48de9626eff5e1b305414f9ee5317da8c",
+        "97490e11a0c19749dab8df3a27029ef9ad0a3d5b2c7e3e55c9984027b11be891",
+        "88096be2f4c59243255daa76f5eb1cc6b299b026effc02d7379194e7aca08ecb",
+        "23bf2fd501d120178479c4c48e627bf1a73033f0347d5fb08bed01ac693afe9b",
+        "851274ec8bd3d0dd91b0457996cf7c2e64624e12dfdb0775e47671a22539ef44",
+        "2a91f2f3dce6aa417c0b4110c4040bf15e776695479d7530e2467a19dbf64703",
+        "1016dddd0f78596c9172337bd97e0649a2cc77c6b165b433bcaceca6e974ca5f",
+        "75c0da4f1277936c1898c3e3cf342228a282b84e8cda6be85cbd26d6e2af95eb",
+        "a0b8b44f01546018fc156bf26e112c16b8b578085a3cc24a9b716f73c8165c4e",
+        "21e1e12fa0747c5f525e1fbde66e5abc12a83b2854b4342a551cfd48655f2201",
+        "bd22c619ae578f43eca326989be39b4e35a8c31772609550ec0c8432580e874f",
+        "f70270715f1287f204cde2dd79f0e2cdbc9950ff5c33a791f82c792d2f76d658",
+        "7b90774957aebe6daf37e7030ce4df28edc7bc18a11039b80ea26595a0e34629",
+        "308195164ca153c133ba55e1d2661a582d485ea1513b26f1a6f029510906ebdb",
+        "eea3f5ddf244d9e417107c5dcf4b806e8838b88ffa397014dc019ff6cb62550a",
+        "756c0930677bc2c0d054cfa1a60db009d222aac1e52a68456834b3fe1305a5da",
+        "1e3dd18a9db345e402f8e86d22bac6b04dabfce4f7a8bfeee1a44e151f99efa6",
+        "900eeedfb44efb706a3ad94e94dd3ce8c27b7243e45b96387264e8afd037caeb",
+        "14509d9e5318ea688f422917dc3550a14f1032c9da0085c7891e3e2624b6a833",
+        "5ddce181387465a03e18e5d661c448a34de71fec73d9c5b6687481a3fd8858eb",
+        "1365183285dc09161fd78260d17429efc3ba8433e31e10eb23157eb0728c65ee",
+        "b88f6cc3ccac014412113f0006d417869bdb26126456ddd55c4af7928ecdd47a",
+        "3095c3efd80ea45743f335a3a52799c93dddef320e300587e0b61bafb197e173",
+        "384126a7ab1a3029fa1f2fc5b4e7f09bfd3b794610b3a869f9322d037f9710a8",
+        "bf51a7d2e9b365fc196bd37d6a9c34e10ef57f9b44532481838bff3d9bbe81a9",
+        "990819747e902cbabc4ce50a4da77edf741f21ca687ad38540b1301e82e86546",
+        "a2c5b65830d08eeab3ac4096cb1b0ed91a0e5c15a987e6ae65ace25d236ff493",
+        "912d27d1278b7d6df52540667484d8fabd7cbc4c34a4f697c26ce4cff905166a",
+        "2fc494feb19fa2441445437d366624ef07f42f1750cc97bcc1bb66c83812141a",
+        "71024a414205ed880e355c7afa8dc5eaaa73010c653fe9d5c08bcaf038cdc4e0",
+        "244b35f7b650fbc5df7e842b9911452c703aa24ce4999d41fe3779d3a13215d8",
+        "a454bb0fb1841b4b037d9c1f7c6150a9e623a933a6f48c9640e1aff85a42bdf5",
+        "49f06daa868306340f349e339c983a0c4ee77cedce915c91e9b81b4d3f244bdf",
+        "8fa4c424e5b3bd7333cb461485a5d1da366cad68562765327618d40b4b55d53e",
+        "ac0889b3169bc7c12924d52019ce95066917760a8f00549cc06a4655add11336",
+        "708bab4465d80f517c7e71e664ac508c230433b5bdcd8cf647ef145a73b7ea5a",
+        "6f814b7163fd09979979ef72109287159773f7fd90d4daab78789b97a9130ad2",
+        "4b6a76c2f05f566cf4ae646d07205535477894f15142289e3036348465e2bc54",
+        "9d65b6c93dde324ea934c50abb35b353ea4cbd3245e3a9395775a42c200b774d",
+        "00d2b19c563cff56679ce1711dcd349b50b642845bb2aa624b48df9d2283dffb",
+        "1e44dd63a717d42b3f98919095b34a2e9a872db10a6514178c6a4d12b42a4fbf"
+      ],
+      "typeScriptLibraryAssertions": 0,
+      "sourceFiles": [
+        {
+          "path": "src/learning/producer.ts",
+          "returned": true
+        },
+        {
+          "path": "src/learning/queue.ts",
+          "returned": true
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "returned": true
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "returned": true
+        }
+      ],
+      "relationships": [
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "57bf7b7c7d589815577575c0fc61f659ea5025c103ee5fd55cdd4ded8a35ce99",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "calls",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 42,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bf51a7d2e9b365fc196bd37d6a9c34e10ef57f9b44532481838bff3d9bbe81a9",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "9cab30728134c1738133ac5db3d00f0f5a3807496327fd22eab322180ec8ec79",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 27,
+                      "endLine": 76,
+                      "endColumn": 35,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "664d78a960179cbd62f16c6413f0c945bc2e63eabbd26e6edf3c018543a182e2",
+                    "provenance": {
+                      "path": "src/learning/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "9cab30728134c1738133ac5db3d00f0f5a3807496327fd22eab322180ec8ec79",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "references",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 27,
+                "endLine": 76,
+                "endColumn": 35,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "35469b4f66709ef9bdf2e2060ae5d0ff4ca281a033a11b710896c61082d0f1db",
+              "subject": "component:file:src/learning/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:0c18f12670e85ec61eb5b7c13bd25d89da640da212155ffcab7e9581be96d48b",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "a03b9b167907ca89313829cdbcdaebf7121dfa863dc8891be7c993dda40abf74",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "calls",
+              "object": "code:symbol:v1:8592ce6ffe67892a48c8a7e231fe1416f1fb31efe15c832cbcf4edcdf140fddc",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 45,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bf51a7d2e9b365fc196bd37d6a9c34e10ef57f9b44532481838bff3d9bbe81a9",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "d214f91c3ee798d263d4a95dec09ea8fdacd4f46f0852e5e674319e4e33e7d3c",
+                    "provenance": {
+                      "path": "src/learning/producer.ts",
+                      "startLine": 76,
+                      "startColumn": 10,
+                      "endLine": 76,
+                      "endColumn": 17,
+                      "columnEncoding": "utf-16",
+                      "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "20ff0fed04742b573372b09a2569e0164075a351354280579c6abd9f43c535cc",
+                    "provenance": {
+                      "path": "src/learning/queue.ts",
+                      "startLine": 3,
+                      "startColumn": 17,
+                      "endLine": 3,
+                      "endColumn": 24,
+                      "columnEncoding": "utf-16",
+                      "digest": "4d740436f14de5e01e5e02c7dfc148a180f18b64325e790ecbe9e1ec234d68f6",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "d214f91c3ee798d263d4a95dec09ea8fdacd4f46f0852e5e674319e4e33e7d3c",
+              "subject": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35",
+              "predicate": "references",
+              "object": "code:symbol:v1:8592ce6ffe67892a48c8a7e231fe1416f1fb31efe15c832cbcf4edcdf140fddc",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 76,
+                "startColumn": 10,
+                "endLine": 76,
+                "endColumn": 17,
+                "columnEncoding": "utf-16",
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:2a4e1b52a6358a621fecce314bdce2e6f9419e448a1609743290779f7cc0ed35"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/producer.ts",
+          "caller": "publish",
+          "callee": "enqueue",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "5f064a132fe1484d2c67d1140b4f5a70461a228302a6d677234539e757f22552",
+              "subject": "component:file:src/learning/producer.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:9f4a2194bd365313896f4667cde53b95a8cb105f64f9f24dcb571c0270a9032e",
+              "provenance": {
+                "path": "src/learning/producer.ts",
+                "startLine": 2,
+                "endLine": 2,
+                "digest": "1d2b055fb77ab779466e958603822aa5569d899230d58939f655da419921b32e",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "aa6347131438cd38f6649ecc2f1945adc77ddcc92a7f424be799efca54dad0e8",
+              "subject": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "predicate": "calls",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 25,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "81bf8c6365a1aea1f290c1b7d19958b33ffc6e34806532bfdd956262f08cf55e",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "5d371dc27a437821f00a91c484f42dbc4ddb15309caa09bd8ce5181d30fef363",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 78,
+                      "startColumn": 10,
+                      "endLine": 78,
+                      "endColumn": 18,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "664d78a960179cbd62f16c6413f0c945bc2e63eabbd26e6edf3c018543a182e2",
+                    "provenance": {
+                      "path": "src/learning/source.ts",
+                      "startLine": 1,
+                      "startColumn": 17,
+                      "endLine": 1,
+                      "endColumn": 25,
+                      "columnEncoding": "utf-16",
+                      "digest": "4c39c799b3b8ea4ab1bc857c68e665eb76fb9f3450d42f974e94f9abf16a5b22",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "5d371dc27a437821f00a91c484f42dbc4ddb15309caa09bd8ce5181d30fef363",
+              "subject": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "predicate": "references",
+              "object": "code:symbol:v1:2979b8996017833791beb694f438ae72ec66ab5651389633c4c8dbf68948326c",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 78,
+                "startColumn": 10,
+                "endLine": 78,
+                "endColumn": 18,
+                "columnEncoding": "utf-16",
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0"
+              }
+            }
+          ]
+        },
+        {
+          "path": "src/learning/worker.ts",
+          "caller": "processJob",
+          "callee": "evaluate",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "c74ce8eaafa53aaf89723c87882cdf98dea0b8555e609af5b7e6fedaf21e60ba",
+              "subject": "component:file:src/learning/worker.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:0c18f12670e85ec61eb5b7c13bd25d89da640da212155ffcab7e9581be96d48b",
+              "provenance": {
+                "path": "src/learning/worker.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "calls",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "7730a479101578693d58feb5e2676a8af97a8a7a9ab7ddd72c36a0b90716c118",
+              "subject": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98",
+              "predicate": "calls",
+              "object": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 31,
+                "columnEncoding": "utf-16",
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeCall": {
+                "schemaVersion": 1,
+                "method": "typescript-ast+scip",
+                "syntax": "call",
+                "dispatch": "lexical",
+                "optional": false,
+                "caller": "indexed-callable",
+                "target": "indexed-body",
+                "runtime": "not-observed",
+                "callerDefinitions": [
+                  {
+                    "factId": "bd6e0ed736cf5a4ddf63948a11146553c84565855ad2f3c5dd1af07d785c036b",
+                    "provenance": {
+                      "path": "test/learning.spec.ts",
+                      "startLine": 2,
+                      "startColumn": 17,
+                      "endLine": 2,
+                      "endColumn": 22,
+                      "columnEncoding": "utf-16",
+                      "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetOccurrences": [
+                  {
+                    "factId": "050e0f685819a41cb102acfd8e915a8b09a5c586c3b19eb6fab78308a87152c7",
+                    "provenance": {
+                      "path": "test/learning.spec.ts",
+                      "startLine": 75,
+                      "startColumn": 10,
+                      "endLine": 75,
+                      "endColumn": 20,
+                      "columnEncoding": "utf-16",
+                      "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ],
+                "targetDefinitions": [
+                  {
+                    "factId": "81bf8c6365a1aea1f290c1b7d19958b33ffc6e34806532bfdd956262f08cf55e",
+                    "provenance": {
+                      "path": "src/learning/worker.ts",
+                      "startLine": 4,
+                      "startColumn": 17,
+                      "endLine": 4,
+                      "endColumn": 27,
+                      "columnEncoding": "utf-16",
+                      "digest": "2e9524040742e9597405ce879a26f424af3acad215ceaaa513f62261608b00c7",
+                      "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "references",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "050e0f685819a41cb102acfd8e915a8b09a5c586c3b19eb6fab78308a87152c7",
+              "subject": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98",
+              "predicate": "references",
+              "object": "code:symbol:v1:ddaba061a3b410ed41d00a4647d7cd954949bd37eabdfd7130fc6a4340f40fd0",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 75,
+                "startColumn": 10,
+                "endLine": 75,
+                "endColumn": 20,
+                "columnEncoding": "utf-16",
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              },
+              "authority": "implemented",
+              "extractionReview": "deterministic",
+              "codeOccurrence": {
+                "schemaVersion": 1,
+                "role": "reference",
+                "locationKind": "name",
+                "nativeRoles": 0,
+                "enclosure": "native-range",
+                "enclosingSymbolId": "code:symbol:v1:4df2174eebb82bfea426a171b1e7e51c4f83de9cf13d6cd1d2544decd6643c98"
+              }
+            }
+          ]
+        },
+        {
+          "path": "test/learning.spec.ts",
+          "caller": "check",
+          "callee": "processJob",
+          "predicate": "consumes",
+          "inSnapshot": 1,
+          "returned": true,
+          "firstPage": 1,
+          "witnesses": [
+            {
+              "id": "866ddcb6e6b38d398cd3040816888d372fb255eab7d6cbd942f2b78296d283fa",
+              "subject": "component:file:test/learning.spec.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:d1daf934d23f0ec1a7826f3c317a1565447aebd7d44c0e8d080b40a96939f687",
+              "provenance": {
+                "path": "test/learning.spec.ts",
+                "startLine": 1,
+                "endLine": 1,
+                "digest": "beead187a578c67bf62981c295ae5363bbf19b20cccd1d343ab78d08f7c88cbb",
+                "commitSha": "6e4a145e59128bd0bdbe9058fa06e34c05849e17"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "returnedAssertions": 540,
+  "typeScriptLibraryAssertions": 0,
+  "expectedRelationships": 36,
+  "retrievedRelationships": 36
+}

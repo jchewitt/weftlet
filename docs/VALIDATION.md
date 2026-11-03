@@ -1,5 +1,69 @@
 # Validation evidence
 
+## Shared-symbol candidate: public evidence, 2026-11-03
+
+[ADR 043](ADR-043-shared-symbol-specificity.md) and its
+[frozen within-group comparison](../evaluations/same-group-retrieval/README.md) address the
+newly supplied chain evidence without changing extraction. On one unchanged 6,417-fact saved
+graph, both round-two targets move from 3,074 / 323 to **141 / 10** at depth three / 3 × 60.
+All reachable facts, exact citations/authority and four stored files remain unchanged. Source
+diversity changes from 63 to 38; two of all 136 predeclared pairs are returned together.
+The symmetric control still misses the targets at 2,892 / 309 and retrieves zero complete pairs.
+That negative result is retained; equal witnesses cannot guarantee universal bounded recall.
+
+The built CLI and a fresh stdio MCP server reproduce all 180 candidate IDs in order across
+three pages, including both exact stored target facts. No hydration/model calls or saved-byte
+changes occur during that comparison. Focused ranking, projection-mismatch, strict hydration,
+repeat, prior relationship and shortest-first path checks pass; full release qualification is
+recorded separately on the change PR. Repeat hydration creates a fresh identical RDF work file
+while preserving every prior evidence file. **The private two-assertion ticket remains open.**
+
+## 0.7.3 private replay: same indirect-ranking ticket remains open, 2026-11-03
+
+Maintainer-reported, sanitized evidence. At the original depth three / three pages of 60,
+the same `references` and `consumes` assertions improve from ranks 23,052 / 3,447 in 0.7.2
+to **3,364 / 456** in 0.7.3 (calculated pages 57 / 8). Both still miss the predeclared 180
+slots. This is the same ranking ticket, not another extraction, scale or authority failure.
+The earlier public two-target pass does not transfer to this larger graph.
+
+Snapshot digest remains `53e2e3a024125389685d5bc9183f428b4e749dc7021df87623f54e32af4c7f56`;
+360 direct matches and 420,837 reachable facts are unchanged. Both targets are reached in
+round two. The released ranker reproduces all 180 CLI fact IDs in order; later ranks were
+calculated without fetching additional pages. Neither target has a hub penalty or belongs
+to the context-only phase. No saved call in the reachable set cites the reference as target proof.
+
+| Target group | Assertions / sources | Target group rank / source ordinal | Slots in first 180 | Target wave |
+| --- | ---: | ---: | ---: | ---: |
+| Weighted distance 2, `references` | 1,038 / 136 | 284 / 5 | 10 | 141 |
+| Weighted distance 3, `consumes` | 284 / 47 | 29 / 1 | 10 | 14 |
+
+These measurements locate displacement within populated groups and their turn allocation;
+they do not establish a universally better weighting scheme. Across the three original cases,
+page-one expected file suggestion/citation changes from 12/12 / 12/12 in 0.7.2 to 10/12 / 11/12;
+through three pages it is 11/12 / 12/12. Library-target references remain 0/540 and no named
+noise control appears. The PM first 180 cover 63 provenance sources, versus 158 previously.
+File discovery and source diversity are separate measurements from exact relationship recall.
+
+The direct-path report stays closed: both exact one-hop assertions retain their predicates,
+citations and original 1,000-step budget. The MCP description is now accurate. Fresh MCP agrees
+with the released CLI; all 35 consumer checks and all 20 stored-byte fingerprints pass, without
+private rehydration or model calls. The 0.7.1 capacity fix remains accepted for the reported run.
+
+The subsequent saved-chain handoff distinguishes the targets from preselected median peers.
+Both targets have a producer → indexed shared symbol ← indexed worker witness, with **three
+distinct production referrer symbols**. The reference's sampled peer instead approaches through
+file-scope symbols; the consumer's peer also has no such shared-symbol witness. Peers were chosen
+as the fifth of ten first-page results in their respective groups, before comparing paths.
+This establishes pairwise structural specificity, not a universally optimal ranking or execution.
+There is no all-forward indexed reference/call path within four approach hops in that diagnostic.
+
+Native and legacy projections have no explicit identity edge. Matching usage/definition file and
+start line are corroboration only; they must not become graph joins or fabricated calls. The
+stored-byte SHA-256 in the handoff is
+`e92e3c2c4b6ec65a4767fe20697657cd566c15fbdff9732af58999d8ff09554d`.
+The query-only candidate and its positive/ambiguous public controls are tracked in
+[ADR 043](ADR-043-shared-symbol-specificity.md). **Private acceptance remains open.**
+
 ## Indirect-ranking patch: public comparison, 2026-11-03
 
 [ADR 042](ADR-042-indirect-local-relationships.md) and the

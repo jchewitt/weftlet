@@ -2,6 +2,8 @@
 
 Status: query-only patch. Qualification and consumer status are recorded in VALIDATION.md.
 Supersedes ADR 041's impact ordering; its shortest-first path search is unchanged.
+The 0.7.3 private replay still misses both targets at 180 facts; the public result below is not
+private acceptance. Investigation now focuses on competition within the same groups.
 
 ## Evidence
 
