@@ -1,5 +1,12 @@
 # @weftlet/toolkit
 
+## 0.7.4
+
+### Patch Changes
+
+- 5e71888: Prioritize indirect indexed references with selective shared-symbol evidence and corroborating legacy file consumers within the existing bounded impact query. Preserve every reachable assertion, citation and authority; no extraction or snapshot refresh is required. Restart impact pagination after upgrading. Add same-group positive and symmetric controls; private consumer acceptance remains open.
+- @weftlet/core@0.7.4
+
 ## 0.7.3
 
 ### Patch Changes
