@@ -118,7 +118,7 @@ describe('explicit source document roles', () => {
       .toEqual([...facts].sort((a, b) => a.id.localeCompare(b.id)));
     expect(pack.coverage.counts).toEqual({ productIntent: 2, contractsAndInvariants: 0,
       implementationAndConsumers: 0, validationEvidence: 2 });
-    expect(pack.exploration?.rankingVersion).toBe('proximity-diversity-v1');
+    expect(pack.exploration?.rankingVersion).toBe('local-relationships-diversity-v2');
     const before = stableJson(pack);
     const html = renderContextPackHtml(pack);
     const svg = renderContextPackSvg(pack);

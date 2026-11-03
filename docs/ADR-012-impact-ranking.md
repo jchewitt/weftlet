@@ -1,6 +1,7 @@
 # ADR 012: order impact evidence by proximity and source diversity
 
-Status: implemented as a query-only heuristic; not product policy or an evidence gate.
+Status: historical v1 query heuristic. [ADR 041](ADR-041-bounded-relationship-retrieval.md)
+records the v2 library-hub and relationship-priority revision. Neither is product policy or an evidence gate.
 
 The self-repository evaluation found distractions connected through common imports such as
 `node:fs/promises`. The previous ordering prioritized keyword counts, then Codex/document-link

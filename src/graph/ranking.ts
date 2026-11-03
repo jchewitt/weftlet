@@ -1,8 +1,9 @@
 import type { GraphFact, GraphNode } from '@weftlet/core';
 import { stableJson } from '../infrastructure/util.js';
+import { impactRankingSignals } from './impact-signals.js';
 
 /** Binds continuation offsets to the ordering policy; changing this requires restarting a scan. */
-export const IMPACT_RANKING_VERSION = 'proximity-diversity-v1';
+export const IMPACT_RANKING_VERSION = 'local-relationships-diversity-v2';
 
 export function factSearchText(fact: GraphFact): string {
   return [fact.subject.id, fact.subject.label, fact.predicate, fact.object.id,
@@ -33,6 +34,9 @@ export function rankImpactFacts(
   facts: readonly GraphFact[], direct: readonly GraphFact[], anchorTerms: readonly string[],
   focus: readonly string[],
 ): readonly RankedImpactFact[] {
+  const signals = impactRankingSignals(facts, anchorTerms);
+  const costs = new Map(facts.map(fact => [fact, signals.penalty(fact)]));
+  const cost = (fact: GraphFact, forward: boolean) => Math.max(edgeCost(fact, forward), costs.get(fact)!);
   const adjacent = new Map<string, { to: string; cost: number }[]>();
   const connect = (from: GraphNode, to: GraphNode, cost: number) => {
     if (from.kind === 'Project' || to.kind === 'Project') return;
@@ -41,8 +45,8 @@ export function rankImpactFacts(
     adjacent.set(from.id, edges);
   };
   for (const fact of facts) {
-    connect(fact.subject, fact.object, edgeCost(fact, true));
-    connect(fact.object, fact.subject, edgeCost(fact, false));
+    connect(fact.subject, fact.object, cost(fact, true));
+    connect(fact.object, fact.subject, cost(fact, false));
   }
   const distance = new Map<string, number>();
   // Integer edge costs permit a bucket queue: O(edges + maximum path cost), without a heap dependency.
@@ -53,11 +57,8 @@ export function rankImpactFacts(
     (pending[cost] ??= []).push(id);
   };
   for (const fact of direct) {
-    const eligible = [fact.subject, fact.object].filter((node) => node.kind !== 'Project');
-    const matching = eligible.filter((node) => anchorTerms.some((term) =>
-      `${node.id} ${node.label}`.toLowerCase().includes(term)));
     // Some adapters only identify an anchor through its citation. Keep those queries supported.
-    for (const node of matching.length ? matching : eligible) enqueue(node.id, 0);
+    for (const node of signals.seedNodes(fact)) enqueue(node.id, 0);
   }
   for (let cost = 0; cost < pending.length; cost++) {
     for (const id of pending[cost] ?? []) {
@@ -70,17 +71,23 @@ export function rankImpactFacts(
     const text = factSearchText(fact);
     return {
       fact,
-      proximity: directIds.has(fact.id) ? 0 : Math.min(
-        (distance.get(fact.subject.id) ?? Infinity) + edgeCost(fact, true),
-        (distance.get(fact.object.id) ?? Infinity) + edgeCost(fact, false)),
+      proximity: costs.get(fact)! + (directIds.has(fact.id) ? 0 : Math.min(
+        (distance.get(fact.subject.id) ?? Infinity) + cost(fact, true),
+        (distance.get(fact.object.id) ?? Infinity) + cost(fact, false))),
+      relationshipOrder: signals.relationshipOrder(fact),
       focus: focus.filter((term) => text.includes(term)).length,
       tie: stableTie(fact),
     };
   });
   const lexical = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
   const compare = (a: typeof rows[number], b: typeof rows[number]) =>
-    b.focus - a.focus || lexical(a.tie, b.tie) || lexical(a.fact.id, b.fact.id);
-  rows.sort((a, b) => a.proximity - b.proximity || compare(a, b));
+    a.relationshipOrder - b.relationshipOrder || b.focus - a.focus || lexical(a.tie, b.tie) || lexical(a.fact.id, b.fact.id);
+  // Allocate each source's early slots to relationships before local occurrence
+  // detail. Otherwise hundreds of nearer variable references consume a file's
+  // diversity allowance before its file-to-symbol consumer can be considered.
+  // Final ordering below still charges distance and shared-library penalties.
+  rows.sort((a, b) => costs.get(a.fact)! - costs.get(b.fact)! ||
+    a.relationshipOrder - b.relationshipOrder || a.proximity - b.proximity || compare(a, b));
   const counts = new Map<string, number>();
   const diverse = rows.map((row) => {
     const seen = counts.get(row.fact.provenance.path) ?? 0;

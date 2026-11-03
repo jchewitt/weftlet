@@ -8,7 +8,7 @@ import { parseGraphPathsRequest } from './path-request.js';
 import { searchEvidencePaths } from './path-search.js';
 import { renderGraphPaths } from './paths-renderer.js';
 
-export const GRAPH_PATHS_VERSION = 'simple-evidence-paths-v1';
+export const GRAPH_PATHS_VERSION = 'simple-evidence-paths-v2';
 
 function continuationOffset(token: string | undefined, binding: string): number {
   if (!token) return 0;
@@ -58,7 +58,7 @@ export class SnapshotGraphPathService implements GraphPathQueryService {
       paths: result.paths, facts, coverage: coverageForFacts(facts, saved),
       diagnostics: selectDiagnostics(saved, {}, facts, [], [], new Set([request.fromNodeId, request.toNodeId,
         ...facts.flatMap(fact => [fact.subject.id, fact.object.id])])),
-      search: { version: GRAPH_PATHS_VERSION, order: 'fact-id-depth-first', direction: request.direction,
+      search: { version: GRAPH_PATHS_VERSION, order: 'shortest-first-target-first', direction: request.direction,
         predicates: request.predicates, maxDepth: request.maxDepth, maxPaths: request.maxPaths, maxSteps: request.maxSteps,
         ...result.search, ...(next ? { continuation: next } : {}) }, frontier: result.frontier,
     };

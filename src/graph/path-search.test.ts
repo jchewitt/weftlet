@@ -5,6 +5,39 @@ const options = { maxDepth: 8, maxPaths: 20, maxSteps: 1000 };
 const edge = (id: string, from: string, to: string): PathEdge => ({ id, from, to });
 const signatures = (paths: readonly { factIds: readonly string[] }[]) => paths.map(path => path.factIds.join(',')).sort();
 
+it('returns a known direct edge before unrelated branches exhaust the unchanged work page', () => {
+  const edges = Array.from({ length: 1500 }, (_, i) => [
+    edge(`a-${i}`, 'start', `branch-${i}`),
+    edge(`b-${i}`, `branch-${i}`, `deep-${i}`),
+    edge(`c-${i}`, `deep-${i}`, `leaf-${i}`),
+  ]).flat();
+  edges.push(edge('zz-direct', 'start', 'target'));
+  const page = searchEvidencePaths(edges, 'start', 'target', { maxDepth: 3, maxPaths: 3, maxSteps: 1000 });
+  expect(page.paths[0]).toEqual({ nodeIds: ['start', 'target'], factIds: ['zz-direct'] });
+  expect(page.search).toMatchObject({ examinedSteps: 1000, stopReason: 'work-page-limit', truncated: true });
+  expect(page.frontier.pendingCount).toBe(1000);
+  expect(page.frontier.pending).toHaveLength(32);
+  expect(page.frontier.omittedPending).toBe(968);
+  expect(searchEvidencePaths([...edges].reverse(), 'start', 'target', { maxDepth: 3, maxPaths: 3, maxSteps: 1000 }))
+    .toEqual(page);
+});
+
+it('returns paths in nondecreasing length across work and output pages', () => {
+  const edges = [edge('a', 's', 'a'), edge('b', 'a', 'b'), edge('c', 'b', 't'),
+    edge('d', 's', 'c'), edge('e', 'c', 't'), edge('z', 's', 't')];
+  const expected = [['z'], ['d', 'e'], ['a', 'b', 'c']];
+  expect(searchEvidencePaths(edges, 's', 't', options).paths.map(path => path.factIds)).toEqual(expected);
+  let offset = 0;
+  const found: string[][] = [];
+  for (;;) {
+    const page = searchEvidencePaths(edges, 's', 't', { ...options, maxPaths: 1, maxSteps: 1, offset });
+    found.push(...page.paths.map(path => [...path.factIds]));
+    if (page.search.exhaustedWithinDepth) break;
+    offset = page.search.totalSteps;
+  }
+  expect(found).toEqual(expected);
+});
+
 it('matches an independent exhaustive oracle on all 4096 directed four-node graphs', () => {
   const possible = Array.from({ length: 4 }, (_, from) => Array.from({ length: 4 }, (_, to) =>
     from === to ? [] : [edge(`${from}-${to}`, String(from), String(to))])).flat(2);

@@ -60,6 +60,7 @@
     "release:prepare": "pnpm context-graph:publication-check && node scripts/release.mjs --prepare",
     "release:publish": "node scripts/release.mjs --publish",
     "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json",
+    "evaluate:retrieval": "tsx scripts/retrieval-study/run.ts",
     "evaluate:impact": "tsx scripts/evaluation/run.ts",
     "evaluate:code:check": "node scripts/code-graph-study/check.mjs",
     "benchmark:shacl": "node scripts/benchmark-shacl.mjs",

@@ -3,6 +3,7 @@ import type { GraphFact, GraphPathsRequest, GraphSnapshot } from '@weftlet/core'
 import { SnapshotGraphPathService } from './paths.js';
 import { RdfEvidenceGraph, CG, factIri } from './rdf.js';
 import { parseGraphPathsRequest } from './path-request.js';
+import { SnapshotImpactQueryService } from './query.js';
 
 function fixture() {
   const fact = (id: string, from: string, to: string, predicate: GraphFact['predicate'] = 'references'): GraphFact => ({ id,
@@ -22,11 +23,34 @@ function fixture() {
   return { snapshot, snapshots, service, request };
 }
 
+it('returns the same directly cited edge as impact.scan on the first high-branching bounded path page', async () => {
+  const { snapshot, service, request } = fixture();
+  const direct = { ...snapshot.facts[4]!, id: 'zz-direct', provenance: { ...snapshot.facts[4]!.provenance, path: 'src/known.ts' } };
+  const branches = Array.from({ length: 1500 }, (_, i) => [
+    { ...snapshot.facts[0]!, id: `a-${i}`, object: { ...direct.object, id: `branch-${i}` } },
+    { ...snapshot.facts[0]!, id: `b-${i}`, subject: { ...direct.subject, id: `branch-${i}` }, object: { ...direct.object, id: `leaf-${i}` } },
+  ]).flat();
+  Object.assign(snapshot, { facts: [...branches, direct] });
+  const unexpectedWrite = async () => { throw new Error('Query must not write'); };
+  const impact = new SnapshotImpactQueryService({ read: async () => snapshot, readHead: async () => snapshot,
+    write: unexpectedWrite, updateHead: unexpectedWrite }, 'default');
+  const found = await impact.scan({ changedFiles: ['src/known.ts'], maxDepth: 3, maxFacts: 60 });
+  expect(found.facts).toContainEqual(direct);
+  const paths = await service.paths({ ...request, direction: 'outgoing', maxDepth: 3, maxPaths: 3, maxSteps: 1000 });
+  expect(paths.paths).toEqual([{ nodeIds: ['a', 't'], factIds: ['zz-direct'] }]);
+  expect(paths.facts).toEqual([direct]);
+  expect(paths.search).toMatchObject({ examinedSteps: 1000, truncated: true, stopReason: 'work-page-limit' });
+  expect(paths.search.continuation).toBeTypeOf('string');
+  expect(paths.frontier).toMatchObject({ pendingCount: 1000, omittedPending: 968 });
+  expect(paths.markdown).toContain('968');
+});
+
 it('returns every simple cited path with RDF-equivalent assertions and explicit pagination', async () => {
   const { snapshot, service, request } = fixture();
   const before = JSON.stringify(snapshot);
   let page = await service.paths(request);
-  expect(page.paths[0]!.factIds).toEqual(['1', '3', '4']);
+  expect(page.paths[0]!.factIds).toEqual(['5']);
+  expect(page.search.order).toBe('shortest-first-target-first');
   expect(page.search).toMatchObject({ stopReason: 'path-page-limit', truncated: true });
   expect(page.coverage.gaps.join(' ')).toContain('unreviewed');
   expect(page.markdown).toContain('not proof of causality');
@@ -36,7 +60,7 @@ it('returns every simple cited path with RDF-equivalent assertions and explicit 
     paths.push(...page.paths);
     for (const fact of page.facts) expect(fact).toEqual(snapshot.facts.find(original => original.id === fact.id));
   }
-  expect(paths.map(path => path.factIds)).toEqual([['1', '3', '4'], ['2', '3', '4'], ['5']]);
+  expect(paths.map(path => path.factIds)).toEqual([['5'], ['1', '3', '4'], ['2', '3', '4']]);
   expect(page.search.truncated).toBe(false);
   const full = await service.paths({ ...request, maxPaths: 20 });
   const rdf = await new RdfEvidenceGraph(snapshot).select(`SELECT ?record WHERE { VALUES ?fact { ${full.facts.map(f => `<${factIri(f.id)}>`).join(' ')} } ?fact <${CG}record> ?record }`);
@@ -49,7 +73,7 @@ it('respects exact endpoints/direction/relations, depth omissions, absent target
   const { snapshot, snapshots, service, request } = fixture();
   expect((await service.paths({ ...request, direction: 'incoming' })).paths).toEqual([]);
   const incoming = await service.paths({ ...request, fromNodeId: 't', toNodeId: 'a', direction: 'incoming', maxPaths: 20 });
-  expect(incoming.paths.map(path => path.factIds)).toEqual([['4', '3', '1'], ['4', '3', '2'], ['5']]);
+  expect(incoming.paths.map(path => path.factIds)).toEqual([['5'], ['4', '3', '1'], ['4', '3', '2']]);
   const both = await service.paths({ ...request, fromNodeId: 'b', toNodeId: 't', direction: 'both', maxPaths: 20 });
   expect(both.paths.some(path => path.factIds.join(',') === '1,5')).toBe(true);
   const filtered = await service.paths({ ...request, predicates: ['references'], maxPaths: 20 });
@@ -89,17 +113,17 @@ it('rejects changed requests, damaged stores and stale/malformed/non-boundary cu
   const continuation = first.search.continuation!;
   const normalized = await service.paths({ ...request, predicates: ['references', 'routesThrough'] });
   expect((await service.paths({ ...request, predicates: ['routesThrough', 'references', 'references'],
-    continuation: normalized.search.continuation })).paths[0]!.factIds).toEqual(['2', '3', '4']);
+    continuation: normalized.search.continuation })).paths[0]!.factIds).toEqual(['1', '3', '4']);
   for (const change of [{ maxDepth: 3 }, { maxPaths: 2 }, { maxSteps: 2 }, { fromNodeId: 'b' }, { toNodeId: 'c' },
     { direction: 'both' as const }, { predicates: ['references'] as const }]) {
     await expect(service.paths({ ...request, ...change, continuation })).rejects.toThrow('mismatch');
   }
   const cursor = JSON.parse(Buffer.from(continuation, 'base64url').toString());
-  for (const value of [null, [], { ...cursor, version: 'old' }, { ...cursor, offset: -1 }, { ...cursor, offset: 100000 }, { ...cursor, extra: true }]) {
+  for (const value of [null, [], { ...cursor, version: 'simple-evidence-paths-v1' }, { ...cursor, offset: -1 }, { ...cursor, offset: 100000 }, { ...cursor, extra: true }]) {
     await expect(service.paths({ ...request, continuation: Buffer.from(JSON.stringify(value)).toString('base64url') })).rejects.toThrow('continuation');
   }
   await expect(service.paths({ ...request, continuation: '!' })).rejects.toThrow('continuation');
-  await expect(service.paths({ ...request, continuation: Buffer.from(JSON.stringify({ ...cursor, offset: 1 })).toString('base64url') })).rejects.toThrow('boundary');
+  await expect(service.paths({ ...request, continuation: Buffer.from(JSON.stringify({ ...cursor, offset: 2 })).toString('base64url') })).rejects.toThrow('boundary');
   snapshots.set('saved', { ...snapshot, facts: snapshot.facts.slice(0, 4) });
   await expect(service.paths({ ...request, continuation })).rejects.toThrow('mismatch');
   snapshots.set('saved', { ...snapshot, facts: [...snapshot.facts, snapshot.facts[0]!] });
