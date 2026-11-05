@@ -1,6 +1,6 @@
 # ADR 044: shared evidence queries for the graph explorer
 
-Status: product direction agreed on 2026-11-05; implementation/schema details proposed.
+Status: product direction agreed on 2026-11-05; shared discovery/index implementation started.
 
 ## Context
 
@@ -27,6 +27,11 @@ export. A bundle may contain multiple assets/data shards; a single index.html is
 Static report coverage is explicit, and unavailable operations must not silently fall back to
 incomplete data. Preserve the existing bounded export API while adding the explorer path.
 
+Storage and access are independent choices: filesystem snapshots can back a local or hosted
+API, while a portable bundle needs no API runtime. A future tested database driver is optional;
+it does not select the viewer deployment mode. Keep connection credentials on the service side.
+Do not introduce a `snapshotOnly` switch that incorrectly disables local live querying.
+
 A deployable Docker service is useful before 2.0. Keep existing immutable graph artifacts on
 persistent storage initially. PostgreSQL fits metadata and later transactional review/approval
 history; an RDF store remains a measured performance option, not a prerequisite. Redis and
@@ -45,6 +50,7 @@ usable browser navigation, explicit missing-intent cases, large-graph resource b
 installation and immutable-byte preservation. Hosted deployment additionally needs reviewed
 access controls and operational configuration; no private graph is uploaded by default.
 
-No viewer implementation, database migration, hosted deployment, new provider, approval workflow
-or license change is established by this decision record. Current 1.0 consumer acceptance and
-the narrow SELinux release remain separately tracked.
+The first [implementation increment](EXPLORER-DISCOVERY.md) adds shared discovery and index
+support. No new browser application, database migration, hosted deployment, new provider,
+approval workflow or license change is established by this increment. Current 1.0 consumer
+acceptance and the narrow SELinux release remain separately tracked.

@@ -1,5 +1,34 @@
 # Validation evidence
 
+## Explorer discovery/index increment, 2026-11-05
+
+The [discovery contract](EXPLORER-DISCOVERY.md) adds snapshot-wide catalogs and exact assertion
+reads. Public tests find intent outside an unrelated impact page, retain mixed authority/review
+states, compare exact facts with RDF, and exercise unchanged shortest-first paths. The actual
+public pipeline hydration/SCIP test now checks catalog discovery and exact detail provenance too.
+Filesystem tests share a read across concurrent services, retain saved bytes, reject stale cursors
+after an out-of-band edit preserving the manifest digest, and detect deletion/load races.
+
+Linux Node 24.19.0: full suite **38 core + 1,025 toolkit tests passed**, with the two optional
+ontology integrations skipped. The aggregate command then stopped at a missing canonical module
+mapping for the new fixture. Moving that fixture into the existing public examples module and
+factoring MCP response handling resolved it; rebuild, nine affected discovery/index/MCP-startup
+checks and governance passed (17 advisory findings, no failed rule). Packaging, inventory,
+licenses and exact-head CI are recorded separately on the source PR.
+
+The public 20,006-fact / 20,009-node synthetic filesystem benchmark measured 787.7 ms for first
+catalog load and 0.44 ms median / 5.21 ms maximum for 20 repeated catalog-plus-neighborhood pairs,
+with exactly one snapshot read and unchanged stored bytes. RSS at the final measurement was
+379.2 MiB, including fixture construction and the in-memory index. This is a mostly disconnected
+synthetic fixture, not private-graph, browser, path-index or database acceptance.
+
+Sandboxed Chromium browser automation is available in this restored environment. A separate
+public Cytoscape 3.34.4 prototype exercised initial intent scope, physical node drag, pan/zoom,
+canvas-node drill-down into code, keyboard entry, collapsed evidence and back navigation that
+restores positions, without page errors. That prototype is not yet the packaged explorer or
+proof of portable/live-loader parity. File-URL navigation is blocked by the browser policy;
+these checks used a loopback static HTTP server with the browser sandbox enabled.
+
 ## Optional compiler SELinux compatibility, 2026-11-05
 
 The same 0.7.4 compiler ticket and the new patched-consumer enforcing-Fedora recovery evidence
@@ -13,6 +42,12 @@ four existing ontology unit tests pass. The opt-in real enforcing-SELinux test i
 this workspace does not expose `/sys/fs/selinux/enforce`, so that validation is deferred.
 The consumer's real Fedora pass belongs to its tracked patch, not an upstream release.
 Full qualification, independent review, publication and consumer upgrade remain distinct gates.
+
+The narrow fix subsequently shipped as core/toolkit **0.7.5**, release source
+`334b8b9f5e07c5c61553979d08327d6674b551b6`, through [release run 42101428251](https://github.com/jchewitt/weftlet/actions/runs/42101428251).
+Published archives matched the workflow archives byte-for-byte and a fresh public npm consumer
+setup passed. Actual upstream enforcing-SELinux and consumer upgrade/removal of the temporary
+patch remain separate acceptance evidence.
 
 ## Shared-symbol candidate: public evidence, 2026-11-03
 

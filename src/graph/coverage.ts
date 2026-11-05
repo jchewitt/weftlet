@@ -82,7 +82,7 @@ export function isImplementationEvidence(fact: GraphFact): boolean {
   return nodes.some(node => node.kind === 'Component' && node.id === file.id);
 }
 
-export function coverageForFacts(facts: readonly GraphFact[], snapshot?: GraphSnapshot): ContextPackCoverage {
+export function coverageForFacts(facts: readonly GraphFact[], snapshot?: GraphSnapshot, code?: ContextPackCoverage['code']): ContextPackCoverage {
   const counts: Record<ContextPackLane, number> = {
     productIntent: 0, contractsAndInvariants: 0, implementationAndConsumers: 0, validationEvidence: 0,
   };
@@ -92,7 +92,7 @@ export function coverageForFacts(facts: readonly GraphFact[], snapshot?: GraphSn
     if (isImplementationEvidence(fact)) counts.implementationAndConsumers++;
   }
   return { scope: 'returned-page', countsAreNonExclusive: true, counts,
-    ...(snapshot ? { code: projectCodeCoverage(snapshot).overview } : {}),
+    ...(snapshot ? { code: code ?? projectCodeCoverage(snapshot).overview } : {}),
     gaps: [
       ...contextPackLanes.filter(lane => counts[lane] === 0)
         .map(lane => `No ${lane} evidence appears on this returned page.`),

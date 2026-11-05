@@ -102,7 +102,7 @@ describe('required MCP startup', () => {
       try {
         await client.connect(transport);
         expect(client.getServerVersion()?.name).toBe('context-graph');
-        expect((await client.listTools()).tools.map((tool) => tool.name).sort()).toEqual(['graph.compatibility', 'graph.coverage', 'graph.neighbors', 'graph.paths', 'impact.scan', 'mapping.plan', 'mapping.proposals']);
+        expect((await client.listTools()).tools.map((tool) => tool.name).sort()).toEqual(['graph.catalog', 'graph.compatibility', 'graph.coverage', 'graph.fact', 'graph.neighbors', 'graph.paths', 'impact.scan', 'mapping.plan', 'mapping.proposals']);
         for (const output of outputs) {
           expect((await stat(join(fixture.toolkit, output))).isFile()).toBe(true);
           expect(await readFile(join(fixture.toolkit, output), 'utf8')).not.toContain(

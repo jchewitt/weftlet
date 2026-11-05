@@ -16,6 +16,7 @@ import { sha256, stableJson } from "../src/infrastructure/util.js";
 import type { ContextGraphConfig } from "../src/configuration/config.js";
 import type { GraphFact } from "@weftlet/core";
 import { DirectRdfOntologyCompiler } from "../src/extraction/ontology.js";
+import { SnapshotGraphDiscoveryService } from '../src/graph/discovery.js';
 
 describe('unified evidence graph', () => {
   it('extracts public prose and real TypeScript across queue boundaries, with SPARQL/projection equivalence', async () => {
@@ -101,6 +102,15 @@ describe('unified evidence graph', () => {
     expect(testLink).toMatchObject({ object: { kind: 'Evidence' }, authority: 'inferred',
       sourceAuthority: 'declared', extractionReview: 'deterministic', provenance: { path: 'docs/discovery.md' } });
     const graph = new RdfEvidenceGraph(snapshot);
+    const discovery = new SnapshotGraphDiscoveryService(store);
+    const catalog = await discovery.catalog({ snapshotId: snapshot.manifest.snapshotId, maxNodes: 100 });
+    expect(catalog.nodes.filter(item => item.node.kind === 'Workflow')).toHaveLength(6);
+    expect(catalog.nodes.every(item => !['Component', 'CodeSymbol', 'Evidence'].includes(item.node.kind))).toBe(true);
+    for (const item of catalog.nodes) {
+      const detail = await discovery.fact({ snapshotId: snapshot.manifest.snapshotId, factId: item.representativeFactId });
+      expect(detail.fact).toEqual(snapshot.facts.find(fact => fact.id === item.representativeFactId));
+      expect(detail.fact?.authority).toBe('inferred');
+    }
     expect((await graph.validate()).conforms).toBe(true);
     expect((await graph.facts()).map((f) => f.id).sort()).toEqual(snapshot.facts.map((f) => f.id).sort());
     expect(stableJson([...(await graph.facts())].sort((a, b) => a.id.localeCompare(b.id))))
