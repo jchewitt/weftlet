@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "e7287cbf5f7182b8c16c073dcc097a26616ae85868a518fc8e8966a8072b83ae"
+      "destinationSha256": "feeedaa92cdba008786a788931e61eb8eca0d85a2df7c91b4f6b72ef01755c9d"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "cd458ed031e0109f5b8455cc5e0d948a42a64f7e4d67f79b12e28a1450c7be51"
+      "destinationSha256": "85218ada0cbc78c97898abb6ec9edcb4efeadc1c2118973164fa187669253eff"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "825072a8f61911034ae7784935b66368eb0c945c19d68bad8fb6acecc6f5981b"
+      "destinationSha256": "a9a88f495903310d3a5f42d2a4c8fd8972a066b329f79b8f6b1fd65cf5821d93"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -580,7 +580,6 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
-    ".changeset/selinux-ontology-workspace.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
