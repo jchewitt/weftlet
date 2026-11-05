@@ -1,5 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { mkdir, writeFile, link, rm } from 'node:fs/promises';
+import { mkdir, writeFile, link, rm, stat } from 'node:fs/promises';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
@@ -98,6 +98,19 @@ export class FileSnapshotStore implements SnapshotStore {
 
   read(snapshotId: string): Promise<GraphSnapshot | undefined> {
     return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true));
+  }
+
+  /** Cache invalidation for read-only query sessions; not a cryptographic integrity claim. */
+  async readRevision(snapshotId: string): Promise<string | undefined> {
+    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true), async path => {
+      try {
+        const info = await stat(path, { bigint: true });
+        return [path, info.dev, info.ino, info.size, info.mtimeNs, info.ctimeNs].join(':');
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined;
+        throw error;
+      }
+    });
   }
 
   private readManifest(snapshotId: string): Promise<GraphSnapshot['manifest'] | undefined> {

@@ -1,13 +1,12 @@
 import { snapshotContext } from './snapshot-context.js';
 import type { GraphExplorationService, GraphFact, GraphNeighborhood, GraphNeighborsRequest, SnapshotStore } from '@weftlet/core';
-import { stableJsonDigest } from '../infrastructure/util.js';
-import { RdfEvidenceGraph } from './rdf.js';
+import { SnapshotIndexReader } from './snapshot-index.js';
 import { coverageForFacts } from './coverage.js';
 import { parseGraphNeighborsRequest } from './neighborhood-request.js';
 import { renderGraphNeighborhood } from './neighborhood-renderer.js';
 import { selectDiagnostics } from './diagnostics.js';
 
-export const GRAPH_NEIGHBORHOOD_VERSION = 'exact-neighborhood-v1';
+export const GRAPH_NEIGHBORHOOD_VERSION = 'exact-neighborhood-v2';
 
 function pageOffset(token: string | undefined, binding: string, length: number, pageSize: number): number {
   if (token === undefined) return 0;
@@ -32,25 +31,13 @@ function opposite(fact: GraphFact, nodeId: string): string {
 
 /** One-hop, exact-ID exploration over the same lossless RDF projection as impact.scan. */
 export class SnapshotGraphExplorationService implements GraphExplorationService {
-  constructor(private readonly store: Pick<SnapshotStore, 'read'>) {}
+  private readonly indexes: SnapshotIndexReader;
+  constructor(store: Pick<SnapshotStore, 'read'>, indexes?: SnapshotIndexReader) { this.indexes = indexes ?? new SnapshotIndexReader(store); }
 
   async neighbors(input: GraphNeighborsRequest): Promise<GraphNeighborhood> {
     const request = parseGraphNeighborsRequest(input);
-    const saved = await this.store.read(request.snapshotId);
-    if (!saved) throw new Error('No graph snapshot is available for that identifier');
-    if (saved.manifest.snapshotId !== request.snapshotId) throw new Error('Saved snapshot identity does not match the requested identifier');
-    const all = await new RdfEvidenceGraph(saved).facts();
-    const adjacency = new Map<string, GraphFact[]>();
-    const factIds = new Set<string>();
-    for (const fact of all) {
-      if (factIds.has(fact.id)) throw new Error('Duplicate fact identities prevent stable graph.neighbors pagination');
-      factIds.add(fact.id);
-      for (const nodeId of new Set([fact.subject.id, fact.object.id])) {
-        const adjacent = adjacency.get(nodeId) ?? [];
-        adjacent.push(fact);
-        adjacency.set(nodeId, adjacent);
-      }
-    }
+    const index = await this.indexes.read(request.snapshotId);
+    const saved = index.snapshot, adjacency = index.adjacency;
     const incident = adjacency.get(request.nodeId) ?? [];
     const selected = incident.filter(fact =>
       (request.direction === 'both' || (request.direction === 'outgoing' ? fact.subject.id : fact.object.id) === request.nodeId) &&
@@ -59,8 +46,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
     const { continuation: _continuation, ...query } = request;
     // Bind to actual projected facts too: even a corrupt store reusing a manifest digest
     // must not silently turn a saved continuation into a different neighborhood/frontier.
-    const binding = stableJsonDigest({ version: GRAPH_NEIGHBORHOOD_VERSION, query, manifest: saved.manifest,
-      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved });
+    const binding = index.binding(GRAPH_NEIGHBORHOOD_VERSION, query);
     const offset = pageOffset(request.continuation, binding, selected.length, request.maxFacts);
     const facts = selected.slice(offset, offset + request.maxFacts);
     const end = offset + facts.length;
@@ -81,7 +67,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
       snapshot: snapshotContext(manifest),
       focus: { nodeId: request.nodeId, status: incident.length ? 'present' : 'absent-from-snapshot' },
       facts,
-      coverage: coverageForFacts(facts, saved),
+      coverage: coverageForFacts(facts, saved, index.code),
       diagnostics: selectDiagnostics(saved, {}, facts, [], [],
         new Set([request.nodeId, ...facts.flatMap(fact => [fact.subject.id, fact.object.id])])),
       selection: { version: GRAPH_NEIGHBORHOOD_VERSION, direction: request.direction, predicates: request.predicates,

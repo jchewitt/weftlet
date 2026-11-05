@@ -1,5 +1,9 @@
 # Bounded evidence viewer
 
+The [new explorer milestone](VIEWER-EXPLORER-PLAN.md) is in progress. Its first increment adds
+[snapshot-wide discovery queries](EXPLORER-DISCOVERY.md) so intent can be found independently
+of an impact page. The HTML viewer described below retains its existing page-local behavior.
+
 `context-graph visualize --changed-file src/discovery.ts --snapshot <id> --output graph.html`
 renders the same Context Pack returned by `impact.scan`. HTML is self-contained; DOT and SVG
 remain available. No CDN, service, model or alternative graph extraction is involved.

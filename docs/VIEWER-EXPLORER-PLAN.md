@@ -1,8 +1,9 @@
 # Graph explorer milestone before 2.0
 
-Status: maintainer-requested direction, 2026-11-05. Implementation remains pending. Finish
-the narrow optional-compiler SELinux release independently; do not combine this work with
-that patch or declare the separate private ranking/1.0 acceptance gates closed.
+Status: implementation started, 2026-11-05. The narrow optional-compiler SELinux fix shipped
+separately in 0.7.5. [Saved-evidence discovery](EXPLORER-DISCOVERY.md) is the first independent
+implementation increment; the new browser application remains pending. The separate private
+ranking/1.0 acceptance gates remain open.
 
 The maintainer selected **both portable reports and a local explorer**, explicitly allowing
 a bundled application rather than a single HTML file. Optional hosting as a Docker service
@@ -68,6 +69,12 @@ V1 does not change the impact-ranking acceptance denominator. It provides explic
 queries instead of treating an impact result as an exhaustive graph overview. Retain the
 existing direct-path result, strict validation, snapshot/cache compatibility and pending private
 two-assertion replay. Missing relationships remain gaps; do not manufacture calls or intent links.
+
+The first V1 increment implements snapshot-wide intent/other-evidence catalogs, literal search,
+exact assertion detail, snapshot counts, and a shared revision-aware index for discovery,
+neighborhoods and paths. Both CLI and MCP expose the new queries. The new UI, portable loader,
+HTTP access, diagnostic drill-down and browser acceptance remain subsequent work; do not mark
+V0–V5 complete from query tests alone.
 
 ## Graph library evaluation
 

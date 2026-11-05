@@ -302,14 +302,14 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor, RepositoryContractExtractor } from ${JSON.stringify(staticModule)};
-import { repositoryFileNode, codeSymbolNode } from '@weftlet/core';
+import { repositoryFileNode, codeSymbolNode, stableJson } from '@weftlet/core';
 import { adapterFileNode } from './adapter-core.mjs';
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
 import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
   extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode, SnapshotContractCompatibilityService, SnapshotCodeCoverageService,
-  inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError } from ${JSON.stringify(toolkitModule)};
+  inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError, SnapshotGraphDiscoveryService } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
@@ -433,6 +433,15 @@ if (JSON.stringify(attributed?.details?.provenance) !== JSON.stringify(conflicti
   throw new Error('Installed explicit identity attribution must preserve all source evidence');
 }
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
+const discovery = new SnapshotGraphDiscoveryService({ read: async () => snapshot });
+const catalog = await discovery.catalog({ snapshotId: context.snapshotId, view: 'all', maxNodes: 2 });
+if (catalog.overview.facts !== facts.length || catalog.nodes.length !== 2 || !catalog.selection.continuation) {
+  throw new Error('Installed catalog must discover and page the actual saved extractor evidence');
+}
+const detail = await discovery.fact({ snapshotId: context.snapshotId, factId: catalog.nodes[0].representativeFactId });
+if (stableJson(detail.fact) !== stableJson(facts.find(fact => fact.id === detail.factId))) {
+  throw new Error('Installed exact assertion detail must preserve source provenance and authority');
+}
 const legacyCoverage = await new SnapshotCodeCoverageService({ read: async () => snapshot }).coverage({ snapshotId: context.snapshotId });
 if (legacyCoverage.overview.status !== 'unavailable' || legacyCoverage.overview.totals !== undefined) {
   throw new Error('Installed coverage API must not invent zero coverage for legacy snapshots without inventory');
@@ -677,6 +686,11 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     if (client.getServerVersion()?.name !== 'context-graph') throw new Error('MCP initialization failed');
     const tools = await client.listTools();
     if (!tools.tools.some((tool) => tool.name === 'impact.scan')) throw new Error('Missing impact.scan');
+    for (const name of ['graph.catalog', 'graph.fact']) {
+      if (!tools.tools.some(tool => tool.name === name && tool.annotations?.readOnlyHint)) throw new Error('Missing read-only ' + name);
+      const missing = await client.callTool({ name, arguments: { snapshotId: 'absent', ...(name === 'graph.fact' ? { factId: 'absent' } : {}) } });
+      if (!missing.isError || !JSON.stringify(missing).includes('snapshot')) throw new Error('Discovery must report missing saved evidence');
+    }
     if (!tools.tools.some(tool => tool.name === 'graph.compatibility' && tool.annotations?.readOnlyHint)) throw new Error('Missing read-only graph.compatibility');
     const compatibility = await client.callTool({ name: 'graph.compatibility', arguments: {
       snapshotId: 'absent', producerFactId: 'producer', consumerFactId: 'consumer' } });

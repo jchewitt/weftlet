@@ -1,14 +1,13 @@
 import { snapshotContext } from './snapshot-context.js';
 import type { GraphPathQueryService, GraphPaths, GraphPathsRequest, SnapshotStore } from '@weftlet/core';
-import { stableJsonDigest } from '../infrastructure/util.js';
-import { RdfEvidenceGraph } from './rdf.js';
+import { SnapshotIndexReader } from './snapshot-index.js';
 import { coverageForFacts } from './coverage.js';
 import { selectDiagnostics } from './diagnostics.js';
 import { parseGraphPathsRequest } from './path-request.js';
 import { searchEvidencePaths } from './path-search.js';
 import { renderGraphPaths } from './paths-renderer.js';
 
-export const GRAPH_PATHS_VERSION = 'simple-evidence-paths-v2';
+export const GRAPH_PATHS_VERSION = 'simple-evidence-paths-v3';
 
 function continuationOffset(token: string | undefined, binding: string): number {
   if (!token) return 0;
@@ -24,18 +23,15 @@ function continuationOffset(token: string | undefined, binding: string): number 
 }
 
 export class SnapshotGraphPathService implements GraphPathQueryService {
-  constructor(private readonly store: Pick<SnapshotStore, 'read'>) {}
+  private readonly indexes: SnapshotIndexReader;
+  constructor(store: Pick<SnapshotStore, 'read'>, indexes?: SnapshotIndexReader) { this.indexes = indexes ?? new SnapshotIndexReader(store); }
 
   async paths(input: GraphPathsRequest): Promise<GraphPaths> {
     const request = parseGraphPathsRequest(input);
-    const saved = await this.store.read(request.snapshotId);
-    if (!saved) throw new Error('No graph snapshot is available for that identifier');
-    if (saved.manifest.snapshotId !== request.snapshotId) throw new Error('Saved snapshot identity does not match the requested identifier');
-    const all = await new RdfEvidenceGraph(saved).facts();
-    if (new Set(all.map(fact => fact.id)).size !== all.length) throw new Error('Duplicate fact identities prevent stable graph.paths pagination');
+    const index = await this.indexes.read(request.snapshotId);
+    const saved = index.snapshot, all = saved.facts;
     const { continuation, ...query } = request;
-    const binding = stableJsonDigest({ version: GRAPH_PATHS_VERSION, query, manifest: saved.manifest,
-      facts: all, diagnostics: saved.diagnostics, unresolved: saved.unresolved });
+    const binding = index.binding(GRAPH_PATHS_VERSION, query);
     const offset = continuationOffset(continuation, binding);
     const selected = all.filter(fact => !request.predicates.length || request.predicates.includes(fact.predicate));
     const edges = selected.flatMap(fact => {
@@ -44,7 +40,7 @@ export class SnapshotGraphPathService implements GraphPathQueryService {
       return request.direction === 'incoming' ? [reverse] : request.direction === 'outgoing' || forward.from === forward.to
         ? [forward] : [forward, reverse];
     });
-    const nodes = new Set(all.flatMap(fact => [fact.subject.id, fact.object.id]));
+    const nodes = new Set(index.adjacency.keys());
     const result = searchEvidencePaths(edges, request.fromNodeId, request.toNodeId, { ...request, offset }, nodes);
     const factIds = new Set(result.paths.flatMap(path => path.factIds));
     const facts = all.filter(fact => factIds.has(fact.id));
@@ -55,7 +51,7 @@ export class SnapshotGraphPathService implements GraphPathQueryService {
     const plain: Omit<GraphPaths, 'markdown'> = {
       snapshot: snapshotContext(manifest),
       endpoints: { from: endpoint(request.fromNodeId), to: endpoint(request.toNodeId) },
-      paths: result.paths, facts, coverage: coverageForFacts(facts, saved),
+      paths: result.paths, facts, coverage: coverageForFacts(facts, saved, index.code),
       diagnostics: selectDiagnostics(saved, {}, facts, [], [], new Set([request.fromNodeId, request.toNodeId,
         ...facts.flatMap(fact => [fact.subject.id, fact.object.id])])),
       search: { version: GRAPH_PATHS_VERSION, order: 'shortest-first-target-first', direction: request.direction,

@@ -2,6 +2,9 @@
 import { SavedGraphExplorationService } from "./saved-exploration.js";
 import { SnapshotGraphExplorationService } from "../graph/neighborhood.js";
 import { SnapshotGraphPathService } from '../graph/paths.js';
+import { SnapshotIndexReader } from '../graph/snapshot-index.js';
+import { SnapshotGraphDiscoveryService } from '../graph/discovery.js';
+import { SavedGraphDiscoveryService } from './saved-discovery.js';
 import { SavedGraphPathService } from './saved-paths.js';
 import { SnapshotContractCompatibilityService } from '../graph/compatibility.js';
 import { SavedContractCompatibilityService } from './saved-compatibility.js';
@@ -76,6 +79,7 @@ export async function createContextGraphApplication(configPath: string) {
   const repository = new GitRepository(repositoryRoot);
   const adapter = await loadContextGraphAdapterModule(config.adapter, repository, repositoryRoot);
   const snapshotStore = new FileSnapshotStore(storageRoot);
+  const snapshotIndexes = new SnapshotIndexReader(snapshotStore);
   const artifactStore = createSemanticArtifactStore(repositoryRoot, config);
   const semanticExtractor = createSemanticExtractor(config.semantic, repositoryRoot);
   const semanticHydrator = new SemanticHydrator(config.semantic, artifactStore, semanticExtractor);
@@ -128,9 +132,11 @@ export async function createContextGraphApplication(configPath: string) {
     ontologyCompiler,
     hydrator,
     queryService,
-    explorationService: new SavedGraphExplorationService(new SnapshotGraphExplorationService(snapshotStore),
+    discoveryService: new SavedGraphDiscoveryService(new SnapshotGraphDiscoveryService(snapshotStore, snapshotIndexes),
       repository, sha256(stableJson(config)), expectedExtractors),
-    pathService: new SavedGraphPathService(new SnapshotGraphPathService(snapshotStore),
+    explorationService: new SavedGraphExplorationService(new SnapshotGraphExplorationService(snapshotStore, snapshotIndexes),
+      repository, sha256(stableJson(config)), expectedExtractors),
+    pathService: new SavedGraphPathService(new SnapshotGraphPathService(snapshotStore, snapshotIndexes),
       repository, sha256(stableJson(config)), expectedExtractors),
     compatibilityService: new SavedContractCompatibilityService(new SnapshotContractCompatibilityService(snapshotStore),
       repository, sha256(stableJson(config)), expectedExtractors),

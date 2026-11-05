@@ -4,6 +4,7 @@ export * from './util.js';
 export { stableJsonDigest, persistedJsonDigest } from './canonical-digest.js';
 export * from './repository-nodes.js';
 export * from './exploration.js';
+export * from './discovery.js';
 export * from './paths.js';
 export * from './code.js';
 export type { BindingEvidence, BindingSubjectEvidence, DocumentCodeBinding } from './bindings.js';
