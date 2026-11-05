@@ -535,7 +535,9 @@ tags. See [npm release instructions](docs/RELEASING.md) for checks, trust settin
 See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
 [architecture policy](docs/architecture-policy.md) for deterministic governance.
 
-See the [bounded viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
+`weftlet viewer serve --snapshot <id>` opens a focused,
+intent-first local explorer over the full saved snapshot, with drag/pan/zoom and cited drill-down.
+See the [viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
 
 For development, `pnpm evaluate:impact` measures bounded candidate-file retrieval on Weftlet's
 own committed source without model calls. See the [evaluation protocol and baseline](docs/IMPACT-EVALUATION.md)

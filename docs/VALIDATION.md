@@ -1,5 +1,34 @@
 # Validation evidence
 
+## Local explorer application, 2026-11-05
+
+The bundled Cytoscape 3.34.4 application uses the saved-evidence discovery/neighborhood/path
+services through a loopback HTTP reader. Public synthetic order evidence exercises intent →
+workflow → code and reverse navigation; this is not a private consumer acceptance result.
+
+Sandboxed Chromium **154.0.8037.57**, Linux Node **24.19.0**: actual application checks pass for
+intent-first startup, canvas drill-down, code-to-intent return, physical dragging and panning,
+zoom, back navigation restoring positions, keyboard entry, authority/predicate/direction filters,
+bounded path search, catalog continuation, empty results, collapsed assertion groups and separate
+source/review authority. No page errors or external network requests were observed. The executable
+is configurable with `WEFTLET_BROWSER_EXECUTABLE`; `pnpm test:viewer:browser` never disables its
+sandbox. These checks use loopback HTTP because this cloud browser blocks file URLs.
+
+HTTP tests compare exact catalog/neighborhood/path/fact payloads with the shared services,
+preserve snapshot bytes, keep dirty changes excluded, reject replaced evidence and load no
+repository adapter. They also check packaged assets, Host/Origin restrictions, method/parameter
+bounds, oversized requests and forbidden filesystem routes. Browser assets total approximately
+471 KB uncompressed, including the Cytoscape MIT license; no runtime CDN is used.
+
+The full deterministic suite passed: **38 core + 1,028 toolkit tests**, with the two optional
+ontology integrations skipped. After the final UI factoring and read-pinning checks, the rebuild,
+12 affected API/discovery/legacy-rendering tests, browser interaction, governance (17 advisory
+findings), inventory and license checks passed. Fresh packed-consumer validation exercises the
+installed server and its browser assets. Exact-head hosted results are recorded on the source PR.
+Focused portable
+loader parity, authenticated hosting, private graph responsiveness, full accessibility review and
+consumer usefulness remain separate gates. The existing legacy `visualize` output is unchanged.
+
 ## Explorer discovery/index increment, 2026-11-05
 
 The [discovery contract](EXPLORER-DISCOVERY.md) adds snapshot-wide catalogs and exact assertion

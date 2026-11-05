@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "3a3149ef683ffbbf3925ecd7975a7c0a5c24db66b4303f6044ba0fe94c9a1310"
+      "destinationSha256": "866a6666edefd8c222a095200582b0917b5436c3a537c03f6d634114c04af5a4"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "feeedaa92cdba008786a788931e61eb8eca0d85a2df7c91b4f6b72ef01755c9d"
+      "destinationSha256": "f91fe1b1176459d92026fb04ed4bec6e01a3625406ca4cd7e50c229fdad26dff"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "8ebe1aba35547d5159ef7e77df9ab8d879e3961bcecebd1b7644edef26465c67"
+      "destinationSha256": "07a5ec8bef03f12a453dde89675cdaf127d3081baed33f77844a49be26b98566"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "e002830e8a810878a2cc33e287083ef239c6723006ebf7e309ec0589d7f62bd4"
+      "destinationSha256": "638b66578c3ab5395ceed8d94d54362a32d53989a921ea1cf116db147ff507c9"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "76659dc59a9cb933f1a64dad164528c1fe357ca27aefa0f6dca5c924ba10a24c"
+      "destinationSha256": "1b64fc66e3e53b83de2a771fe157c92fc43d71fddba1534eed65669b238ac431"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "de8c8008b97b64a21079fa031adb3e7c087fb790892eb7c8d7fe749dda7c36b4"
+      "destinationSha256": "6fee7637d39bfd0a223bf43414fefe523fb0552558011800dfea145c040fbdfb"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/cited-snapshot-discovery.md",
     ".changeset/config.json",
+    ".changeset/focused-local-explorer.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -812,6 +813,7 @@
     "evaluations/weftlet/ranking-baseline.json",
     "evaluations/weftlet/source-project-baseline.json",
     "evaluations/weftlet/source-project.config.json",
+    "examples/explorer/create-project.ts",
     "examples/explorer/fixture.ts",
     "examples/generic-typescript/context-graph.oml.config.json",
     "examples/generic-typescript/document-policy.json",
@@ -867,6 +869,7 @@
     "runtime-check.mjs",
     "scripts/benchmark-explorer-index.ts",
     "scripts/benchmark-shacl.mjs",
+    "scripts/build-explorer.mjs",
     "scripts/call-study/run.ts",
     "scripts/check-release-plan.mjs",
     "scripts/check-restoration.mjs",
@@ -932,6 +935,7 @@
     "scripts/same-group-study/v3-signals.ts",
     "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-traversal.mjs",
+    "scripts/test-explorer-browser.ts",
     "scripts/update-inventory.mjs",
     "scripts/validation-benchmark/execution.mjs",
     "scripts/validation-benchmark/extracted.ts",
@@ -950,6 +954,7 @@
     "src/application/document-obligations.ts",
     "src/application/document-overlay.ts",
     "src/application/draft-facts.ts",
+    "src/application/explorer-service.ts",
     "src/application/extraction-identity.ts",
     "src/application/extractor-results.ts",
     "src/application/hydration-failure.ts",
@@ -1109,6 +1114,7 @@
     "src/interfaces/init.ts",
     "src/interfaces/mapping-proposals.test.ts",
     "src/interfaces/mapping-proposals.ts",
+    "src/interfaces/viewer.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
     "src/repository/git-entries.test.ts",
@@ -1123,7 +1129,19 @@
     "src/storage/streaming-json.ts",
     "src/telemetry.ts",
     "src/visualization/evidence-sources.ts",
+    "src/visualization/explorer-contract.ts",
+    "src/visualization/explorer-server.ts",
+    "src/visualization/explorer/app.ts",
+    "src/visualization/explorer/client.ts",
+    "src/visualization/explorer/dom.ts",
+    "src/visualization/explorer/graph.ts",
+    "src/visualization/explorer/index.html",
+    "src/visualization/explorer/inspector.ts",
+    "src/visualization/explorer/scope-details.ts",
+    "src/visualization/explorer/scope.ts",
+    "src/visualization/explorer/style.css",
     "src/visualization/path-parity.test.ts",
+    "src/visualization/source-links.ts",
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",
     "tests/business-context-acceptance.test.ts",
@@ -1136,6 +1154,7 @@
     "tests/document-evidence.test.ts",
     "tests/document-source-rdf.test.ts",
     "tests/document-symbol-bindings.test.ts",
+    "tests/explorer-server.test.ts",
     "tests/extractor-compatibility.test.ts",
     "tests/fixtures/business-context-provider.mjs",
     "tests/fixtures/code-evidence-project.ts",

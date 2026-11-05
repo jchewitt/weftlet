@@ -57,6 +57,17 @@ it('pages deterministic search over the whole snapshot and keeps exact RDF facts
   expect(JSON.stringify(saved)).toBe(before);
 });
 
+it('retains logical component concepts cited by intent sources while keeping physical code endpoints out of the intent overview', async () => {
+  const base = explorerFixture(0);
+  const saved = { ...base, facts: base.facts.map(fact => ({ ...fact,
+    subject: fact.subject.id === 'workflow:ship' ? { ...fact.subject, kind: 'Component' as const } : fact.subject,
+    object: fact.object.id === 'workflow:ship' ? { ...fact.object, kind: 'Component' as const } : fact.object,
+  })) };
+  const result = await new SnapshotGraphDiscoveryService({ read: async () => saved }).catalog({ snapshotId: saved.manifest.snapshotId });
+  expect(result.nodes.find(item => item.node.id === 'workflow:ship')).toMatchObject({ node: { kind: 'Component' }, authorities: { inferred: 2 } });
+  expect(result.nodes.some(item => item.node.id === 'component:file:src/worker.ts')).toBe(false);
+});
+
 it('rejects changed queries, corrupt stores, stale cursors and invalid input without hiding empty intent', async () => {
   let saved = explorerFixture();
   const service = new SnapshotGraphDiscoveryService({ read: async () => saved });
