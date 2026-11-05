@@ -17,6 +17,12 @@ The 0.2.x status descriptions below are historical planning context. Use the cur
 consumer acceptance status; they supersede the early M0 intake statuses without changing the
 proposed 2.0 scope. Keep the compiler compatibility fix separate from this future platform work.
 
+The maintainer subsequently requested the [graph explorer milestone](VIEWER-EXPLORER-PLAN.md)
+before starting 2.0. Its shared read-query boundary, portable/local application and optional
+Docker deployment prepare agent/browser access without implementing review writes. Hosted
+review/approval records can later use PostgreSQL; immutable graph storage and any RDF-database
+adoption remain separate concerns. See [ADR 044](ADR-044-viewer-query-boundary.md).
+
 ## Product outcome
 
 Help teams establish and maintain an agreed set of product rules, connect those rules to
