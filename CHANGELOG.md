@@ -1,5 +1,12 @@
 # @weftlet/toolkit
 
+## 0.7.5
+
+### Patch Changes
+
+- 7400df1: Use a private SELinux label for the isolated openCAESAR compiler workspace on Linux, and reject a copied root symlink before generated writes or mounting. Preserve existing Windows/macOS arguments, host-user execution, and saved evidence.
+- @weftlet/core@0.7.5
+
 ## 0.7.4
 
 ### Patch Changes
