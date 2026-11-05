@@ -5,7 +5,7 @@ import { pipeline } from 'node:stream/promises';
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { DataFactory, Store, Writer } from 'n3';
 import { CG, nodeIri } from "../graph/rdf.js";
-import { cp, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { cp, lstat, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -144,6 +144,10 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
       recursive: true,
       filter: (path) => path !== sourceBuild && !path.startsWith(`${sourceBuild}${sep}`),
     });
+    // Relabel only our disposable copy, never a symlink into the source project.
+    if (process.platform === 'linux' && !(await lstat(work)).isDirectory()) {
+      throw new Error('openCAESAR compiler workspace must be a real directory before writing or mounting');
+    }
     const generatedRoot = join(work, 'src', 'oml', 'context-graph.dev', 'generated');
     await mkdir(generatedRoot, { recursive: true });
     for (const artifact of artifacts) {
@@ -164,6 +168,7 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
       'utf8',
     );
     const dockerPath = work.replace(/\\/g, '/');
+    const workspaceMount = `${dockerPath}:/workspace${process.platform === 'linux' ? ':Z' : ''}`;
     await runProcess(
       'docker',
       [
@@ -171,7 +176,7 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
         '--rm',
         ...dockerHostUserArguments(),
         '-v',
-        `${dockerPath}:/workspace`,
+        workspaceMount,
         '-w',
         '/workspace',
         this.config.containerImage,
