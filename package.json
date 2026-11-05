@@ -41,7 +41,7 @@
     }
   },
   "scripts": {
-    "build": "node runtime-check.mjs && node scripts/clean-build.mjs && pnpm --filter @weftlet/core build && tsc -p tsconfig.json",
+    "build": "node runtime-check.mjs && node scripts/clean-build.mjs && pnpm --filter @weftlet/core build && tsc -p tsconfig.json && node scripts/build-explorer.mjs",
     "context-graph": "tsx src/cli.ts",
     "hydrate": "tsx src/cli.ts hydrate --ref HEAD",
     "mcp": "tsx src/mcp.ts",
@@ -72,7 +72,8 @@
     "evaluate:calls": "tsx scripts/call-study/run.ts",
     "evaluate:proposals": "tsx scripts/mapping-proposal-study/run.ts",
     "evaluate:indirect": "tsx scripts/indirect-retrieval-study/run.ts",
-    "evaluate:same-group": "tsx scripts/same-group-study/run.ts"
+    "evaluate:same-group": "tsx scripts/same-group-study/run.ts",
+    "test:viewer:browser": "tsx scripts/test-explorer-browser.ts"
   },
   "engines": {
     "node": ">=24.0.0"
@@ -95,6 +96,7 @@
     "@sourcegraph/scip-typescript": "0.4.0",
     "@streamparser/json": "0.0.26",
     "@weftlet/core": "workspace:^",
+    "cytoscape": "3.34.4",
     "import-meta-resolve": "4.2.0",
     "mdast-util-from-markdown": "2.1.0",
     "n3": "2.7.2",
@@ -109,8 +111,10 @@
     "@types/node": "20.19.11",
     "@typescript-eslint/parser": "8.72.0",
     "dependency-cruiser": "18.7.0",
+    "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "jscpd": "5.4.1",
+    "playwright-core": "1.65.0",
     "tsx": "4.20.5",
     "vitest": "3.2.4"
   },

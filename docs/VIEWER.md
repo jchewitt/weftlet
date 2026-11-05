@@ -1,8 +1,43 @@
-# Bounded evidence viewer
+# Evidence explorer
 
-The [new explorer milestone](VIEWER-EXPLORER-PLAN.md) is in progress. Its first increment adds
-[snapshot-wide discovery queries](EXPLORER-DISCOVERY.md) so intent can be found independently
-of an impact page. The HTML viewer described below retains its existing page-local behavior.
+The local application starts from snapshot-wide product-intent discovery,
+then queries focused neighborhoods over the full saved snapshot.
+
+```sh
+weftlet viewer serve --config context-graph.config.json --snapshot <exact-snapshot-id>
+```
+
+Open the loopback URL printed by the command (default `http://127.0.0.1:4173`; change it with
+`--port`). No adapter, model provider, compiler or refresh is started. The saved snapshot stays
+pinned while checkout freshness can be refreshed separately. Historical/configuration-incompatible
+evidence remains browsable and is never reported as current-diff validation.
+
+The bundled Cytoscape.js application supports drag/arrange, pan/zoom, focused node navigation,
+back/breadcrumbs restoring layout, exact relationship predicates/directions, authority filters,
+literal catalog search and deterministic continuation. Start at intent, contracts, implementation
+or tests/observations. Source authority and extraction approval remain separate. Logical component
+concepts can appear in intent; physical code nodes are reached through relationships. No approved
+intent is manufactured from code.
+
+Inspect an edge to open grouped, collapsed assertions with exact citations. A selected node can
+fill either endpoint of the bounded path search. Paths preserve stored predicates/directions and
+do not prove causality. Overview connections only cover displayed catalog nodes and bounded
+neighborhood pages; counts state remaining pages. Authority filters act on the returned page.
+The diagnostic panel retains gaps and omitted-summary counts.
+
+To enable source links, add `--source-url-template` with an HTTPS template containing `{commit}`
+and `{path}` (and optionally `{line}`), as in the legacy example below. Nothing is sent to a CDN.
+The server binds only to loopback, rejects other Host/Origin values, accepts bounded read queries,
+and serves an allowlist of packaged assets. Remote binding, authentication and Docker deployment
+are a separate milestone; do not expose this local server through a public proxy.
+
+Portable bundles are the next increment: the maintainer selected focused reports around explicit
+product areas, with navigation boundaries, while the local explorer browses the full snapshot.
+See the [milestone plan](VIEWER-EXPLORER-PLAN.md) and [shared discovery contract](EXPLORER-DISCOVERY.md).
+
+## Legacy impact-page exports
+
+The existing `visualize` HTML/DOT/SVG outputs retain their page-local behavior.
 
 `context-graph visualize --changed-file src/discovery.ts --snapshot <id> --output graph.html`
 renders the same Context Pack returned by `impact.scan`. HTML is self-contained; DOT and SVG

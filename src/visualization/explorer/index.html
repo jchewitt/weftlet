@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weftlet · Evidence explorer</title><link rel="stylesheet" href="assets/style.css"><script defer src="assets/app.js"></script></head>
+<body><header><b>weftlet<span> / evidence explorer</span></b><span class="pill" id="mode">Opening saved evidence…</span></header>
+<div class="context"><div><small>PINNED EVIDENCE</small><strong id="repository"></strong><span id="snapshot-label"></span><br><span id="coverage-label"></span><br><span id="snapshot-state"></span></div>
+<button id="gap-count">Saved diagnostic records</button><details><summary>Snapshot and checkout</summary><button id="refresh-state">Refresh checkout status</button><pre id="snapshot-details"></pre></details></div>
+<div id="error" role="alert" hidden></div>
+<main><nav aria-label="Evidence navigation"><h2>Explore evidence</h2><form id="search-form"><label for="view">Start from</label>
+<select id="view"><option value="intent">Product intent</option><option value="contracts">Contracts</option><option value="implementation">Implementation</option><option value="evidence">Tests and observations</option><option value="all">All saved evidence</option></select>
+<label for="search">Search saved IDs, labels or sources</label><input id="search" type="search" maxlength="256"><button type="submit">Find</button></form>
+<p class="muted">Enter an item to follow its cited relationships. Intent-source evidence may still need review.</p><div id="related"></div>
+<details><summary>Explore a path</summary><form id="path-form"><label for="from-node">From exact node ID</label><input id="from-node" required maxlength="8192">
+<label for="to-node">To exact node ID</label><input id="to-node" required maxlength="8192">
+<label for="path-direction">Direction</label><select id="path-direction"><option value="both">Both</option><option value="outgoing">Outgoing</option><option value="incoming">Incoming</option></select>
+<label for="path-depth">Maximum depth</label><input id="path-depth" type="number" min="1" max="32" value="3" required>
+<label for="path-count">Paths per page</label><input id="path-count" type="number" min="1" max="20" value="3" required>
+<label for="path-steps">Work steps per page</label><input id="path-steps" type="number" min="1" max="10000" value="1000" required>
+<button type="submit">Find saved paths</button><small>Static paths are not causality. Inspect the frontier before concluding there is no connection.</small></form></details></nav>
+<section class="workspace"><div class="toolbar"><button id="back" disabled>← Back</button><button id="home">Intent overview</button><span id="scope">Product intent</span>
+<button id="zoom-in" aria-label="Zoom in">＋</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="fit">Fit</button></div>
+<div class="filters"><label for="authority">Assertion authority</label><select id="authority"><option value="all">All returned evidence</option><option>declared</option><option>implemented</option><option>validated</option><option>observed</option><option>inferred</option><option>draft</option></select>
+<span id="node-filters" hidden><label for="direction">Direction</label><select id="direction"><option value="both">Both</option><option value="outgoing">Outgoing</option><option value="incoming">Incoming</option></select>
+<label for="predicate">Relationship</label><select id="predicate"><option value="">All predicates</option></select></span>
+<button id="connections">Show overview connections</button></div><div id="breadcrumbs" aria-label="Recent scopes"></div>
+<div id="graph" aria-label="Evidence graph canvas"></div><p id="empty" hidden></p>
+<div class="canvas-note">Drag to arrange · scroll to zoom · drag the background to pan · click a node to enter its scope</div><p id="status" role="status"></p><button id="next" hidden>Next evidence page</button>
+<details class="query-details"><summary>Query coverage and limits</summary><pre id="selection-details"></pre></details></section>
+<aside aria-label="Evidence inspector"><small id="kind">INTENT OVERVIEW</small><h1 id="title">Follow the why.</h1><p id="intro"></p>
+<div class="notice">Source authority and assertion approval are separate. Historical evidence does not validate current changes.</div>
+<details id="gap-panel"><summary>Coverage gaps and diagnostics</summary><div id="gaps"></div></details><h3>Cited relationships</h3><div id="evidence"></div></aside></main>
+</body></html>

@@ -2,11 +2,14 @@
 
 Status: implementation started, 2026-11-05. The narrow optional-compiler SELinux fix shipped
 separately in 0.7.5. [Saved-evidence discovery](EXPLORER-DISCOVERY.md) is the first independent
-implementation increment; the new browser application remains pending. The separate private
+implementation increment. The next increment implements the bundled local browser application;
+focused portable exports and deployable hosting remain pending. The separate private
 ranking/1.0 acceptance gates remain open.
 
 The maintainer selected **both portable reports and a local explorer**, explicitly allowing
-a bundled application rather than a single HTML file. Optional hosting as a Docker service
+a bundled application rather than a single HTML file. Portable reports should cover explicit
+selected product areas with visible navigation boundaries; the local explorer can browse the
+full saved snapshot. Optional hosting as a Docker service
 on an existing SSH-managed host is desired. Available infrastructure does not select a
 database or authorize changing a shared deployment. The [query boundary decision](ADR-044-viewer-query-boundary.md)
 records the proposed local/hosted/storage split and its connection to the [2.0 plan](WEFTLET-2.0-PLAN.md).
@@ -72,9 +75,10 @@ two-assertion replay. Missing relationships remain gaps; do not manufacture call
 
 The first V1 increment implements snapshot-wide intent/other-evidence catalogs, literal search,
 exact assertion detail, snapshot counts, and a shared revision-aware index for discovery,
-neighborhoods and paths. Both CLI and MCP expose the new queries. The new UI, portable loader,
-HTTP access, diagnostic drill-down and browser acceptance remain subsequent work; do not mark
-V0–V5 complete from query tests alone.
+neighborhoods and paths. Both CLI and MCP expose the new queries. The V2 application now provides local HTTP access, intent-first Cytoscape navigation and
+structured diagnostic/assertion drill-down. Public real-browser interaction checks are distinct
+from private consumer acceptance. Portable loading and hosted deployment remain subsequent work;
+do not mark V0–V5 complete from query or public browser tests alone.
 
 ## Graph library evaluation
 
@@ -86,9 +90,26 @@ Candidate metadata checked against npm on 2026-11-05:
 | [React Flow](https://reactflow.dev/) | @xyflow/react 12.12.1 / MIT | Useful if rich custom node components and a broader React application outweigh additional layout/state integration. Evaluate rather than assume an editor is the required product. |
 | [Sigma.js](https://www.sigmajs.org/) | 4.0.4 / MIT | Evaluate if large visible-network rendering proves necessary. A large-canvas benchmark alone does not satisfy intent navigation or structured evidence inspection. |
 
-These are candidates, not installed or validated adapters. Choose one after the bounded V0
-prototype. Package its needed assets and applicable notices; do not depend on a runtime CDN.
-Frontend framework, detailed API schema and layout persistence remain implementation decisions.
+Selected **Cytoscape.js 3.34.4**, after a real sandboxed-browser prototype exercised scoped
+drag/pan/zoom and navigation. The app uses modular TypeScript without requiring a frontend
+framework, bundles the MIT library and license, and needs no runtime CDN. React Flow and Sigma
+were metadata/design comparisons, not implemented benchmark competitors. Positions are restored
+in session history; persistent per-user layouts remain future work.
+
+## Focused portable-report boundary
+
+The maintainer selected focused portable reports, not an automatic copy of the entire graph.
+Export explicit root node IDs and a bounded expansion depth. A fully included node must retain
+all incident assertions; endpoint-only frontier nodes must state that their neighborhoods are
+outside the report. Exceeding fact/node/byte limits fails the export rather than silently dropping
+relationships. A separate report identity records the selection without rewriting the original
+snapshot identity, citations or authority.
+
+Use the same application with a static data loader, package all browser assets, and keep
+supported query results equivalent to the local service. Search is report-scoped; unsupported
+operations must be explicit. Chunk data rather than constructing a graph-sized string. Exports
+are read-only evidence artifacts suitable for reviewed static CI hosting, with no automatic upload.
+This is the V3 design boundary; implementation and parity/browser checks remain pending.
 
 ## Hosting and 2.0 boundaries
 

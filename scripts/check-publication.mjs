@@ -85,6 +85,9 @@ try {
     if (expectedName === '@weftlet/toolkit') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
+        'dist/visualization/explorer-assets/index.html', 'dist/visualization/explorer-assets/app.js',
+        'dist/visualization/explorer-assets/style.css', 'dist/visualization/explorer-assets/app.js.LEGAL.txt',
+        'dist/visualization/explorer-assets/CYTOSCAPE-LICENSE.txt',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/scip-symbols.js', 'dist/extraction/scip-runtime.js',
@@ -310,6 +313,7 @@ import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', s
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService,
   extractDocumentCodeBindings, extractDocumentObligations, obligationContractNode, SnapshotContractCompatibilityService, SnapshotCodeCoverageService,
   inspectGraphIdentities, assertGraphIdentities, GraphIdentityConflictError, SnapshotGraphDiscoveryService } from ${JSON.stringify(toolkitModule)};
+import { FileSnapshotStore } from ${JSON.stringify(new URL('../storage/storage.js', staticModule).href)};
 
 const root = process.cwd();
 if (repositoryFileNode('test/contract.test.ts').kind !== 'Evidence' ||
@@ -433,6 +437,7 @@ if (JSON.stringify(attributed?.details?.provenance) !== JSON.stringify(conflicti
   throw new Error('Installed explicit identity attribution must preserve all source evidence');
 }
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
+await new FileSnapshotStore(join(root, '.context-graph')).write(snapshot);
 const discovery = new SnapshotGraphDiscoveryService({ read: async () => snapshot });
 const catalog = await discovery.catalog({ snapshotId: context.snapshotId, view: 'all', maxNodes: 2 });
 if (catalog.overview.facts !== facts.length || catalog.nodes.length !== 2 || !catalog.selection.continuation) {
@@ -673,6 +678,17 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   await writeFile(join(consumer, 'adapter.mjs'),
     'export function createContextGraphAdapter() { return { factExtractors: [], invariantEvaluators: [] }; }\n');
   await writeFile(join(consumer, 'context-graph.config.json'), JSON.stringify(config));
+  const installedToolkit = await import(toolkitModule);
+  const explorerService = await installedToolkit.createExplorerService(join(consumer, 'context-graph.config.json'), 'publication-smoke');
+  const viewer = await installedToolkit.startExplorerServer(explorerService, { port: 0 });
+  try {
+    for (const asset of ['/', '/assets/app.js', '/assets/style.css', '/assets/CYTOSCAPE-LICENSE.txt', '/explorer.json']) {
+      if (!(await fetch(viewer.url + asset)).ok) throw new Error('Installed viewer asset unavailable: ' + asset);
+    }
+    const result = await fetch(viewer.url + '/api/query', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method: 'graph.catalog', params: { snapshotId: 'publication-smoke', view: 'all' } }) });
+    if (!result.ok || !(await result.json()).nodes.length) throw new Error('Installed viewer must query the real saved extraction');
+  } finally { await viewer.close(); }
   const transport = new StdioClientTransport({
     command: process.execPath,
     args: [join(installedRoot, 'dist/mcp.js')],

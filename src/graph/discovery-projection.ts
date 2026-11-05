@@ -17,7 +17,8 @@ export function catalogViewsForFact(fact: GraphFact): readonly GraphCatalogView[
     ...(fact.sourceRole === 'intent' ? ['intent' as const] : [])])];
 }
 function eligible(node: GraphNode, view: GraphCatalogView): boolean {
-  return view !== 'intent' || intentKinds.has(node.kind);
+  return view !== 'intent' || intentKinds.has(node.kind) ||
+    (node.kind === 'Component' && !node.id.startsWith('component:file:'));
 }
 export function catalogOverview(index: SnapshotEvidenceIndex): GraphCatalog['overview'] {
   const sets = Object.fromEntries(catalogViews.map(view => [view, new Set<string>()])) as Record<GraphCatalogView, Set<string>>;
