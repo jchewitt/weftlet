@@ -1,5 +1,5 @@
 import type { GraphCatalog, GraphCatalogNode, GraphCatalogView, GraphFact, GraphNode } from '@weftlet/core';
-import { contextPackLaneForFact } from './coverage.js';
+import { contextPackLaneForFact } from './coverage-facts.js';
 import { contextPackEvidenceAuthority } from './authority.js';
 import { diagnosticKinds } from './diagnostics.js';
 import { catalogViews } from './discovery-request.js';
@@ -41,9 +41,10 @@ export function catalogOverview(index: SnapshotEvidenceIndex): GraphCatalog['ove
     ] };
 }
 export interface CatalogEntry { readonly summary: GraphCatalogNode; readonly search: readonly string[] }
-export function catalogEntries(index: SnapshotEvidenceIndex, view: GraphCatalogView): readonly CatalogEntry[] {
+export function catalogEntries(index: SnapshotEvidenceIndex, view: GraphCatalogView, includedNodeIds?: ReadonlySet<string>): readonly CatalogEntry[] {
   const entries: CatalogEntry[] = [];
-  for (const [id, incident] of index.adjacency) {
+  const adjacency = includedNodeIds ? [...includedNodeIds].map(id => [id, index.adjacency.get(id) ?? []] as const) : index.adjacency;
+  for (const [id, incident] of adjacency) {
     const matching = incident.filter(fact => catalogViewsForFact(fact).includes(view) &&
       [fact.subject, fact.object].some(node => node.id === id && eligible(node, view)));
     if (!matching.length) continue;

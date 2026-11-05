@@ -537,6 +537,9 @@ See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, 
 
 `weftlet viewer serve --snapshot <id>` opens a focused,
 intent-first local explorer over the full saved snapshot, with drag/pan/zoom and cited drill-down.
+Use `weftlet viewer export --snapshot <id> --node <exact-id> --output <new-directory>` for a
+[focused static report](docs/PORTABLE-EXPLORER.md) using the same application, with explicit
+frontier boundaries and no API requirement.
 See the [viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
 
 For development, `pnpm evaluate:impact` measures bounded candidate-file retrieval on Weftlet's

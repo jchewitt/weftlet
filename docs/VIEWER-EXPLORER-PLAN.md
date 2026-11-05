@@ -3,7 +3,8 @@
 Status: implementation started, 2026-11-05. The narrow optional-compiler SELinux fix shipped
 separately in 0.7.5. [Saved-evidence discovery](EXPLORER-DISCOVERY.md) is the first independent
 implementation increment. The next increment implements the bundled local browser application;
-focused portable exports and deployable hosting remain pending. The separate private
+focused portable exports are implemented in the next independent increment. Deployable hosting
+and private consumer acceptance remain pending. The separate private
 ranking/1.0 acceptance gates remain open.
 
 The maintainer selected **both portable reports and a local explorer**, explicitly allowing
@@ -77,7 +78,8 @@ The first V1 increment implements snapshot-wide intent/other-evidence catalogs, 
 exact assertion detail, snapshot counts, and a shared revision-aware index for discovery,
 neighborhoods and paths. Both CLI and MCP expose the new queries. The V2 application now provides local HTTP access, intent-first Cytoscape navigation and
 structured diagnostic/assertion drill-down. Public real-browser interaction checks are distinct
-from private consumer acceptance. Portable loading and hosted deployment remain subsequent work;
+from private consumer acceptance. The portable loader supports complete selected neighborhoods and explicit frontier boundaries.
+Hosted deployment and private acceptance remain subsequent work;
 do not mark V0–V5 complete from query or public browser tests alone.
 
 ## Graph library evaluation
@@ -109,7 +111,10 @@ Use the same application with a static data loader, package all browser assets, 
 supported query results equivalent to the local service. Search is report-scoped; unsupported
 operations must be explicit. Chunk data rather than constructing a graph-sized string. Exports
 are read-only evidence artifacts suitable for reviewed static CI hosting, with no automatic upload.
-This is the V3 design boundary; implementation and parity/browser checks remain pending.
+V3 implements this boundary through `viewer export` and the same application with a static
+loader. Public parity and browser tests cover retained assertion IDs, citations, authority,
+coverage, diagnostics, pagination and frontier errors; full-snapshot path search stays local.
+See [portable report usage and limits](PORTABLE-EXPLORER.md).
 
 ## Hosting and 2.0 boundaries
 

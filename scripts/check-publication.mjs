@@ -687,7 +687,19 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     }
     const result = await fetch(viewer.url + '/api/query', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ method: 'graph.catalog', params: { snapshotId: 'publication-smoke', view: 'all' } }) });
-    if (!result.ok || !(await result.json()).nodes.length) throw new Error('Installed viewer must query the real saved extraction');
+    const catalog = await result.json();
+    if (!result.ok || !catalog.nodes.length) throw new Error('Installed viewer must query the real saved extraction');
+    const exported = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'), 'viewer', 'export',
+      '--config', join(consumer, 'context-graph.config.json'), '--snapshot', 'publication-smoke',
+      '--node', catalog.nodes[0].node.id, '--depth', '1', '--output', join(consumer, 'portable-report')], consumer));
+    const report = JSON.parse(await readFile(join(exported.output, 'explorer.json'), 'utf8'));
+    if (report.mode !== 'portable' || report.report.scope !== 'focused-report' || !report.report.includedFacts) {
+      throw new Error('Installed CLI must export a focused report from the real saved extraction');
+    }
+    const { PortableEvidenceSource } = await import(new URL('../visualization/explorer/portable-client.js', staticModule).href);
+    const offline = await PortableEvidenceSource.open(report, async path => JSON.parse(await readFile(join(exported.output, path), 'utf8')));
+    const neighborhood = await offline.neighbors({ snapshotId: 'publication-smoke', nodeId: catalog.nodes[0].node.id });
+    if (!neighborhood.facts.length) throw new Error('Installed portable loader must retain exact evidence');
   } finally { await viewer.close(); }
   const transport = new StdioClientTransport({
     command: process.execPath,
