@@ -24,7 +24,7 @@ function overlapsReturnedEvidence(item: GraphDiagnostic, facts: readonly GraphFa
     fact.provenance.endLine >= span.startLine));
 }
 
-function relevantDiagnostic(
+export function relevantDiagnostic(
   item: GraphDiagnostic,
   request: ImpactScanRequest,
   facts: readonly GraphFact[],

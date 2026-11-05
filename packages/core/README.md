@@ -40,3 +40,7 @@ the RDF-backed implementation; core does not load a graph database, provider or 
 `GraphPathsRequest`, `GraphPaths` and `GraphPathQueryService` describe bounded cited paths between
 exact snapshot endpoints, including work/depth limits, continuation and unexplored frontier.
 These contracts are available starting with 0.7.0.
+
+`@weftlet/core/browser` exposes only the pure `graphPredicates` vocabulary and
+`repositoryFileNode` identity helper without Node filesystem/process/crypto imports.
+The root entry point retains its existing Node-oriented utilities.

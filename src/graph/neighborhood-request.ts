@@ -1,4 +1,5 @@
-import { graphPredicates, type GraphPredicate, type GraphNeighborsRequest } from '@weftlet/core';
+import type { GraphPredicate, GraphNeighborsRequest } from '@weftlet/core';
+import { graphPredicates } from '@weftlet/core/browser';
 
 const fields = new Set(['snapshotId', 'nodeId', 'direction', 'predicates', 'maxFacts', 'continuation']);
 

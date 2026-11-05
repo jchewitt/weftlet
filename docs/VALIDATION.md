@@ -1,5 +1,29 @@
 # Validation evidence
 
+## Focused portable explorer, 2026-11-05
+
+Public regressions compare every included neighborhood across directions, predicate filters and
+multiple page sizes with the full saved-query service, including exact facts, coverage, diagnostics
+and global neighbor degrees. Catalog entries equal the full catalog restricted to expanded nodes.
+Tests retain immutable source bytes, unchanged repeat shard/read-table hashes, separate source and
+assertion authority, and explicit errors for frontier neighborhoods and unavailable path search.
+A 350-edge public hub exercises four fact shards and six fixed 60-fact pages without pruning.
+Other checks cover concurrent exports, existing output preservation, failed-budget cleanup,
+corrupt read tables, byte/digest checks and query-bound UTF-8 continuations. Linux qualification
+passed **38 core + 1,034 toolkit tests**, with two optional ontology integrations skipped; the
+subsequent four-test export rerun also passed after adding the multi-shard hub/byte-preservation
+assertions. Governance passed with 17 advisory findings. Exact-head hosted checks remain separate.
+
+The sandboxed Chromium test opens the same application from a static subdirectory with only
+GET requests, follows intent into code, compares its exact assertions with live queries, reports
+frontier boundaries without losing the prior view, and backtracks. No API, provider or external
+network request is used by the portable page. The installed-consumer smoke also exercises the
+export CLI and loader over real public TypeScript extraction; qualification is recorded on its PR.
+
+Portable search is report-scoped, full-snapshot path search remains local, and checkout status
+is captured at export. These public results do not prove private-graph usability, remote-host
+security or whole-repository product-intent completeness. See [portable limits](PORTABLE-EXPLORER.md).
+
 ## Local explorer application, 2026-11-05
 
 The bundled Cytoscape 3.34.4 application uses the saved-evidence discovery/neighborhood/path

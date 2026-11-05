@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { resolve, join } from 'node:path';
 import { chromium } from 'playwright-core';
 import { createExplorerFixtureProject } from '../examples/explorer/create-project.js';
 import { createExplorerService } from '../src/application/explorer-service.js';
 import { startExplorerServer } from '../src/visualization/explorer-server.js';
+import { exportExplorerReport } from '../src/application/explorer-export.js';
+import { servePublicReport } from '../examples/explorer/report-server.js';
 
 const executablePath = process.env.WEFTLET_BROWSER_EXECUTABLE ?? ['/usr/bin/chromium', '/usr/bin/google-chrome'].find(existsSync);
 if (!executablePath) throw new Error('Set WEFTLET_BROWSER_EXECUTABLE to a sandbox-capable Chromium/Chrome executable');
@@ -92,8 +94,38 @@ try {
   const screenshot = process.env.WEFTLET_BROWSER_SCREENSHOT;
   if (screenshot) { const output = resolve(screenshot); await mkdir(resolve(output, '..'), { recursive: true }); await page.screenshot({ path: output, fullPage: true }); }
   assert.deepEqual(errors, []); assert.deepEqual(external, []);
+  const report = await exportExplorerReport(service, { output: join(fixture.root, '.context-graph/browser-report'), roots: ['workflow:reserve'], depth: 3 });
+  const staticServer = await servePublicReport(report.output);
+  try {
+    const offline = await browser.newPage({ viewport: { width: 1440, height: 1040 } });
+    const offlineErrors: string[] = [], offlineExternal: string[] = [];
+    offline.on('pageerror', error => offlineErrors.push(error.message));
+    offline.on('request', request => { if (!request.url().startsWith(staticServer.url)) offlineExternal.push(request.url()); });
+    await offline.goto(staticServer.url);
+    await offline.waitForFunction(() => document.querySelector('#status')!.textContent!.includes('saved assertions connect'));
+    assert.ok((await offline.locator('#report-scope').innerText()).includes('5 of 256 source facts'));
+    assert.equal(await offline.getByText('Explore a path', { exact: true }).isVisible(), false);
+    assert.equal(await offline.locator('#refresh-state').isVisible(), false);
+    await offline.locator('#related').getByRole('button', { name: 'Ship after reservation Workflow' }).click();
+    await offline.waitForFunction(() => document.querySelector('#title')!.textContent === 'Ship after reservation');
+    await offline.locator('#related').getByRole('button', { name: 'Shipping worker Component' }).click();
+    await offline.waitForFunction(() => document.querySelector('#title')!.textContent === 'Shipping worker');
+    const live = await service.exploration.neighbors({ snapshotId: fixture.snapshot.manifest.snapshotId, nodeId: 'component:file:src/worker.ts', maxFacts: 30 });
+    assert.deepEqual(await offline.locator('#evidence details[data-fact-id]').evaluateAll(items => items.map(item => (item as HTMLElement).dataset.factId)), live.facts.map(fact => fact.id));
+    await offline.locator('#related').getByRole('button', { name: /Future plan.*outside report/ }).click();
+    await offline.waitForFunction(() => !document.querySelector<HTMLElement>('#error')!.hidden);
+    assert.ok((await offline.locator('#error').innerText()).includes('outside the focused report'));
+    assert.equal(await offline.locator('#title').innerText(), 'Shipping worker');
+    await offline.locator('#back').click();
+    assert.equal(await offline.locator('#title').innerText(), 'Ship after reservation');
+    assert.ok(staticServer.requests.some(path => /\/data\/[a-f0-9]{64}\.json$/.test(path)));
+    assert.ok(staticServer.requests.every(path => !path.includes('/api/')));
+    assert.deepEqual(offlineErrors, []); assert.deepEqual(offlineExternal, []);
+    await offline.close();
+  } finally { await staticServer.close(); }
   console.log(JSON.stringify({ browser: browser.version(), sandbox: true, mode: 'local', publicFixture: true,
     passed: ['intent overview', 'canvas drill-down', 'code-to-intent return', 'drag', 'pan', 'zoom', 'back restores layout',
       'keyboard entry', 'authority and predicate/direction filters', 'bounded paths', 'catalog continuation', 'empty results',
-      'collapsed inspector', 'source/review separation', 'no external requests'], screenshot: screenshot ?? null }));
+      'collapsed inspector', 'source/review separation', 'portable static subdirectory deployment', 'portable/live assertion parity',
+      'explicit portable frontier', 'no portable API dependency', 'no external requests'], screenshot: screenshot ?? null }));
 } finally { await browser?.close(); await server.close(); await fixture.cleanup(); }

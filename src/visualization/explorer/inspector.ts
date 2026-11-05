@@ -57,7 +57,7 @@ export function showAssertions(facts: readonly GraphFact[], enter: (id: string) 
     groups.get(fact.predicate)!.append(detail);
   }
 }
-export function showFocus(node: GraphNode | undefined, facts: readonly GraphFact[], enter: (id: string) => void, template?: string) {
+export function showFocus(node: GraphNode | undefined, facts: readonly GraphFact[], enter: (id: string) => void, template?: string, paths = true) {
   byId('kind').textContent = node?.kind.toUpperCase() ?? 'SAVED EVIDENCE';
   byId('title').textContent = node?.label ?? 'Follow the why.';
   byId('intro').textContent = node ? 'Enter a connected item to explore its scope. Arrows retain the saved direction; static links do not prove runtime causality.'
@@ -65,6 +65,7 @@ export function showFocus(node: GraphNode | undefined, facts: readonly GraphFact
   showAssertions(facts, enter, template);
   if (node) {
     const id = element('span', `Exact node: ${node.id}`); id.className = 'node-id'; byId('intro').append(id);
+    if (!paths) return;
     const from = element('button', 'Use as path start'), to = element('button', 'Use as path target');
     from.onclick = () => { byId<HTMLInputElement>('from-node').value = node.id; };
     to.onclick = () => { byId<HTMLInputElement>('to-node').value = node.id; };

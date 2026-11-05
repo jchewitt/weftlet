@@ -5,6 +5,7 @@ import { coverageForFacts } from './coverage.js';
 import { parseGraphNeighborsRequest } from './neighborhood-request.js';
 import { renderGraphNeighborhood } from './neighborhood-renderer.js';
 import { selectDiagnostics } from './diagnostics.js';
+import { selectNeighborhoodFacts, neighborhoodFrontier } from './neighborhood-projection.js';
 
 export const GRAPH_NEIGHBORHOOD_VERSION = 'exact-neighborhood-v2';
 
@@ -25,10 +26,6 @@ function pageOffset(token: string | undefined, binding: string, length: number, 
   return Number(value.offset);
 }
 
-function opposite(fact: GraphFact, nodeId: string): string {
-  return fact.subject.id === nodeId ? fact.object.id : fact.subject.id;
-}
-
 /** One-hop, exact-ID exploration over the same lossless RDF projection as impact.scan. */
 export class SnapshotGraphExplorationService implements GraphExplorationService {
   private readonly indexes: SnapshotIndexReader;
@@ -39,10 +36,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
     const index = await this.indexes.read(request.snapshotId);
     const saved = index.snapshot, adjacency = index.adjacency;
     const incident = adjacency.get(request.nodeId) ?? [];
-    const selected = incident.filter(fact =>
-      (request.direction === 'both' || (request.direction === 'outgoing' ? fact.subject.id : fact.object.id) === request.nodeId) &&
-      (!request.predicates.length || request.predicates.includes(fact.predicate)))
-      .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+    const selected = selectNeighborhoodFacts(incident, request);
     const { continuation: _continuation, ...query } = request;
     // Bind to actual projected facts too: even a corrupt store reusing a manifest digest
     // must not silently turn a saved continuation into a different neighborhood/frontier.
@@ -53,15 +47,6 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
     const next = end < selected.length ? Buffer.from(JSON.stringify({
       version: GRAPH_NEIGHBORHOOD_VERSION, binding, offset: end,
     })).toString('base64url') : undefined;
-    const neighborIds = (items: readonly GraphFact[]) => new Set(items.map(fact => opposite(fact, request.nodeId))
-      .filter(id => id !== request.nodeId));
-    const totalNeighbors = neighborIds(selected).size;
-    const neighbors = [...neighborIds(facts)].sort().map(nodeId => ({
-      nodeId,
-      factIds: facts.filter(fact => opposite(fact, request.nodeId) === nodeId).map(fact => fact.id),
-      otherIncidentFacts: adjacency.get(nodeId)!.filter(fact =>
-        fact.subject.id !== request.nodeId && fact.object.id !== request.nodeId).length,
-    }));
     const manifest = saved.manifest;
     const plain: Omit<GraphNeighborhood, 'markdown'> = {
       snapshot: snapshotContext(manifest),
@@ -74,8 +59,7 @@ export class SnapshotGraphExplorationService implements GraphExplorationService 
         maxFacts: request.maxFacts, incidentFacts: incident.length, matchingFacts: selected.length,
         filteredFacts: incident.length - selected.length, offset, returnedFacts: facts.length,
         remainingFacts: selected.length - end, truncated: Boolean(next), ...(next ? { continuation: next } : {}) },
-      frontier: { scope: 'selected-one-hop-neighborhood', totalNeighbors,
-        remainingNeighbors: totalNeighbors - neighborIds(selected.slice(0, end)).size, neighbors },
+      frontier: neighborhoodFrontier(request.nodeId, incident, selected, facts, end, id => adjacency.get(id)?.length ?? 0),
     };
     return { ...plain, markdown: renderGraphNeighborhood(plain) };
   }

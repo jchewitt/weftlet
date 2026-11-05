@@ -18,6 +18,7 @@ export class EvidenceCanvas {
       { selector: 'node[kind="Contract"], node[kind="Invariant"]', style: { 'background-color': '#fff2da', 'border-color': '#d1af6d' } },
       { selector: 'node[kind="Evidence"]', style: { 'background-color': '#f1e9f8', 'border-color': '#ad8bc0' } },
       { selector: 'node.focus', style: { 'border-width': 4, 'border-color': '#176c59' } },
+      { selector: 'node.boundary', style: { 'border-style': 'dashed', 'background-opacity': 0.5 } },
       { selector: 'edge', style: { label: 'data(label)', width: 2, 'line-color': '#8ca8b0', 'target-arrow-color': '#8ca8b0',
         'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'font-size': 10, 'text-background-opacity': 1,
         'text-background-color': '#f2f6f7', 'text-background-padding': '3px', 'text-rotation': 'autorotate' } },
@@ -30,7 +31,7 @@ export class EvidenceCanvas {
     return { positions: this.cy.nodes().map(node => ({ id: node.id(), position: { ...node.position() } })),
       zoom: this.cy.zoom(), pan: { ...this.cy.pan() } };
   }
-  render(nodes: readonly GraphNode[], facts: readonly GraphFact[], focus?: string, restore?: ViewportState): void {
+  render(nodes: readonly GraphNode[], facts: readonly GraphFact[], focus?: string, restore?: ViewportState, boundaries?: ReadonlySet<string>): void {
     const groups = new Map<string, GraphFact[]>();
     for (const fact of facts) {
       const key = JSON.stringify([fact.subject.id, fact.predicate, fact.object.id]);
@@ -45,6 +46,7 @@ export class EvidenceCanvas {
         data: { id: `edge:${index}`, source: nodeKey(group[0]!.subject.id), target: nodeKey(group[0]!.object.id),
           label: group[0]!.predicate + (group.length > 1 ? ` · ${group.length} assertions` : ''), facts: group } })));
       if (focus) this.cy.getElementById(nodeKey(focus)).addClass('focus');
+      for (const id of boundaries ?? []) this.cy.getElementById(nodeKey(id)).addClass('boundary');
     });
     this.cy.layout({ name: 'breadthfirst', directed: true, spacingFactor: 1.25, padding: 60, animate: false }).run();
     if (restore) {

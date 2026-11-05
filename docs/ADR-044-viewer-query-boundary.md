@@ -1,6 +1,7 @@
 # ADR 044: shared evidence queries for the graph explorer
 
-Status: product direction agreed on 2026-11-05; shared discovery/index implementation started.
+Status: agreed on 2026-11-05; shared discovery/index and the local application are implemented.
+Focused portable reports are the next independent implementation; hosted deployment remains pending.
 
 ## Context
 
@@ -51,6 +52,7 @@ installation and immutable-byte preservation. Hosted deployment additionally nee
 access controls and operational configuration; no private graph is uploaded by default.
 
 The first [implementation increment](EXPLORER-DISCOVERY.md) adds shared discovery and index
-support. No new browser application, database migration, hosted deployment, new provider,
-approval workflow or license change is established by this increment. Current 1.0 consumer
+support. The subsequent local application uses Cytoscape and shared read queries; focused
+portable reports use complete selected neighborhoods with explicit frontier boundaries. Database
+migration, hosted deployment, new providers, approval workflows and license changes remain separate. Current 1.0 consumer
 acceptance and the narrow SELinux release remain separately tracked.

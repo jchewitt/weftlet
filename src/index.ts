@@ -8,6 +8,7 @@ export * from "./extraction/semantic.js";
 export * from "./extraction/telemetry.js";
 export * from "./visualization/visualization.js";
 export { createExplorerService } from './application/explorer-service.js';
+export { exportExplorerReport, type ExplorerExportOptions } from './application/explorer-export.js';
 export { startExplorerServer } from './visualization/explorer-server.js';
 export type { ExplorerMetadata, ExplorerDataSource } from './visualization/explorer-contract.js';
 export * from "./application/overlay.js";

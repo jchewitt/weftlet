@@ -31,7 +31,7 @@ The server binds only to loopback, rejects other Host/Origin values, accepts bou
 and serves an allowlist of packaged assets. Remote binding, authentication and Docker deployment
 are a separate milestone; do not expose this local server through a public proxy.
 
-Portable bundles are the next increment: the maintainer selected focused reports around explicit
+`weftlet viewer export` creates [focused portable bundles](PORTABLE-EXPLORER.md) around explicit
 product areas, with navigation boundaries, while the local explorer browses the full snapshot.
 See the [milestone plan](VIEWER-EXPLORER-PLAN.md) and [shared discovery contract](EXPLORER-DISCOVERY.md).
 

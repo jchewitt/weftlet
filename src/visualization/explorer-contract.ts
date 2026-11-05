@@ -1,5 +1,6 @@
 import type { ContextPack, DiagnosticReport, GraphCatalog, GraphCatalogRequest, GraphFactDetail, GraphFactRequest, GraphPredicate,
   GraphNeighborhood, GraphNeighborsRequest, GraphPaths, GraphPathsRequest } from '@weftlet/core';
+import type { PortableReportScope } from './portable-contract.js';
 
 export interface ExplorerMetadata {
   readonly version: 1;
@@ -12,9 +13,11 @@ export interface ExplorerMetadata {
   readonly capabilities: { readonly paths: boolean; readonly search: boolean };
   readonly predicates: readonly GraphPredicate[];
   readonly sourceUrlTemplate?: string;
+  readonly report?: PortableReportScope;
 }
 export interface ExplorerDataSource {
   readonly metadata: ExplorerMetadata;
+  canExplore?(nodeId: string): boolean;
   catalog(request: GraphCatalogRequest): Promise<GraphCatalog>;
   neighbors(request: GraphNeighborsRequest): Promise<GraphNeighborhood>;
   fact(request: GraphFactRequest): Promise<GraphFactDetail>;

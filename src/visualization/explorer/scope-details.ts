@@ -3,18 +3,19 @@ import type { Scope } from './scope.js';
 import { byId } from './dom.js';
 import { showGaps } from './inspector.js';
 
-export function showScopeDetails(value: Scope, nodes: number, facts: number, focused: boolean,
+export function showScopeDetails(value: Scope, nodes: number, facts: number,
   metadata: ExplorerMetadata, status: (text: string) => void) {
   if (value.kind === 'catalog') {
     byId<HTMLSelectElement>('view').value = value.result.selection.view;
     byId<HTMLInputElement>('search').value = value.request.search ?? '';
     const selection = value.result.selection;
-    byId('coverage-label').textContent = `${value.result.overview.views.intent.nodes} intent navigation items · ${value.result.overview.facts.toLocaleString()} saved facts`;
+    byId('coverage-label').textContent = `Source snapshot: ${value.result.overview.views.intent.nodes} intent navigation items · ${value.result.overview.facts.toLocaleString()} saved facts`;
     status(`${nodes} nodes visible · ${selection.returnedNodes}/${selection.matchingNodes} catalog matches on this page · ${selection.remainingNodes} remain · ${facts} connections loaded for this view`);
     byId('empty').hidden = nodes > 0;
     byId('empty').textContent = value.result.overview.views.intent.nodes === 0 && selection.view === 'intent'
       ? 'No qualifying intent concepts were found in this saved snapshot. Inspect selected documents and source classification; code is available under Implementation.'
       : 'No nodes match this page and its filters. Broaden the search or change the evidence view.';
+    if (metadata.mode === 'portable' && nodes === 0) byId('empty').textContent = 'No included nodes match this report view and its filters. This does not establish absence from the full snapshot; try a selected root or another view.';
     showGaps(byId('gaps'), metadata.diagnostics);
   } else if (value.kind === 'node') {
     const selection = value.result.selection;

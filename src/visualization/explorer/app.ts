@@ -1,6 +1,7 @@
 import type { GraphCatalogRequest, GraphCatalogView, GraphFact, GraphNeighborsRequest, GraphNode, GraphPathsRequest } from '@weftlet/core';
 import type { ExplorerDataSource, ExplorerMetadata } from '../explorer-contract.js';
 import { LiveEvidenceSource } from './client.js';
+import { PortableEvidenceSource } from './portable-client.js';
 import { EvidenceCanvas, type ViewportState } from './graph.js';
 import { byId, element, navigationButton } from './dom.js';
 import { showAssertions, showFocus, showGaps } from './inspector.js';
@@ -14,7 +15,7 @@ async function main() {
   if (!response.ok) throw new Error('Unable to open the saved-evidence explorer');
   const metadata: ExplorerMetadata = await response.json();
   if (metadata.version !== 1) throw new Error('Unsupported explorer data version');
-  const source: ExplorerDataSource = new LiveEvidenceSource(metadata);
+  const source: ExplorerDataSource = metadata.mode === 'portable' ? await PortableEvidenceSource.open(metadata) : new LiveEvidenceSource(metadata);
   const snapshotId = metadata.snapshot.snapshotId;
   let scope: Scope | undefined, generation = 0;
   const history: SavedScope[] = [];
@@ -42,19 +43,23 @@ async function main() {
       byId<HTMLSelectElement>('direction').value = value.request.direction ?? 'both';
       byId<HTMLSelectElement>('predicate').value = value.request.predicates?.[0] ?? '';
     }
-    canvas.render([...nodes.values()], facts, focus?.id, viewport);
+    canvas.render([...nodes.values()], facts, focus?.id, viewport, new Set([...nodes.keys()].filter(id => source.canExplore?.(id) === false)));
     if (value.kind === 'path') canvas.highlight(new Set(value.result.paths.flatMap(path => path.factIds)));
-    showFocus(focus, facts, id => void enter(id), metadata.sourceUrlTemplate);
+    showFocus(focus, facts, id => void enter(id), metadata.sourceUrlTemplate, metadata.capabilities.paths);
     byId('scope').textContent = value.kind === 'catalog' ? `${value.result.selection.view} overview` : focus?.label ?? 'Evidence paths';
     byId('related').replaceChildren();
-    for (const node of nodes.values()) if (node.id !== focus?.id) navigationButton(byId('related'), node.label, node.kind, () => void enter(node.id));
+    for (const node of nodes.values()) if (node.id !== focus?.id) navigationButton(byId('related'), node.label,
+      node.kind + (source.canExplore?.(node.id) === false ? ' · outside report' : ''), () => void enter(node.id));
     byId<HTMLButtonElement>('back').disabled = !history.length;
     const next = byId<HTMLButtonElement>('next'); next.hidden = value.kind === 'path' ? !value.result.search.continuation : !value.result.selection.continuation;
     byId('node-filters').hidden = value.kind !== 'node';
     byId('connections').hidden = value.kind !== 'catalog';
-    showScopeDetails(value, nodes.size, facts.length, Boolean(focus), metadata, status);
+    showScopeDetails(value, nodes.size, facts.length, metadata, status);
     const selectionDetail = value.kind === 'path' ? { search: value.result.search, frontier: value.result.frontier } : value.result.selection;
     byId('selection-details').textContent = JSON.stringify(selectionDetail, null, 2);
+    showHistory();
+  }
+  function showHistory() {
     byId('breadcrumbs').replaceChildren();
     for (const [index, prior] of history.entries()) {
       if (index < history.length - 5) continue;
@@ -106,17 +111,23 @@ async function main() {
   }
   byId('repository').textContent = metadata.repositoryId;
   byId('mode').textContent = metadata.mode === 'local' ? 'Local · saved evidence' : 'Portable · saved evidence';
+  if (metadata.report) {
+    const report = metadata.report, banner = byId('report-scope'); banner.hidden = false;
+    banner.append(element('p', `Focused report: ${report.includedFacts.toLocaleString()} of ${report.sourceFacts.toLocaleString()} source facts · ${report.expandedNodes} complete neighborhoods · ${report.frontierNodes} frontier nodes. Search covers this report. Dashed nodes require the full snapshot for further exploration. Full-snapshot path search is available in the local explorer.`));
+    for (const root of report.roots) { const button = element('button', root); button.onclick = () => void enter(root); banner.append(button); }
+  }
   byId('snapshot-label').textContent = `Commit ${metadata.snapshot.commitSha.slice(0, 12)} · ${metadata.snapshot.overlayDigest ? 'draft overlay' : 'committed snapshot'}`;
   const displayState = (current: ExplorerMetadata) => {
-    byId('snapshot-details').textContent = JSON.stringify({ snapshot: current.snapshot, checkout: current.checkout }, null, 2);
+    byId('snapshot-details').textContent = JSON.stringify({ snapshot: current.snapshot, checkout: current.checkout, report: current.report }, null, 2);
     const state = current.checkout?.state;
     byId('snapshot-state').textContent = [state?.stale ? 'Historical or stale evidence' : 'Pinned saved evidence',
       state?.configurationMatches === false ? 'configuration differs' : '', state?.extractionCompatible === false ? 'extraction versions differ' : '',
       state?.excludedWorkingChanges.length ? `${state.excludedWorkingChanges.length} working changes excluded` : '',
       current.snapshot.documentSelection?.complete === false ? 'document coverage incomplete' : '',
-      current.checkout ? `checked ${new Date(current.checkout.checkedAt).toLocaleTimeString()}` : 'checkout state unavailable'].filter(Boolean).join(' · ');
+      current.checkout ? `${current.mode === 'portable' ? 'captured at export' : 'checked'} ${new Date(current.checkout.checkedAt).toLocaleString()}` : 'checkout state unavailable'].filter(Boolean).join(' · ');
   };
   displayState(metadata);
+  byId('refresh-state').hidden = metadata.mode === 'portable';
   byId('refresh-state').onclick = () => {
     void fetch('./explorer.json').then(async response => {
       if (!response.ok) throw new Error('Unable to refresh checkout state');
@@ -146,7 +157,7 @@ async function main() {
     else if (scope?.kind === 'node') void enter(scope.request.nodeId, scope.result.selection.continuation);
     else if (scope?.kind === 'path') void findPaths({ ...scope.request, continuation: scope.result.search.continuation });
   };
-  byId('path-form').hidden = !metadata.capabilities.paths;
+  byId('path-form').parentElement!.hidden = !metadata.capabilities.paths;
   async function findPaths(request: GraphPathsRequest) {
     await run(async ticket => {
       status('Searching bounded saved paths…');

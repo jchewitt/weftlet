@@ -5,6 +5,7 @@ import { parseGraphNeighborsRequest } from '../graph/neighborhood-request.js';
 import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
 import { sourceLink } from './source-links.js';
+import { explorerAssetsRoot } from './explorer-assets.js';
 
 const assets = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']], ['/index.html', ['index.html', 'text/html; charset=utf-8']],
@@ -46,8 +47,7 @@ export async function startExplorerServer(service: ExplorerService, options: { p
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('Invalid viewer port');
   if (options.sourceUrlTemplate) sourceLink({ path: 'README.md', startLine: 1, endLine: 1,
     commitSha: service.index.snapshot.manifest.commitSha, digest: '' }, options.sourceUrlTemplate);
-  const assetsRoot = options.assetsRoot ?? new URL(import.meta.url.endsWith('.ts')
-    ? '../../dist/visualization/explorer-assets/' : './explorer-assets/', import.meta.url);
+  const assetsRoot = options.assetsRoot ?? explorerAssetsRoot();
   // Fail before announcing a URL if the installed package omitted browser assets.
   const assetBytes = new Map<string, Buffer>();
   for (const [name] of assets.values()) if (!assetBytes.has(name!)) assetBytes.set(name!, await readFile(new URL(name!, assetsRoot)));
