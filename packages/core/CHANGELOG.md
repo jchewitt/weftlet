@@ -1,5 +1,12 @@
 # @weftlet/core
 
+## 0.8.0
+
+### Minor Changes
+
+- b43750e: Add snapshot-wide intent/evidence discovery and exact assertion detail queries through CLI and MCP. Share a revision-aware, read-only index across discovery, neighborhoods and paths while preserving saved evidence and authority. Existing neighborhood/path pagination must restart after upgrading; shortest-first path behavior and retrieval budgets are unchanged.
+- abaab48: Add focused portable explorer bundles with complete selected neighborhoods, explicit frontier boundaries, bounded hashed data shards, integrity checks and local-query equivalence. Export through `viewer export`; the same bundled app runs on static HTTPS/localhost hosting without an API. Keep full-snapshot path search in the local explorer. Expose pure vocabulary/file identity helpers at `@weftlet/core/browser`.
+
 ## 0.7.5
 
 No changes in this release.
