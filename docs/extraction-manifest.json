@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "621f8e278fe52656c1621469afd50e6df79a23c98a4fae54776840541c308ab6"
+      "destinationSha256": "5f8757daa6dec3c7cc3ea3829fc2dc102608ad26beae8cd3f4e3de94a1e5e468"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/selinux-ontology-workspace.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -643,6 +644,7 @@
     "docs/GRAPHIFY-EVALUATION.md",
     "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",
+    "docs/OPENCAESAR-SELINUX.md",
     "docs/PRE-1.0-BASELINE.md",
     "docs/PROVIDERS.md",
     "docs/RELEASE-1.0-PLAN.md",
@@ -1145,6 +1147,8 @@
     "tests/mapping-proposals.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/monorepo-coverage.test.ts",
+    "tests/ontology-compiler.test.ts",
+    "tests/ontology-selinux.integration.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf-scaling-parity.test.ts",

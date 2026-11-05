@@ -11,6 +11,12 @@ The maintainer supports developing this direction. Detailed schemas, hosting, co
 terms and policy choices below remain proposals to resolve before their dependent work.
 This planning increment implements no features, changes no license and provisions no services.
 
+Handoff verification, 2026-11-05: this plan is committed and linked from the README and roadmap.
+The 0.2.x status descriptions below are historical planning context. Use the current
+[1.0 work queue](1.0-WORK-QUEUE.md) and [validation record](VALIDATION.md) for release and
+consumer acceptance status; they supersede the early M0 intake statuses without changing the
+proposed 2.0 scope. Keep the compiler compatibility fix separate from this future platform work.
+
 ## Product outcome
 
 Help teams establish and maintain an agreed set of product rules, connect those rules to
@@ -274,8 +280,8 @@ Resolve these decisions in small ADRs as their milestones approach:
 
 ## Next handoff
 
-1. Obtain a genuine consumer re-run of the published 0.2.1 identity/kind patch under M0.
-2. Complete the remaining [1.0 tasks](RELEASE-1.0-PLAN.md) and review acceptance without waiting for the website or managed AI.
+1. Read the current [1.0 work queue](1.0-WORK-QUEUE.md) and latest validation evidence; resolve its open consumer findings through reviewed releases and genuine consumer acceptance.
+2. Complete the remaining 1.0 acceptance and explicit release decision without waiting for the website or managed AI. Do not restart already completed historical intake tasks.
 3. Design M1's minimal records and compatibility rules, then implement M2 on bounded public fixtures.
 4. Review real extraction/review results before committing to hosted scope, paid operation or more adapters.
 

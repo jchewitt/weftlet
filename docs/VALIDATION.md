@@ -1,5 +1,19 @@
 # Validation evidence
 
+## Optional compiler SELinux compatibility, 2026-11-05
+
+The same 0.7.4 compiler ticket and the new patched-consumer enforcing-Fedora recovery evidence
+are recorded in [OPENCAESAR-SELINUX.md](OPENCAESAR-SELINUX.md). The upstream correction labels
+only the unique disposable ontology copy on Linux and rejects a copied root symlink before
+generated writes or mounting. No semantic/cache identity, SHACL, provider budget or default
+backend changes are part of this fix.
+
+On this Linux workspace, all six real-filesystem/mocked-process compiler regressions and all
+four existing ontology unit tests pass. The opt-in real enforcing-SELinux test is separate;
+this workspace does not expose `/sys/fs/selinux/enforce`, so that validation is deferred.
+The consumer's real Fedora pass belongs to its tracked patch, not an upstream release.
+Full qualification, independent review, publication and consumer upgrade remain distinct gates.
+
 ## Shared-symbol candidate: public evidence, 2026-11-03
 
 [ADR 043](ADR-043-shared-symbol-specificity.md) and its
