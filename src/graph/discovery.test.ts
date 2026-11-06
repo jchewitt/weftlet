@@ -77,7 +77,8 @@ it('rejects changed queries, corrupt stores, stale cursors and invalid input wit
     await expect(service.catalog({ ...request, ...change, continuation })).rejects.toThrow('mismatch');
   }
   const original = JSON.parse(Buffer.from(continuation, 'base64url').toString('utf8'));
-  for (const token of ['!', 'e30', Buffer.from(JSON.stringify({ ...original, offset: 1.5 })).toString('base64url')]) {
+  for (const token of ['!', 'e30', Buffer.from(JSON.stringify({ ...original, version: 'snapshot-catalog-v1' })).toString('base64url'),
+    Buffer.from(JSON.stringify({ ...original, offset: 1.5 })).toString('base64url')]) {
     await expect(service.catalog({ ...request, continuation: token })).rejects.toThrow('Invalid');
   }
   saved = { ...saved, facts: saved.facts.map(fact => fact.id === 'policy-queue' ? { ...fact, confidence: 0.5 } : fact) };

@@ -1,5 +1,40 @@
 # Validation evidence
 
+## Exact-owner intent evidence candidate, 2026-11-06
+
+[ADR 045](ADR-045-owner-intent-retrieval.md) addresses both reproduced public
+findings: intent-source contracts omitted from intent coverage, and exact-owner
+semantic assertions displaced beyond a bounded impact page. A public 965-fact
+fixture includes 165 owner facts (65 generated document links, 15 conceptual
+assertions, 83 contracts and two code mappings), eight changed files and task/
+checklist competition. With legacy and explicit source roles, the exact target
+assertion moves into the first **60** results at depth **3**, while all 965 facts
+remain reachable and paginatable exactly once. Source/review authority, citations,
+strict SHACL and saved bytes are preserved. This is synthetic query evidence,
+not model extraction quality or private consumer acceptance.
+
+Linux Node 24.19.0: the full suite passed **38 core + 1,048 toolkit tests**, with
+two optional ontology integrations skipped. Existing real-SCIP caller/worker,
+indirect-consumer and symmetric-witness controls retained their budgets and
+denominators. The aggregate command then caught an unmapped example fixture;
+moving it into the canonical examples module resolved that failure. After this
+move, a Windows-separator validation-evidence guard and factoring report text,
+the rebuild and **49 affected tests** passed. Governance passed with the existing
+17 advisory findings; no policy or baseline was relaxed.
+
+Sandboxed Chromium 154.0.8037.57 passed all 19 existing interaction checks,
+including intent navigation, code-to-intent return, dragging, bounded exploration
+and portable/live evidence parity. Inventory, license and release-documentation
+checks passed. Fresh packed-consumer installation, real TypeScript indexing,
+strict RDF/SHACL, repeat hydration, viewer export and MCP checks passed, including
+exact CLI/MCP equality for owner facts and their selection report. Exact-head
+hosted results are recorded separately on the change PR.
+
+The [sanitized consumer report](OWNER-INTENT-RETRIEVAL.md) remains separate. Its
+original query has not been replayed upstream. Intent coverage is nonexclusive
+evidence reporting, not assertion approval or task completeness. Restart impact
+and catalog pagination after upgrading; no extraction refresh is required.
+
 ## Focused portable explorer, 2026-11-05
 
 Public regressions compare every included neighborhood across directions, predicate filters and

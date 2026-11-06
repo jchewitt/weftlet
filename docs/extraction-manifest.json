@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "b273b08720993c8195031f8b45af2e304705d9fe605aaeccd8546276bbf81789"
+      "destinationSha256": "af6dcd33233b59cbf6b1d55ed7f83c524d9b8892c4db8debbfb7a4ebf18d2a47"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "ab7bb2683478ba8f2d99fd6a0fda3cd9c125872db89a7222463dd4c70128512a"
+      "destinationSha256": "4cd8759254c8e44fc530af71ed6a9a2c8ffaef0956b5b8714a0f29da5e1efe8d"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -346,7 +346,7 @@
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "1e37cc722a09199d2d70f9beba621c2c8798be94734726c6104afe4f07035c3e"
+      "destinationSha256": "472dba24db993bdd3db244bee2418c709dc42a06331fdaa753765a875843ebf9"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -388,14 +388,14 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "11b59d7e1936c66cf453136dc01908e3c19287926a29e881effd7b631cce518c"
+      "destinationSha256": "6e37d376813c509950686eec9a39a111a148e904103eae8dd65cd7016d096157"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "8c13b32499f0b830cd02bfc281c37c32fd6387aa3b98a325e6a60d3706b64528"
+      "destinationSha256": "fd245c5930c0bf158b219d53e4037eed03adbe5ae1b135dfed792427db507c56"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "8315467bc5e73c1538e8172914aa52390f144d6ca38eaf8df24548c598871a00"
+      "destinationSha256": "7c2a3347a92ecc78fe7d9f07a53de251e183283192104ce502987930b239b3cf"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/owner-intent-evidence.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -638,6 +639,7 @@
     "docs/ADR-042-indirect-local-relationships.md",
     "docs/ADR-043-shared-symbol-specificity.md",
     "docs/ADR-044-viewer-query-boundary.md",
+    "docs/ADR-045-owner-intent-retrieval.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -646,6 +648,7 @@
     "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",
     "docs/OPENCAESAR-SELINUX.md",
+    "docs/OWNER-INTENT-RETRIEVAL.md",
     "docs/PORTABLE-EXPLORER.md",
     "docs/PRE-1.0-BASELINE.md",
     "docs/PROVIDERS.md",
@@ -817,6 +820,7 @@
     "examples/explorer/report-server.ts",
     "examples/generic-typescript/context-graph.oml.config.json",
     "examples/generic-typescript/document-policy.json",
+    "examples/owner-intent/fixture.ts",
     "examples/pipeline/context-graph.config.json",
     "examples/pipeline/docs/admission.md",
     "examples/pipeline/docs/analysis.md",
@@ -1074,6 +1078,8 @@
     "src/graph/neighborhood.ts",
     "src/graph/obligation-rdf.ts",
     "src/graph/obligation-shapes.ts",
+    "src/graph/owner-intent.test.ts",
+    "src/graph/owner-intent.ts",
     "src/graph/partitioned-shacl.ts",
     "src/graph/path-request.ts",
     "src/graph/path-search.test.ts",
@@ -1194,6 +1200,7 @@
     "tests/monorepo-coverage.test.ts",
     "tests/ontology-compiler.test.ts",
     "tests/ontology-selinux.integration.test.ts",
+    "tests/owner-intent.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf-scaling-parity.test.ts",

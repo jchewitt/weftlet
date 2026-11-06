@@ -282,6 +282,20 @@ export interface ContextPack {
     readonly unexpandedCodeTargets?: readonly string[];
     readonly unexpandedCodeTargetCount?: number;
     readonly unexpandedCodeTargetsTruncated?: boolean;
+    /** Counts over the reachable set and returned page, not approval or task sufficiency. */
+    readonly ownerIntent?: {
+      readonly policy: 'exact-owner-intent-v1';
+      readonly scope: 'reachable-evidence';
+      readonly ownerDocument: string;
+      readonly citedFacts: number;
+      readonly intentFacts: number;
+      /** Eligible owner facts excluding built-in generated document links. */
+      readonly assertionFacts: number;
+      /** At most four leading facts; may extend beyond a page smaller than four. */
+      readonly priorityFactIds: readonly string[];
+      readonly returnedFacts: number;
+      readonly returnedAssertions: number;
+    };
     readonly returned: number;
     readonly reachableFacts: number;
     readonly maxDepth: number;
@@ -302,7 +316,7 @@ export interface ContextPackCoverage {
   readonly code?: import('./code-coverage.js').CodeCoverageOverview;
   /** Absent in older packs, whose counts described exclusive display lanes. */
   readonly scope?: 'returned-page';
-  /** One returned relationship can support both implementation and contract coverage. */
+  /** One returned relationship can support intent, contract and implementation coverage. */
   readonly countsAreNonExclusive?: true;
   readonly counts: Readonly<Record<ContextPackLane, number>>;
   readonly gaps: readonly string[];

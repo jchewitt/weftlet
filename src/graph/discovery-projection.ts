@@ -1,5 +1,5 @@
 import type { GraphCatalog, GraphCatalogNode, GraphCatalogView, GraphFact, GraphNode } from '@weftlet/core';
-import { contextPackLaneForFact } from './coverage-facts.js';
+import { contextPackLaneForFact, isProductIntentEvidence } from './coverage-facts.js';
 import { contextPackEvidenceAuthority } from './authority.js';
 import { diagnosticKinds } from './diagnostics.js';
 import { catalogViews } from './discovery-request.js';
@@ -14,7 +14,7 @@ const laneViews = { productIntent: 'intent', contractsAndInvariants: 'contracts'
 export function catalogViewsForFact(fact: GraphFact): readonly GraphCatalogView[] {
   const lane = contextPackLaneForFact(fact);
   return [...new Set<GraphCatalogView>(['all', ...(lane ? [laneViews[lane]] : ['evidence' as const]),
-    ...(fact.sourceRole === 'intent' ? ['intent' as const] : [])])];
+    ...(fact.sourceRole === 'intent' || isProductIntentEvidence(fact) ? ['intent' as const] : [])])];
 }
 function eligible(node: GraphNode, view: GraphCatalogView): boolean {
   return view !== 'intent' || intentKinds.has(node.kind) ||

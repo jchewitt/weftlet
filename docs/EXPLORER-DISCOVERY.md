@@ -1,5 +1,12 @@
 # Saved-evidence discovery
 
+The owner-intent patch adds approved-source contracts/mappings to the intent
+facet even on legacy snapshots without source-role metadata. Source approval does
+not approve the extracted assertion. Intent and contract page counts may overlap;
+primary display groups are unchanged. Restart catalog and impact continuations
+after upgrading (`snapshot-catalog-v2`, `owner-intent-priority-v5`). See
+[ADR 045](ADR-045-owner-intent-retrieval.md) for exact-owner selection and limits.
+
 Development milestone V1 adds `graph.catalog` and `graph.fact` to the CLI, MCP and public
 query contract. The existing `visualize` command still exports one bounded impact page;
 the new explorer application is a separate increment.

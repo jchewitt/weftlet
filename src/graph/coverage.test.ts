@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { repositoryFileNode, type GraphFact } from '@weftlet/core';
-import { contextPackLaneForFact, coverageForFacts, isImplementationEvidence } from './coverage.js';
+import { contextPackLaneForFact, coverageForFacts, isImplementationEvidence, isProductIntentEvidence } from './coverage.js';
 
 function consumer(path = 'src/worker.ts', changes: Partial<GraphFact> = {}): GraphFact {
   return { id: 'public-consumer', snapshotId: 'public-snapshot',
@@ -11,6 +11,34 @@ function consumer(path = 'src/worker.ts', changes: Partial<GraphFact> = {}): Gra
 }
 
 describe('reported evidence coverage', () => {
+  it('counts legacy approved-source contracts as intent without rewriting their lane or review', () => {
+    const fact = consumer('docs/owner.md', { authority: 'inferred', sourceAuthority: 'declared', extractionReview: 'unreviewed' });
+    const before = structuredClone(fact);
+    expect(isProductIntentEvidence(fact)).toBe(true);
+    expect(contextPackLaneForFact(fact)).toBe('contractsAndInvariants');
+    expect(coverageForFacts([fact]).counts).toEqual({ productIntent: 1, contractsAndInvariants: 1,
+      implementationAndConsumers: 0, validationEvidence: 0 });
+    expect(fact).toEqual(before);
+    expect(fact.authority).toBe('inferred');
+  });
+
+  it.each(['plan', 'reference', 'unclassified', 'validation'] as const)(
+    'does not count an explicitly %s source as intent even with declared source/claim authority', sourceRole => {
+      expect(isProductIntentEvidence(consumer('docs/owner.md', { sourceRole, sourceAuthority: 'declared', authority: 'declared' }))).toBe(false);
+    });
+
+  it('keeps unapproved, validation and runtime evidence outside intent coverage', () => {
+    const unapproved = consumer('docs/owner.md', { sourceRole: 'intent', authority: 'inferred', sourceAuthority: 'inferred' });
+    const test = consumer('test/worker.test.ts', { sourceAuthority: 'declared', authority: 'declared' });
+    const validation = consumer('docs/owner.md', { sourceAuthority: 'declared', predicate: 'verifiedBy' });
+    const windowsValidation = consumer('docs\\validation\\report.md', { sourceAuthority: 'declared', authority: 'declared' });
+    const runtime = consumer('docs/owner.md', { sourceAuthority: 'declared', extractor: { id: 'otlp-runtime-evidence', version: '1' } });
+    for (const fact of [unapproved, test, validation, windowsValidation, runtime]) {
+      expect(isProductIntentEvidence(fact)).toBe(false);
+      expect(coverageForFacts([fact]).counts.productIntent).toBe(0);
+    }
+  });
+
   it('counts one legacy code consumer in both coverage categories while retaining its primary lane and evidence', () => {
     const fact = consumer();
     const before = structuredClone(fact);

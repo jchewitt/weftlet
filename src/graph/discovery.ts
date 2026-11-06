@@ -5,7 +5,7 @@ import { catalogEntries, catalogOverview, type CatalogEntry } from './discovery-
 import { SnapshotIndexReader, type RevisionedSnapshotReader, type SnapshotEvidenceIndex } from './snapshot-index.js';
 import { snapshotContext } from './snapshot-context.js';
 
-export const GRAPH_CATALOG_VERSION = 'snapshot-catalog-v1';
+export const GRAPH_CATALOG_VERSION = 'snapshot-catalog-v2';
 function offsetFor(token: string | undefined, binding: string, length: number, pageSize: number): number {
   if (token === undefined) return 0;
   try {

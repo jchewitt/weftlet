@@ -46,7 +46,7 @@ async function main(): Promise<void> {
       {
         name: impactScanToolName,
         description:
-          'Return a bounded, provenance-bearing impact Context Pack for a task, document, file, symbol, or capability.',
+          'Return a bounded, provenance-bearing impact Context Pack for a task, document, file, symbol, or capability. An explicit ownerDocument gives up to four early positions to exact owner-cited intent evidence, preferring assertions over generated document links. Inspect ownerIntent counts, citations, review and continuation; priority does not prove task relevance or completeness.',
         inputSchema: {
           type: 'object',
           additionalProperties: false,

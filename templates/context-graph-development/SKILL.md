@@ -16,8 +16,14 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
 2. Call MCP `impact.scan` before implementation with the owner document, task, and checklist text.
    Queries only read saved evidence. Run the CLI `hydrate` explicitly when refresh is needed.
    Check the reported commit, configuration, scope and excluded working changes.
+   When present, `exploration.ownerIntent` distinguishes available/returned owner
+   assertions from generated document links. Up to four owner facts receive early
+   priority; this does not establish relevance to every checklist item or complete
+   owner coverage. Inspect the exact cited assertions and follow up as needed.
 3. Inspect product intent, contracts/invariants, implementation/consumers, validation evidence,
-   runtime evidence, confidence, unknowns, and source locations. Treat an empty coverage lane or
+   runtime evidence, confidence, unknowns, and source locations. Intent-source
+   contracts can count as both intent and contracts; counts do not grant approval.
+   Treat an empty coverage count or
    relevant runtime gap as unresolved context.
 4. Keep source approval, assertion review, implementation, test coverage and observed runtime
    behavior distinct. An inferred/unreviewed assertion citing an approved owner document still
