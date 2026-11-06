@@ -14,7 +14,7 @@ function isValidationFact(fact: GraphFact): boolean {
     return fact.sourceRole === 'validation' || fact.subject.kind === 'Evidence' ||
       fact.object.kind === 'Evidence' || fact.predicate === 'verifiedBy';
   }
-  const path = fact.provenance.path.toLowerCase();
+  const path = fact.provenance.path.replaceAll('\\', '/').toLowerCase();
   return (
     fact.subject.kind === 'Evidence' ||
     fact.object.kind === 'Evidence' ||
@@ -28,6 +28,14 @@ export function isDeclaredFact(fact: GraphFact): boolean {
   if (fact.sourceRole !== undefined && fact.sourceRole !== 'intent') return false;
   if (fact.authority) return fact.authority === 'declared' && !isValidationFact(fact);
   return false;
+}
+
+/** Source intent is independent of the display lane and assertion review. A
+ * contract or code binding can carry intent evidence without becoming approved. */
+export function isProductIntentEvidence(fact: GraphFact): boolean {
+  if (fact.extractor.id === 'otlp-runtime-evidence' || isValidationFact(fact) ||
+      (fact.sourceRole !== undefined && fact.sourceRole !== 'intent')) return false;
+  return isDeclaredFact(fact) || fact.sourceAuthority === 'declared';
 }
 
 export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undefined {
@@ -81,7 +89,8 @@ export function pageCoverageForFacts(facts: readonly GraphFact[], code?: Context
   };
   for (const fact of facts) {
     const lane = contextPackLaneForFact(fact);
-    if (lane && lane !== 'implementationAndConsumers') counts[lane]++;
+    if (lane && lane !== 'implementationAndConsumers' && lane !== 'productIntent') counts[lane]++;
+    if (isProductIntentEvidence(fact)) counts.productIntent++;
     if (isImplementationEvidence(fact)) counts.implementationAndConsumers++;
   }
   return { scope: 'returned-page', countsAreNonExclusive: true, counts,

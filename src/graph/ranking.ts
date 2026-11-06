@@ -6,7 +6,7 @@ import { sharedSymbolAffinity } from './impact-affinity.js';
 import { interleaveAffinity } from './impact-affinity-order.js';
 
 /** Binds continuation offsets to the ordering policy; changing this requires restarting a scan. */
-export const IMPACT_RANKING_VERSION = 'shared-symbol-witnesses-v4';
+export const IMPACT_RANKING_VERSION = 'owner-intent-priority-v5';
 
 export function factSearchText(fact: GraphFact): string {
   return [fact.subject.id, fact.subject.label, fact.predicate, fact.object.id,

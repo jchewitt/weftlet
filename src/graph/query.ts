@@ -16,7 +16,8 @@ import type {
 } from "@weftlet/core";
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
 import { factSearchText, IMPACT_RANKING_VERSION, rankImpactFacts } from './ranking.js';
-import { contextPackLanes, contextPackLaneForFact, isDeclaredFact, coverageForFacts, coverageDescription } from './coverage.js';
+import { contextPackLanes, contextPackLaneForFact, isDeclaredFact, isProductIntentEvidence, coverageForFacts, coverageDescription } from './coverage.js';
+import { citesOwner, normalizeOwnerDocument, ownerIntentDescription, prioritizeOwnerIntent } from './owner-intent.js';
 import { documentSelectionDescription, sourceDocumentDescription } from './document-role-description.js';
 export { contextPackLaneForFact } from './coverage.js';
 
@@ -100,6 +101,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
         `Relationships returned: ${pack.exploration.returned}/${pack.exploration.reachableFacts}; truncated: ${pack.exploration.truncated}; depth limit reached: ${pack.exploration.depthLimitReached}`,
         ...(pack.exploration.continuation ? [`Continuation: ${pack.exploration.continuation}`] : []),
       ] : []),
+      ...ownerIntentDescription(pack.exploration),
       ...(pack.evidenceState ? [
         `Stale relative to checkout: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
         `Extraction compatibility: ${pack.evidenceState.extractionCompatible === undefined ? 'not assessed' : pack.evidenceState.extractionCompatible ? 'current' : `refresh required (${pack.evidenceState.incompatibleExtractors?.join(', ') || 'unknown versions'})`}`,
@@ -128,7 +130,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
         '',
         `## ${lane}`,
         ...pack.facts
-          .filter((fact) => contextPackLaneForFact(fact) === lane)
+          .filter((fact) => lane === 'productIntent' ? isProductIntentEvidence(fact) : contextPackLaneForFact(fact) === lane)
           .map(
             (fact) =>
               `- [${contextPackEvidenceAuthority(fact)}] ${fact.subject.label} —${fact.predicate}→ ${fact.object.label} ` +
@@ -180,7 +182,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       throw new Error('maxDepth must be an integer between 1 and 128');
     }
     const anchorTerms = [
-      request.ownerDocument,
+      request.ownerDocument === undefined ? undefined : normalizeOwnerDocument(request.ownerDocument),
       ...(request.changedFiles ?? []),
       ...(request.symbols ?? []),
     ]
@@ -193,7 +195,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     ]);
     const terms = [...anchorTerms, ...focus];
     const directTerms = anchorTerms.length > 0 ? anchorTerms : focus;
-    const direct = snapshot.facts.filter((fact) => this.matches(fact, directTerms));
+    const direct = snapshot.facts.filter((fact) => this.matches(fact, directTerms) || citesOwner(fact, request.ownerDocument));
     const ranked = new Map(direct.map((fact) => [fact.id, fact]));
     const unexpandedCodeTargets = new Set<string>();
     const expand = (node: GraphFact['subject']) => {
@@ -229,10 +231,12 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       tier.push(fact); tiers.set(score, tier);
     }
     // Balance evidence lanes within each ordering wave; retain the scorer's wave boundaries.
-    const allBalanced = [...tiers.values()].flatMap((tier) => [
+    const balanced = [...tiers.values()].flatMap((tier) => [
       ...selectBalancedFacts(tier, tier.length),
       ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
     ]);
+    const ownerSelection = prioritizeOwnerIntent(balanced, request.ownerDocument);
+    const allBalanced = ownerSelection.facts;
     const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
     const queryDigest = sha256(stableJson({ ranking: IMPACT_RANKING_VERSION, codeTraversal: 'indexed-symbols-v1', query }));
     let offset = 0;
@@ -353,6 +357,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         unexpandedCodeTargets: [...unexpandedCodeTargets].sort().slice(0, 100),
         unexpandedCodeTargetCount: unexpandedCodeTargets.size,
         unexpandedCodeTargetsTruncated: unexpandedCodeTargets.size > 100,
+        ...(request.ownerDocument === undefined ? {} : { ownerIntent: ownerSelection.report(facts) }),
         returned: facts.length, reachableFacts: allBalanced.length, maxDepth,
         depthLimitReached: frontier.size > 0, truncated: Boolean(continuation) || frontier.size > 0,
         continuation,

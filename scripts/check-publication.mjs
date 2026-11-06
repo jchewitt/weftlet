@@ -630,6 +630,10 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   const documentQuery = new publicApi.SnapshotImpactQueryService({ read: async () => documentSnapshot,
     readHead: async () => documentSnapshot, write: async () => {}, updateHead: async () => {} }, 'default');
   const documentPack = await documentQuery.scan({ ownerDocument: 'role-owner.md', maxFacts: 100 });
+  if (documentPack.exploration?.ownerIntent?.policy !== 'exact-owner-intent-v1' ||
+      documentPack.exploration.ownerIntent.priorityFactIds.length > 4) {
+    throw new Error('Installed query must report bounded owner-evidence selection');
+  }
   const documentHtml = publicApi.renderContextPackVisualization(documentPack, 'html');
   if (publicApi.stableJson([...documentPack.facts].sort((a, b) => a.id.localeCompare(b.id))) !==
       publicApi.stableJson([...documentEvidence.facts].sort((a, b) => a.id.localeCompare(b.id))) ||
@@ -726,6 +730,16 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     const result = await client.callTool({ name: 'impact.scan', arguments: { capabilities: ['search'] } });
     if (!result.isError || !JSON.stringify(result).includes('snapshot')) {
       throw new Error('Empty installed consumer must report missing snapshot honestly');
+    }
+    const ownerArguments = { snapshotId: 'publication-smoke', ownerDocument: 'intent.md', maxDepth: 3, maxFacts: 60 };
+    const ownerCli = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'), 'impact', 'scan',
+      '--snapshot', ownerArguments.snapshotId, '--owner-doc', ownerArguments.ownerDocument,
+      '--max-depth', '3', '--max-facts', '60', '--json'], consumer));
+    const ownerMcp = await client.callTool({ name: 'impact.scan', arguments: ownerArguments });
+    if (ownerMcp.isError || ownerCli.exploration?.ownerIntent?.policy !== 'exact-owner-intent-v1' ||
+        !ownerCli.exploration.ownerIntent.citedFacts ||
+        installedToolkit.stableJson(ownerCli) !== installedToolkit.stableJson(JSON.parse(ownerMcp.content[1].text))) {
+      throw new Error('Installed CLI/MCP must agree on exact-owner evidence, authority, counts and pagination');
     }
   } finally {
     await client.close();
