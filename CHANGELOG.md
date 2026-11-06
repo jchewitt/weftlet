@@ -1,5 +1,13 @@
 # @weftlet/toolkit
 
+## 0.8.1
+
+### Patch Changes
+
+- 786044f: Count intent-source contracts and mappings independently of display categories. Prioritize up to four exact-owner assertions within the existing impact budget, ahead of generated document links, and report remaining owner evidence without changing its authority. Normalize owner citation path separators; preserve all saved facts and the relative order of other results. Restart impact and catalog pagination after upgrading. No extraction refresh is required.
+- Updated dependencies [786044f]
+  - @weftlet/core@0.8.1
+
 ## 0.8.0
 
 ### Minor Changes

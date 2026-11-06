@@ -3,18 +3,16 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.8.0",
-      "previousVersion": "0.7.5"
+      "version": "0.8.1",
+      "previousVersion": "0.8.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.8.0",
-      "previousVersion": "0.7.5"
+      "version": "0.8.1",
+      "previousVersion": "0.8.0"
     }
   ],
   "changesets": [
-    "cited-snapshot-discovery.md",
-    "focused-local-explorer.md",
-    "scoped-portable-evidence.md"
+    "owner-intent-evidence.md"
   ]
 }
