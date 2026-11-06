@@ -3,16 +3,18 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.7.5",
-      "previousVersion": "0.7.4"
+      "version": "0.8.0",
+      "previousVersion": "0.7.5"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.7.5",
-      "previousVersion": "0.7.4"
+      "version": "0.8.0",
+      "previousVersion": "0.7.5"
     }
   ],
   "changesets": [
-    "selinux-ontology-workspace.md"
+    "cited-snapshot-discovery.md",
+    "focused-local-explorer.md",
+    "scoped-portable-evidence.md"
   ]
 }

@@ -1,5 +1,19 @@
 # @weftlet/toolkit
 
+## 0.8.0
+
+### Minor Changes
+
+- b43750e: Add snapshot-wide intent/evidence discovery and exact assertion detail queries through CLI and MCP. Share a revision-aware, read-only index across discovery, neighborhoods and paths while preserving saved evidence and authority. Existing neighborhood/path pagination must restart after upgrading; shortest-first path behavior and retrieval budgets are unchanged.
+- ab4869a: Add a bundled Cytoscape evidence explorer and loopback-only read service over pinned snapshots. Start from product intent, follow exact relationships into code and back, inspect grouped citations, filter and paginate, and restore layouts while backtracking. Saved queries do not initialize adapters or providers. Retain the legacy impact-page export contract.
+- abaab48: Add focused portable explorer bundles with complete selected neighborhoods, explicit frontier boundaries, bounded hashed data shards, integrity checks and local-query equivalence. Export through `viewer export`; the same bundled app runs on static HTTPS/localhost hosting without an API. Keep full-snapshot path search in the local explorer. Expose pure vocabulary/file identity helpers at `@weftlet/core/browser`.
+
+### Patch Changes
+
+- Updated dependencies [b43750e]
+- Updated dependencies [abaab48]
+  - @weftlet/core@0.8.0
+
 ## 0.7.5
 
 ### Patch Changes
