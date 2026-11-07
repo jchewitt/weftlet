@@ -1,5 +1,33 @@
 # Validation evidence
 
+## 0.8.1 original owner-intent consumer replay, 2026-11-06 Central
+
+**The reported original-page missing-intent regression is resolved in this
+consumer replay.** The [sanitized acceptance record](OWNER-INTENT-081-ACCEPTANCE.md)
+contains the maintainer-supplied evidence from 2026-11-07 00:58 UTC; upstream has
+not rerun the private graph. Official core/toolkit 0.8.1 and all 528 installed
+archive files were independently verified by the consumer. The original owner,
+task, three checklist items, eight changed files, depth 3 and 60-result first
+page were retained on the unchanged producing config and saved snapshot.
+
+Four semantic owner-cited assertions now lead the page, with source authority
+declared and claims still inferred/unreviewed. Owner-cited retrieval increases
+from **1 to 4**; primary-lane intent increases **0 to 2**. Applying the new
+source-intent definition to both pages gives **3 before / 6 now**, not six newly
+retrieved facts. The reachable count stays **459,338**; the 56 non-priority
+results retain their original relative order, and all 60 facts exactly match
+stored objects. Full-graph source-intent accounting is 165 owner facts including
+54 semantic assertions; the earlier primary-intent subset remains 15 semantic
+plus 65 document-linker facts.
+
+Fresh CLI/MCP agree on ordered IDs, snapshot and coverage. The consumer reports
+56 tests passed and one existing Windows symlink skip. All 116 fingerprints,
+including the 1,116,685,237-byte snapshot and 112 semantic artifacts, match.
+No rehydration or model call occurred; runtime evidence is still empty. The open
+desktop reader needs reconnecting. This closes the specific query report, not
+the separate indirect-worker ticket, full recall, semantic correctness, current-
+diff/review acceptance, hosted deployment or the overall 1.0 decision.
+
 ## Exact-owner intent evidence candidate, 2026-11-06
 
 [ADR 045](ADR-045-owner-intent-retrieval.md) addresses both reproduced public
@@ -30,10 +58,17 @@ strict RDF/SHACL, repeat hydration, viewer export and MCP checks passed, includi
 exact CLI/MCP equality for owner facts and their selection report. Exact-head
 hosted results are recorded separately on the change PR.
 
-The [sanitized consumer report](OWNER-INTENT-RETRIEVAL.md) remains separate. Its
-original query has not been replayed upstream. Intent coverage is nonexclusive
-evidence reporting, not assertion approval or task completeness. Restart impact
-and catalog pagination after upgrading; no extraction refresh is required.
+This candidate subsequently shipped as core/toolkit **0.8.1**, source
+`ce3d5320a4539382ca61ef8a2492efb23b3f1a90`, through
+[release run 42315084899](https://github.com/jchewitt/weftlet/actions/runs/42315084899).
+Exact release-PR and main Linux/Windows checks passed. Public npm archives matched
+the prepared archives byte-for-byte, with matching release tags. A fresh public
+npm consumer passed strict saved-fixture validation, unchanged-byte/repeat/full
+pagination checks and complete CLI/MCP equality for identical request shapes.
+The separate consumer replay is recorded above; upstream has not replayed the
+private graph. Intent coverage remains nonexclusive evidence reporting, not
+assertion approval or task completeness. Restart impact/catalog pagination after
+upgrading; no extraction refresh is required.
 
 ## Focused portable explorer, 2026-11-05
 
