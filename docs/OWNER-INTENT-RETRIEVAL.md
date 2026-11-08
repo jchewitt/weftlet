@@ -4,8 +4,9 @@ Status: **shipped in 0.8.1; the original TradePilot missing-intent query passes*
 The [sanitized consumer acceptance record](OWNER-INTENT-081-ACCEPTANCE.md), reported
 2026-11-06 Central / 2026-11-07 00:58 UTC, retains the original request, budget,
 snapshot and producing configuration. It distinguishes improved retrieval from
-changed coverage accounting. Broader 1.0 acceptance and the separate indirect-worker
-ranking ticket remain open.
+changed coverage accounting. The independent indirect-worker ranking ticket also
+passed in the [November 8 consumer replay](assessments/consumer-pm-0.8.1-2026-11-08.json).
+The [work queue](1.0-WORK-QUEUE.md) retains the final 1.0 release decision.
 
 [ADR 045](ADR-045-owner-intent-retrieval.md) records both fixes. The historical
 investigation below preserves two public behaviors reproduced against the **published

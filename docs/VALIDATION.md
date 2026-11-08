@@ -1,5 +1,51 @@
 # Validation evidence
 
+## 0.8.1 indirect-worker consumer replay, 2026-11-08 UTC
+
+**The two-assertion PM-worker ranking ticket is closed by this consumer replay.**
+The [sanitized receipt](assessments/consumer-pm-0.8.1-2026-11-08.json) is the
+maintainer-supplied result for core/toolkit **0.8.1**, from 16:57:26.892 to
+16:59:16.041 UTC. Upstream has not loaded or independently queried the private
+graph. The original depth **3**, **three pages × 60 facts**, **360 direct matches**
+and **420,837 reachable assertions** are unchanged on the same 561,777-fact
+snapshot. Both exact stored relationships now fit within the fixed 180 slots:
+
+| Predicate | 0.7.3 rank | Reported 0.7.4 rank | 0.8.1 rank / page |
+| --- | ---: | ---: | ---: |
+| `references` | 3,364 | 125 | **125 / 3** |
+| `consumes` | 456 | 22 | **22 / 1** |
+
+The entire returned order matches the reported 0.7.4 order; this confirms the
+earlier ranking correction survives 0.8.1, rather than a new improvement in 0.8.1.
+All **180 stored fact objects** and **20 fingerprints** are preserved. The
+snapshot content digest remains
+`53e2e3a024125389685d5bc9183f428b4e749dc7021df87623f54e32af4c7f56`, and its
+stored-file SHA-256 remains
+`e92e3c2c4b6ec65a4767fe20697657cd566c15fbdff9732af58999d8ff09554d`.
+The receipt retains both exact assertion IDs. No assertion is promoted to a
+`calls` relationship or runtime evidence.
+
+The pages cover **41 distinct provenance sources** and all **4/4** expected
+files as both suggestions and citations. No named noise control or TypeScript
+standard-library target reference appears. This four-file check is not the
+earlier three-case twelve-file denominator. No fourth page was fetched;
+depth limits, truncation and continuation remain explicit, with further results
+available and 5,196 reported unexpanded code targets (that list is truncated).
+
+Page timings are **31,642 / 30,712 / 31,201 ms**. Record the roughly 31-second
+page latency as a performance concern; these timings do not isolate loading,
+traversal or ranking cost, or create a new acceptance gate for this ticket.
+No private hydration or model calls occurred, and the checkout and 40 stashes
+were preserved. Configuration and extraction compatibility pass, while evidence
+correctly remains **stale and ineligible for current-diff validation**.
+
+All three pages report zero product-intent and runtime-evidence coverage. This
+code-relationship replay neither replaces nor contradicts the separate exact-owner
+EQT result below. It provides no new direct-path, MCP-parity, other-case or
+universal-recall acceptance. Together the two consumer reports close the two
+reported retrieval tickets; the [work queue](1.0-WORK-QUEUE.md) retains the final
+1.0 scope/limitations and release decision, with hosted deployment separate.
+
 ## 0.8.1 original owner-intent consumer replay, 2026-11-06 Central
 
 **The reported original-page missing-intent regression is resolved in this
@@ -25,8 +71,9 @@ Fresh CLI/MCP agree on ordered IDs, snapshot and coverage. The consumer reports
 including the 1,116,685,237-byte snapshot and 112 semantic artifacts, match.
 No rehydration or model call occurred; runtime evidence is still empty. The open
 desktop reader needs reconnecting. This closes the specific query report, not
-the separate indirect-worker ticket, full recall, semantic correctness, current-
-diff/review acceptance, hosted deployment or the overall 1.0 decision.
+full recall, semantic correctness, current-diff/review acceptance, hosted
+deployment or the overall 1.0 decision. The separate indirect-worker ticket was
+subsequently closed by the November 8 replay above, not by this EQT result.
 
 ## Exact-owner intent evidence candidate, 2026-11-06
 

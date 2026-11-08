@@ -1,6 +1,12 @@
 # Delivery roadmap
 
-Release checkpoint: 2026-10-28, after verified 0.6.1 consumer-blocker patch publication.
+Current acceptance update, 2026-11-08: core/toolkit **0.8.1** is published, and
+both reported owner-intent and indirect-worker retrieval tickets have consumer
+passes. B1–B5 implementation is complete. The [1.0 work queue](1.0-WORK-QUEUE.md)
+records the final scope/limitations and release decision; hosting and the 2.0
+platform remain separate. This update does not announce an official 1.0 release.
+
+Historical release checkpoint below: 2026-10-28, after verified 0.6.1 consumer-blocker patch publication.
 Evidence is recorded in [validation](VALIDATION.md); this roadmap is not a live registry status.
 
 Project: `jchewitt/weftlet`. Extraction provenance is recorded in the

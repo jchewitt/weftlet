@@ -82,5 +82,9 @@ specific original-page missing-intent report in
 [the investigation](OWNER-INTENT-RETRIEVAL.md) and supports the bounded selection
 in [ADR 045](ADR-045-owner-intent-retrieval.md). It does not establish universal
 task relevance, semantic correctness, full recall, current-diff graph/review
-acceptance, runtime behavior or a new hosted viewer deployment. The separate
-indirect-worker ranking ticket and broader 1.0 acceptance remain open.
+acceptance, runtime behavior or a new hosted viewer deployment.
+
+Subsequent update, 2026-11-08: the separate indirect-worker ranking ticket passed
+its [own 0.8.1 consumer replay](assessments/consumer-pm-0.8.1-2026-11-08.json).
+That result is independent of this EQT acceptance. The final official 1.0 release
+decision remains in the [work queue](1.0-WORK-QUEUE.md).
