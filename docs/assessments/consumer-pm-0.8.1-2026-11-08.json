@@ -1,0 +1,156 @@
+{
+  "startedAt": "2026-11-08T16:57:26.892Z",
+  "completedAt": "2026-11-08T16:59:16.041Z",
+  "versions": [
+    { "name": "@weftlet/toolkit", "version": "0.8.1" },
+    { "name": "@weftlet/core", "version": "0.8.1" }
+  ],
+  "snapshotId": "58b930614b8bb8385b31a27b1812f398e2547ed4-graph-v12-links-2.0.0-files-2.0.0-contracts-1.2.0-symbols-2.1.0-271b8926e2c55f3a-8236be919d38-runtime-4f53cda18c2b",
+  "snapshotCommit": "58b930614b8bb8385b31a27b1812f398e2547ed4",
+  "snapshotDigest": "53e2e3a024125389685d5bc9183f428b4e749dc7021df87623f54e32af4c7f56",
+  "snapshotStoredSha256": "e92e3c2c4b6ec65a4767fe20697657cd566c15fbdff9732af58999d8ff09554d",
+  "snapshotFacts": 561777,
+  "maxDepth": 3,
+  "maxPages": 3,
+  "maxFactsPerPage": 60,
+  "returned": 180,
+  "pages": [
+    {
+      "page": 1,
+      "elapsedMs": 31642,
+      "rankingVersion": "owner-intent-priority-v5",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargetCount": 5196,
+      "unexpandedCodeTargetsTruncated": true,
+      "returned": 60,
+      "reachableFacts": 420837,
+      "maxDepth": 3,
+      "depthLimitReached": true,
+      "truncated": true,
+      "hasContinuation": true,
+      "coverage": {
+        "productIntent": 0,
+        "contractsAndInvariants": 22,
+        "implementationAndConsumers": 53,
+        "validationEvidence": 7
+      },
+      "runtimeEvidenceCount": 0,
+      "evidenceState": {
+        "currentCommit": "9b70e4b23f7150bc05b8fc417add4ca78da9b312",
+        "excludedWorkingChanges": [],
+        "stale": true,
+        "configurationMatches": true,
+        "extractionCompatible": true,
+        "incompatibleExtractors": [],
+        "eligibleForCurrentDiffValidation": false
+      }
+    },
+    {
+      "page": 2,
+      "elapsedMs": 30712,
+      "rankingVersion": "owner-intent-priority-v5",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargetCount": 5196,
+      "unexpandedCodeTargetsTruncated": true,
+      "returned": 60,
+      "reachableFacts": 420837,
+      "maxDepth": 3,
+      "depthLimitReached": true,
+      "truncated": true,
+      "hasContinuation": true,
+      "coverage": {
+        "productIntent": 0,
+        "contractsAndInvariants": 14,
+        "implementationAndConsumers": 50,
+        "validationEvidence": 10
+      },
+      "runtimeEvidenceCount": 0,
+      "evidenceState": {
+        "currentCommit": "9b70e4b23f7150bc05b8fc417add4ca78da9b312",
+        "excludedWorkingChanges": [],
+        "stale": true,
+        "configurationMatches": true,
+        "extractionCompatible": true,
+        "incompatibleExtractors": [],
+        "eligibleForCurrentDiffValidation": false
+      }
+    },
+    {
+      "page": 3,
+      "elapsedMs": 31201,
+      "rankingVersion": "owner-intent-priority-v5",
+      "codeTraversalVersion": "indexed-symbols-v1",
+      "unexpandedCodeTargetCount": 5196,
+      "unexpandedCodeTargetsTruncated": true,
+      "returned": 60,
+      "reachableFacts": 420837,
+      "maxDepth": 3,
+      "depthLimitReached": true,
+      "truncated": true,
+      "hasContinuation": true,
+      "coverage": {
+        "productIntent": 0,
+        "contractsAndInvariants": 10,
+        "implementationAndConsumers": 48,
+        "validationEvidence": 12
+      },
+      "runtimeEvidenceCount": 0,
+      "evidenceState": {
+        "currentCommit": "9b70e4b23f7150bc05b8fc417add4ca78da9b312",
+        "excludedWorkingChanges": [],
+        "stale": true,
+        "configurationMatches": true,
+        "extractionCompatible": true,
+        "incompatibleExtractors": [],
+        "eligibleForCurrentDiffValidation": false
+      }
+    }
+  ],
+  "targets": [
+    {
+      "id": "bbe51f8fc9842202124b8ba545c66995cbbbd0ee6b2fdd06407a200fdf9639f6",
+      "predicate": "references",
+      "rank": 125,
+      "page": 3,
+      "prior073Rank": 3364,
+      "prior074Rank": 125,
+      "storedAssertionUnchanged": true,
+      "direction": "subject-to-object",
+      "subjectKind": "CodeSymbol",
+      "objectKind": "CodeSymbol"
+    },
+    {
+      "id": "bbea929d883634efdef9f9a5ddee65358655898f4c0f0618b1676895ff899946",
+      "predicate": "consumes",
+      "rank": 22,
+      "page": 1,
+      "prior073Rank": 456,
+      "prior074Rank": 22,
+      "storedAssertionUnchanged": true,
+      "direction": "subject-to-object",
+      "subjectKind": "Component",
+      "objectKind": "Contract"
+    }
+  ],
+  "directMatchCount": 360,
+  "originalReachableFacts": 420837,
+  "ranker": "owner-intent-priority-v5",
+  "preservedStoredFactObjects": 180,
+  "preservedFingerprints": 20,
+  "same180OrderAs074": true,
+  "distinctProvenanceSources": 41,
+  "expectedFiles": { "denominator": 4, "suggested": 4, "cited": 4 },
+  "noiseControlCount": 0,
+  "standardLibraryTargetReferenceCount": 0,
+  "furtherResultsRemain": true,
+  "noPageFourFetched": true,
+  "noHydrationOrModelCalls": true,
+  "checkoutPreserved": "9b70e4b23f7150bc05b8fc417add4ca78da9b312",
+  "stashesPreserved": 40,
+  "narrowTicketPass": true,
+  "limitations": [
+    "Historical saved-snapshot ranking test, not current-diff/runtime acceptance.",
+    "No new direct-path, MCP-parity, other-case or universal-recall claim.",
+    "Relationship predicates are preserved; references and consumes are not promoted to calls."
+  ]
+}

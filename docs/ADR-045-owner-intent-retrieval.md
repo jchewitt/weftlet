@@ -1,6 +1,8 @@
 # ADR 045: intent evidence coverage and exact-owner retrieval
 
-Status: implemented candidate; private replay and publication remain separate.
+Status: shipped in 0.8.1. The original missing-intent consumer query passed on
+2026-11-06 Central; see the [sanitized acceptance record](OWNER-INTENT-081-ACCEPTANCE.md).
+Broader task/semantic/current-diff acceptance remains separate.
 
 ## Problem
 
@@ -74,4 +76,7 @@ determinism and immutable-byte preservation. Existing real SCIP caller/worker,
 indirect-consumer, symmetric-evidence and implementation-coverage checks retain
 their original budgets and denominators. Fresh packed-consumer and browser checks
 qualify the same application code. No private hydration or paid provider run is
-part of this patch; the original private query remains an acceptance boundary.
+part of this patch. The original reported consumer query subsequently passed at
+the same budget with unchanged saved evidence. Its acceptance record distinguishes
+retrieval from coverage-accounting changes and does not extend the result to
+universal task relevance, full recall or the separate indirect-worker ticket.

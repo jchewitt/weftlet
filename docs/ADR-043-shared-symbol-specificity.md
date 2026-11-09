@@ -1,6 +1,8 @@
 # ADR 043: shared-symbol specificity in bounded impact retrieval
 
-Status: query-only candidate; private two-assertion acceptance remains open.
+Status: shipped and retained in 0.8.1; the private two-assertion acceptance passed
+on 2026-11-08. See the [consumer receipt](assessments/consumer-pm-0.8.1-2026-11-08.json)
+and [validation record](VALIDATION.md).
 Extends [ADR 042](ADR-042-indirect-local-relationships.md). Does not change path search.
 
 ## Evidence
@@ -63,5 +65,11 @@ not a repository-global count or a confidence score.
 Continuation tokens identify v4 and reject prior offsets with restart instructions. No extractor,
 assembly, semantic-cache, snapshot, persistence, RDF, SHACL or core contract identity changes.
 Existing evidence can be queried without hydration or model calls. The 0.7.1 capacity fix and
-shortest-first direct paths remain untouched. Keep the private original queries, exact assertion
-IDs, 180-result budget, reachable totals and stored fingerprints as the next acceptance check.
+shortest-first direct paths remain untouched.
+
+The November 8 consumer replay closes that original two-assertion check on 0.8.1:
+the exact private reference/consumer rank **125 / 22**, within the unchanged 180
+slots, with all 420,837 reachable facts, returned stored objects and fingerprints
+preserved. Its order matches the reported 0.7.4 order. These private ranks are
+separate from the public 141 / 10 result above. The replay retains stale-evidence
+labels and does not add direct-path, MCP-parity, runtime or universal-recall proof.

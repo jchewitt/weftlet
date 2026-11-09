@@ -1,15 +1,20 @@
 # Exact-owner intent retrieval investigation
 
-Status: candidate fixes implemented; Linux tests, browser and packed-install checks
-passed. Hosted checks, private acceptance and publication remain separate.
-[ADR 045](ADR-045-owner-intent-retrieval.md) records
-both fixes and their unchanged-budget acceptance. Two public behaviors were reproduced against the **published
+Status: **shipped in 0.8.1; the original TradePilot missing-intent query passes**.
+The [sanitized consumer acceptance record](OWNER-INTENT-081-ACCEPTANCE.md), reported
+2026-11-06 Central / 2026-11-07 00:58 UTC, retains the original request, budget,
+snapshot and producing configuration. It distinguishes improved retrieval from
+changed coverage accounting. The independent indirect-worker ranking ticket also
+passed in the [November 8 consumer replay](assessments/consumer-pm-0.8.1-2026-11-08.json).
+The [work queue](1.0-WORK-QUEUE.md) retains the final 1.0 release decision.
+
+[ADR 045](ADR-045-owner-intent-retrieval.md) records both fixes. The historical
+investigation below preserves two public behaviors reproduced against the **published
 0.8.0 toolkit** at release commit `c3b450e71542476bbca9c69263f428c71f70bda5`.
-The consumer has now supplied a sanitized, read-only full-snapshot audit and
-original query structure. It confirms owner-intent evidence in the same saved
-snapshot but absent from the primary returned page. Upstream has not loaded or
-replayed the private graph. Anchor matching versus later ordering remains to be
-attributed; neither public result alone establishes the consumer's root cause.
+The initial sanitized audit confirmed owner-intent evidence in the saved snapshot
+but absent from the primary returned page. Upstream has not loaded or replayed
+the private graph. The subsequent consumer replay establishes the reported
+query's recovery; it does not isolate every earlier matching/ordering mechanism.
 
 Retain **both public findings** independently of that attribution, as explicitly
 requested by the maintainer on 2026-11-06:
@@ -19,12 +24,11 @@ requested by the maintainer on 2026-11-06:
 - **OI-2: exact-owner first-page retrieval.** An available, direct owner-cited
   product-flow assertion can lose its place to same-source contract competition.
 
-Both remediation criteria are implemented in the candidate; the original released
-behavior and consumer evidence below remain the comparison baseline. The consumer audit
-is additional evidence for the same owner-intent ticket, not a new extraction or
-graph-capacity defect.
+Both remediation criteria shipped in 0.8.1. The original behavior and initial
+consumer audit below remain the comparison baseline for the accepted replay.
+No extraction or graph-capacity defect is inferred from this ticket.
 
-## Consumer evidence received on 2026-11-06
+## Initial consumer evidence received on 2026-11-06
 
 The reported installed/resolved CLI is **0.7.5** for toolkit and core. This does
 not establish the version of an already-running MCP process. A complete streaming
@@ -66,12 +70,12 @@ This establishes **returned-page/query-selection absence despite saved owner
 intent**, rather than snapshot-wide owner-intent absence. Category reporting
 alone cannot explain A: the same classifier identifies 80 owner-intent facts in
 the saved data. It does not yet establish that all 80 entered A's reachable set.
-The remaining small check is whether the original parsed owner argument, without
-slash normalization, directly matches those 80 facts (15 semantic / 65 linker)
-under the installed matcher. If all match, they are direct seeds and the missing
-page results belong to subsequent ordering/pagination. If they do not, inspect
-argument parsing/path matching before assigning that cause. The released matcher
-lowercases but does not normalize slashes.
+The proposed follow-up was to check whether the original parsed owner argument,
+without slash normalization, directly matched those 80 facts (15 semantic / 65
+linker) under the old matcher. Those old-matcher counts were not supplied. The
+later original-request 0.8.1 replay establishes acceptance without requiring that
+additional diagnostic; it does not attribute the old failure solely to separator
+normalization. The old matcher lowercased but did not normalize slashes.
 
 ## Confirmed public behavior
 
@@ -102,12 +106,12 @@ zero intent catalog nodes. This confirms the distinction between existing intent
 classification and the newer overlapping source-role facet. It is not a private
 query replay, and does not justify rewriting saved source roles.
 
-## Released mechanisms and viewer correlation
+## 0.8.0 mechanisms and viewer correlation
 
 1. [Coverage classification](../src/graph/coverage-facts.ts) assigns contracts,
    invariants and `governedBy` relationships to the contracts category before
    considering product intent. Thus `productIntent: 0` does not establish zero
-   owner-sourced business rules. The current missing-intent diagnostic uses that
+   owner-sourced business rules. The 0.8.0 missing-intent diagnostic used that
    category count, even when such rules are already on the returned page.
 2. [Impact ordering](../src/graph/impact-order.ts) queues facts by distance and
    relationship family. Intent and contract relationships can compete in the
@@ -128,22 +132,21 @@ query replay, and does not justify rewriting saved source roles.
    `sourceRole: intent` does not gain an overlapping intent facet automatically.
    An actual 0.8.0 consumer catalog check remains separate from this code analysis.
 
-## Next diagnosis and acceptance
+## Acceptance outcome and retained boundaries
 
-- Consumer version, sanitized query structure, immutable identifiers and
-  owner-cited classification counts are now recorded above. Complete the direct
-  matcher check without replaying or rebuilding the private graph. No private
-  source text, node labels, model prompts or raw task values are needed.
+- The original query passes with official 0.8.1 archives and fresh CLI/MCP
+  processes. The [acceptance record](OWNER-INTENT-081-ACCEPTANCE.md) retains exact
+  sanitized evidence identifiers, before/after accounting and byte preservation.
+  No further old-matcher diagnostic is required to close this report.
 - Distinguish source selection/extraction, linkage/reachability, page ranking and
   reporting classification. An empty display category alone cannot choose among
   them. Source ownership metadata is also distinct from an assertion's cited path.
-- Preserve both OI-1 and OI-2 public cases as separate regression criteria. Extend
-  retrieval coverage to owner + multiple changed-file anchors, task/checklist
-  competition, absent legacy source roles, and semantic assertions alongside
-  document-linker facts. Returning only containment links is not semantic recall.
-  Define any first-page allocation change explicitly, retaining the original
-  budget and testing existing consumer-retrieval controls. Do not claim every
-  owner assertion is relevant or all can fit in 60 slots.
+- Preserve both OI-1 and OI-2 public regressions, including owner + multiple
+  changed-file anchors, task/checklist competition, absent legacy source roles,
+  and semantic assertions alongside document-linker facts. Returning only
+  containment links is not semantic recall. Retain the explicit four-position
+  policy and existing consumer-retrieval controls. This pass does not establish
+  that every owner assertion is relevant or that all can fit in 60 slots.
 - Report intent evidence independently of exclusive display categories, retaining
   source approval versus assertion review. Never manufacture intent or promote
   model extraction to an approved rule to make a counter nonzero.
@@ -152,8 +155,7 @@ query replay, and does not justify rewriting saved source roles.
   if a fix changes continuation offsets; no rehydration is justified by these
   public query-only findings.
 
-This ticket is separate from the previously reported indirect worker relationship
-ranking case. [Validation](VALIDATION.md#exact-owner-intent-evidence-candidate-2026-11-06)
-records the completed local checks; hosted qualification, private
-acceptance and publication remain separate. A deployable hosting artifact would
-not resolve either query issue.
+This resolved report is separate from the previously reported indirect-worker
+ranking case. [Validation](VALIDATION.md) records public qualification, publication
+and the original-request consumer pass separately. No broader task-coverage,
+current-diff or hosted-viewer acceptance follows from this result.

@@ -4,8 +4,9 @@ Status: implementation started, 2026-11-05. The narrow optional-compiler SELinux
 separately in 0.7.5. [Saved-evidence discovery](EXPLORER-DISCOVERY.md) is the first independent
 implementation increment. The next increment implements the bundled local browser application;
 focused portable exports are implemented in the next independent increment. Deployable hosting
-and private consumer acceptance remain pending. The separate private
-ranking/1.0 acceptance gates remain open.
+and private viewer acceptance remain pending. Both separate retrieval tickets
+have consumer passes on 0.8.1; the [work queue](1.0-WORK-QUEUE.md) records the
+remaining official 1.0 release decision.
 
 The maintainer selected **both portable reports and a local explorer**, explicitly allowing
 a bundled application rather than a single HTML file. Portable reports should cover explicit
@@ -71,8 +72,9 @@ approved intent. A declared source and approval of its extracted assertions rema
 
 V1 does not change the impact-ranking acceptance denominator. It provides explicit browsing
 queries instead of treating an impact result as an exhaustive graph overview. Retain the
-existing direct-path result, strict validation, snapshot/cache compatibility and pending private
-two-assertion replay. Missing relationships remain gaps; do not manufacture calls or intent links.
+existing direct-path result, strict validation, snapshot/cache compatibility and the
+[accepted private two-assertion replay](assessments/consumer-pm-0.8.1-2026-11-08.json).
+Missing relationships remain gaps; do not manufacture calls or intent links.
 
 The first V1 increment implements snapshot-wide intent/other-evidence catalogs, literal search,
 exact assertion detail, snapshot counts, and a shared revision-aware index for discovery,

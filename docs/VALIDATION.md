@@ -1,5 +1,80 @@
 # Validation evidence
 
+## 0.8.1 indirect-worker consumer replay, 2026-11-08 UTC
+
+**The two-assertion PM-worker ranking ticket is closed by this consumer replay.**
+The [sanitized receipt](assessments/consumer-pm-0.8.1-2026-11-08.json) is the
+maintainer-supplied result for core/toolkit **0.8.1**, from 16:57:26.892 to
+16:59:16.041 UTC. Upstream has not loaded or independently queried the private
+graph. The original depth **3**, **three pages × 60 facts**, **360 direct matches**
+and **420,837 reachable assertions** are unchanged on the same 561,777-fact
+snapshot. Both exact stored relationships now fit within the fixed 180 slots:
+
+| Predicate | 0.7.3 rank | Reported 0.7.4 rank | 0.8.1 rank / page |
+| --- | ---: | ---: | ---: |
+| `references` | 3,364 | 125 | **125 / 3** |
+| `consumes` | 456 | 22 | **22 / 1** |
+
+The entire returned order matches the reported 0.7.4 order; this confirms the
+earlier ranking correction survives 0.8.1, rather than a new improvement in 0.8.1.
+All **180 stored fact objects** and **20 fingerprints** are preserved. The
+snapshot content digest remains
+`53e2e3a024125389685d5bc9183f428b4e749dc7021df87623f54e32af4c7f56`, and its
+stored-file SHA-256 remains
+`e92e3c2c4b6ec65a4767fe20697657cd566c15fbdff9732af58999d8ff09554d`.
+The receipt retains both exact assertion IDs. No assertion is promoted to a
+`calls` relationship or runtime evidence.
+
+The pages cover **41 distinct provenance sources** and all **4/4** expected
+files as both suggestions and citations. No named noise control or TypeScript
+standard-library target reference appears. This four-file check is not the
+earlier three-case twelve-file denominator. No fourth page was fetched;
+depth limits, truncation and continuation remain explicit, with further results
+available and 5,196 reported unexpanded code targets (that list is truncated).
+
+Page timings are **31,642 / 30,712 / 31,201 ms**. Record the roughly 31-second
+page latency as a performance concern; these timings do not isolate loading,
+traversal or ranking cost, or create a new acceptance gate for this ticket.
+No private hydration or model calls occurred, and the checkout and 40 stashes
+were preserved. Configuration and extraction compatibility pass, while evidence
+correctly remains **stale and ineligible for current-diff validation**.
+
+All three pages report zero product-intent and runtime-evidence coverage. This
+code-relationship replay neither replaces nor contradicts the separate exact-owner
+EQT result below. It provides no new direct-path, MCP-parity, other-case or
+universal-recall acceptance. Together the two consumer reports close the two
+reported retrieval tickets; the [work queue](1.0-WORK-QUEUE.md) retains the final
+1.0 scope/limitations and release decision, with hosted deployment separate.
+
+## 0.8.1 original owner-intent consumer replay, 2026-11-06 Central
+
+**The reported original-page missing-intent regression is resolved in this
+consumer replay.** The [sanitized acceptance record](OWNER-INTENT-081-ACCEPTANCE.md)
+contains the maintainer-supplied evidence from 2026-11-07 00:58 UTC; upstream has
+not rerun the private graph. Official core/toolkit 0.8.1 and all 528 installed
+archive files were independently verified by the consumer. The original owner,
+task, three checklist items, eight changed files, depth 3 and 60-result first
+page were retained on the unchanged producing config and saved snapshot.
+
+Four semantic owner-cited assertions now lead the page, with source authority
+declared and claims still inferred/unreviewed. Owner-cited retrieval increases
+from **1 to 4**; primary-lane intent increases **0 to 2**. Applying the new
+source-intent definition to both pages gives **3 before / 6 now**, not six newly
+retrieved facts. The reachable count stays **459,338**; the 56 non-priority
+results retain their original relative order, and all 60 facts exactly match
+stored objects. Full-graph source-intent accounting is 165 owner facts including
+54 semantic assertions; the earlier primary-intent subset remains 15 semantic
+plus 65 document-linker facts.
+
+Fresh CLI/MCP agree on ordered IDs, snapshot and coverage. The consumer reports
+56 tests passed and one existing Windows symlink skip. All 116 fingerprints,
+including the 1,116,685,237-byte snapshot and 112 semantic artifacts, match.
+No rehydration or model call occurred; runtime evidence is still empty. The open
+desktop reader needs reconnecting. This closes the specific query report, not
+full recall, semantic correctness, current-diff/review acceptance, hosted
+deployment or the overall 1.0 decision. The separate indirect-worker ticket was
+subsequently closed by the November 8 replay above, not by this EQT result.
+
 ## Exact-owner intent evidence candidate, 2026-11-06
 
 [ADR 045](ADR-045-owner-intent-retrieval.md) addresses both reproduced public
@@ -30,10 +105,17 @@ strict RDF/SHACL, repeat hydration, viewer export and MCP checks passed, includi
 exact CLI/MCP equality for owner facts and their selection report. Exact-head
 hosted results are recorded separately on the change PR.
 
-The [sanitized consumer report](OWNER-INTENT-RETRIEVAL.md) remains separate. Its
-original query has not been replayed upstream. Intent coverage is nonexclusive
-evidence reporting, not assertion approval or task completeness. Restart impact
-and catalog pagination after upgrading; no extraction refresh is required.
+This candidate subsequently shipped as core/toolkit **0.8.1**, source
+`ce3d5320a4539382ca61ef8a2492efb23b3f1a90`, through
+[release run 42315084899](https://github.com/jchewitt/weftlet/actions/runs/42315084899).
+Exact release-PR and main Linux/Windows checks passed. Public npm archives matched
+the prepared archives byte-for-byte, with matching release tags. A fresh public
+npm consumer passed strict saved-fixture validation, unchanged-byte/repeat/full
+pagination checks and complete CLI/MCP equality for identical request shapes.
+The separate consumer replay is recorded above; upstream has not replayed the
+private graph. Intent coverage remains nonexclusive evidence reporting, not
+assertion approval or task completeness. Restart impact/catalog pagination after
+upgrading; no extraction refresh is required.
 
 ## Focused portable explorer, 2026-11-05
 
