@@ -3,16 +3,16 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.8.1",
-      "previousVersion": "0.8.0"
+      "version": "0.9.0",
+      "previousVersion": "0.8.1"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.8.1",
-      "previousVersion": "0.8.0"
+      "version": "0.9.0",
+      "previousVersion": "0.8.1"
     }
   ],
   "changesets": [
-    "owner-intent-evidence.md"
+    "canonical-semantic-file-contract.md"
   ]
 }
