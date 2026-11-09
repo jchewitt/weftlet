@@ -1,8 +1,11 @@
 # Semantic provider contract
 
-Codex CLI is the shipped model adapter. The module extension contract is tested with deterministic
-providers; no additional CLI or API integration is advertised as working. An arbitrary executable
-is not compatible merely because it accepts stdin.
+Codex CLI is the released built-in adapter through 0.9.0. The 0.10 development
+candidate adds Claude Code CLI extraction and optional mapping proposals. Its
+deterministic orchestration is tested; authenticated model execution remains
+unvalidated. OpenCode extraction is a subsequent 0.10 task. The module extension
+contract remains available; an arbitrary executable is not compatible merely
+because it accepts stdin.
 
 For contributors, [provider dispatch](../src/extraction/providers.ts) enforces this contract.
 [Codex discovery](../src/extraction/codex-command.ts), [authentication](../src/extraction/codex-auth.ts)
@@ -62,8 +65,7 @@ API authentication without an interactive login. Missing or blank keys fail with
 to saved authentication. A key's presence does not establish validity, model access or available
 quota. Authentication failures do not trigger a switch to the other mode.
 
-Never put a key value in JSON. Unknown `auth` fields are rejected, and this option is only valid
-for `codex-cli`. Ambient `OPENAI_API_KEY`, `CODEX_API_KEY` and `OPENAI_BASE_URL` are not inherited
+Never put a key value in JSON. Unknown `auth` fields are rejected, and each built-in provider accepts only its documented login mode or `api-key`. Ambient `OPENAI_API_KEY`, `CODEX_API_KEY` and `OPENAI_BASE_URL` are not inherited
 implicitly. To use `OPENAI_API_KEY`, explicitly name it in `apiKeyEnv` in API mode. Custom API
 endpoints are not part of this change. Proxy and CA settings remain supported.
 
@@ -80,10 +82,102 @@ trusted inputs, with narrowly scoped secret exposure and small document budgets.
 Compatibility with that action's proxy is not validated here. Trusted persistent runners can
 continue using their ChatGPT login; this change does not provision or copy account sessions.
 
+## Claude Code
+
+Status: implemented in the 0.10 development candidate, **not yet published**.
+No Codex executable, Codex login or OpenAI API key is required. Claude Code is
+installed and authenticated separately by the operator. The adapter currently
+requires Claude Code **2.1.321 or later within major version 2**: the contract was
+inspected on 2.1.321, including customization isolation and structured-output
+flags. This is not a claim that every later CLI version has been tested.
+
+For a fresh project using this candidate:
+
+```sh
+weftlet init --provider claude-cli --yes --semantic-source docs/product --model sonnet
+claude auth login
+weftlet doctor
+weftlet hydrate --ref HEAD --plan --json
+```
+
+Review and commit configuration/source inputs before hydration. `sonnet` is an
+upstream alias; choose an explicit supported model ID and advance the extraction
+version deliberately when reproducibility requires pinning a model revision.
+MCP client choice is independent of extraction choice.
+
+In an existing config, replace provider/model/authentication together:
+
+```json
+{
+  "semantic": {
+    "provider": "claude-cli",
+    "model": "sonnet",
+    "reasoningEffort": "medium",
+    "auth": { "mode": "claude-login" }
+  }
+}
+```
+
+This fragment preserves the other required semantic settings. Omitting `auth`
+selects `claude-login` for this provider. Weftlet requires the read-only Claude
+status probe to confirm a first-party `claude.ai` login. Ambient API keys, OAuth
+tokens and third-party provider switches are not forwarded. CLI account access,
+quota and supported models depend on the user's Claude plan; Weftlet does not
+copy or provision sessions. `CLAUDE_CONFIG_DIR` is supported for an operator-owned
+CLI profile. A failed probe does not fall back to API billing or Codex.
+
+For explicit API use, replace `auth` with:
+
+```json
+{ "mode": "api-key", "apiKeyEnv": "WEFTLET_CLAUDE_API_KEY" }
+```
+
+Supply that variable through a secret manager or trusted runner. The default
+variable name is `ANTHROPIC_API_KEY`. Only the selected value is forwarded as
+`ANTHROPIC_API_KEY`; CLI `--bare` disables saved OAuth/keychain authentication
+for that request. Missing keys fail before execution. `doctor` reports presence
+as `key-present-unverified`, without testing billing, quota or model access.
+Third-party gateways/Bedrock/Vertex and OAuth-token CI setup are not qualified
+by this adapter. No credentials belong in JSON or public CI artifacts.
+
+Each request runs in a disposable directory with the numbered source supplied
+through stdin. Safe mode, empty tool/setting sources, strict empty MCP config,
+disabled skills/Chrome and no session persistence prevent project customization
+from becoming extraction instructions. Enterprise-managed CLI policy still
+applies; this is not an OS sandbox. Weftlet makes no permission-bypass request.
+The CLI must return a successful JSON result with `structured_output`; plain text,
+error results and malformed schema/citations/canonical file kinds fail. The same
+shared runtime validator and authority rules used by Codex apply. Only structured
+model output is retained, not CLI session/account metadata.
+
+Weftlet caps captured stdout at 2 MiB for extraction and 128 KiB for mapping
+proposals, suppresses provider stderr, and terminates the process tree on timeout,
+cancellation or excess output. The configured deadline is per extraction attempt;
+authentication and version probes are separately bounded to five seconds each.
+The CLI may perform internal requests within that deadline; document/byte/time
+limits are not token or dollar caps. Weftlet retries only explicitly retryable
+exit status 75 up to `semantic.retries`; malformed output and ambiguous errors
+are not retried. Mapping proposals use one invocation with no Weftlet retry.
+
+Claude cache identity includes provider/model/effort/prompt/auth mode and adapter
+contract, plus shared source and validation-policy inputs. It never reuses Codex
+artifacts. Operational timeout/retry/concurrency/budget changes reuse compatible
+artifacts; key values are never hashed or stored in identity. Switching auth mode
+is conservative and changes Claude identity. Old snapshots/artifacts remain intact.
+Saved querying needs neither CLI nor credentials.
+
+Validation: a deterministic executable fixture exercises init/doctor, the actual
+provider dispatch and process boundary, real TypeScript SCIP, strict SHACL,
+persist/read, unchanged repeat and failure preservation. Windows launcher arguments
+are checked with fixtures; hosted Windows execution is recorded separately. The
+real 2.1.321 binary's help/version and unauthenticated status contract were inspected
+without an inference call. **Live Claude login/API extraction and semantic quality
+remain pending**; no model call or paid authentication probe was made.
+
 ## Limits and reuse
 
 Defaults are at most 8 documents per hydration, 64 KiB per source, a 120-second timeout per
-Codex attempt (or module execution), no retries, and the configured concurrency (validated at 1–4). Source budgets are checked
+built-in CLI attempt (or module execution), no retries, and the configured concurrency (validated at 1–4). Source budgets are checked
 before any model call. `maxDocuments`, `maxSourceBytes`, `timeoutMs`, and `retries` may be configured
 within validated limits. Review scope and cost before raising them; these byte/document limits
 are not dollar or token estimates. Ask the operator before substantial paid runs.
@@ -91,8 +185,8 @@ Starting with 0.5.0, `semantic.timeoutMs` accepts integer values from 1 through 
 (ten minutes); 0.4.0 and earlier reject values above 300000. The default remains 120000.
 For the approved ten-minute retry, set `"timeoutMs": 600000` inside the existing `semantic`
 configuration, preview reuse with `hydrate --plan`, then rerun hydration without forcing
-re-extraction. The limit applies to each Codex attempt, or the whole module execution, rather
-than the entire hydration. Codex authentication/discovery checks retain their separate five-second
+re-extraction. The limit applies to each built-in CLI attempt, or the whole module execution, rather
+than the entire hydration. Built-in CLI authentication/discovery checks retain their separate five-second
 bounds. This setting does not raise a CI job's overall timeout or change retry policy.
 Only explicit transient exit status 75 is retryable, at most twice; authentication, invalid
 output, cancellation and ambiguous failures are not retried. Ctrl-C cancels live CLI extraction.

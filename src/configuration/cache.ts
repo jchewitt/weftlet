@@ -16,25 +16,25 @@ export function resolveStorageRoot(
   return resolve(userCacheRoot, profile);
 }
 
-// These controls do not change a successful built-in Codex extraction. Unknown
+// These controls do not change a successful built-in CLI extraction. Unknown
 // fields and module-provider configuration remain conservative identity inputs.
-const codexOperationalFields = new Set([
+const cliOperationalFields = new Set([
   'timeoutMs', 'retries', 'concurrency', 'maxDocuments', 'maxSourceBytes',
 ]);
 
 export function semanticCachePartition(repositoryRoot: string, config: ContextGraphConfig): string {
   if (config.documentTraversal) assertDocumentTraversalConfig(config.documentTraversal);
-  const semantic = config.semantic.provider === 'codex-cli'
-    ? Object.fromEntries(Object.entries(config.semantic).filter(([field]) => !codexOperationalFields.has(field)))
+  const semantic = config.semantic.provider !== 'module'
+    ? Object.fromEntries(Object.entries(config.semantic).filter(([field]) => !cliOperationalFields.has(field)))
     : config.semantic;
-  // Traversal/role metadata is assembled after the built-in Codex artifact is validated.
+  // Traversal/role metadata is assembled after the built-in CLI artifact is validated.
   // Keep the old partition exactly when enabling it; do not ignore unknown configuration.
   const { documentTraversal: _traversal, ...directConfig } = config;
-  const inputs = config.semantic.provider === 'codex-cli' ? directConfig : config;
+  const inputs = config.semantic.provider !== 'module' ? directConfig : config;
   return sha256(stableJson({ config: { ...inputs, semantic }, checkout: resolve(repositoryRoot) }));
 }
 
-/** Snapshot profiles retain the full configuration. Only Codex user artifacts share operational changes. */
+/** Snapshot profiles retain the full configuration. Only built-in CLI user artifacts share operational changes. */
 export function resolveSemanticStorageRoots(repositoryRoot: string, config: ContextGraphConfig,
   userCacheRoot = resolve(homedir(), '.cache', 'context-graph')): { primary: string; legacy?: string } {
   const legacy = resolveStorageRoot(repositoryRoot, config, userCacheRoot);
@@ -43,6 +43,6 @@ export function resolveSemanticStorageRoots(repositoryRoot: string, config: Cont
   if (config.documentTraversal && config.semantic.provider === 'module') {
     return { primary: resolve(legacy, 'document-semantic-v1', semanticCachePartition(repositoryRoot, config)) };
   }
-  if (config.storageScope !== 'user' || config.semantic.provider !== 'codex-cli') return { primary: legacy };
+  if (config.storageScope !== 'user' || config.semantic.provider === 'module') return { primary: legacy };
   return { primary: resolve(userCacheRoot, 'semantic-artifacts-v1', semanticCachePartition(repositoryRoot, config)), legacy };
 }

@@ -1,3 +1,4 @@
+import { ClaudeCliSemanticExtractor } from './claude.js';
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { CodexCliSemanticExtractor, SemanticProviderError, type SemanticExtractor, type SemanticRunOptions } from "./semantic.js";
@@ -12,6 +13,7 @@ export interface SemanticProviderModule {
 /** Lazy loading ensures a missing provider cannot disable saved-evidence queries. */
 export function createSemanticExtractor(config: ContextGraphConfig['semantic'], repositoryRoot: string): SemanticExtractor {
   if (config.provider === 'codex-cli') return new CodexCliSemanticExtractor(config);
+  if (config.provider === 'claude-cli') return new ClaudeCliSemanticExtractor(config);
   const modulePath = config.providerModule!;
   const identity = semanticProviderIdentity(config);
   let extractor: SemanticExtractor | undefined;

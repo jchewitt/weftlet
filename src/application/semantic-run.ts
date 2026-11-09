@@ -103,7 +103,7 @@ export async function hydrateSemanticSources(options: {
       'Inspect hydrate --plan --json locally with the same --config, committed --ref and scope options to map sourceId to its path and check expected reuse. The preview contains local paths; review it before sharing.',
     ];
     if (firstFailure.code === 'timeout') recovery.push(
-      'Review semantic.timeoutMs before retrying. This limit is per Codex attempt (authentication is separately bounded), or covers module import/factory/extraction; source elapsed time can be longer.',
+      'Review semantic.timeoutMs before retrying. This limit is per built-in CLI attempt (authentication is separately bounded), or covers module import/factory/extraction; source elapsed time can be longer.',
     );
     else if (firstFailure.code === 'unavailable') recovery.push('Run doctor with the same configuration to check provider installation and authentication.');
     else if (firstFailure.code === 'cache-failure') recovery.push('Inspect cache integrity and permissions. Corrupt or conflicting complete artifacts are retained and must be repaired explicitly; a timeout change cannot repair them.');
@@ -113,13 +113,13 @@ export async function hydrateSemanticSources(options: {
     recovery.push(forceRevision
       ? 'This run used --force-semantic. Its completed revision artifacts remain stored, but an ordinary rerun or a new forced run does not automatically reuse that revision.'
       : 'Rerun hydrate without --force-semantic after resolving the failure; only valid compatible completed artifacts are reusable.');
-    recovery.push(config.provider === 'codex-cli'
-      ? 'Built-in Codex supports reuse across operational timeout changes. For profiles created before shared caching, use cache adopt --from-config with the exact previous configuration; preview with --dry-run first.'
+    recovery.push(config.provider !== 'module'
+      ? 'Built-in CLI providers support reuse across operational timeout changes. For profiles created before shared caching, use cache adopt --from-config with the exact previous configuration; preview with --dry-run first.'
       : 'Custom provider identities include their full semantic configuration; changing a module timeout may invalidate reuse. Preview again before extraction.');
     throw new SemanticHydrationError({ schemaVersion: 1, kind: 'semantic-hydration-failure', ...firstFailure,
       category: semanticFailureCategory(firstFailure.code), commitSha, configurationDigest,
       timeoutMs: config.timeoutMs ?? 120_000,
-      timeoutScope: config.provider === 'codex-cli' ? 'provider-attempt' : 'module-execution',
+      timeoutScope: config.provider !== 'module' ? 'provider-attempt' : 'module-execution',
       progress: { total: sources.length, completed, extracted: semanticExtracted, reused: semanticReused,
         failed, cancelled, notStarted: sources.length - started, remaining: sources.length - completed },
       forced: !!forceRevision, recovery });

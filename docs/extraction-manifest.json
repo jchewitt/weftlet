@@ -234,14 +234,14 @@
       "destinationPath": "src/configuration/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
       "modified": true,
-      "destinationSha256": "aefa63517c2a92f426d45d78619af7e5fe0e3d41c1dc50a1c14db824b75b9879"
+      "destinationSha256": "913b63ca57b0ef581c54da231ab3354f26aa4a7349236cd6a61b1f4ec65d745d"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "15b65ee79b29a805c70b8c7e585a9d5a2e72e1dfcd508605297c6ec4c83fe068"
+      "destinationSha256": "a0d869461b82018fb69aba68c12d880cafd1d3e8a7b06f93b5557ea6f2a39849"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -255,7 +255,7 @@
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "29e606aff4311b6a717ee75b71a31a98a946d2547c383b2ed7aac3346cadae9d"
+      "destinationSha256": "905e81933486fde6e119140c97bab4f77d7dcedcd4eb0390427a3a07e30788f3"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "c344279229f239e0a0658512080a76854887f7d353ca767e74243c3970420e78"
+      "destinationSha256": "dc4e89d0afa6c571034b262e4c84e331940b668c87aa47101277c8215a72c24a"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -640,6 +641,8 @@
     "docs/ADR-044-viewer-query-boundary.md",
     "docs/ADR-045-owner-intent-retrieval.md",
     "docs/ADR-046-semantic-physical-file-validation.md",
+    "docs/ADR-047-provider-choice.md",
+    "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -989,6 +992,11 @@
     "src/extraction/call-syntax.ts",
     "src/extraction/canonical-document-links.test.ts",
     "src/extraction/canonical-document-links.ts",
+    "src/extraction/claude-auth.ts",
+    "src/extraction/claude-request.ts",
+    "src/extraction/claude.test.ts",
+    "src/extraction/claude.ts",
+    "src/extraction/cli-command.ts",
     "src/extraction/code-inventory.test.ts",
     "src/extraction/code-inventory.ts",
     "src/extraction/codex-auth.test.ts",
@@ -1029,9 +1037,11 @@
     "src/extraction/scip-symbols.ts",
     "src/extraction/semantic-cache.ts",
     "src/extraction/semantic-diagnostics.ts",
+    "src/extraction/semantic-environment.ts",
     "src/extraction/semantic-identity.ts",
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
+    "src/extraction/semantic-prompt.ts",
     "src/extraction/semantic-sources.ts",
     "src/extraction/static-calls.ts",
     "src/extraction/symbol-resolution.ts",
@@ -1166,6 +1176,7 @@
     "tests/business-context-acceptance.test.ts",
     "tests/cache-adoption.test.ts",
     "tests/canonical-semantic-files.test.ts",
+    "tests/claude-consumer.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
     "tests/contract-compatibility.test.ts",

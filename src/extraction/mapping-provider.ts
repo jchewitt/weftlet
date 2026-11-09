@@ -1,3 +1,4 @@
+import { runClaudeStructuredRequest, type ClaudeRuntime } from './claude-request.js';
 import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -14,15 +15,16 @@ import { mappingVersion } from './mapping-request.js';
 
 type Config = ContextGraphConfig['semantic'];
 export interface MappingCodexRuntime {
+  readonly claude?: ClaudeRuntime;
   readonly authenticate?: typeof prepareCodexAuthentication;
   readonly invocation?: typeof resolveCodexInvocation;
   readonly run?: typeof runSemanticProcess;
 }
 export const mappingProviderIdentity = (config: Config) => sha256(stableJson({ version: mappingVersion, provider: config.provider,
   model: config.model, reasoningEffort: config.reasoningEffort, providerModule: config.providerModule,
-  providerIdentity: config.providerIdentity, authMode: config.auth?.mode ?? 'chatgpt' }));
+  providerIdentity: config.providerIdentity, authMode: config.auth?.mode ?? (config.provider === 'claude-cli' ? 'claude-login' : 'chatgpt') }));
 
-/** Same Codex authentication choice as extraction; one bounded request, with no automatic retry. */
+/** Same selected provider/authentication choice as extraction; one bounded request, with no automatic retry. */
 export function createMappingProvider(config: Config, repositoryRoot: string, runtime: MappingCodexRuntime = {}): MappingProposalProvider {
   const identity = mappingProviderIdentity(config);
   return { identity, async propose(input, options) {
@@ -36,6 +38,8 @@ export function createMappingProvider(config: Config, repositoryRoot: string, ru
       options.signal.throwIfAborted();
       return provider.propose(input, options);
     }
+    if (config.provider === 'claude-cli') return runClaudeStructuredRequest(config, mappingOutputSchema,
+      mappingPrompt(input), 131_072, options, runtime.claude);
     const command = 'codex';
     const env = await (runtime.authenticate ?? prepareCodexAuthentication)(config.auth, process.env, command, options);
     const invocation = await (runtime.invocation ?? resolveCodexInvocation)(command, env, process.platform, options);

@@ -1,8 +1,11 @@
 # Delivery roadmap
 
-November 9 update: a new canonical semantic-file identity blocker pauses official
-1.0. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md) schedules the focused repair first,
-then agent/CI onboarding. Earlier bounded retrieval passes remain valid.
+November 9 update: the canonical semantic-file repair shipped in core/toolkit
+0.9.0; the maintainer reports TradePilot looks good. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md)
+now covers provider choice plus agent/CI onboarding: Claude/OpenCode integrations
+must support extraction without Codex. The [architecture-only direction](ARCHITECTURE-TOOLING-PLAN.md)
+is recorded as a follow-up, not an additional 1.0 gate. Earlier bounded retrieval
+passes remain valid; official 1.0 is a separate release decision.
 
 Current acceptance update, 2026-11-08: core/toolkit **0.8.1** is published, and
 both reported owner-intent and indirect-worker retrieval tickets have consumer

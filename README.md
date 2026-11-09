@@ -30,9 +30,9 @@ npx @weftlet/toolkit config validate
 npx @weftlet/toolkit doctor
 ```
 
-`init` asks for the repository ID, code roots, selected document paths and model, then writes
+`init` asks for the repository ID, code roots, selected document paths, extraction provider and model, then writes
 `context-graph.config.json` and adds `.context-graph/` to `.gitignore`. It fills in the internal
-version fields, requires no Git commit or Codex login to run, and refuses to overwrite existing
+version fields, requires no Git commit or model login to run, and refuses to overwrite existing
 configuration. Setup makes no model requests. For automation:
 
 ```sh
@@ -46,13 +46,20 @@ Use `--config .config/context-graph.json` for another configuration location,
 `--directory /path/to/project` to initialize another project, or `--no-gitignore` to leave
 ignore rules alone. Configuration remains JSON; `config show` displays the validated settings.
 
-Review the selected sources, configure Codex authentication when using semantic documents,
+Review the selected sources, configure the selected provider authentication when using semantic documents,
 and commit the inputs you want indexed before hydrating:
 
-In Weftlet, `semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
+Codex remains the default provider. With `semantic.provider: "codex-cli"`,
+`semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
 ChatGPT login. API billing requires explicitly selecting `api-key`; credentials stay in an
 environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
 for both modes and their tentative validation status. The earlier `@launch-echo/tently@0.1.0` release predates this option.
+
+The 0.10 development candidate adds `init --provider claude-cli`, selecting Claude Code
+for extraction and optional mapping proposals without Codex. It supports Claude account login
+or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
+OpenCode extraction and client-registration helpers remain tracked 0.10 work;
+a compatible MCP client can already query saved evidence without any extraction provider.
 
 ```sh
 npx @weftlet/toolkit hydrate --ref HEAD
@@ -107,7 +114,7 @@ extraction. The opt-in traversal mode below excludes them by default. See
 
 Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
 failures report completed/remaining work and recovery guidance; `hydrate --json --quiet` emits
-their structured report on stderr. Built-in Codex can reuse completed artifacts after supported
+their structured report on stderr. Built-in CLI providers can reuse completed artifacts after supported
 operational changes such as increasing a timeout. See [provider recovery](docs/PROVIDERS.md#limits-and-reuse)
 for preview, retry and explicit legacy-cache adoption instructions.
 
@@ -213,7 +220,7 @@ approved source never approves a model assertion. Plans/unclassified sources rem
 labeled, and model facts remain inferred/unreviewed. Complete coverage means the configured
 canonical links were followed, not that every product rule was found.
 
-Built-in Codex can reuse unchanged artifacts when enabling traversal or editing its policy/read
+Built-in CLI providers can reuse unchanged artifacts when enabling traversal or editing its policy/read
 limits. Role/owner metadata is assembled without rewriting those artifacts. Custom module
 providers use a separate full-config cache. Snapshots bind the configuration and selection, while
 old snapshots remain queryable. Draft overlays recompute reachability, invalidate changed sources
@@ -582,7 +589,8 @@ weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
 
 No configuration switch enables automatic inference. The proposal command reuses the existing
 `semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
-the default; configured API-key mode is optional. A compatible module must separately export
+the default; the 0.10 candidate also uses Claude when `claude-cli` is selected.
+Configured API-key mode is optional for either CLI. A compatible module must separately export
 `createMappingProposalProvider(config)` with matching `identity` and
 `propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is
 one provider request per invocation, no automatic retry, and cache hits require no `--allow-model`.

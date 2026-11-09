@@ -1,5 +1,60 @@
 # Validation evidence
 
+## 0.10 Claude provider candidate, 2026-11-09
+
+[ADR 047](ADR-047-provider-choice.md) implements independent Claude Code extraction
+and optional mapping proposals. `init --provider claude-cli` writes Claude account
+login configuration; `doctor` only probes the selected provider. No Codex install,
+login or OpenAI API key is required. API authentication is explicitly selected and
+never a fallback. This is a development candidate, not an npm publication.
+
+Linux Node 24.19.0 / pnpm 10.18.2: the clean full run passed **38 core + 1,065
+toolkit tests**, with two optional ontology integrations skipped. A prior run
+mixed a newly added malformed-provider test with an older worker-loaded config
+validator; that run was discarded and the full suite rerun. Subsequent small
+result-parser/provider-default helper factoring passed a fresh build and all
+**62 affected tests**. Governance returned to **17 advisory findings**, with no
+baseline or policy relaxation. Release documentation, license inventory, export
+inventory and fresh packed-consumer npm/npx installation, SCIP/RDF/SHACL, viewer
+and MCP smoke passed. Hosted Windows execution remains a separate pending check.
+
+The new consumer regression uses a deterministic Claude executable fixture and
+actual process dispatch: init/doctor → fresh semantic extraction → real TypeScript
+SCIP → strict SHACL → persist/read → unchanged repeat. The repeat extracts zero
+and reuses one artifact with identical snapshot ID/digest and stored-byte hashes.
+A forced invalid-kind output preserves the last valid head, snapshot and artifact
+bytes. Authority stays inferred/unreviewed even for a declared source. Credentials
+are not inherited implicitly; neither doctor nor extraction invokes Codex.
+Separate tests cover account/API selection, cancellation, output limits, retry
+bounds, malformed citations/envelopes, Windows npm/native discovery, provider
+cache separation and mapping dispatch. The shared Codex prompt was byte-compared
+with the 0.9.0 implementation using a public fixture and is unchanged.
+
+The real integrity-verified Claude Code **2.1.321** binary was used only for help,
+version and an unauthenticated status probe. These checks do not establish live
+account/API extraction, model access, cost or semantic quality. No paid request,
+private consumer hydration, model prompt upload or authentication mutation was
+performed. Actual Claude client sessions, authenticated extraction and OpenCode
+support remain separately tracked in the [0.10 plan](RELEASE-09-10-PLAN.md).
+
+## 0.9.0 publication receipt and consumer status
+
+Core/toolkit **0.9.0** were published from
+`122deea05d33359cef87298a4c1803bc61b4e177`, after PRs 83/84 and successful
+hosted qualification. [Release workflow 42628836040](https://github.com/jchewitt/weftlet/actions/runs/42628836040)
+completed preparation, trusted publishing and release records. Both npm `latest`
+tags and both Git release tags resolved to this version/commit at verification.
+The downloaded public archives matched both the registry SHA-512 and the prepared
+release archives byte for byte:
+
+- Core: `sha512-rj0j2UVmQN1SvD8p1548+g6ucIRLd1O2E7s40AYtgTm3b/zh8gDTCFoG1AXPKp56gYwBVBlQPAVzB+Hksbyl0Q==`.
+- Toolkit: `sha512-78yPLqirSAQsAMGQb3BNFTa1A1pxJpAqvVSLIRygeQQ01WcYcQF7rHDhjTt5LkjMrskPV9xE+ixzBi2wLJkdXA==`.
+
+The maintainer subsequently reported “Tp looks good.” Record that as a consumer
+status report; no additional private commit, full-run counts or artifact receipt
+was supplied with it. It does not establish live Claude/OpenCode acceptance.
+The candidate section below records pre-publication qualification historically.
+
 ## Canonical semantic-file validation candidate, 2026-11-09 Central
 
 [ADR 046](ADR-046-semantic-physical-file-validation.md) addresses the newly

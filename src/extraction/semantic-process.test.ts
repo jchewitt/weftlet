@@ -3,7 +3,17 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { expect, it } from 'vitest';
-import { runSemanticProcess } from './semantic-process.js';
+import { captureSemanticProcess, runSemanticProcess } from './semantic-process.js';
+
+it('captures bounded UTF-8 stdout, rejects overflow and terminates stalled structured providers', async () => {
+  const run = (script: string, limit = 32, options = {}) => captureSemanticProcess(process.execPath,
+    ['-e', script], tmpdir(), 'PRIVATE PROMPT', {}, limit, options);
+  expect(await run('process.stdout.write(Buffer.from([0xe2])); setTimeout(()=>process.stdout.end(Buffer.from([0x82,0xac])),10)')).toBe('€');
+  await expect(run('process.stdout.write("x".repeat(1000)); setInterval(()=>{},1000)')).rejects.toMatchObject({ code: 'invalid-output' });
+  await expect(run('process.stderr.write("PRIVATE SECRET"); process.exit(1)')).rejects.toThrow('status 1');
+  await expect(run('setInterval(()=>{},1000)', 32, { timeoutMs: 50 })).rejects.toMatchObject({ code: 'timeout' });
+  await expect(run('process.stdout.write("must-not-run")', 32, { signal: AbortSignal.abort() })).rejects.toMatchObject({ code: 'cancelled' });
+});
 
 it('cancels a launcher and its active child process', async () => {
   const root = await mkdtemp(join(tmpdir(), 'weftlet-provider-tree-'));

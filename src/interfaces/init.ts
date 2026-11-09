@@ -11,6 +11,7 @@ export interface InitOptions {
   semanticSources?: string[];
   evidenceRoots?: string[];
   model?: string;
+  provider?: 'codex-cli' | 'claude-cli';
   gitignore?: boolean;
 }
 
@@ -22,6 +23,13 @@ async function present(path: string): Promise<boolean> {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return false;
     throw error;
   }
+}
+
+function providerDefaults(options: InitOptions): Pick<ContextGraphConfig['semantic'], 'provider' | 'auth' | 'model'> {
+  const provider = options.provider ?? 'codex-cli';
+  if (!['codex-cli', 'claude-cli'].includes(provider)) throw new Error('Provider must be codex-cli or claude-cli');
+  return { provider, auth: { mode: provider === 'claude-cli' ? 'claude-login' : 'chatgpt' },
+    model: options.model ?? (provider === 'claude-cli' ? 'sonnet' : 'gpt-6-astra') };
 }
 
 /** Creates local configuration only; no provider, indexer, Git mutation or install is invoked. */
@@ -56,7 +64,7 @@ export async function prepareProjectConfig(options: InitOptions = {}) {
     contractPatterns: [],
     evidenceRoots: paths(options.evidenceRoots ?? detectedEvidence),
     semantic: {
-      provider: 'codex-cli', auth: { mode: 'chatgpt' }, model: options.model ?? 'gpt-6-astra', reasoningEffort: 'medium',
+      ...providerDefaults(options), reasoningEffort: 'medium',
       promptVersion: 'generic-semantic-v3', extractorVersion: '1.1.0', adapterVersion: '1.1.0',
       ontologyVersion: '1.1.0', minimumConfidence: 0.7, failOnUnresolved: true, concurrency: 1,
       maxDocuments: 8, maxSourceBytes: 65_536, timeoutMs: 120_000, retries: 0,
@@ -97,7 +105,7 @@ export async function initializeProject(options: InitOptions = {}) {
 export async function runInit(args: readonly string[]): Promise<void> {
   const values = new Map<string, string[]>();
   const flags = new Set(['--yes', '--no-gitignore']);
-  const valued = new Set(['--directory', '--config', '--repository-id', '--code-root', '--semantic-source', '--evidence-root', '--model']);
+  const valued = new Set(['--directory', '--config', '--repository-id', '--code-root', '--semantic-source', '--evidence-root', '--model', '--provider']);
   for (let i = 0; i < args.length; i++) {
     const key = args[i]!;
     if (flags.has(key)) continue;
@@ -113,15 +121,19 @@ export async function runInit(args: readonly string[]): Promise<void> {
   };
   const options: InitOptions = {
     directory: one('--directory'), configPath: one('--config'), repositoryId: one('--repository-id'),
-    model: one('--model'), codeRoots: values.get('--code-root'), semanticSources: values.get('--semantic-source'),
+    model: one('--model'), provider: one('--provider') as InitOptions['provider'], codeRoots: values.get('--code-root'), semanticSources: values.get('--semantic-source'),
     evidenceRoots: values.get('--evidence-root'), gitignore: !args.includes('--no-gitignore'),
   };
   if (!args.includes('--yes')) {
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('Non-interactive setup requires --yes. Use --semantic-source <path> to select documents explicitly.');
-    const defaults = await prepareProjectConfig(options);
+    let defaults = await prepareProjectConfig(options);
     const prompt = createInterface({ input: process.stdin, output: process.stdout });
     try {
       process.stdout.write('Set up a TypeScript context graph. Documents are opt-in; source approval is configured separately.\n');
+      if (!options.provider) {
+        options.provider = ((await prompt.question('Extraction provider [codex-cli; or claude-cli]: ')).trim() || 'codex-cli') as InitOptions['provider'];
+        defaults = await prepareProjectConfig(options);
+      }
       if (!options.repositoryId) options.repositoryId = (await prompt.question(`Repository ID [${defaults.config.repositoryId}]: `)).trim() || defaults.config.repositoryId;
       if (!options.codeRoots) {
         const answer = (await prompt.question(`Code roots, comma-separated [${defaults.config.codeRoots.join(', ')}]: `)).trim();
@@ -131,7 +143,7 @@ export async function runInit(args: readonly string[]): Promise<void> {
         const answer = (await prompt.question('Document paths, comma-separated [none]: ')).trim();
         options.semanticSources = answer ? answer.split(',').map((path) => path.trim()).filter(Boolean) : [];
       }
-      if (!options.model) options.model = (await prompt.question(`Codex model [${defaults.config.semantic.model}]: `)).trim() || defaults.config.semantic.model;
+      if (!options.model) options.model = (await prompt.question(`Model [${defaults.config.semantic.model}]: `)).trim() || defaults.config.semantic.model;
       const confirm = (await prompt.question(`Write ${defaults.configPath}${options.gitignore ? ' and update .gitignore' : ''}? [Y/n]: `)).trim();
       if (confirm && !/^y(?:es)?$/i.test(confirm)) {
         process.stdout.write('Setup cancelled; no files written.\n');
@@ -145,5 +157,5 @@ export async function runInit(args: readonly string[]): Promise<void> {
   process.stdout.write('Review the configuration, select any contracts and owner-approved documents, and commit the inputs you want indexed.\n');
   const configArg = JSON.stringify(result.configPath);
   process.stdout.write(`Next: npx @weftlet/toolkit doctor --config ${configArg}\nThen: npx @weftlet/toolkit hydrate --config ${configArg} --ref HEAD\n`);
-  process.stdout.write('Hydration with selected documents uses Codex and may incur model charges. Setup made no model requests.\n');
+  process.stdout.write('Hydration with selected documents uses the configured provider and may incur model charges. Setup made no model requests.\n');
 }

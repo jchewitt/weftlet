@@ -1,3 +1,4 @@
+import { claudeCommandEnvironment, inspectClaudeInstallation, readClaudeLoginMode } from '../extraction/claude-auth.js';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { loadConfig } from "../configuration/config.js";
@@ -24,21 +25,28 @@ export async function diagnoseSetup(configPath: string) {
     } catch { return { available: false, output: '' }; }
   };
   const git = await probe('git', ['--version']);
-  const codex = await probe('codex', ['--version']);
+  const codex = config.semantic.provider === 'codex-cli' ? await probe('codex', ['--version']) : undefined;
+  const claudeEnvironment = claudeCommandEnvironment(process.env);
+  const claude = config.semantic.provider === 'claude-cli' ? await inspectClaudeInstallation(claudeEnvironment) : undefined;
   const auth = config.semantic.auth;
   const authMode = config.semantic.provider === 'codex-cli' ? auth?.mode ?? 'chatgpt' : undefined;
-  const apiKeyEnv = auth?.mode === 'api-key' ? auth.apiKeyEnv ?? 'CODEX_API_KEY' : undefined;
+  const apiKeyEnv = config.semantic.provider === 'codex-cli' && auth?.mode === 'api-key' ? auth.apiKeyEnv ?? 'CODEX_API_KEY' : undefined;
   const apiKeyPresent = apiKeyEnv ? Boolean(process.env[apiKeyEnv]?.trim()) : undefined;
-  const loginMode = codex.available && authMode === 'chatgpt'
+  const loginMode = codex?.available && authMode === 'chatgpt'
     ? await readCodexLoginMode('codex', environment)
     : undefined;
+  const claudeAuthMode = claude ? auth?.mode ?? 'claude-login' : undefined;
+  const claudeApiKeyEnv = claude && auth?.mode === 'api-key' ? auth.apiKeyEnv ?? 'ANTHROPIC_API_KEY' : undefined;
+  const claudeApiKeyPresent = claudeApiKeyEnv ? Boolean(process.env[claudeApiKeyEnv]?.trim()) : undefined;
+  const claudeLoginMode = claude?.supported && claudeAuthMode === 'claude-login'
+    ? await readClaudeLoginMode(claudeEnvironment) : undefined;
   const docker = config.ontology.backend === 'opencaesar' ? await probe('docker', ['info']) : undefined;
   const saved = await new FileSnapshotStore(resolveStorageRoot(repositoryRoot, config)).readHead('default');
   return {
     node: process.version, repositoryRoot, gitAvailable: git.available,
     savedSnapshot: saved?.manifest.snapshotId ?? null,
     semanticProvider: config.semantic.provider,
-    codexAvailable: codex.available,
+    codexAvailable: codex?.available,
     codexAuthMode: authMode,
     codexLoginMode: loginMode,
     codexApiKeyEnv: apiKeyEnv,
@@ -46,6 +54,10 @@ export async function diagnoseSetup(configPath: string) {
     codexAuthenticated: authMode === 'chatgpt' ? loginMode === 'chatgpt' : null,
     codexAuthStatus: authMode === 'api-key' ? (apiKeyPresent ? 'key-present-unverified' : 'missing-key')
       : authMode === 'chatgpt' ? (loginMode === 'chatgpt' ? 'chatgpt-login-present' : 'chatgpt-login-required') : 'not-applicable',
+    claudeAvailable: claude?.available, claudeSupported: claude?.supported, claudeVersion: claude?.version,
+    claudeAuthMode, claudeLoginMode, claudeApiKeyEnv, claudeApiKeyPresent,
+    claudeAuthStatus: claudeAuthMode === 'api-key' ? (claudeApiKeyPresent ? 'key-present-unverified' : 'missing-key')
+      : claudeAuthMode === 'claude-login' ? (claudeLoginMode === 'claude-login' ? 'claude-login-present' : 'claude-login-required') : 'not-applicable',
     moduleProvider: config.semantic.provider === 'module' ? 'loaded only during extraction; trusted local code' : undefined,
     ontologyBackend: config.ontology.backend ?? 'rdf', dockerReady: docker?.available,
     limits: { maxDocuments: config.semantic.maxDocuments ?? 8, maxSourceBytes: config.semantic.maxSourceBytes ?? 65_536,
