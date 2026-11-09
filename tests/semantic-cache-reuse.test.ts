@@ -351,16 +351,19 @@ describe('operational-setting semantic artifact reuse', () => {
       semanticProviderIdentity(f.config.semantic))).status).toBe('corrupt');
   });
 
-  it('retains the released artifact key and invalidates changed sources or output-affecting settings', async () => {
+  it('versions the file policy and invalidates changed sources or output-affecting settings', async () => {
     const f = await fixture();
     const source = f.sources[0]!;
     const semantic = f.config.semantic;
     const identity = `codex-cli:${semantic.model}:${semantic.reasoningEffort}:${semantic.promptVersion}:contract-v3`;
-    const releasedKey = sha256(stableJson({ stableSemanticId: source.stableSemanticId, sourceDigest: source.digest,
+    const keyFields = { stableSemanticId: source.stableSemanticId, sourceDigest: source.digest,
       promptVersion: semantic.promptVersion, extractorVersion: semantic.extractorVersion, modelIdentity: identity,
       adapterVersion: semantic.adapterVersion, ontologyVersion: semantic.ontologyVersion,
       minimumConfidence: semantic.minimumConfidence, failOnUnresolved: semantic.failOnUnresolved,
-      forceRevision: undefined, diagnosticContractVersion: 3, repositoryNodeIdentityVersion: 1 }));
+      forceRevision: undefined, diagnosticContractVersion: 3, repositoryNodeIdentityVersion: 2 };
+    const releasedKey = sha256(stableJson(keyFields));
+    const priorKey = sha256(stableJson({ ...keyFields, repositoryNodeIdentityVersion: 1 }));
+    expect(releasedKey).not.toBe(priorKey);
     expect(semanticArtifactKey(semantic, source, semanticProviderIdentity(semantic))).toBe(releasedKey);
     const seeded = extraction(f, f.config, []);
     await seeded.semantic.hydrate(source, f.context);

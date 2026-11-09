@@ -1,5 +1,9 @@
 # Delivery roadmap
 
+November 9 update: a new canonical semantic-file identity blocker pauses official
+1.0. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md) schedules the focused repair first,
+then agent/CI onboarding. Earlier bounded retrieval passes remain valid.
+
 Current acceptance update, 2026-11-08: core/toolkit **0.8.1** is published, and
 both reported owner-intent and indirect-worker retrieval tickets have consumer
 passes. B1–B5 implementation is complete. The [1.0 work queue](1.0-WORK-QUEUE.md)

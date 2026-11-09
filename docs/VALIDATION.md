@@ -1,5 +1,43 @@
 # Validation evidence
 
+## Canonical semantic-file validation candidate, 2026-11-09 Central
+
+[ADR 046](ADR-046-semantic-physical-file-validation.md) addresses the newly
+reported 0.8.1 physical-file kind conflict. The consumer confirms the omitted
+path is canonically Component; its saved semantic `verifiedBy` target is Evidence.
+This candidate rejects that inconsistent physical identity at fresh validation,
+cache reuse and linker ingress. It does not change the fact's kind to make SHACL
+pass, erase assertions or infer a replacement business concept.
+
+On the prior source, all five selected regression cases fail: malformed fresh
+outputs are accepted and a digest-valid conflicting cache entry is reusable.
+The new public regression retains non-mutating rejection, ordinary logical
+document IDs, and the existing explicit document-path migration. Correctly typed
+two-document extraction composes with real TypeScript SCIP, passes strict SHACL,
+persists/reloads and repeats with zero extraction and two reused artifacts.
+A later invalid forced extraction leaves the last valid head and stored bytes
+unchanged. These are deterministic provider tests, not live model-quality proof.
+
+Linux, Node 24.19.0 / pnpm 10.18.2: final build and full suite passed **38 core +
+1,055 toolkit tests**, with two optional ontology integrations skipped. An initial
+run caught an overbroad treatment of logical `document:` IDs; the guard was narrowed
+to the existing physical-file contract and the full suite rerun passed. The 65-test
+affected rerun also passed. Governance passed with the existing 17 advisory
+findings after factoring the boundary check; no baseline or policy was relaxed.
+License, release-documentation, local documentation links, export inventory and
+whitespace checks passed. Fresh packed-consumer install/index/hydration/reuse,
+viewer export and MCP smoke passed. The existing large-graph lifecycle regression
+passed; no new private or full-scale performance claim follows.
+
+The new regression is included in hosted Windows checks; exact-head hosted
+results, release publication and consumer recovery remain separate. Artifact
+policy 2 and graph assembly 13 preserve old stored evidence but require new
+extraction for selected sources with only policy-1 artifacts. Inspect the no-model
+plan and budget first. A provider still returning the wrong kind still fails;
+the new failure occurs before reusable artifact publication. No private run,
+model request, cache rewrite or package publication was performed for this work.
+The [two-release task list](RELEASE-09-10-PLAN.md) keeps 0.10 onboarding separate.
+
 ## 0.8.1 indirect-worker consumer replay, 2026-11-08 UTC
 
 **The two-assertion PM-worker ranking ticket is closed by this consumer replay.**
