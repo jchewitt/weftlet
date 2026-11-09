@@ -179,7 +179,7 @@ describe('no-model hydration preview', () => {
         failOnUnresolved: config.semantic.failOnUnresolved,
         forceRevision: undefined,
         diagnosticContractVersion: 3,
-        repositoryNodeIdentityVersion: 1,
+        repositoryNodeIdentityVersion: 2,
       }));
       expect(seeded.artifacts.find((artifact) => artifact.stableSemanticId === source.stableSemanticId)?.key).toBe(expectedKey);
     }

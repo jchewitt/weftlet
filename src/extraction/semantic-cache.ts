@@ -1,7 +1,8 @@
-import type { SemanticArtifact, SemanticSource } from '@weftlet/core';
+import type { GraphNode, SemanticArtifact, SemanticSource } from '@weftlet/core';
 import type { ContextGraphConfig } from '../configuration/config.js';
 import type { SemanticArtifactStore } from '../storage/storage.js';
 import { semanticArtifactKey, semanticArtifactOutputDigest } from './semantic-identity.js';
+import { isCanonicalRepositoryNode } from './repository-nodes.js';
 
 export type SemanticCacheStatus = 'hit' | 'miss' | 'forced' | 'corrupt' | 'unavailable';
 export interface SemanticCacheInspection {
@@ -42,7 +43,8 @@ function reusableArtifact(value: unknown, key: string, source: SemanticSource,
     Number.isInteger(item.startLine) && Number.isInteger(item.endLine) &&
     Number(item.startLine) >= 1 && Number(item.endLine) >= Number(item.startLine) && Number(item.endLine) <= lineCount;
   const node = (item: unknown) => record(item) && typeof item.id === 'string' && item.id.length > 0 &&
-    typeof item.kind === 'string' && typeof item.label === 'string';
+    typeof item.kind === 'string' && typeof item.label === 'string' &&
+    isCanonicalRepositoryNode(item as unknown as GraphNode);
   if (!span(value.source) || !value.facts.every((fact) => record(fact) && typeof fact.id === 'string' &&
     node(fact.subject) && node(fact.object) && typeof fact.predicate === 'string' && span(fact.provenance) &&
     record(fact.extractor) && fact.extractor.id === modelIdentity && fact.extractor.version === config.extractorVersion &&
@@ -72,7 +74,7 @@ export async function inspectSemanticCache(store: SemanticArtifactStore, config:
   }
   if (value === undefined) return { status: 'miss', key, reason: 'No artifact exists for the current source and extraction contract.' };
   if (!reusableArtifact(value, key, source, config, modelIdentity)) {
-    return { status: 'corrupt', key, reason: 'Cached artifact identity, structure or content digest is invalid; retain it for diagnosis or use an explicit forced refresh.' };
+    return { status: 'corrupt', key, reason: 'Cached artifact identity, canonical file kind, structure or content digest is invalid; retain it for diagnosis or use an explicit forced refresh.' };
   }
   return { status: 'hit', key, origin,
     reason: origin === 'legacy'

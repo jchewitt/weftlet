@@ -5,6 +5,7 @@ import type {
 import { sha256, stableJson } from '../infrastructure/util.js';
 import { documentReferences, resolveDocumentReference } from './document-references.js';
 import { repositoryFileNode as fileNode } from '@weftlet/core';
+import { isCanonicalRepositoryNode } from './repository-nodes.js';
 
 export const documentLinkerIdentity = { id: 'document-linker', version: '2.0.0' } as const;
 
@@ -35,6 +36,10 @@ export function linkSemanticDocuments(
     // Containment follows the assertion's actual cited passage and stays unreviewed.
     for (const fact of artifact.facts) {
       for (const node of [fact.subject, fact.object]) {
+        if (!isCanonicalRepositoryNode(node)) {
+          throw new Error(`Document linker rejected a noncanonical repository-file identity (node ${sha256(node.id).slice(0, 16)}). ` +
+            'Retain the artifact for diagnosis; no assertion was rewritten.');
+        }
         add('contains', node, span(fact.provenance.startLine, fact.provenance.endLine));
       }
     }

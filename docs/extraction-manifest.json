@@ -283,7 +283,7 @@
       "destinationPath": "src/extraction/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
       "modified": true,
-      "destinationSha256": "535b92a52357edf4825414915b1109374f01cbc10ad7c0ed9c9b218452b8e18d"
+      "destinationSha256": "f0167be7463fd927287e4656657aca8ce0ad9169eaf7e0d1f2fe08996958b3ab"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
@@ -311,7 +311,7 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "b87bbd86171c81122150a21e86525017b7c17dafd8eade4f13405f588e9262b8"
+      "destinationSha256": "0f621369c01d4bc586b885e15fdb6f258800fdab3a9ea009982666b8991fe4da"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "3e10e0de42d11e783847de30abc12ee2482da5d15249126c1834eaf53a996a94"
+      "destinationSha256": "c344279229f239e0a0658512080a76854887f7d353ca767e74243c3970420e78"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/canonical-semantic-file-contract.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -639,6 +640,7 @@
     "docs/ADR-043-shared-symbol-specificity.md",
     "docs/ADR-044-viewer-query-boundary.md",
     "docs/ADR-045-owner-intent-retrieval.md",
+    "docs/ADR-046-semantic-physical-file-validation.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -652,6 +654,7 @@
     "docs/PORTABLE-EXPLORER.md",
     "docs/PRE-1.0-BASELINE.md",
     "docs/PROVIDERS.md",
+    "docs/RELEASE-09-10-PLAN.md",
     "docs/RELEASE-1.0-PLAN.md",
     "docs/RELEASING.md",
     "docs/ROADMAP.md",
@@ -1163,6 +1166,7 @@
     "tests/architecture.test.ts",
     "tests/business-context-acceptance.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/canonical-semantic-files.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
     "tests/contract-compatibility.test.ts",

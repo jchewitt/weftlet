@@ -30,7 +30,7 @@ afterEach(async () => {
     { recursive: true, force: true, maxRetries: 5, retryDelay: 50 })));
 });
 
-/** Frozen released formulas, independent of the new cache location helpers. */
+/** Frozen profile-location formulas with the v2 artifact policy, independent of cache location helpers. */
 const legacyRoot = (root: string, config: ContextGraphConfig) => join(cacheHome.path,
   '.cache', 'context-graph', sha256(stableJson({ config, checkout: resolve(root) })).slice(0, 20));
 const codexIdentity = (config: ContextGraphConfig) =>
@@ -41,7 +41,7 @@ const legacyKey = (config: ContextGraphConfig, source: SemanticSource) => sha256
   modelIdentity: codexIdentity(config), adapterVersion: config.semantic.adapterVersion,
   ontologyVersion: config.semantic.ontologyVersion, minimumConfidence: config.semantic.minimumConfidence,
   failOnUnresolved: config.semantic.failOnUnresolved, forceRevision: undefined, diagnosticContractVersion: 3,
-  repositoryNodeIdentityVersion: 1,
+  repositoryNodeIdentityVersion: 2,
 }));
 const artifactPath = (root: string, key: string) => join(root, 'artifacts', 'semantic', `${key}.json`);
 

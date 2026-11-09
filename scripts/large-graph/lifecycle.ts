@@ -34,7 +34,7 @@ export async function corpusLifecycle(modules: number, functions: number, requir
     const legacyDigest = createHash('sha256').update('[');
     const expectedRecords = new Map<string, string>();
     const nodeCount = new Set(first.snapshot.facts.flatMap(fact => [fact.subject.id, fact.object.id])).size;
-    assert.equal(extractorVersions.assembly, 'standalone-graph-v12');
+    assert.equal(extractorVersions.assembly, 'standalone-graph-v13');
     assert(first.snapshot.facts.some(fact => fact.predicate === 'calls'));
     assert(first.snapshot.facts.some(fact => fact.object.kind === 'Evidence' && fact.provenance.path.endsWith('.spec.ts')));
     for (const [index, fact] of first.snapshot.facts.entries()) {

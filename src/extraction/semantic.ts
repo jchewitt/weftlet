@@ -26,7 +26,7 @@ import type {
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { SemanticArtifactStore } from "../storage/storage.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
-import { canonicalizeRepositoryDocumentNode } from './repository-nodes.js';
+import { canonicalizeRepositoryDocumentNode, assertSemanticRepositoryNodes } from './repository-nodes.js';
 import { semanticArtifactKey, semanticArtifactOutputDigest, semanticProviderIdentity } from './semantic-identity.js';
 import { inspectSemanticCache } from './semantic-cache.js';
 import { SemanticPolicyError, type SemanticHydrationPhase } from './semantic-diagnostics.js';
@@ -262,6 +262,7 @@ export function assertSemanticOutput(value: unknown, source: SemanticSource): as
       fail('Invalid semantic assertion');
     }
     assertSemanticCitation((assertion as ExtractedAssertion).citation, source.path, lineCount, `assertion[${index}]`);
+    assertSemanticRepositoryNodes(assertion as ExtractedAssertion, index);
   }
   if (output.diagnostics !== undefined) {
     if (!Array.isArray(output.diagnostics) || output.diagnostics.length > 1000) fail('Invalid semantic diagnostics');
@@ -312,6 +313,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
       'Use product-wide canonical IDs derived from durable concepts, not IDs scoped to this file.',
       'Reuse capability, policy, workflow, contract, and component IDs that another source would use for the same concept.',
       'For a repository document path ending in .md, .mdx or .txt, use document:<path> with kind Document. For other repository files use component:file:<path>; test/spec files have kind Evidence, other files Component. Use exact repository-relative paths; keep business concepts in their own IDs instead of assigning their kind to a file.',
+      'A verifiedBy relationship does not change its target file kind: scripts/check.ts is Component, scripts/check.test.ts is Evidence, and docs/validation.md is Document. Evidence that is a business concept rather than a physical file must use its own non-file ID. Never change a file kind based on its role in an assertion.',
       'Capture why a rule exists, its decision authority, and cross-domain dependencies when the source explicitly states them.',
       'Every assertion must cite inclusive 1-based source line numbers and carry calibrated confidence.',
       `Source lines are explicitly prefixed N| below. Cite those original-source numbers, not prompt lines or visual wraps; valid lines are 1-${lineCount}.`,
