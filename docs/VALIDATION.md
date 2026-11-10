@@ -1,5 +1,22 @@
 # Validation evidence
 
+## Merge preparation and documentation navigation, 2026-11-10
+
+Added direct Documentation/Guide/Tutorial/Changelog links under the README title.
+GitHub's branch overview identifies four License tabs from LICENSE,
+reviewed-licenses.json, docs/licenses/REVIEW.md and the BlueOak review document;
+these supplementary compliance files are retained. A sidebar/search documentation
+site is recorded separately; guides and the example tutorial are already split
+into files.
+
+Head ee833ba passed both Linux and relationship-retrieval jobs plus one Windows
+storage run; the other Windows run failed at a 60-second local npm fixture install.
+That log establishes an install timeout, not its underlying cause. The fixture
+now explicitly uses offline mode with its dependency-free local package, retaining
+actual npm launcher creation and every discovery/authentication assertion. No
+runtime timeout or production behavior was relaxed. Final-head checks follow.
+
+
 ## Evidence decision guide and agent workflow, 2026-11-10
 
 Added scenario guidance for source authority/roles, contextual plans/references,

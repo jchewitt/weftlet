@@ -9,6 +9,12 @@ subdivide mixed-domain directories around cohesive features. Inventory public
 imports and preserve compatibility before moving files. This is deferred cleanup,
 not a new extraction/provider or storage change.
 
+Documentation presentation follow-up: build a small dedicated documentation site
+from the existing multi-file guides/tutorials, with persistent sidebar navigation,
+search and release/version context. GitHub's automatic README/community tabs cannot
+provide custom Guide/Changelog tabs. Keep the README as the entry point and retain
+the separate example tutorial; the current Markdown hub is not a hosted docs site.
+
 November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
 records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
 coordinated retention and single-snapshot size profiling as separate increments.

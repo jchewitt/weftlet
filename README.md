@@ -1,5 +1,7 @@
 # Weftlet — Context Graph Toolkit
 
+**[Documentation](docs/README.md) · [Guide](docs/guides/PROJECT-GUIDE.md) · [Tutorial](docs/tutorials/DOCUMENT-SEARCH.md) · [Changelog](CHANGELOG.md)**
+
 Weftlet is an open-source context-graph toolkit that helps AI development agents understand
 how a local change affects the broader product. It connects approved product intent, shared
 contracts, implementing code, downstream consumers, tests and observed runtime evidence.
