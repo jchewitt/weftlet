@@ -1,9 +1,9 @@
 # Semantic provider contract
 
 Codex CLI is the released built-in adapter through 0.9.0. The 0.10 development
-candidate adds Claude Code CLI extraction and optional mapping proposals. Its
+candidate adds Claude Code and OpenCode CLI extraction and optional mapping proposals. Its
 deterministic orchestration is tested; authenticated model execution remains
-unvalidated. OpenCode extraction is a subsequent 0.10 task. The module extension
+unvalidated. OpenCode initially supports API credentials; subscription/OAuth support is separate. The module extension
 contract remains available; an arbitrary executable is not compatible merely
 because it accepts stdin.
 
@@ -307,3 +307,87 @@ semantic calls and counted only against traversal read limits. Module providers 
 full-config namespace in traversal mode, including workspace storage. Modules with mutable
 external inputs must version their declared identity or force extraction; unchanged source/config
 reuse does not discover those external dependencies. See [ADR 026](ADR-026-traversal-hydration.md).
+
+
+## OpenCode
+
+The **unpublished 0.10 candidate** supports OpenCode **1.19.5**, using an explicit
+`provider/model` and either its selected saved API credential or an environment
+variable. Codex and Claude are not required. No provider is chosen automatically.
+The maintainer approved API credentials first; subscription/OAuth refresh is a
+separate increment. Saved OAuth entries fail clearly, without changing tokens or
+falling back to API billing. This is independent of Claude's own login support.
+
+Install OpenCode using its official instructions, then configure the project:
+
+```sh
+weftlet init --yes --provider opencode-cli --model anthropic/claude-sonnet-4-5 --semantic-source docs/product
+weftlet doctor
+weftlet hydrate --plan --json
+```
+
+The model is an example, not an availability/access guarantee. Choose an actual
+provider/model available to your account. `init` defaults to `opencode-auth`:
+Weftlet reads only the selected provider's `type: "api"` entry from OpenCode's
+`auth.json` in `$XDG_DATA_HOME/opencode`, or `~/.local/share/opencode` by default.
+It does not alter that file, copy other providers' entries or load custom OpenCode
+provider configurations. For CI or an explicit key, edit the generated semantic
+configuration (retain its other required fields):
+
+```json
+{
+  "semantic": {
+    "provider": "opencode-cli",
+    "model": "anthropic/claude-sonnet-4-5",
+    "reasoningEffort": "default",
+    "auth": { "mode": "api-key", "apiKeyEnv": "WEFTLET_OPENCODE_API_KEY" }
+  }
+}
+```
+
+Supply the key through a secure environment. `default` omits `--variant`; other
+values pass the explicitly selected provider's variant. API key presence is not
+proof of authentication: `doctor` makes no model request. Missing keys, unsupported
+CLI versions and unsupported auth fail without provider/login fallback. Alternate
+endpoints, custom provider plugins, cloud credential chains and every OpenCode
+backend are **not** claimed as supported by this first adapter.
+
+Each request uses a disposable directory for OpenCode configuration, data,
+sessions, logs, cache and state. The pinned CLI's `OPENCODE_TEST_HOME` override
+isolates home-directory discovery without changing `HOME`; project config,
+external/default plugins, skills, MCP, tools, sharing, snapshots, model-list
+updates and auxiliary title/summary/compaction agents are disabled. Only the
+selected API entry is forwarded in memory. These are CLI controls, not an OS
+sandbox. The executable still runs as the operator, and selected source text goes
+to the configured model provider. Interrupted process trees are stopped before
+operation-owned temporary output is removed; abrupt machine/process termination
+can leave temporary directories (global storage/crash cleanup is separate work).
+
+`run --format json` emits events, not schema-constrained output. Weftlet supplies
+the schema in the prompt, accepts one complete successful assistant message,
+then applies the same schema, citation and physical-file identity validation as
+other providers. Invalid output does not enter the reusable cache. Response bytes,
+source bytes, timeout, cancellation and explicit retries are bounded. Optional
+mapping proposals use the same provider/auth selection with one request and no
+automatic retry.
+
+Cache identity includes provider/model/variant/prompt/auth mode and the pinned
+CLI adapter contract. Timeout/concurrency changes keep reusable artifacts; a
+provider/model/contract change does not borrow another provider's artifacts.
+Existing snapshots remain readable without OpenCode. CLI updates require an
+explicit compatibility review rather than silently accepting new behavior.
+
+Qualification: deterministic subprocess fixture → actual TypeScript SCIP →
+strict SHACL → publish/read → unchanged reuse and malformed-output preservation.
+A real integrity-verified Linux OpenCode 1.19.5 binary also passed a loopback HTTP
+protocol test with **one request and zero tools**. That is not a live backend,
+API-authentication, model-quality or native Windows binary claim. To rerun the
+optional public protocol test with an already installed binary:
+
+```sh
+WEFTLET_TEST_OPENCODE_BINARY=/absolute/path/to/opencode pnpm exec vitest run tests/opencode-cli.integration.test.ts
+```
+
+The test sends no remote model request and uses no account credentials. It is
+skipped by default. Client registration and shared skill setup remain in the
+[0.10 onboarding plan](RELEASE-09-10-PLAN.md).

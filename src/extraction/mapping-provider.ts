@@ -1,3 +1,4 @@
+import { runOpenCodeStructuredRequest, type OpenCodeRuntime } from './opencode-request.js';
 import { runClaudeStructuredRequest, type ClaudeRuntime } from './claude-request.js';
 import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -16,13 +17,15 @@ import { mappingVersion } from './mapping-request.js';
 type Config = ContextGraphConfig['semantic'];
 export interface MappingCodexRuntime {
   readonly claude?: ClaudeRuntime;
+  readonly opencode?: OpenCodeRuntime;
   readonly authenticate?: typeof prepareCodexAuthentication;
   readonly invocation?: typeof resolveCodexInvocation;
   readonly run?: typeof runSemanticProcess;
 }
 export const mappingProviderIdentity = (config: Config) => sha256(stableJson({ version: mappingVersion, provider: config.provider,
   model: config.model, reasoningEffort: config.reasoningEffort, providerModule: config.providerModule,
-  providerIdentity: config.providerIdentity, authMode: config.auth?.mode ?? (config.provider === 'claude-cli' ? 'claude-login' : 'chatgpt') }));
+  providerIdentity: config.providerIdentity,
+  ...(config.provider === 'opencode-cli' ? { cliContract: '1.19.5-v1' } : {}), authMode: config.auth?.mode ?? (config.provider === 'opencode-cli' ? 'opencode-auth' : config.provider === 'claude-cli' ? 'claude-login' : 'chatgpt') }));
 
 /** Same selected provider/authentication choice as extraction; one bounded request, with no automatic retry. */
 export function createMappingProvider(config: Config, repositoryRoot: string, runtime: MappingCodexRuntime = {}): MappingProposalProvider {
@@ -40,6 +43,8 @@ export function createMappingProvider(config: Config, repositoryRoot: string, ru
     }
     if (config.provider === 'claude-cli') return runClaudeStructuredRequest(config, mappingOutputSchema,
       mappingPrompt(input), 131_072, options, runtime.claude);
+    if (config.provider === 'opencode-cli') return runOpenCodeStructuredRequest(config, mappingOutputSchema,
+      mappingPrompt(input), 131_072, options, runtime.opencode);
     const command = 'codex';
     const env = await (runtime.authenticate ?? prepareCodexAuthentication)(config.auth, process.env, command, options);
     const invocation = await (runtime.invocation ?? resolveCodexInvocation)(command, env, process.platform, options);

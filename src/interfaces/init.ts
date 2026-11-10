@@ -11,7 +11,7 @@ export interface InitOptions {
   semanticSources?: string[];
   evidenceRoots?: string[];
   model?: string;
-  provider?: 'codex-cli' | 'claude-cli';
+  provider?: 'codex-cli' | 'claude-cli' | 'opencode-cli';
   gitignore?: boolean;
 }
 
@@ -27,7 +27,11 @@ async function present(path: string): Promise<boolean> {
 
 function providerDefaults(options: InitOptions): Pick<ContextGraphConfig['semantic'], 'provider' | 'auth' | 'model'> {
   const provider = options.provider ?? 'codex-cli';
-  if (!['codex-cli', 'claude-cli'].includes(provider)) throw new Error('Provider must be codex-cli or claude-cli');
+  if (!['codex-cli', 'claude-cli', 'opencode-cli'].includes(provider)) throw new Error('Provider must be codex-cli, claude-cli or opencode-cli');
+  if (provider === 'opencode-cli') {
+    if (!options.model || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*\/\S+$/.test(options.model)) throw new Error('OpenCode requires --model provider/model; no billing provider is selected automatically');
+    return { provider, auth: { mode: 'opencode-auth' }, model: options.model };
+  }
   return { provider, auth: { mode: provider === 'claude-cli' ? 'claude-login' : 'chatgpt' },
     model: options.model ?? (provider === 'claude-cli' ? 'sonnet' : 'gpt-6-astra') };
 }
@@ -64,7 +68,7 @@ export async function prepareProjectConfig(options: InitOptions = {}) {
     contractPatterns: [],
     evidenceRoots: paths(options.evidenceRoots ?? detectedEvidence),
     semantic: {
-      ...providerDefaults(options), reasoningEffort: 'medium',
+      ...providerDefaults(options), reasoningEffort: options.provider === 'opencode-cli' ? 'default' : 'medium',
       promptVersion: 'generic-semantic-v3', extractorVersion: '1.1.0', adapterVersion: '1.1.0',
       ontologyVersion: '1.1.0', minimumConfidence: 0.7, failOnUnresolved: true, concurrency: 1,
       maxDocuments: 8, maxSourceBytes: 65_536, timeoutMs: 120_000, retries: 0,
@@ -126,14 +130,14 @@ export async function runInit(args: readonly string[]): Promise<void> {
   };
   if (!args.includes('--yes')) {
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('Non-interactive setup requires --yes. Use --semantic-source <path> to select documents explicitly.');
-    let defaults = await prepareProjectConfig(options);
     const prompt = createInterface({ input: process.stdin, output: process.stdout });
     try {
       process.stdout.write('Set up a TypeScript context graph. Documents are opt-in; source approval is configured separately.\n');
       if (!options.provider) {
-        options.provider = ((await prompt.question('Extraction provider [codex-cli; or claude-cli]: ')).trim() || 'codex-cli') as InitOptions['provider'];
-        defaults = await prepareProjectConfig(options);
+        options.provider = ((await prompt.question('Extraction provider [codex-cli; or claude-cli, opencode-cli]: ')).trim() || 'codex-cli') as InitOptions['provider'];
       }
+      if (options.provider === 'opencode-cli' && !options.model) options.model = (await prompt.question('OpenCode provider/model (required): ')).trim();
+      const defaults = await prepareProjectConfig(options);
       if (!options.repositoryId) options.repositoryId = (await prompt.question(`Repository ID [${defaults.config.repositoryId}]: `)).trim() || defaults.config.repositoryId;
       if (!options.codeRoots) {
         const answer = (await prompt.question(`Code roots, comma-separated [${defaults.config.codeRoots.join(', ')}]: `)).trim();

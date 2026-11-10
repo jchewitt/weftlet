@@ -58,7 +58,9 @@ for both modes and their tentative validation status. The earlier `@launch-echo/
 The 0.10 development candidate adds `init --provider claude-cli`, selecting Claude Code
 for extraction and optional mapping proposals without Codex. It supports Claude account login
 or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
-OpenCode extraction and client-registration helpers remain tracked 0.10 work;
+The candidate also adds `opencode-cli` extraction with explicitly selected API credentials
+and a required `provider/model`; see [OpenCode setup and limits](docs/PROVIDERS.md#opencode).
+OpenCode subscription/OAuth login and client-registration helpers remain tracked work;
 a compatible MCP client can already query saved evidence without any extraction provider.
 
 ```sh
@@ -589,7 +591,7 @@ weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
 
 No configuration switch enables automatic inference. The proposal command reuses the existing
 `semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
-the default; the 0.10 candidate also uses Claude when `claude-cli` is selected.
+the default; the 0.10 candidate also uses the selected Claude or OpenCode provider.
 Configured API-key mode is optional for either CLI. A compatible module must separately export
 `createMappingProposalProvider(config)` with matching `identity` and
 `propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is

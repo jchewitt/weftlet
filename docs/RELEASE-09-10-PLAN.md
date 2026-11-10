@@ -61,10 +61,12 @@ path and its account-login option. Implement and qualify adapters incrementally.
   configuration/CLI-contract probes.
 
 
-Current increment: P1 and the provider-selection portion of P3 are implemented
+Current increment: P1, initial API-only P2 and the provider-selection portion of P3 are implemented
 locally ([ADR 047](ADR-047-provider-choice.md)). Claude uses its own account/API authentication, extraction, mapping
-proposals and cache identity. Deterministic qualification is recorded in
-[validation](VALIDATION.md); live authenticated runs, publication, P2 and I2–I7
+proposals and cache identity. OpenCode independently supports explicit or saved API
+credentials on its pinned 1.19.5 contract; subscription/OAuth refresh is separate,
+as approved by the maintainer. Deterministic qualification is recorded in
+[validation](VALIDATION.md); live authenticated runs, publication and I2–I7
 remain open. This is not a completed 0.10 release. Reconcile candidate/support
 wording in README and provider documentation with the final qualified feature set
 before publishing 0.10; do not leave shipped functionality labeled as future work.
@@ -110,3 +112,11 @@ Semantic caches can contain raw model output and must not be published by defaul
 The [architecture-only direction](ARCHITECTURE-TOOLING-PLAN.md), new viewer/hosting milestone and the [2.0 plan](WEFTLET-2.0-PLAN.md) remain
 separate. This work does not add remote databases, hosted AI, source backfill or
 approval workflows.
+
+## Storage handoff
+
+The November 10 [cache-retention intake](CACHE-RETENTION-PLAN.md) is tracked
+separately: stop permanent successful-comparison duplicates, profile graph size,
+then coordinate retention and a user-wide 10 GiB budget. Release ordering is a
+maintainer decision; no 10 GiB cap or prune command is implied by this provider
+increment. Preserve the existing consumer cleanup boundary.

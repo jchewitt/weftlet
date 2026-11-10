@@ -1,5 +1,10 @@
 # Delivery roadmap
 
+November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
+records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
+coordinated retention and single-snapshot size profiling as separate increments.
+These are planned capabilities, not released cache commands.
+
 November 9 update: the canonical semantic-file repair shipped in core/toolkit
 0.9.0; the maintainer reports TradePilot looks good. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md)
 now covers provider choice plus agent/CI onboarding: Claude/OpenCode integrations

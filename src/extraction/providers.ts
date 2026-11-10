@@ -1,3 +1,4 @@
+import { OpenCodeCliSemanticExtractor } from './opencode.js';
 import { ClaudeCliSemanticExtractor } from './claude.js';
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { ExtractionContext, SemanticSource } from "@weftlet/core";
@@ -14,6 +15,7 @@ export interface SemanticProviderModule {
 export function createSemanticExtractor(config: ContextGraphConfig['semantic'], repositoryRoot: string): SemanticExtractor {
   if (config.provider === 'codex-cli') return new CodexCliSemanticExtractor(config);
   if (config.provider === 'claude-cli') return new ClaudeCliSemanticExtractor(config);
+  if (config.provider === 'opencode-cli') return new OpenCodeCliSemanticExtractor(config);
   const modulePath = config.providerModule!;
   const identity = semanticProviderIdentity(config);
   let extractor: SemanticExtractor | undefined;

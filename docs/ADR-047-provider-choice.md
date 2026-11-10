@@ -1,6 +1,6 @@
 # ADR 047: Independent extraction provider choice
 
-Status: implemented for Claude in the 0.10 development candidate; OpenCode is next.
+Status: implemented for Claude and initial OpenCode API credentials in the 0.10 development candidate.
 
 The maintainer requires Claude users to extract with Claude as well as develop
 with Claude, without installing Codex. MCP client registration alone does not
@@ -48,8 +48,24 @@ mapping routing and provider-specific cache identity. A fixture is not a live
 Claude model test. Authenticated account/API inference and semantic quality remain
 pending; no paid or private-source inference was run for this increment.
 
-OpenCode requires its own verified output, tool-permission, authentication and
-cache contracts. It is not enabled by renaming the Claude/Codex executable.
+OpenCode uses a separately verified 1.19.5 contract. Official source at tag
+`v1.19.5` (tree `810c0eba1a7348036f8bdf61e6632d0c36c6876c`) defines the
+JSON event protocol, XDG paths, `OPENCODE_AUTH_CONTENT`, isolated home override,
+permission and plugin controls used here. Source was inspected as reference;
+no CLI code is vendored and no mandatory CLI dependency is added.
+
+The maintainer selected API credentials first. Read only the selected saved API
+entry or an explicit key variable, require a provider/model, and isolate settings
+and disposable sessions. OAuth tokens can rotate; copying them into a disposable
+profile would lose refresh updates. Therefore OAuth is rejected until its own
+reviewed refresh/persistence contract exists. Custom plugins/endpoints and all
+backend credential chains are not claimed as supported.
+
+OpenCode does not provide a schema flag on `run`: validate complete JSON events,
+then apply the shared schema/citation contract. A real native CLI loopback test
+confirmed one request, zero tools and successful cleanup without remote inference.
+The adapter is pinned to 1.19.5 because its home-isolation override is not a stable
+public API promise; upgrade qualification must revisit that boundary.
 Client registration, shared skill setup and CI examples remain in the
 [0.10 task list](RELEASE-09-10-PLAN.md). Architecture-only packaging follows the
 separate [architecture plan](ARCHITECTURE-TOOLING-PLAN.md).

@@ -9,6 +9,8 @@ export function semanticProviderIdentity(config: ContextGraphConfig['semantic'])
     ? `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v3`
     : config.provider === 'claude-cli'
       ? `claude-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:${config.auth?.mode ?? 'claude-login'}:contract-v1`
+    : config.provider === 'opencode-cli'
+      ? `opencode-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:${config.auth?.mode ?? 'opencode-auth'}:cli-1.19.5:contract-v1`
     : `${config.providerIdentity}:${sha256(stableJson(config))}:contract-v2`;
 }
 

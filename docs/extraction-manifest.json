@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "a0d869461b82018fb69aba68c12d880cafd1d3e8a7b06f93b5557ea6f2a39849"
+      "destinationSha256": "ac1f845ee274630d99a05ec420aa95e0e8261499a11f4c06cedac967bbab2e78"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -255,7 +255,7 @@
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "905e81933486fde6e119140c97bab4f77d7dcedcd4eb0390427a3a07e30788f3"
+      "destinationSha256": "22ed79b9a859bb55d7fcd0c0468cb06480a720a74e44d73a07a2be2c8aee2af8"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -643,6 +643,7 @@
     "docs/ADR-046-semantic-physical-file-validation.md",
     "docs/ADR-047-provider-choice.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
+    "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -1022,6 +1023,12 @@
     "src/extraction/mapping-request.ts",
     "src/extraction/module-request.test.ts",
     "src/extraction/module-request.ts",
+    "src/extraction/opencode-auth.ts",
+    "src/extraction/opencode-output.ts",
+    "src/extraction/opencode-profile.ts",
+    "src/extraction/opencode-request.ts",
+    "src/extraction/opencode.test.ts",
+    "src/extraction/opencode.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
     "src/extraction/repository-nodes.test.ts",
@@ -1044,6 +1051,7 @@
     "src/extraction/semantic-prompt.ts",
     "src/extraction/semantic-sources.ts",
     "src/extraction/static-calls.ts",
+    "src/extraction/structured-semantic.ts",
     "src/extraction/symbol-resolution.ts",
     "src/extraction/symbol-selectors.test.ts",
     "src/extraction/symbol-selectors.ts",
@@ -1137,6 +1145,7 @@
     "src/interfaces/init.ts",
     "src/interfaces/mapping-proposals.test.ts",
     "src/interfaces/mapping-proposals.ts",
+    "src/interfaces/opencode-readiness.ts",
     "src/interfaces/viewer.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
@@ -1215,6 +1224,8 @@
     "tests/monorepo-coverage.test.ts",
     "tests/ontology-compiler.test.ts",
     "tests/ontology-selinux.integration.test.ts",
+    "tests/opencode-cli.integration.test.ts",
+    "tests/opencode-consumer.test.ts",
     "tests/owner-intent.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",

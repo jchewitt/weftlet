@@ -122,7 +122,7 @@ it('rejects mismatched provider auth and preserves an existing configuration', a
     await writeFile(init.configPath, JSON.stringify({ ...init.config, semantic: { ...init.config.semantic, auth } }));
     await expect(loadConfig(init.configPath)).rejects.toThrow('semantic.auth');
   }
-  for (const provider of [['claude-cli'], null, 'opencode-cli']) {
+  for (const provider of [['claude-cli'], null, 'unknown-cli']) {
     await writeFile(init.configPath, JSON.stringify({ ...init.config, semantic: { ...init.config.semantic, provider } }));
     await expect(loadConfig(init.configPath)).rejects.toThrow('semantic.provider');
   }

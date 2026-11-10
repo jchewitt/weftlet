@@ -1,5 +1,51 @@
 # Validation evidence
 
+## 0.10 OpenCode API candidate, 2026-11-10
+
+The maintainer approved API credentials first, with subscription/OAuth refresh
+tracked separately. The candidate supports `init --provider opencode-cli --model
+provider/model`, local readiness diagnostics, semantic extraction and optional
+mapping proposals through OpenCode 1.19.5. Neither Codex nor Claude is required.
+Explicit API mode never falls back to saved authentication; saved mode forwards
+only the selected backend's API entry, without modifying its credential store.
+OAuth entries fail explicitly. No actual credential value is retained in fixtures.
+
+The focused deterministic run passed **21 tests**, including both provider
+consumer lifecycles. OpenCode's public subprocess fixture exercises fresh
+extraction → real TypeScript SCIP → strict SHACL → publish/read → unchanged
+semantic reuse. The repeated snapshot identity/digest and stored bytes are
+unchanged; forced malformed output preserves the last valid artifacts/head.
+Auth isolation, complete JSON event parsing, provider/cache separation, explicit
+retry/cancellation bounds, setup errors and Windows native/npm launcher discovery
+are covered. The Claude tests also pass after sharing validation/retry code.
+
+An integrity-verified official native Linux OpenCode **1.19.5** additionally
+passed `tests/opencode-cli.integration.test.ts` against a loopback HTTP server:
+exactly one `/v1/chat/completions` request, zero tools, valid structured output and
+operation-workspace cleanup. It used no remote model, paid request or account
+credential. This is protocol/isolation evidence, not live API authentication,
+backend/model quality, subscription login or native Windows binary acceptance.
+The real-CLI integration is opt-in and skipped in the default suite.
+
+Build, license and release-documentation checks passed. Governance reports **18
+advisories**: the prior 17 plus textual similarity between the Claude/OpenCode
+public provider tests. That similarity was reviewed as common public fixture and
+preservation assertions; production validation/retry behavior is shared. No policy,
+baseline or exception was relaxed. The clean Linux Node 24.19.0 / pnpm 10.18.2 full run passed **38 core + 1,074
+toolkit tests** (134 toolkit test files); two optional ontology integrations and
+the opt-in native OpenCode test were skipped in that run. The native OpenCode
+loopback test passed separately against the final parser. Fresh packed-consumer
+npm/npx setup, installed TypeScript indexing, RDF/SPARQL/SHACL, viewer and MCP
+smoke also passed. Export inventory and diff checks are clean. Hosted checks for
+this increment remain pending.
+
+The storage-size handoff is separately recorded in
+[CACHE-RETENTION-PLAN.md](CACHE-RETENTION-PLAN.md). Current source confirms permanent
+clean-comparison snapshots/heads/indexes, but this candidate does not implement
+retention, pruning, compression or a 10 GiB limit. No consumer cache was accessed
+or deleted. Provider changes and storage implementation must remain separately
+reviewable; npm publication and consumer acceptance remain open.
+
 ## 0.10 Claude provider candidate, 2026-11-09
 
 [ADR 047](ADR-047-provider-choice.md) implements independent Claude Code extraction
@@ -16,7 +62,9 @@ result-parser/provider-default helper factoring passed a fresh build and all
 **62 affected tests**. Governance returned to **17 advisory findings**, with no
 baseline or policy relaxation. Release documentation, license inventory, export
 inventory and fresh packed-consumer npm/npx installation, SCIP/RDF/SHACL, viewer
-and MCP smoke passed. Hosted Windows execution remains a separate pending check.
+and MCP smoke passed. Subsequent hosted runs [42707351454](https://github.com/jchewitt/weftlet/actions/runs/42707351454) and [42707412643](https://github.com/jchewitt/weftlet/actions/runs/42707412643)
+passed deterministic Linux and both Windows jobs at `4ce9a922a6c4b911d661e7e1aa754257ce5b1d58`.
+Those results qualify the Claude increment, not later OpenCode changes.
 
 The new consumer regression uses a deterministic Claude executable fixture and
 actual process dispatch: init/doctor → fresh semantic extraction → real TypeScript

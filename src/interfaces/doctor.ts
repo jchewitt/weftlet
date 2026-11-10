@@ -6,6 +6,7 @@ import { resolveStorageRoot } from "../configuration/cache.js";
 import { FileSnapshotStore } from "../storage/storage.js";
 import { resolveCodexInvocation } from '../extraction/codex-command.js';
 import { readCodexLoginMode, semanticCommandEnvironment } from '../extraction/codex-auth.js';
+import { diagnoseOpenCode } from './opencode-readiness.js';
 
 /** Reads readiness only. It never installs tools, prints credentials, or starts a model. */
 export async function diagnoseSetup(configPath: string) {
@@ -41,11 +42,13 @@ export async function diagnoseSetup(configPath: string) {
   const claudeLoginMode = claude?.supported && claudeAuthMode === 'claude-login'
     ? await readClaudeLoginMode(claudeEnvironment) : undefined;
   const docker = config.ontology.backend === 'opencaesar' ? await probe('docker', ['info']) : undefined;
+  const opencode = await diagnoseOpenCode(config.semantic);
   const saved = await new FileSnapshotStore(resolveStorageRoot(repositoryRoot, config)).readHead('default');
   return {
     node: process.version, repositoryRoot, gitAvailable: git.available,
     savedSnapshot: saved?.manifest.snapshotId ?? null,
     semanticProvider: config.semantic.provider,
+    ...opencode,
     codexAvailable: codex?.available,
     codexAuthMode: authMode,
     codexLoginMode: loginMode,
