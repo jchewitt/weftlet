@@ -66,6 +66,7 @@ and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
 - **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
 - **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
 - **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
+- **[Act on evidence and authority labels](docs/guides/EVIDENCE-DECISIONS.md)** — how agents use reference/draft material, report conflicts, and how users inspect or rectify results.
 - **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
 - **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
 

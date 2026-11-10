@@ -188,6 +188,10 @@ and ownership checks but do not invent an approval workflow. Existing saved
 snapshots keep their original labels: after a policy change, preview and refresh
 under the new configuration before relying on new authority labels.
 
+For the complete decision workflow, see [acting on evidence](EVIDENCE-DECISIONS.md):
+agent behavior for each authority/role combination, conflicts, reporting, viewer
+inspection and when to change configuration versus the source or extraction.
+
 ### External sources and custom adapters
 
 The [2.0 source-adapter plan](../WEFTLET-2.0-PLAN.md) includes evaluating **Figma,

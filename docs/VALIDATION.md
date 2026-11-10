@@ -1,5 +1,19 @@
 # Validation evidence
 
+## Evidence decision guide and agent workflow, 2026-11-10
+
+Added scenario guidance for source authority/roles, contextual plans/references,
+conflicts, extraction errors, missing/stale evidence, viewer inspection and the
+correct source/config/refresh action. Updated the packaged skill to report
+relevant unresolved decisions without silently promoting sources or claiming
+queries create logs/approval tasks. Manual installation/update remains explicit;
+no automatic agent compliance, acceptance UI or universal contradiction detection
+is claimed. Checked current labels, query diagnostics, read-only viewer and cache
+partition behavior. **99 existing classification/documentation/inventory tests
+passed**, plus release consistency, relative links and whitespace checks. Runtime
+code is unchanged; no live agent/provider or private consumer run was performed.
+
+
 ## Source-authority setup clarification, 2026-11-10
 
 Checked the built-in authority assignment in hydrator, hydration-plan and document

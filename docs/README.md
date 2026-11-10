@@ -9,6 +9,7 @@ Start with the path that matches your task:
 | Connect Codex, Claude Code or OpenCode and install the skill | [Agent setup](guides/AGENTS.md) |
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | See what changed between releases | [Release overview](RELEASES.md), [toolkit changelog](../CHANGELOG.md), [core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) |
+| Understand authority labels and resolve unapproved/conflicting evidence | [Evidence decisions](guides/EVIDENCE-DECISIONS.md) |
 | Configure a model provider | [Provider reference](PROVIDERS.md) |
 | Browse or export a graph | [Viewer](VIEWER.md), [portable reports](PORTABLE-EXPLORER.md) |
 | Assess a real-project trial | [Consumer trial](CONSUMER-TRIAL.md), [validation evidence](VALIDATION.md) |

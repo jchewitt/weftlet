@@ -156,6 +156,16 @@ is stale, it can inform investigation but cannot satisfy a final gate. If the
 server is absent, check absolute paths, Node 24+, config validation and client
 stderr; reproduce the query with the CLI. The server never hydrates implicitly.
 
+## What to do with non-governing or conflicting results
+
+Follow the [evidence decision guide](EVIDENCE-DECISIONS.md). Reference/draft sources
+remain useful context, but do not silently become governing requirements. Agents
+should report relevant unresolved decisions with exact citations in their task
+response; MCP does not automatically log or open approval items. The guide covers
+viewer inspection, source/config changes and explicit refresh. Update an existing
+skill copy deliberately to receive this guidance; an npm upgrade alone does not
+replace the project's installed skill file.
+
 ## Extraction versus development support
 
 A development client only needs saved querying. For new semantic extraction,

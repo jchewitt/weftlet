@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "7c2a3347a92ecc78fe7d9f07a53de251e183283192104ce502987930b239b3cf"
+      "destinationSha256": "f6da8567d2e32d46ca74ffd48e7e2d94eda30a7d9146ef4a4273331dbefaf998"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -684,6 +684,7 @@
     "docs/extraction-manifest.json",
     "docs/guides/AGENTS.md",
     "docs/guides/CI.md",
+    "docs/guides/EVIDENCE-DECISIONS.md",
     "docs/guides/PROJECT-GUIDE.md",
     "docs/licenses/REVIEW.md",
     "docs/licenses/lru-cache-11.5.3-BlueOak.md",
