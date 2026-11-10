@@ -910,6 +910,8 @@
     "scripts/code-graph-study/scip-worker.mjs",
     "scripts/code-graph-study/score.mjs",
     "scripts/code-graph-study/supervise.py",
+    "scripts/docs-release-dispatch.mjs",
+    "scripts/docs-release-dispatch.test.mjs",
     "scripts/evaluation/protocol.test.ts",
     "scripts/evaluation/protocol.ts",
     "scripts/evaluation/run.test.ts",
