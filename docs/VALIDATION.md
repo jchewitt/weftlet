@@ -2966,3 +2966,19 @@ timeouts and concurrent publication. Codex transport/authentication is tested wi
 The public three-request live protocol was predeclared before any live proposal measurement.
 Final local publication gates and hosted platform results belong in the implementation PR once
 executed. No live quality, token-cost, private consumer, browser or 1.0 acceptance is claimed here.
+
+
+## November 10, 2026 — release-to-documentation dispatch staging
+
+Added an explicit source-side dispatch after successful publication and immutable release records
+for both packages. The sender emits one combined stable version set and source commit with
+archive integrities and a deterministic deduplication key; it does not subscribe twice to the
+package-specific Release records. The dedicated job restores the same prepared manifest on retry.
+
+Local offline dispatch contract tests: **6 passed**, including invalid or partial identities,
+canonical repeat/changed identities, a failed/uncertain transport followed by the same retry key,
+missing credentials without a request, and workflow ordering after prepare/publish/records.
+YAML/schema checks and extraction inventory checks are recorded with the implementation review.
+No live repository dispatch, token creation/access, paid model call, npm release, merge, hosting,
+DNS or downstream deployment was performed. End-to-end activation remains dependent on scoped
+cross-repository authorization and the separately staged docs receiver/default-branch workflow.
