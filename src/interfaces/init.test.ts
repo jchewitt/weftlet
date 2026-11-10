@@ -58,10 +58,11 @@ it('runs setup and config commands in a consumer without Git, providers or preex
   await expect(run('init', '--yes', '--unknown')).rejects.toThrow('Unknown init option');
   await expect(readFile(join(root, 'context-graph.config.json'))).rejects.toThrow();
   const setup = await run('init', '--yes', '--repository-id', 'test/new', '--semantic-source', 'docs/intent',
-    '--semantic-source', 'docs/contracts', '--no-gitignore');
+    '--semantic-source', 'docs/contracts', '--provider', 'claude-cli', '--no-gitignore');
   expect(setup.stdout).toContain('Setup made no model requests');
   const config = JSON.parse((await run('config', 'show')).stdout);
   expect(config.semanticSources).toEqual(['docs/intent', 'docs/contracts']);
+  expect(config.semantic).toMatchObject({ provider: 'claude-cli', auth: { mode: 'claude-login' }, model: 'sonnet' });
   expect(JSON.parse((await run('config', 'validate')).stdout).valid).toBe(true);
   await expect(readFile(join(root, '.gitignore'))).rejects.toThrow();
   await expect(run('init', '--yes')).rejects.toThrow('already exists');

@@ -28,6 +28,18 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
 4. Keep source approval, assertion review, implementation, test coverage and observed runtime
    behavior distinct. An inferred/unreviewed assertion citing an approved owner document still
    requires checking the citation. Never promote current behavior or model output into intent.
+   Source designation currently comes from configuration (`approvedIntentSources`), not an
+   interactive acceptance workflow. Follow governing intent after verifying the citation;
+   inferred/unreviewed extraction does not downgrade a declared governing source. Treat
+   undesignated/reference/proposed material as context, not a new binding business rule.
+   Respect explicit roles: declared validation/reference material is not automatically intent.
+   If relevant sources conflict, report exact citations, authority/scope and the unresolved
+   decision in the task response. Resolve clear owner precedence; ask for a product decision
+   when governing sources or the intended change remain ambiguous. Do not silently promote
+   a draft, update authority configuration, write an acceptance log or open an issue.
+   Query results do not automatically persist these agent findings. Use the project's normal
+   authorized review/logging process if a durable decision record is needed. A scoped user
+   instruction can authorize a task without globally promoting the entire source document.
 5. Query progressively for relationships that need detail. Follow continuation tokens and
    check depth truncation; rerun with a larger maxDepth when needed. Missing pages are not proof
    of missing dependencies. When the installed MCP advertises `graph.neighbors`, use it for

@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "29a599a31cc70a1f382967a1c015fc3c380d24feda857e6e372bda474adf872f"
+      "destinationSha256": "b2e83182d9356eda0cba7301cd75cf7efa671af5f33ee5cc482915d44dd1b531"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "cbbae8fcad0b39830fb688a775c1018828335c87282e20fa2d6ed93f99e6d2a8"
+      "destinationSha256": "b66398d33d5a4d976bfffdb79347e10d93674e21683f9fff284166b324e10f88"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "ddfb6c7b9c257f305982d259a7c1e8c8a9f6a348cd8a8eb1b9028ab76de39bf7"
+      "destinationSha256": "f7667935b34b6374a88b87357b34e44cdd0787261460b2723f5f1d48487bd0d9"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -234,14 +234,14 @@
       "destinationPath": "src/configuration/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
       "modified": true,
-      "destinationSha256": "aefa63517c2a92f426d45d78619af7e5fe0e3d41c1dc50a1c14db824b75b9879"
+      "destinationSha256": "913b63ca57b0ef581c54da231ab3354f26aa4a7349236cd6a61b1f4ec65d745d"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "15b65ee79b29a805c70b8c7e585a9d5a2e72e1dfcd508605297c6ec4c83fe068"
+      "destinationSha256": "ac1f845ee274630d99a05ec420aa95e0e8261499a11f4c06cedac967bbab2e78"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -255,7 +255,7 @@
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "29e606aff4311b6a717ee75b71a31a98a946d2547c383b2ed7aac3346cadae9d"
+      "destinationSha256": "22ed79b9a859bb55d7fcd0c0468cb06480a720a74e44d73a07a2be2c8aee2af8"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "c344279229f239e0a0658512080a76854887f7d353ca767e74243c3970420e78"
+      "destinationSha256": "dc4e89d0afa6c571034b262e4c84e331940b668c87aa47101277c8215a72c24a"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "7c2a3347a92ecc78fe7d9f07a53de251e183283192104ce502987930b239b3cf"
+      "destinationSha256": "f6da8567d2e32d46ca74ffd48e7e2d94eda30a7d9146ef4a4273331dbefaf998"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -578,7 +578,9 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
+    ".changeset/guided-project-documentation.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -640,6 +642,9 @@
     "docs/ADR-044-viewer-query-boundary.md",
     "docs/ADR-045-owner-intent-retrieval.md",
     "docs/ADR-046-semantic-physical-file-validation.md",
+    "docs/ADR-047-provider-choice.md",
+    "docs/ARCHITECTURE-TOOLING-PLAN.md",
+    "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
@@ -653,8 +658,10 @@
     "docs/PORTABLE-EXPLORER.md",
     "docs/PRE-1.0-BASELINE.md",
     "docs/PROVIDERS.md",
+    "docs/README.md",
     "docs/RELEASE-09-10-PLAN.md",
     "docs/RELEASE-1.0-PLAN.md",
+    "docs/RELEASES.md",
     "docs/RELEASING.md",
     "docs/ROADMAP.md",
     "docs/SOURCE-INVENTORY.md",
@@ -672,11 +679,18 @@
     "docs/benchmarks/validation-2026-10-28/lifecycle.json",
     "docs/benchmarks/validation-2026-10-28/native.json",
     "docs/benchmarks/validation-2026-10-28/rich.json",
+    "docs/examples/weftlet-check.yml.example",
+    "docs/examples/weftlet-generate.yml.example",
     "docs/extraction-manifest.json",
+    "docs/guides/AGENTS.md",
+    "docs/guides/CI.md",
+    "docs/guides/EVIDENCE-DECISIONS.md",
+    "docs/guides/PROJECT-GUIDE.md",
     "docs/licenses/REVIEW.md",
     "docs/licenses/lru-cache-11.5.3-BlueOak.md",
     "docs/licenses/negotiate-1.0.1-BSD.txt",
     "docs/licenses/spark-md5-3.0.2-MIT.txt",
+    "docs/tutorials/DOCUMENT-SEARCH.md",
     "evaluations/code-graph-results/2026-10-29/README.md",
     "evaluations/code-graph-results/2026-10-29/export-inventory.json",
     "evaluations/code-graph-results/2026-10-29/public-evidence.tar.gz",
@@ -989,6 +1003,11 @@
     "src/extraction/call-syntax.ts",
     "src/extraction/canonical-document-links.test.ts",
     "src/extraction/canonical-document-links.ts",
+    "src/extraction/claude-auth.ts",
+    "src/extraction/claude-request.ts",
+    "src/extraction/claude.test.ts",
+    "src/extraction/claude.ts",
+    "src/extraction/cli-command.ts",
     "src/extraction/code-inventory.test.ts",
     "src/extraction/code-inventory.ts",
     "src/extraction/codex-auth.test.ts",
@@ -1014,6 +1033,12 @@
     "src/extraction/mapping-request.ts",
     "src/extraction/module-request.test.ts",
     "src/extraction/module-request.ts",
+    "src/extraction/opencode-auth.ts",
+    "src/extraction/opencode-output.ts",
+    "src/extraction/opencode-profile.ts",
+    "src/extraction/opencode-request.ts",
+    "src/extraction/opencode.test.ts",
+    "src/extraction/opencode.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
     "src/extraction/repository-nodes.test.ts",
@@ -1029,11 +1054,14 @@
     "src/extraction/scip-symbols.ts",
     "src/extraction/semantic-cache.ts",
     "src/extraction/semantic-diagnostics.ts",
+    "src/extraction/semantic-environment.ts",
     "src/extraction/semantic-identity.ts",
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
+    "src/extraction/semantic-prompt.ts",
     "src/extraction/semantic-sources.ts",
     "src/extraction/static-calls.ts",
+    "src/extraction/structured-semantic.ts",
     "src/extraction/symbol-resolution.ts",
     "src/extraction/symbol-selectors.test.ts",
     "src/extraction/symbol-selectors.ts",
@@ -1127,6 +1155,7 @@
     "src/interfaces/init.ts",
     "src/interfaces/mapping-proposals.test.ts",
     "src/interfaces/mapping-proposals.ts",
+    "src/interfaces/opencode-readiness.ts",
     "src/interfaces/viewer.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
@@ -1166,6 +1195,7 @@
     "tests/business-context-acceptance.test.ts",
     "tests/cache-adoption.test.ts",
     "tests/canonical-semantic-files.test.ts",
+    "tests/claude-consumer.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
     "tests/contract-compatibility.test.ts",
@@ -1204,6 +1234,8 @@
     "tests/monorepo-coverage.test.ts",
     "tests/ontology-compiler.test.ts",
     "tests/ontology-selinux.integration.test.ts",
+    "tests/opencode-cli.integration.test.ts",
+    "tests/opencode-consumer.test.ts",
     "tests/owner-intent.test.ts",
     "tests/physical-file-kinds.test.ts",
     "tests/rdf-ontology.test.ts",

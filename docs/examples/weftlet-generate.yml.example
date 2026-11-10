@@ -1,0 +1,50 @@
+# Copy only after reviewing scope, model cost and private artifact access.
+# Requires a committed Codex api-key config using apiKeyEnv: CODEX_API_KEY,
+# workspace storagePath .context-graph, ignored outputs and an npm lockfile.
+name: Generate private Weftlet evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generate:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: weftlet-generation
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install the reviewed extraction CLI
+        run: npm install --global @openai/codex@0.153.4
+      - run: npx --no-install weftlet config validate
+      - name: Reviewable plan without model credentials
+        run: npx --no-install weftlet hydrate --plan --ref "$GITHUB_SHA" --json
+      - name: Explicit bounded semantic generation
+        env:
+          CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
+        run: npx --no-install weftlet hydrate --ref "$GITHUB_SHA" --json --quiet > "$RUNNER_TEMP/weftlet-build.json"
+      - name: Final exact-commit evidence and invariants
+        run: npx --no-install weftlet invariant check --ref "$GITHUB_SHA"
+      - name: Prepare query-only private delivery
+        shell: bash
+        run: |
+          mkdir .weftlet-delivery
+          cp -R .context-graph/snapshots .context-graph/heads .weftlet-delivery/
+          cp "$RUNNER_TEMP/weftlet-build.json" .weftlet-delivery/build.json
+          cp context-graph.config.json .weftlet-delivery/producing-config.json
+          npm ls @weftlet/toolkit @weftlet/core --json > .weftlet-delivery/packages.json
+          cd .weftlet-delivery
+          find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: weftlet-${{ github.sha }}
+          path: .weftlet-delivery/
+          retention-days: 3
+          if-no-files-found: error

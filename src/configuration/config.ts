@@ -23,9 +23,9 @@ export interface ContextGraphConfig {
   /** Exact committed JSON routing declarations; opt-in, not approved intent or runtime evidence. */
   readonly routingSources?: readonly string[];
   readonly semantic: {
-    readonly provider: 'codex-cli' | 'module';
-    /** Codex authentication only; secrets stay in the process environment. */
-    readonly auth?: { readonly mode: 'chatgpt' } | { readonly mode: 'api-key'; readonly apiKeyEnv?: string };
+    readonly provider: 'codex-cli' | 'claude-cli' | 'opencode-cli' | 'module';
+    /** Built-in provider authentication only; secrets stay in the process environment. */
+    readonly auth?: { readonly mode: 'chatgpt' | 'claude-login' | 'opencode-auth' } | { readonly mode: 'api-key'; readonly apiKeyEnv?: string };
     readonly providerModule?: string;
     readonly providerIdentity?: string;
     readonly timeoutMs?: number;
@@ -257,7 +257,7 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
   requireConfig(isRecord(value.semantic), 'semantic must be an object', absolutePath);
   if (isRecord(value.semantic)) {
     requireConfig(
-      value.semantic.provider === 'codex-cli' || value.semantic.provider === 'module',
+      value.semantic.provider === 'codex-cli' || value.semantic.provider === 'claude-cli' || value.semantic.provider === 'opencode-cli' || value.semantic.provider === 'module',
       'semantic.provider is invalid',
       absolutePath,
     );
@@ -267,16 +267,25 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
     }
     if (value.semantic.auth !== undefined) {
       const auth = value.semantic.auth;
-      requireConfig(value.semantic.provider === 'codex-cli' && isRecord(auth),
-        'semantic.auth must be an object for codex-cli only', absolutePath);
+      requireConfig(value.semantic.provider !== 'module' && isRecord(auth),
+        'semantic.auth must be an object for a built-in CLI provider only', absolutePath);
       if (isRecord(auth)) {
-        requireConfig(auth.mode === 'chatgpt' || auth.mode === 'api-key',
-          'semantic.auth.mode must be chatgpt or api-key', absolutePath);
+        const loginMode = value.semantic.provider === 'opencode-cli' ? 'opencode-auth' : value.semantic.provider === 'claude-cli' ? 'claude-login' : 'chatgpt';
+        requireConfig(auth.mode === loginMode || auth.mode === 'api-key',
+          `semantic.auth.mode must be ${loginMode} or api-key for the selected provider`, absolutePath);
         requireConfig(Object.keys(auth).every(key => key === 'mode' || (auth.mode === 'api-key' && key === 'apiKeyEnv')),
           'semantic.auth accepts only mode and, for api-key, apiKeyEnv; never store credentials here', absolutePath);
         requireConfig(auth.apiKeyEnv === undefined || (typeof auth.apiKeyEnv === 'string' && /^[A-Za-z_][A-Za-z0-9_]*$/.test(auth.apiKeyEnv)),
           'semantic.auth.apiKeyEnv must name an environment variable', absolutePath);
       }
+    }
+    if (value.semantic.provider === 'opencode-cli') {
+      requireConfig(typeof value.semantic.model === 'string' && /^[a-zA-Z0-9][a-zA-Z0-9._-]*\/\S+$/.test(value.semantic.model),
+        'OpenCode semantic.model must explicitly select provider/model', absolutePath);
+    }
+    if (value.semantic.provider === 'claude-cli') {
+      requireConfig(['low', 'medium', 'high', 'xhigh', 'max'].includes(String(value.semantic.reasoningEffort)),
+        'semantic.reasoningEffort is not supported by Claude Code', absolutePath);
     }
     for (const [field, max] of [['timeoutMs', 600_000], ['retries', 2], ['maxDocuments', 1000], ['maxSourceBytes', 1_048_576]] as const) {
       const item = value.semantic[field];

@@ -104,7 +104,7 @@ else if (args[0] === 'exec') {
 } else process.exit(2);
 `);
   await execute(process.execPath, [await npmCli(), 'install', ...(local ? [] : ['--global']), '--prefix', prefix,
-    '--install-links', '--ignore-scripts', '--no-audit', '--no-fund', '--update-notifier=false', fixture], { timeout: 60_000 });
+    '--offline', '--install-links', '--ignore-scripts', '--no-audit', '--no-fund', '--update-notifier=false', fixture], { timeout: 60_000 });
   const bin = local ? join(prefix, 'node_modules/.bin') : process.platform === 'win32' ? prefix : join(prefix, 'bin');
   vi.stubEnv('PATH', `${bin}${delimiter}${process.env.PATH ?? ''}`);
   vi.stubEnv('OPENAI_API_KEY', 'must-not-inherit');

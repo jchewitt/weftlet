@@ -1,8 +1,31 @@
 # Delivery roadmap
 
-November 9 update: a new canonical semantic-file identity blocker pauses official
-1.0. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md) schedules the focused repair first,
-then agent/CI onboarding. Earlier bounded retrieval passes remain valid.
+Documentation priority, November 10: the [project guide](guides/PROJECT-GUIDE.md),
+[demo tutorial](tutorials/DOCUMENT-SEARCH.md), [agent setup](guides/AGENTS.md),
+[CI examples](guides/CI.md) and visible [release history](RELEASES.md) precede
+storage implementation. Follow-up contributor cleanup: review the large public
+index/export surface, define package/submodule compatibility boundaries, and
+subdivide mixed-domain directories around cohesive features. Inventory public
+imports and preserve compatibility before moving files. This is deferred cleanup,
+not a new extraction/provider or storage change.
+
+Documentation presentation follow-up: build a small dedicated documentation site
+from the existing multi-file guides/tutorials, with persistent sidebar navigation,
+search and release/version context. GitHub's automatic README/community tabs cannot
+provide custom Guide/Changelog tabs. Keep the README as the entry point and retain
+the separate example tutorial; the current Markdown hub is not a hosted docs site.
+
+November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
+records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
+coordinated retention and single-snapshot size profiling as separate increments.
+These are planned capabilities, not released cache commands.
+
+November 9 update: the canonical semantic-file repair shipped in core/toolkit
+0.9.0; the maintainer reports TradePilot looks good. The [0.9 / 0.10 plan](RELEASE-09-10-PLAN.md)
+now covers provider choice plus agent/CI onboarding: Claude/OpenCode integrations
+must support extraction without Codex. The [architecture-only direction](ARCHITECTURE-TOOLING-PLAN.md)
+is recorded as a follow-up, not an additional 1.0 gate. Earlier bounded retrieval
+passes remain valid; official 1.0 is a separate release decision.
 
 Current acceptance update, 2026-11-08: core/toolkit **0.8.1** is published, and
 both reported owner-intent and indirect-worker retrieval tickets have consumer

@@ -23,6 +23,10 @@ Docker deployment prepare agent/browser access without implementing review write
 review/approval records can later use PostgreSQL; immutable graph storage and any RDF-database
 adoption remain separate concerns. See [ADR 044](ADR-044-viewer-query-boundary.md).
 
+The maintainer also requested an [architecture-only tooling direction](ARCHITECTURE-TOOLING-PLAN.md).
+It follows 0.10 provider/onboarding work and reuses composable code evidence without
+requiring semantic extraction. Proposed package splits are not yet implemented.
+
 ## Product outcome
 
 Help teams establish and maintain an agreed set of product rules, connect those rules to

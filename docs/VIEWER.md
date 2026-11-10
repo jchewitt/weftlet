@@ -35,6 +35,15 @@ are a separate milestone; do not expose this local server through a public proxy
 product areas, with navigation boundaries, while the local explorer browses the full snapshot.
 See the [milestone plan](VIEWER-EXPLORER-PLAN.md) and [shared discovery contract](EXPLORER-DISCOVERY.md).
 
+## Authority inspection and resolution
+
+The viewer is read-only. Inspect grouped assertion citations and authority/review
+metadata, then use the [evidence decision guide](guides/EVIDENCE-DECISIONS.md) to
+resolve source-policy, document, extraction or retrieval issues. There is no
+accept button, automatic approval queue or authority edit in this viewer.
+Changing a filter does not approve a source; config/source changes require an
+explicit refresh and selection of the new snapshot.
+
 ## Legacy impact-page exports
 
 The existing `visualize` HTML/DOT/SVG outputs retain their page-local behavior.

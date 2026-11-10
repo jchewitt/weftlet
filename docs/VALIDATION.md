@@ -1,5 +1,201 @@
 # Validation evidence
 
+## Merge preparation and documentation navigation, 2026-11-10
+
+Added direct Documentation/Guide/Tutorial/Changelog links under the README title.
+GitHub's branch overview identifies four License tabs from LICENSE,
+reviewed-licenses.json, docs/licenses/REVIEW.md and the BlueOak review document;
+these supplementary compliance files are retained. A sidebar/search documentation
+site is recorded separately; guides and the example tutorial are already split
+into files.
+
+Head ee833ba passed both Linux and relationship-retrieval jobs plus one Windows
+storage run; the other Windows run failed at a 60-second local npm fixture install.
+That log establishes an install timeout, not its underlying cause. The fixture
+now explicitly uses offline mode with its dependency-free local package, retaining
+actual npm launcher creation and every discovery/authentication assertion. No
+runtime timeout or production behavior was relaxed. Final-head checks follow.
+
+
+## Evidence decision guide and agent workflow, 2026-11-10
+
+Added scenario guidance for source authority/roles, contextual plans/references,
+conflicts, extraction errors, missing/stale evidence, viewer inspection and the
+correct source/config/refresh action. Updated the packaged skill to report
+relevant unresolved decisions without silently promoting sources or claiming
+queries create logs/approval tasks. Manual installation/update remains explicit;
+no automatic agent compliance, acceptance UI or universal contradiction detection
+is claimed. Checked current labels, query diagnostics, read-only viewer and cache
+partition behavior. **99 existing classification/documentation/inventory tests
+passed**, plus release consistency, relative links and whitespace checks. Runtime
+code is unchanged; no live agent/provider or private consumer run was performed.
+
+
+## Source-authority setup clarification, 2026-11-10
+
+Checked the built-in authority assignment in hydrator, hydration-plan and document
+classification against source patterns. Documented bulk `approvedIntentSources`,
+the empty default, no interactive/per-assertion acceptance mechanism, preview's
+`approvedBy`/`sourceAuthority`, and the separation of source authority from model
+interpretation. Existing consumer owner evidence was declared in the supplied
+handoff; no new claim about every private document is made. Documentation checks
+passed; no private configuration, model or snapshot was modified.
+
+## Relatable source workflows, 2026-11-10
+
+Added README/project-guide examples for AI planning Markdown, maintained product
+specifications and committed generated/mirrored documentation. Clarified that chat
+history is not ingested, generated plans/summaries do not confer approval, and CI
+working files cannot be attributed to an earlier committed input. Existing source
+selection and future external-connector boundaries are unchanged. Release-doc,
+relative-link, inventory and whitespace checks passed; no runtime/model action
+was needed for these prose changes.
+
+## Source-input clarification, 2026-11-10
+
+README/project/tutorial guidance now distinguishes built-in committed `.md`,
+`.mdx`, `.txt` semantic inputs from TypeScript/contract/test/runtime evidence.
+Checked against GitRepository.semanticSources, adapter/core interfaces and the
+existing 2.0 source-adapter plan. Clarifies document purpose/approval, arbitrary
+repository locations, current fact/check extensions and planned external-source
+connectors. Relative documentation links (excluding illustrative code blocks),
+release consistency and inventory checks passed; two stale README storage links
+were corrected during checking. Runtime behavior is unchanged; no provider or
+consumer operation was run for this edit.
+
+## Guided documentation and packaged release history, 2026-11-10
+
+Added a documentation home, project guide, independent Document Search tutorial,
+manual Codex/Claude/OpenCode MCP and skill setup, CI scenarios and two inert
+`.yml.example` consumer workflows. The README now surfaces release history and
+both package archives include CHANGELOG.md. Existing Changesets records remain
+canonical; no version or release publication is claimed by this increment.
+
+Linux Node 24.19.0: an independent temporary Git repository copied the packaged
+public example, selected zero semantic documents, and passed config/plan → real
+SCIP hydration → strict SHACL → catalog/coverage/impact → unchanged repeat → final
+invariant evidence check. Its demo test passed, a fresh stdio MCP session exposed
+nine tools and answered impact.scan, and tracked source stayed clean. This smoke
+used existing built toolkit/dependencies; it was not a fresh npm install or live
+model test. The prose/model branch is documented but was not rerun with paid
+inference. An initial harness symlink was accidentally tracked; correcting the
+fixture ignore rule made it ordinary untracked dependency infrastructure, without
+changing product source or the committed-hydration boundary.
+
+Both actual packed archives were inspected: changelogs are included, along with
+all new toolkit guides and CI examples. Relative guide file links, YAML syntax,
+release-documentation consistency and extraction inventory checks passed;
+**41 release-documentation/inventory tests passed**. Runtime code is unchanged,
+so the complete provider suite was not repeated for this documentation increment.
+Codex reference pages were read; Claude/OpenCode doc sites returned HTTP 403.
+Their manual profiles require current-client verification. Hosted consumer
+workflow dispatch, protected environment/secrets, artifact delivery and actual
+client/authenticated model sessions remain target-project checks, not claimed
+passes. No provider request, storage pruning or private cache access occurred.
+
+## 0.10 OpenCode API candidate, 2026-11-10
+
+The maintainer approved API credentials first, with subscription/OAuth refresh
+tracked separately. The candidate supports `init --provider opencode-cli --model
+provider/model`, local readiness diagnostics, semantic extraction and optional
+mapping proposals through OpenCode 1.19.5. Neither Codex nor Claude is required.
+Explicit API mode never falls back to saved authentication; saved mode forwards
+only the selected backend's API entry, without modifying its credential store.
+OAuth entries fail explicitly. No actual credential value is retained in fixtures.
+
+The focused deterministic run passed **21 tests**, including both provider
+consumer lifecycles. OpenCode's public subprocess fixture exercises fresh
+extraction → real TypeScript SCIP → strict SHACL → publish/read → unchanged
+semantic reuse. The repeated snapshot identity/digest and stored bytes are
+unchanged; forced malformed output preserves the last valid artifacts/head.
+Auth isolation, complete JSON event parsing, provider/cache separation, explicit
+retry/cancellation bounds, setup errors and Windows native/npm launcher discovery
+are covered. The Claude tests also pass after sharing validation/retry code.
+
+An integrity-verified official native Linux OpenCode **1.19.5** additionally
+passed `tests/opencode-cli.integration.test.ts` against a loopback HTTP server:
+exactly one `/v1/chat/completions` request, zero tools, valid structured output and
+operation-workspace cleanup. It used no remote model, paid request or account
+credential. This is protocol/isolation evidence, not live API authentication,
+backend/model quality, subscription login or native Windows binary acceptance.
+The real-CLI integration is opt-in and skipped in the default suite.
+
+Build, license and release-documentation checks passed. Governance reports **18
+advisories**: the prior 17 plus textual similarity between the Claude/OpenCode
+public provider tests. That similarity was reviewed as common public fixture and
+preservation assertions; production validation/retry behavior is shared. No policy,
+baseline or exception was relaxed. The clean Linux Node 24.19.0 / pnpm 10.18.2 full run passed **38 core + 1,074
+toolkit tests** (134 toolkit test files); two optional ontology integrations and
+the opt-in native OpenCode test were skipped in that run. The native OpenCode
+loopback test passed separately against the final parser. Fresh packed-consumer
+npm/npx setup, installed TypeScript indexing, RDF/SPARQL/SHACL, viewer and MCP
+smoke also passed. Export inventory and diff checks are clean. Hosted checks for
+this increment remain pending.
+
+The storage-size handoff is separately recorded in
+[CACHE-RETENTION-PLAN.md](CACHE-RETENTION-PLAN.md). Current source confirms permanent
+clean-comparison snapshots/heads/indexes, but this candidate does not implement
+retention, pruning, compression or a 10 GiB limit. No consumer cache was accessed
+or deleted. Provider changes and storage implementation must remain separately
+reviewable; npm publication and consumer acceptance remain open.
+
+## 0.10 Claude provider candidate, 2026-11-09
+
+[ADR 047](ADR-047-provider-choice.md) implements independent Claude Code extraction
+and optional mapping proposals. `init --provider claude-cli` writes Claude account
+login configuration; `doctor` only probes the selected provider. No Codex install,
+login or OpenAI API key is required. API authentication is explicitly selected and
+never a fallback. This is a development candidate, not an npm publication.
+
+Linux Node 24.19.0 / pnpm 10.18.2: the clean full run passed **38 core + 1,065
+toolkit tests**, with two optional ontology integrations skipped. A prior run
+mixed a newly added malformed-provider test with an older worker-loaded config
+validator; that run was discarded and the full suite rerun. Subsequent small
+result-parser/provider-default helper factoring passed a fresh build and all
+**62 affected tests**. Governance returned to **17 advisory findings**, with no
+baseline or policy relaxation. Release documentation, license inventory, export
+inventory and fresh packed-consumer npm/npx installation, SCIP/RDF/SHACL, viewer
+and MCP smoke passed. Subsequent hosted runs [42707351454](https://github.com/jchewitt/weftlet/actions/runs/42707351454) and [42707412643](https://github.com/jchewitt/weftlet/actions/runs/42707412643)
+passed deterministic Linux and both Windows jobs at `4ce9a922a6c4b911d661e7e1aa754257ce5b1d58`.
+Those results qualify the Claude increment, not later OpenCode changes.
+
+The new consumer regression uses a deterministic Claude executable fixture and
+actual process dispatch: init/doctor → fresh semantic extraction → real TypeScript
+SCIP → strict SHACL → persist/read → unchanged repeat. The repeat extracts zero
+and reuses one artifact with identical snapshot ID/digest and stored-byte hashes.
+A forced invalid-kind output preserves the last valid head, snapshot and artifact
+bytes. Authority stays inferred/unreviewed even for a declared source. Credentials
+are not inherited implicitly; neither doctor nor extraction invokes Codex.
+Separate tests cover account/API selection, cancellation, output limits, retry
+bounds, malformed citations/envelopes, Windows npm/native discovery, provider
+cache separation and mapping dispatch. The shared Codex prompt was byte-compared
+with the 0.9.0 implementation using a public fixture and is unchanged.
+
+The real integrity-verified Claude Code **2.1.321** binary was used only for help,
+version and an unauthenticated status probe. These checks do not establish live
+account/API extraction, model access, cost or semantic quality. No paid request,
+private consumer hydration, model prompt upload or authentication mutation was
+performed. Actual Claude client sessions, authenticated extraction and OpenCode
+support remain separately tracked in the [0.10 plan](RELEASE-09-10-PLAN.md).
+
+## 0.9.0 publication receipt and consumer status
+
+Core/toolkit **0.9.0** were published from
+`122deea05d33359cef87298a4c1803bc61b4e177`, after PRs 83/84 and successful
+hosted qualification. [Release workflow 42628836040](https://github.com/jchewitt/weftlet/actions/runs/42628836040)
+completed preparation, trusted publishing and release records. Both npm `latest`
+tags and both Git release tags resolved to this version/commit at verification.
+The downloaded public archives matched both the registry SHA-512 and the prepared
+release archives byte for byte:
+
+- Core: `sha512-rj0j2UVmQN1SvD8p1548+g6ucIRLd1O2E7s40AYtgTm3b/zh8gDTCFoG1AXPKp56gYwBVBlQPAVzB+Hksbyl0Q==`.
+- Toolkit: `sha512-78yPLqirSAQsAMGQb3BNFTa1A1pxJpAqvVSLIRygeQQ01WcYcQF7rHDhjTt5LkjMrskPV9xE+ixzBi2wLJkdXA==`.
+
+The maintainer subsequently reported “Tp looks good.” Record that as a consumer
+status report; no additional private commit, full-run counts or artifact receipt
+was supplied with it. It does not establish live Claude/OpenCode acceptance.
+The candidate section below records pre-publication qualification historically.
+
 ## Canonical semantic-file validation candidate, 2026-11-09 Central
 
 [ADR 046](ADR-046-semantic-physical-file-validation.md) addresses the newly

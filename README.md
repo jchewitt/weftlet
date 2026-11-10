@@ -1,5 +1,7 @@
 # Weftlet — Context Graph Toolkit
 
+**[Documentation](docs/README.md) · [Guide](docs/guides/PROJECT-GUIDE.md) · [Tutorial](docs/tutorials/DOCUMENT-SEARCH.md) · [Changelog](CHANGELOG.md)**
+
 Weftlet is an open-source context-graph toolkit that helps AI development agents understand
 how a local change affects the broader product. It connects approved product intent, shared
 contracts, implementing code, downstream consumers, tests and observed runtime evidence.
@@ -10,6 +12,65 @@ supported capabilities and limitations.
 For a first real-project evaluation, use the [private consumer trial](docs/CONSUMER-TRIAL.md)
 to retain reproducible queries, logs and human-reviewed findings.
 Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
+
+## From planning conversations to shared development context
+
+Many AI-assisted projects begin with a planning session in Codex or Claude Code.
+That conversation may produce Markdown requirements, feature plans and task
+breakdowns. As implementation grows, the reasoning behind those decisions can
+become scattered across files and disconnected from the code it shaped.
+
+Weftlet brings selected, versioned documents into a queryable knowledge graph
+alongside code relationships. Agents can retrieve the relevant intent, follow
+shared contracts and downstream dependencies, and check the cited sources while
+planning a change. The aim is to keep development aligned with the product and
+help surface business drift across features, services and later agent sessions.
+Existing requirements and plans can already be your governing documentation;
+Weftlet does not ask you to accept each one. Configure `semanticSources` to select
+what it reads and `approvedIntentSources` to identify the authoritative files or
+path patterns, regardless of authorship. One pattern can cover an existing
+requirements directory. This is a source-policy declaration, not an interactive
+approval workflow. An extracted graph assertion's review status does not downgrade
+its governing source. See [source authority setup](docs/guides/PROJECT-GUIDE.md#configure-source-authority-no-per-document-acceptance).
+
+The same approach fits repositories with maintained READMEs, reviewed documentation
+generated through CI, or versioned text exports alongside designs in Figma and
+work tracked in other tools. Configuration selects the files, ownership and roles
+that match your project's organization. Today those document inputs come from
+Git; planned Figma, Trello, GitHub Projects and further source adapters would let
+teams connect external product information more directly. Existing custom
+repository fact/check adapters are already a separate extension point.
+
+## What Weftlet reads today
+
+“Evidence” includes several inputs: selected product documents, TypeScript code
+and references, configured contracts, test/validation records, and optional
+supplied runtime traces. Weftlet does not run your tests or observe production
+merely by indexing their files.
+
+The built-in **product-intent extraction** reads selected committed `.md`, `.mdx`
+and `.txt` files. They can live anywhere in the repository: `docs/` is an example,
+not a required directory or document schema. Select existing owner specifications,
+business rules, constraints and cross-feature workflows through `semanticSources`.
+Source approval is configured separately; a folder name or model-generated summary
+does not establish approved intent. Code-only projects can build code evidence,
+with the missing product intent reported as a gap.
+
+Figma, Trello, GitHub Projects and other external source connectors are **planned**,
+not built-in integrations. Current repository adapters can add custom facts and
+checks; that is different from a ready-made remote source/synchronization adapter.
+You do not need to mirror Figma into a `docs/` directory to adopt the code tooling.
+See [source selection, document writing and adapter boundaries](docs/guides/PROJECT-GUIDE.md#what-counts-as-a-source-today)
+and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
+
+## Start here
+
+- **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
+- **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
+- **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
+- **[Act on evidence and authority labels](docs/guides/EVIDENCE-DECISIONS.md)** — how agents use reference/draft material, report conflicts, and how users inspect or rectify results.
+- **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
+- **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
 
 ## Set up a project
 
@@ -30,9 +91,9 @@ npx @weftlet/toolkit config validate
 npx @weftlet/toolkit doctor
 ```
 
-`init` asks for the repository ID, code roots, selected document paths and model, then writes
+`init` asks for the repository ID, code roots, selected document paths, extraction provider and model, then writes
 `context-graph.config.json` and adds `.context-graph/` to `.gitignore`. It fills in the internal
-version fields, requires no Git commit or Codex login to run, and refuses to overwrite existing
+version fields, requires no Git commit or model login to run, and refuses to overwrite existing
 configuration. Setup makes no model requests. For automation:
 
 ```sh
@@ -46,13 +107,22 @@ Use `--config .config/context-graph.json` for another configuration location,
 `--directory /path/to/project` to initialize another project, or `--no-gitignore` to leave
 ignore rules alone. Configuration remains JSON; `config show` displays the validated settings.
 
-Review the selected sources, configure Codex authentication when using semantic documents,
+Review the selected sources, configure the selected provider authentication when using semantic documents,
 and commit the inputs you want indexed before hydrating:
 
-In Weftlet, `semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
+Codex remains the default provider. With `semantic.provider: "codex-cli"`,
+`semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
 ChatGPT login. API billing requires explicitly selecting `api-key`; credentials stay in an
 environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
 for both modes and their tentative validation status. The earlier `@launch-echo/tently@0.1.0` release predates this option.
+
+The 0.10 development candidate adds `init --provider claude-cli`, selecting Claude Code
+for extraction and optional mapping proposals without Codex. It supports Claude account login
+or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
+The candidate also adds `opencode-cli` extraction with explicitly selected API credentials
+and a required `provider/model`; see [OpenCode setup and limits](docs/PROVIDERS.md#opencode).
+OpenCode subscription/OAuth login and client-registration helpers remain tracked work;
+a compatible MCP client can already query saved evidence without any extraction provider.
 
 ```sh
 npx @weftlet/toolkit hydrate --ref HEAD
@@ -107,13 +177,13 @@ extraction. The opt-in traversal mode below excludes them by default. See
 
 Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
 failures report completed/remaining work and recovery guidance; `hydrate --json --quiet` emits
-their structured report on stderr. Built-in Codex can reuse completed artifacts after supported
+their structured report on stderr. Built-in CLI providers can reuse completed artifacts after supported
 operational changes such as increasing a timeout. See [provider recovery](docs/PROVIDERS.md#limits-and-reuse)
 for preview, retry and explicit legacy-cache adoption instructions.
 
 ## Preview linked document coverage
 
-This checkout/archive includes a separate prospective preview. npm 0.5.0 does not include this command:
+Available since 0.6.0, this separate prospective preview inspects linked documents:
 
 ```sh
 pnpm exec weftlet documents plan --entry docs/sot.md --entry docs/roadmap.md --root docs --ref HEAD
@@ -213,7 +283,7 @@ approved source never approves a model assertion. Plans/unclassified sources rem
 labeled, and model facts remain inferred/unreviewed. Complete coverage means the configured
 canonical links were followed, not that every product rule was found.
 
-Built-in Codex can reuse unchanged artifacts when enabling traversal or editing its policy/read
+Built-in CLI providers can reuse unchanged artifacts when enabling traversal or editing its policy/read
 limits. Role/owner metadata is assembled without rewriting those artifacts. Custom module
 providers use a separate full-config cache. Snapshots bind the configuration and selection, while
 old snapshots remain queryable. Draft overlays recompute reachability, invalidate changed sources
@@ -327,8 +397,8 @@ as well; the toolkit cannot correct nodes they still classify independently.
 In a selected document such as `docs/intent.md`, link a responsibility to its sources:
 
 ```md
-Committed snapshots stay queryable during edits. See [snapshot storage](../src/storage.ts)
-and [lifecycle checks](../tests/storage.test.ts).
+Committed snapshots stay queryable during edits. See [snapshot storage](src/storage/storage.ts)
+and [lifecycle checks](tests/snapshot-lifecycle.test.ts).
 ```
 
 [Explicit document links](docs/ADR-011-explicit-document-links.md) resolve against the recorded
@@ -582,7 +652,8 @@ weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
 
 No configuration switch enables automatic inference. The proposal command reuses the existing
 `semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
-the default; configured API-key mode is optional. A compatible module must separately export
+the default; the 0.10 candidate also uses the selected Claude or OpenCode provider.
+Configured API-key mode is optional for either CLI. A compatible module must separately export
 `createMappingProposalProvider(config)` with matching `identity` and
 `propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is
 one provider request per invocation, no automatic retry, and cache hits require no `--allow-model`.
