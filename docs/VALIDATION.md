@@ -1,5 +1,17 @@
 # Validation evidence
 
+## Source-input clarification, 2026-11-10
+
+README/project/tutorial guidance now distinguishes built-in committed `.md`,
+`.mdx`, `.txt` semantic inputs from TypeScript/contract/test/runtime evidence.
+Checked against GitRepository.semanticSources, adapter/core interfaces and the
+existing 2.0 source-adapter plan. Clarifies document purpose/approval, arbitrary
+repository locations, current fact/check extensions and planned external-source
+connectors. Relative documentation links (excluding illustrative code blocks),
+release consistency and inventory checks passed; two stale README storage links
+were corrected during checking. Runtime behavior is unchanged; no provider or
+consumer operation was run for this edit.
+
 ## Guided documentation and packaged release history, 2026-11-10
 
 Added a documentation home, project guide, independent Document Search tutorial,

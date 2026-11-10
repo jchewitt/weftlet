@@ -366,8 +366,8 @@ as well; the toolkit cannot correct nodes they still classify independently.
 In a selected document such as `docs/intent.md`, link a responsibility to its sources:
 
 ```md
-Committed snapshots stay queryable during edits. See [snapshot storage](../src/storage.ts)
-and [lifecycle checks](../tests/storage.test.ts).
+Committed snapshots stay queryable during edits. See [snapshot storage](src/storage/storage.ts)
+and [lifecycle checks](tests/snapshot-lifecycle.test.ts).
 ```
 
 [Explicit document links](docs/ADR-011-explicit-document-links.md) resolve against the recorded
