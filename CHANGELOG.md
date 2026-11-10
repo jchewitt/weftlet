@@ -1,5 +1,21 @@
 # @weftlet/toolkit
 
+## 0.10.0
+
+### Minor Changes
+
+- 9231050: Add independent Claude Code and OpenCode CLI extraction and mapping proposals with explicit account or API-key authentication, provider-aware initialization and diagnostics, bounded structured output and isolated cache identity. Neither adapter requires Codex. OpenCode initially supports explicitly selected API credentials on its tested 1.19.5 CLI contract; subscription/OAuth login is separate. Live backend authentication and semantic quality validation remain pending; the rest of 0.10 onboarding is tracked separately.
+
+### Patch Changes
+
+- 9231050: Make release history visible and include changelogs in both package archives. Add a guided project walkthrough, a public Document Search tutorial, manual Codex/Claude/OpenCode skill and MCP setup, and copyable credential-free/trusted-generation CI examples. Distinguish released features, candidate providers, saved graph conformance and final-commit evidence checks.
+  
+  Clarify current prose/code/test/runtime inputs, flexible repository document locations, intent-document authoring and the distinction between existing repository extensions and planned external source connectors.
+  
+  Document evidence-authority decision scenarios, viewer inspection and source/config remediation. Update the packaged agent skill to distinguish governing sources from contextual proposals and to report relevant unresolved decisions without implying automatic approval or logging.
+- Updated dependencies [9231050]
+  - @weftlet/core@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes
