@@ -1,5 +1,20 @@
 # Validation evidence
 
+## Accepted onboarding queue and publication hold, 2026-11-10 Central
+
+The maintainer accepted S1–S7 from the setup audit and requested a publication
+hold while the separate documentation site is reviewed and its release-update
+automation is prepared. The current 1.0 queue now records task status, next S1
+increment, remaining provider/storage work and final candidate acceptance;
+the 0.10 plan and roadmap point to that queue. Provider implementation is
+correctly marked merged in PR 85; setup tasks remain unimplemented.
+
+Read-only GitHub inspection found release PR 86 open with no auto-merge and no
+active publication among the latest release runs. No workflow configuration,
+release dispatch, merge or website change was made. Documentation links,
+release-documentation, inventory and whitespace checks pass. These planning
+changes introduce no runtime behavior or new consumer acceptance evidence.
+
 ## Setup and capability documentation audit, 2026-11-10 Central
 
 [Audit and proposed tasks](1.0-ONBOARDING-GAP-AUDIT.md) compare 16 public live

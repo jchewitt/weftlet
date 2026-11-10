@@ -6,6 +6,11 @@ are 0.9.0 and 0.10.0 for the fixed core/toolkit pair. 0.9.0 is now published;
 0.10 is in progress. Earlier EQT and PM saved-query acceptance remains valid
 within its recorded scope. Official 1.0 remains a separate release decision.
 
+November 10 scheduling update: S1–S7 are now accepted in the
+[current 1.0 queue](1.0-WORK-QUEUE.md), which owns execution order and the active
+publication hold. Keep implementation increments separate; the 0.10 label does
+not require putting all remaining storage/onboarding work into one release.
+
 ## 0.9 — Canonical semantic file contract
 
 Progress: F1–F5 upstream work is complete. Core/toolkit 0.9.0 was published
@@ -44,7 +49,7 @@ is not evidence of live model compliance.
 November 10 follow-up: the [setup/capability audit](1.0-ONBOARDING-GAP-AUDIT.md)
 maps the website's manual-setup instructions and capability limits to current
 source. S1–S4/S7 refine I1–I7 below; S5 assisted integration and S6 verified
-snapshot delivery are proposed additions for the 1.0 scope discussion. Avoid
+snapshot delivery are now accepted additions to the task list. Avoid
 duplicate tasks or assuming every documentation limitation requires a new engine.
 
 Maintainer clarification: a Claude user must be able to extract with Claude and
@@ -67,13 +72,14 @@ path and its account-login option. Implement and qualify adapters incrementally.
   configuration/CLI-contract probes.
 
 
-Current increment: P1, initial API-only P2 and the provider-selection portion of P3 are implemented
-locally ([ADR 047](ADR-047-provider-choice.md)). Claude uses its own account/API authentication, extraction, mapping
+Current increment: P1, initial API-only P2 and the provider-selection portion of P3 are merged
+in PR 85 ([ADR 047](ADR-047-provider-choice.md)). Claude uses its own account/API authentication, extraction, mapping
 proposals and cache identity. OpenCode independently supports explicit or saved API
 credentials on its pinned 1.19.5 contract; subscription/OAuth refresh is separate,
 as approved by the maintainer. Deterministic qualification is recorded in
-[validation](VALIDATION.md); live authenticated runs, publication and I2–I7
-remain open. This is not a completed 0.10 release. Reconcile candidate/support
+[validation](VALIDATION.md); live authenticated qualification and publication
+remain open. Manual I2/I5/I6 guidance is delivered; automated setup and remaining
+I3/I4/I7 qualification are tracked by S1–S7. This is not a completed 0.10 release. Reconcile candidate/support
 wording in README and provider documentation with the final qualified feature set
 before publishing 0.10; do not leave shipped functionality labeled as future work.
 
@@ -130,7 +136,9 @@ acceptance. I4's setup helper remains unimplemented. I7 has a bounded independen
 code-only tutorial/CLI/MCP smoke, not a live semantic or hosted consumer pass.
 The manual guides do not imply automatic skill installation or MCP registration.
 
-Storage implementation is paused until this documentation increment is reviewed.
+The source documentation increment merged in PR 85. The separate website is
+under review; publication is on hold while its release-update automation is
+prepared. S1 setup is next, followed by the sequence in the current 1.0 queue.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

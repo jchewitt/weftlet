@@ -1,5 +1,11 @@
 # Delivery roadmap
 
+November 10 maintainer decision: accept S1–S7 onboarding tasks and hold npm
+publication during the separate website review/release-update integration. The
+[current 1.0 execution queue](1.0-WORK-QUEUE.md) consolidates next steps, provider
+qualification, storage work and final candidate acceptance. Start with S1
+automatic skill setup; source work and qualification can continue during the hold.
+
 Documentation priority, November 10: the [project guide](guides/PROJECT-GUIDE.md),
 [demo tutorial](tutorials/DOCUMENT-SEARCH.md), [agent setup](guides/AGENTS.md),
 [CI examples](guides/CI.md) and visible [release history](RELEASES.md) precede
@@ -9,11 +15,10 @@ subdivide mixed-domain directories around cohesive features. Inventory public
 imports and preserve compatibility before moving files. This is deferred cleanup,
 not a new extraction/provider or storage change.
 
-Documentation presentation follow-up: build a small dedicated documentation site
-from the existing multi-file guides/tutorials, with persistent sidebar navigation,
-search and release/version context. GitHub's automatic README/community tabs cannot
-provide custom Guide/Changelog tabs. Keep the README as the entry point and retain
-the separate example tutorial; the current Markdown hub is not a hosted docs site.
+The dedicated [documentation site](https://weftlet.crowdpigeon.org/) now exists
+in `weftlet-docs`, with searchable guides/tutorials. Its review and automated
+updates after npm publication are owned by the separate website thread. Keep the
+README and source guides aligned with it; do not duplicate that site's work here.
 
 November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
 records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
