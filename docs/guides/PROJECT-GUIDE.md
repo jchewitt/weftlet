@@ -33,6 +33,37 @@ or path is not proof of execution. A graph cannot fill undocumented intent with
 approved assumptions. Code-derived drafts and approval/backfill are future
 [2.0 work](../WEFTLET-2.0-PLAN.md).
 
+### Common ways to bring product context into the graph
+
+- **AI-assisted planning:** a Codex/Claude planning session produces requirements,
+  decisions and task Markdown. Select the useful files, distinguish proposed plans
+  from reviewed owner requirements, and connect them to code evidence. Later agents
+  can query the product context instead of relying on the original conversation
+  being present in their session. Unrecorded chat history is not ingested.
+- **Documentation maintained with the code:** READMEs, feature specifications,
+  architecture rules and cross-service contracts already live in Git. Configure
+  Weftlet around those existing locations; there is no required folder migration.
+- **Generated or mirrored documentation:** a project may generate docs in CI or
+  maintain text exports alongside Figma designs or project-board work. Weftlet
+  can consume supported files once they are committed at the selected input SHA.
+  Generated summaries of code remain implementation-derived evidence unless
+  independently reviewed as intent. Retain origin links/revisions and make export
+  freshness visible; Weftlet does not refresh the external source automatically.
+
+The purpose is to make the relationship between *why the product should behave
+this way* and *how the code implements it* available to each development agent.
+This can help an agent identify related business areas and possible drift before
+editing. It does not guarantee complete understanding or prove that the code
+satisfies the requirements. Configuration aligns extraction with the documents,
+roles and ownership your project actually uses.
+
+A CI-generated file that exists only in the current working directory is not a
+committed source for that hydration. Use a reviewed workflow that versions the
+intended document inputs, then hydrate their exact commit; do not label generated
+working output as evidence from an earlier SHA. External source adapters are a
+future way to obtain versioned context directly, not a requirement to adopt the
+current repository-based workflow.
+
 ### What counts as a source today
 
 “Evidence” is the umbrella term for these distinct inputs:

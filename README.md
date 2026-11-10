@@ -11,6 +11,29 @@ For a first real-project evaluation, use the [private consumer trial](docs/CONSU
 to retain reproducible queries, logs and human-reviewed findings.
 Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
 
+## From planning conversations to shared development context
+
+Many AI-assisted projects begin with a planning session in Codex or Claude Code.
+That conversation may produce Markdown requirements, feature plans and task
+breakdowns. As implementation grows, the reasoning behind those decisions can
+become scattered across files and disconnected from the code it shaped.
+
+Weftlet brings selected, versioned documents into a queryable knowledge graph
+alongside code relationships. Agents can retrieve the relevant intent, follow
+shared contracts and downstream dependencies, and check the cited sources while
+planning a change. The aim is to keep development aligned with the product and
+help surface business drift across features, services and later agent sessions.
+An AI-generated plan is still a proposal until reviewed; Weftlet preserves that
+distinction rather than treating every planning file as approved requirements.
+
+The same approach fits repositories with maintained READMEs, reviewed documentation
+generated through CI, or versioned text exports alongside designs in Figma and
+work tracked in other tools. Configuration selects the files, ownership and roles
+that match your project's organization. Today those document inputs come from
+Git; planned Figma, Trello, GitHub Projects and further source adapters would let
+teams connect external product information more directly. Existing custom
+repository fact/check adapters are already a separate extension point.
+
 ## What Weftlet reads today
 
 “Evidence” includes several inputs: selected product documents, TypeScript code

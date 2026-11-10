@@ -1,5 +1,15 @@
 # Validation evidence
 
+## Relatable source workflows, 2026-11-10
+
+Added README/project-guide examples for AI planning Markdown, maintained product
+specifications and committed generated/mirrored documentation. Clarified that chat
+history is not ingested, generated plans/summaries do not confer approval, and CI
+working files cannot be attributed to an earlier committed input. Existing source
+selection and future external-connector boundaries are unchanged. Release-doc,
+relative-link, inventory and whitespace checks passed; no runtime/model action
+was needed for these prose changes.
+
 ## Source-input clarification, 2026-11-10
 
 README/project/tutorial guidance now distinguishes built-in committed `.md`,
