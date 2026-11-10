@@ -1,5 +1,22 @@
 # Validation evidence
 
+## Maintainer release-documentation skill, 2026-11-10 Central
+
+Based on merged onboarding commit `9231050cecfda3923984c69c23fef90764a5f5b6`.
+The repository-only `.agents/skills/release-documentation/SKILL.md` now describes
+release-scope review across README, multi-page guides, tutorial, agent skill,
+provider/CI examples and changelogs. Root `AGENTS.md`, contributing instructions
+and the release guide route maintainers to it. The stale contributing statement
+that no publishing workflow exists is corrected. Scripted checks retain their
+explicit scope; skill instructions are not an automated semantic documentation
+gate or proof that a downstream documentation website has been deployed.
+
+Release-documentation checking and all 36 existing documentation tests pass on
+Linux/Node 24. Changed local Markdown links and skill frontmatter were checked;
+inventory and whitespace checks pass. This is instruction/documentation work;
+no runtime behavior, package version, publication, model request or consumer
+acceptance is claimed. No new test suite was added for prose instructions.
+
 ## Merge preparation and documentation navigation, 2026-11-10
 
 Added direct Documentation/Guide/Tutorial/Changelog links under the README title.

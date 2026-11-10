@@ -577,6 +577,7 @@
     ".github/workflows/context-graph.yml"
   ],
   "authoredPaths": [
+    ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
     ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
@@ -588,6 +589,7 @@
     ".gitignore",
     ".npmrc",
     ".nvmrc",
+    "AGENTS.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "README.md",
