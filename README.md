@@ -11,6 +11,14 @@ For a first real-project evaluation, use the [private consumer trial](docs/CONSU
 to retain reproducible queries, logs and human-reviewed findings.
 Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
 
+## Start here
+
+- **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
+- **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
+- **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
+- **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
+- **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
+
 ## Set up a project
 
 <!-- weftlet:release:start -->
@@ -122,7 +130,7 @@ for preview, retry and explicit legacy-cache adoption instructions.
 
 ## Preview linked document coverage
 
-This checkout/archive includes a separate prospective preview. npm 0.5.0 does not include this command:
+Available since 0.6.0, this separate prospective preview inspects linked documents:
 
 ```sh
 pnpm exec weftlet documents plan --entry docs/sot.md --entry docs/roadmap.md --root docs --ref HEAD

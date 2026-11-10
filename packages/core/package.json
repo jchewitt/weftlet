@@ -10,6 +10,7 @@
     "LICENSE",
     "NOTICE",
     "README.md",
+    "CHANGELOG.md",
     "THIRD_PARTY_NOTICES.md"
   ],
   "exports": {

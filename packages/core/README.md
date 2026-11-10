@@ -44,3 +44,5 @@ These contracts are available starting with 0.7.0.
 `@weftlet/core/browser` exposes only the pure `graphPredicates` vocabulary and
 `repositoryFileNode` identity helper without Node filesystem/process/crypto imports.
 The root entry point retains its existing Node-oriented utilities.
+
+Release-by-release changes are recorded in the [core changelog](CHANGELOG.md).

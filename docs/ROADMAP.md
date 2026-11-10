@@ -1,5 +1,14 @@
 # Delivery roadmap
 
+Documentation priority, November 10: the [project guide](guides/PROJECT-GUIDE.md),
+[demo tutorial](tutorials/DOCUMENT-SEARCH.md), [agent setup](guides/AGENTS.md),
+[CI examples](guides/CI.md) and visible [release history](RELEASES.md) precede
+storage implementation. Follow-up contributor cleanup: review the large public
+index/export surface, define package/submodule compatibility boundaries, and
+subdivide mixed-domain directories around cohesive features. Inventory public
+imports and preserve compatibility before moving files. This is deferred cleanup,
+not a new extraction/provider or storage change.
+
 November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
 records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
 coordinated retention and single-snapshot size profiling as separate increments.

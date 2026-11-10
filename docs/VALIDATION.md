@@ -1,5 +1,35 @@
 # Validation evidence
 
+## Guided documentation and packaged release history, 2026-11-10
+
+Added a documentation home, project guide, independent Document Search tutorial,
+manual Codex/Claude/OpenCode MCP and skill setup, CI scenarios and two inert
+`.yml.example` consumer workflows. The README now surfaces release history and
+both package archives include CHANGELOG.md. Existing Changesets records remain
+canonical; no version or release publication is claimed by this increment.
+
+Linux Node 24.19.0: an independent temporary Git repository copied the packaged
+public example, selected zero semantic documents, and passed config/plan → real
+SCIP hydration → strict SHACL → catalog/coverage/impact → unchanged repeat → final
+invariant evidence check. Its demo test passed, a fresh stdio MCP session exposed
+nine tools and answered impact.scan, and tracked source stayed clean. This smoke
+used existing built toolkit/dependencies; it was not a fresh npm install or live
+model test. The prose/model branch is documented but was not rerun with paid
+inference. An initial harness symlink was accidentally tracked; correcting the
+fixture ignore rule made it ordinary untracked dependency infrastructure, without
+changing product source or the committed-hydration boundary.
+
+Both actual packed archives were inspected: changelogs are included, along with
+all new toolkit guides and CI examples. Relative guide file links, YAML syntax,
+release-documentation consistency and extraction inventory checks passed;
+**41 release-documentation/inventory tests passed**. Runtime code is unchanged,
+so the complete provider suite was not repeated for this documentation increment.
+Codex reference pages were read; Claude/OpenCode doc sites returned HTTP 403.
+Their manual profiles require current-client verification. Hosted consumer
+workflow dispatch, protected environment/secrets, artifact delivery and actual
+client/authenticated model sessions remain target-project checks, not claimed
+passes. No provider request, storage pruning or private cache access occurred.
+
 ## 0.10 OpenCode API candidate, 2026-11-10
 
 The maintainer approved API credentials first, with subscription/OAuth refresh

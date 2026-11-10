@@ -113,6 +113,21 @@ The [architecture-only direction](ARCHITECTURE-TOOLING-PLAN.md), new viewer/host
 separate. This work does not add remote databases, hosted AI, source backfill or
 approval workflows.
 
+## Guided documentation increment, November 10
+
+The [documentation home](README.md) now routes readers to a full project guide,
+a separate public-demo tutorial, manual agent setup, CI scenarios and release
+history. Both npm archives include their generated changelogs. This delivers the
+manual workflow guidance for I2/I6 and copyable I5 examples. I3 client profiles
+are documented with verification limits; they do not establish real-client
+acceptance. I4's setup helper remains unimplemented. I7 has a bounded independent
+code-only tutorial/CLI/MCP smoke, not a live semantic or hosted consumer pass.
+The manual guides do not imply automatic skill installation or MCP registration.
+
+Storage implementation is paused until this documentation increment is reviewed.
+Directory/submodule and public export-surface cleanup is recorded in the roadmap
+for later; no source files or exports are reorganized here.
+
 ## Storage handoff
 
 The November 10 [cache-retention intake](CACHE-RETENTION-PLAN.md) is tracked
