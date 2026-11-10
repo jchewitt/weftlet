@@ -35,6 +35,11 @@ The code trims a query then delegates to `DocumentRepository.search`. The owner
 text declares a capability, query service, repository/search contracts and test
 evidence. It does not specify every edge case of trimming.
 
+`docs/` is this demo's layout, not a required Weftlet convention. In a real
+project, select existing specifications wherever they live. The [source guide](../guides/PROJECT-GUIDE.md#what-counts-as-a-source-today)
+explains supported inputs, what intent documents represent and planned external
+connectors. The demo's explicit graph IDs are illustrative, not a required authoring schema.
+
 The included config already selects `docs`, `src` and `test`, declares the public
 owner document and uses RDF. Do not run `init` over it. This tutorial treats that
 public document as the example's declared source; do not copy its approval policy

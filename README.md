@@ -11,6 +11,28 @@ For a first real-project evaluation, use the [private consumer trial](docs/CONSU
 to retain reproducible queries, logs and human-reviewed findings.
 Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
 
+## What Weftlet reads today
+
+“Evidence” includes several inputs: selected product documents, TypeScript code
+and references, configured contracts, test/validation records, and optional
+supplied runtime traces. Weftlet does not run your tests or observe production
+merely by indexing their files.
+
+The built-in **product-intent extraction** reads selected committed `.md`, `.mdx`
+and `.txt` files. They can live anywhere in the repository: `docs/` is an example,
+not a required directory or document schema. Select existing owner specifications,
+business rules, constraints and cross-feature workflows through `semanticSources`.
+Source approval is configured separately; a folder name or model-generated summary
+does not establish approved intent. Code-only projects can build code evidence,
+with the missing product intent reported as a gap.
+
+Figma, Trello, GitHub Projects and other external source connectors are **planned**,
+not built-in integrations. Current repository adapters can add custom facts and
+checks; that is different from a ready-made remote source/synchronization adapter.
+You do not need to mirror Figma into a `docs/` directory to adopt the code tooling.
+See [source selection, document writing and adapter boundaries](docs/guides/PROJECT-GUIDE.md#what-counts-as-a-source-today)
+and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
+
 ## Start here
 
 - **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.

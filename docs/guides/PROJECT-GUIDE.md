@@ -33,6 +33,100 @@ or path is not proof of execution. A graph cannot fill undocumented intent with
 approved assumptions. Code-derived drafts and approval/backfill are future
 [2.0 work](../WEFTLET-2.0-PLAN.md).
 
+### What counts as a source today
+
+“Evidence” is the umbrella term for these distinct inputs:
+
+| Input | Current built-in behavior |
+| --- | --- |
+| Product/architecture prose | Model extraction from selected committed `.md`, `.mdx`, `.txt` files, with source-line citations and validated structured assertions |
+| Document links/declarations | Deterministic links and supported declarations; opt-in Markdown traversal follows configured entry points |
+| Code | TypeScript SCIP indexing plus deterministic file, symbol, reference and supported static-call extraction |
+| Shared contracts | Configured repository contract extraction and consumer relationships |
+| Tests/validation | Test-file/code relationships and selected validation records; indexing does not execute tests or prove a passing result |
+| Runtime | Explicitly supplied supported OTLP JSON trace evidence with configured mappings/eligibility; no automatic production observation |
+| Repository extensions | Trusted `adapter` modules contributing fact extractors and invariant evaluators |
+
+The built-in semantic source reader reads Git bytes at the requested commit,
+not a live website, Figma canvas, ticket API, PDF, Word document or agent chat.
+MDX is read as text, not executed. Direct `semanticSources` selection accepts
+repository file/directory paths, not a universal URL or connector specification.
+For example, an existing `PRODUCT.md`, `specs/search.md` or
+`planning/approved-rules.txt` can be selected; no `docs/` directory is required:
+
+```json
+{
+  "semanticSources": ["PRODUCT.md", "specs/search.md", "planning/approved-rules.txt"],
+  "approvedIntentSources": ["specs/search.md"]
+}
+```
+
+This is a partial configuration fragment, not a complete config. Use your real
+paths and approve only reviewed owner sources. Selection means “read this”; it
+does not mean “this is authoritative.” Source approval does not independently
+approve each extracted assertion.
+
+### What should product documents say?
+
+Use existing human-readable source-of-truth material. No special prose template
+or graph vocabulary is mandatory. Useful documents explain:
+
+- The feature's purpose, scope and responsible owner.
+- Required behavior, business rules, constraints, exceptions and terms.
+- Shared contracts and dependencies on other domains/services, including queues,
+  events, stored data and downstream consumers.
+- Which rules are current, proposed, superseded or unresolved, with links to the
+  governing owner document and relevant validation records.
+
+For example, a reviewed requirement might state: “Only published documents may
+enter search results. The indexing worker and query service use the same
+publication-status contract.” That states intent across an asynchronous boundary.
+Links to the actual contract, implementation and tests make it easier to connect
+the statement to evidence. It does not prove either service satisfies the rule.
+
+Implementation notes, old tickets, plans and test reports can be useful sources,
+but should retain their own role and authority. An old ticket is not necessarily
+a current requirement; a completed checklist is not a product rule. Keep validation
+records separately classified. Explicit code links/annotations can establish more
+precise bindings, but ordinary prose does not guarantee a rule-to-function mapping.
+See the README's document-binding examples when that precision is needed.
+
+Optional `semantic-id:` lines provide stable document identity. They are not
+approval markers. The demo uses explicit concept IDs for clarity, but ordinary
+project docs do not need to imitate its list of graph identifiers. Approval comes
+from your reviewed source policy, not Markdown formatting, file location or the
+model. Weftlet does not currently author or keep your intent documents up to date.
+
+### External sources and custom adapters
+
+The [2.0 source-adapter plan](../WEFTLET-2.0-PLAN.md) includes evaluating **Figma,
+Trello, GitHub Projects, Canva and other sources** individually. The direction is
+to read versioned product information where teams keep it, retain its identity,
+citations and authority, and eventually support reviewed proposals/publication
+where the source permits it. These connectors and automatic write-back are not
+shipped. A GitHub repository checked out locally is supported today; live GitHub
+Projects/issues ingestion is a different integration. GitHub Actions generation
+also does not itself ingest project-board intent.
+
+There are two different adapter concepts:
+
+- **Available now:** a configured trusted repository `adapter` contributes
+  `factExtractors` and `invariantEvaluators`. Custom code must use the public core
+  contracts, canonical file identities, provenance and strict validation. This can
+  add repository-specific evidence; it is not automatic remote ingestion.
+- **Planned source connectors:** fetching external material, handling permissions,
+  source revisions, citations, freshness, deletions and any reviewed write-back.
+  A neutral `SemanticSourceProvider` interface exists, but the current CLI does
+  not expose a generic remote-source registration setting. A model-provider
+  adapter selects how inference runs; it does not supply Figma/Trello content.
+
+If a team chooses an interim export, it can commit a reviewed text/Markdown
+representation anywhere in Git and select it, retaining the external URL/revision
+and ownership information. That is an optional manually maintained bridge, not a
+required mirror or built-in synchronization promise. Alternatively, start with
+code evidence and explicit intent gaps until the needed connector exists. Do not
+invent approved requirements to make graph coverage look complete.
+
 ## 2. Install and initialize
 
 Use Node 24+ and a Git repository. In the project root:
