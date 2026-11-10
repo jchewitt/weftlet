@@ -11,4 +11,11 @@ calls to ordinary or untrusted CI.
 
 Preserve the Apache-2.0 notices and extraction manifest. Update modified-file notices when
 adapting imported source. Never include secrets, private documents or graph snapshots in a PR.
-No release/publish workflow is enabled.
+
+Releases use Changesets and GitHub trusted publishing; see
+[release instructions](docs/RELEASING.md). For changes to released behavior and
+for every release review, use the
+[release-documentation skill](.agents/skills/release-documentation/SKILL.md).
+It covers the README, multi-page guides, separate tutorial, examples and release
+history alongside the automated version/archive checks. Record which docs
+changed, checks run and remaining validation limits in the PR.
