@@ -1,5 +1,21 @@
 # Validation evidence
 
+## Setup and capability documentation audit, 2026-11-10 Central
+
+[Audit and proposed tasks](1.0-ONBOARDING-GAP-AUDIT.md) compare 16 public live
+documentation pages with implementation at `9231050cecfda3923984c69c23fef90764a5f5b6`.
+The separate documentation repository was inspected read only; only public-page
+claims and toolkit evidence enter the report. npm metadata returned latest
+0.9.0 for both packages at inspection. Manual skill/MCP/CI setup is confirmed;
+existing mappings, runtime ingestion, overlays and local API behavior are
+distinguished from broader future features. Proposed S1–S7 tasks link to the
+existing 0.10/1.0 plans and do not claim implementation or acceptance.
+
+Changed local links, release-documentation, extraction inventory and whitespace
+checks pass. No runtime code changed, so no new behavioral tests were added or
+live provider/consumer tests run. No website mutation, hydration, publication or
+private workflow execution occurred.
+
 ## Merge preparation and documentation navigation, 2026-11-10
 
 Added direct Documentation/Guide/Tutorial/Changelog links under the README title.

@@ -41,6 +41,12 @@ is not evidence of live model compliance.
 
 ## 0.10 — Provider choice, agent and CI onboarding
 
+November 10 follow-up: the [setup/capability audit](1.0-ONBOARDING-GAP-AUDIT.md)
+maps the website's manual-setup instructions and capability limits to current
+source. S1–S4/S7 refine I1–I7 below; S5 assisted integration and S6 verified
+snapshot delivery are proposed additions for the 1.0 scope discussion. Avoid
+duplicate tasks or assuming every documentation limitation requires a new engine.
+
 Maintainer clarification: a Claude user must be able to extract with Claude and
 query with Claude without installing or authenticating Codex. OpenCode must
 likewise have a supported extraction path through its configured provider,
