@@ -99,6 +99,15 @@ approve each extracted assertion.
 
 ### What should product documents say?
 
+An accepted plan can itself be your authoritative product document. Its authorship
+is irrelevant: requirements written with an AI become governing intent when you
+accept them and designate the source accordingly in `approvedIntentSources` (or
+the applicable reviewed source policy). You do not need to rewrite an approved
+plan into a separate human-authored specification. Agents should follow the
+approved document. An inferred/unreviewed graph assertion is an extracted
+interpretation to check against that document, not a downgrade of its authority
+or a requirement to reapprove every existing requirement before using it.
+
 Use existing human-readable source-of-truth material. No special prose template
 or graph vocabulary is mandatory. Useful documents explain:
 

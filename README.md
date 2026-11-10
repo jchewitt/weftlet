@@ -23,8 +23,12 @@ alongside code relationships. Agents can retrieve the relevant intent, follow
 shared contracts and downstream dependencies, and check the cited sources while
 planning a change. The aim is to keep development aligned with the product and
 help surface business drift across features, services and later agent sessions.
-An AI-generated plan is still a proposal until reviewed; Weftlet preserves that
-distinction rather than treating every planning file as approved requirements.
+Once you approve a plan and designate its governing documents, those documents
+are authoritative product intent, whether written by a person, an AI or both.
+Weftlet distinguishes those accepted requirements from unaccepted drafts through
+source configuration. An extracted graph assertion's review status does not
+downgrade its approved source; agents should follow that source and verify the
+graph's interpretation against its citations.
 
 The same approach fits repositories with maintained READMEs, reviewed documentation
 generated through CI, or versioned text exports alongside designs in Figma and
