@@ -1,5 +1,15 @@
 # Validation evidence
 
+## Source-authority setup clarification, 2026-11-10
+
+Checked the built-in authority assignment in hydrator, hydration-plan and document
+classification against source patterns. Documented bulk `approvedIntentSources`,
+the empty default, no interactive/per-assertion acceptance mechanism, preview's
+`approvedBy`/`sourceAuthority`, and the separation of source authority from model
+interpretation. Existing consumer owner evidence was declared in the supplied
+handoff; no new claim about every private document is made. Documentation checks
+passed; no private configuration, model or snapshot was modified.
+
 ## Relatable source workflows, 2026-11-10
 
 Added README/project-guide examples for AI planning Markdown, maintained product

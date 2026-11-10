@@ -99,14 +99,9 @@ approve each extracted assertion.
 
 ### What should product documents say?
 
-An accepted plan can itself be your authoritative product document. Its authorship
-is irrelevant: requirements written with an AI become governing intent when you
-accept them and designate the source accordingly in `approvedIntentSources` (or
-the applicable reviewed source policy). You do not need to rewrite an approved
-plan into a separate human-authored specification. Agents should follow the
-approved document. An inferred/unreviewed graph assertion is an extracted
-interpretation to check against that document, not a downgrade of its authority
-or a requirement to reapprove every existing requirement before using it.
+Existing plans/specifications can already be the project's governing documents.
+Weftlet does not require a new review ceremony or a human-authored replacement.
+Tell it where those sources live using the configuration described below.
 
 Use existing human-readable source-of-truth material. No special prose template
 or graph vocabulary is mandatory. Useful documents explain:
@@ -136,6 +131,62 @@ approval markers. The demo uses explicit concept IDs for clarity, but ordinary
 project docs do not need to imitate its list of graph identifiers. Approval comes
 from your reviewed source policy, not Markdown formatting, file location or the
 model. Weftlet does not currently author or keep your intent documents up to date.
+
+### Configure source authority: no per-document acceptance
+
+There is **no accept-document dialog, approval prompt or acceptance command** in
+the current toolkit. The word “approved” in configuration means “the project
+identifies this source as governing intent.” It does not mean Weftlet collected an
+approval event, verified an owner signature or asked someone to review each file.
+Existing authoritative docs can be configured in bulk when adopting the tool.
+
+These settings perform different jobs:
+
+```json
+{
+  "semanticSources": ["PRODUCT.md", "specs", "docs/product"],
+  "approvedIntentSources": ["PRODUCT.md", "specs/**", "docs/product/**"]
+}
+```
+
+This is a fragment to merge into the generated configuration. Use actual project
+paths. `semanticSources` selects files/directories to read; `approvedIntentSources`
+matches exact paths or supported globs to label governing sources. A single
+`docs/product/**` pattern covers the selected files under that directory, including
+future matching files. It does not select documents by itself. Keep unaccepted
+plans, archived material and test reports outside authoritative patterns unless
+that classification is intentional. Follow your project's existing review policy
+for changes to governing docs; Weftlet does not add a second approval ceremony.
+
+| Configuration / output | What it means |
+| --- | --- |
+| Selected and matches `approvedIntentSources` | Source is labeled `declared`; use it as governing intent within its role/scope |
+| Selected but does not match | Source is still consumed, labeled `inferred`; selection alone does not designate authority |
+| `approvedIntentSources` omitted or `[]` | No built-in semantic source is designated governing by this setting; init uses this default |
+| Graph assertion `authority: inferred`, `extractionReview: unreviewed` | The model-derived interpretation/link has not been independently reviewed; the source's authority is separate |
+
+The graph can therefore contain **declared source + inferred/unreviewed
+assertion**. Agents should follow the cited governing requirement and check that
+the graph interpreted it correctly. “Unreviewed” is not a request to accept every
+fact before use, and the current toolkit has no per-assertion approval command or
+acceptance queue. A future review system is separate 2.0 work. Weftlet provides
+labels/citations and workflow instructions; it cannot guarantee an agent follows
+them.
+
+Check the effective classification without running a model:
+
+```sh
+npx weftlet config show
+npx weftlet hydrate --plan --ref HEAD --json
+```
+
+For each selected document, inspect `sourceAuthority` and `approvedBy`. A governing
+source should show `declared` and its matching configuration pattern. If existing
+requirements unexpectedly show `inferred`, fix the source patterns; do not assume
+an approval popup will appear. Traversal roles/owner mappings add classification
+and ownership checks but do not invent an approval workflow. Existing saved
+snapshots keep their original labels: after a policy change, preview and refresh
+under the new configuration before relying on new authority labels.
 
 ### External sources and custom adapters
 

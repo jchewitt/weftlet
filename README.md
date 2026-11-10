@@ -23,12 +23,13 @@ alongside code relationships. Agents can retrieve the relevant intent, follow
 shared contracts and downstream dependencies, and check the cited sources while
 planning a change. The aim is to keep development aligned with the product and
 help surface business drift across features, services and later agent sessions.
-Once you approve a plan and designate its governing documents, those documents
-are authoritative product intent, whether written by a person, an AI or both.
-Weftlet distinguishes those accepted requirements from unaccepted drafts through
-source configuration. An extracted graph assertion's review status does not
-downgrade its approved source; agents should follow that source and verify the
-graph's interpretation against its citations.
+Existing requirements and plans can already be your governing documentation;
+Weftlet does not ask you to accept each one. Configure `semanticSources` to select
+what it reads and `approvedIntentSources` to identify the authoritative files or
+path patterns, regardless of authorship. One pattern can cover an existing
+requirements directory. This is a source-policy declaration, not an interactive
+approval workflow. An extracted graph assertion's review status does not downgrade
+its governing source. See [source authority setup](docs/guides/PROJECT-GUIDE.md#configure-source-authority-no-per-document-acceptance).
 
 The same approach fits repositories with maintained READMEs, reviewed documentation
 generated through CI, or versioned text exports alongside designs in Figma and

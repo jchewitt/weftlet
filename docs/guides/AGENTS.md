@@ -119,6 +119,9 @@ Add a short instruction to the project's existing `AGENTS.md` or `CLAUDE.md`:
 > Treat missing/stale evidence as a gap. Model extraction requires explicit scope
 > and cost approval. Historical evidence cannot validate the current diff.
 
+Designate existing governing documents through `approvedIntentSources` path
+patterns as described in [source authority setup](PROJECT-GUIDE.md#configure-source-authority-no-per-document-acceptance).
+There is no separate document-acceptance interaction in the current toolkit.
 Keep canonical product policy in its owner documents. This instruction connects
 the agent to the workflow; it does not establish new business or CI rules.
 
