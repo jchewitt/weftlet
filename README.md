@@ -68,7 +68,7 @@ and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
 - **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
 - **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
 - **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
-- **[Automatic project skills (0.10 candidate)](docs/guides/PROJECT-SETUP.md)** — install during init or preview/apply setup in an existing project, with managed updates and customization protection.
+- **[Automatic project setup (0.10 candidate)](docs/guides/PROJECT-SETUP.md)** — install skills during init or add them to an existing project; [register and verify MCP](docs/guides/MCP-SETUP.md) with preserved settings and managed updates.
 - **[Act on evidence and authority labels](docs/guides/EVIDENCE-DECISIONS.md)** — how agents use reference/draft material, report conflicts, and how users inspect or rectify results.
 - **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
 - **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
@@ -122,8 +122,9 @@ for extraction and optional mapping proposals without Codex. It supports Claude 
 or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
 The candidate also adds `opencode-cli` extraction with explicitly selected API credentials
 and a required `provider/model`; see [OpenCode setup and limits](docs/PROVIDERS.md#opencode).
-OpenCode subscription/OAuth login and client-registration helpers remain tracked work;
-a compatible MCP client can already query saved evidence without any extraction provider.
+OpenCode subscription/OAuth login remains tracked work. Client registration and verification
+are implemented for review in the [0.10 candidate](docs/guides/MCP-SETUP.md).
+A compatible MCP client can already query saved evidence without any extraction provider.
 
 ```sh
 npx @weftlet/toolkit hydrate --ref HEAD

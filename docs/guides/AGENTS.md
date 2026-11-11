@@ -5,7 +5,8 @@
 MCP exposes saved evidence. A skill tells the agent when and how to use it.
 Configure both, then verify them in a fresh client session. Published 0.9 uses
 the manual setup below. The 0.10 candidate adds [automatic skill installation](PROJECT-SETUP.md)
-through `init` and `setup`; MCP registration remains manual in that increment.
+through `init` and `setup`, plus [MCP registration and verification](MCP-SETUP.md)
+through `setup --mcp`.
 
 ## 1. Choose a stable server command
 
@@ -180,8 +181,9 @@ own login/API path and OpenCode API credentials without Codex. See
 second CLI just to query a graph. MCP uses no Weftlet cloud key.
 
 The server's protocol behavior is tested through fresh CLI/MCP consumer checks.
-These manual client profiles are configuration examples; actual authenticated
+The candidate also tests generated registrations and launcher startup.
+These manual client profiles remain configuration examples; actual authenticated
 Claude/OpenCode development sessions are not established by those tests. Codex
-reference pages were checked for this guide; Claude/OpenCode documentation sites
-returned HTTP 403 in this environment, so their profiles still need a real-client
-verification against the linked current documentation.
+reference pages were checked for this guide; Claude's documentation site
+returned HTTP 403. OpenCode 1.x was subsequently checked against its upstream
+versioned guide. Real-client verification remains distinct from protocol checks.
