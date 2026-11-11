@@ -10,6 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { smokeMappingProposals } from './smoke-mapping-proposals.mjs';
+import { smokeProjectSetup } from './smoke-project-setup.mjs';
 import { smokeTraversal } from './smoke-traversal.mjs';
 import { pnpmInvocation } from './package-manager.mjs';
 import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
@@ -226,6 +227,7 @@ try {
         throw new Error(`Documented archive installation did not install reviewed ${name} bytes`);
       }
     }
+    await smokeProjectSetup(freshProject, registryPackages.get('@weftlet/toolkit').manifest.version);
   } finally {
     registry.closeAllConnections();
     await new Promise((resolve) => registry.close(resolve));
@@ -727,7 +729,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   const client = new Client({ name: 'installed-smoke', version: '1.0.0' });
   try {
     await client.connect(transport);
-    if (client.getServerVersion()?.name !== 'context-graph') throw new Error('MCP initialization failed');
+    if (client.getServerVersion()?.name !== 'context-graph' || client.getServerVersion()?.version !== registryPackages.get('@weftlet/toolkit').manifest.version) throw new Error('MCP initialization failed');
     const tools = await client.listTools();
     if (!tools.tools.some((tool) => tool.name === 'impact.scan')) throw new Error('Missing impact.scan');
     for (const name of ['graph.catalog', 'graph.fact']) {
@@ -756,6 +758,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
+  await smokeProjectSetup(consumer, registryPackages.get('@weftlet/toolkit').manifest.version, 'publication-smoke');
   await smokeMappingProposals(installedRoot, documentConfig);
   console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {

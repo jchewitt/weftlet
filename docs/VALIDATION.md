@@ -1,5 +1,52 @@
 # Validation evidence
 
+## S2/S4 managed MCP registration and verification, 2026-11-11 UTC
+
+Implemented for review on the S1 foundation; see [ADR 049](ADR-049-project-mcp-setup.md)
+and the [MCP setup guide](guides/MCP-SETUP.md). The candidate adds project Codex,
+Claude Code and OpenCode 1.x registration, managed-entry updates, portable/absolute
+launchers and a bounded fresh stdio verification command. MCP initialization now
+reports the installed toolkit version rather than hardcoded 0.1.0. Publication
+remains on hold; this is source/candidate evidence, not a published 0.10 claim.
+
+Linux / Node 24.19.0 / pnpm 10.18.2:
+
+- Build and the final uninterrupted full suite passed: **38 core + 1,096 toolkit
+  tests**, with three optional integrations skipped. The 17 focused skill/MCP
+  configuration/CLI checks passed after the setup helpers were factored. A new
+  real-MCP launcher test also passed separately and in the final suite.
+- Generated client entries preserve unrelated JSON/TOML settings, comments and
+  credentials. Tests cover duplicate/malformed configs, managed updates, CRLF,
+  stale config-bound plans, customized entries/launchers, missing installations,
+  ambiguous OpenCode config files, symlink/junction refusal and POSIX permission
+  preservation. Config plans expose hashes rather than existing credential values.
+- Fresh packed npm/npx consumer smoke passed with all three registration shapes:
+  preview/apply/repeat, nested cwd, relocated checkout and an absolute launcher
+  started outside the project. Real protocol initialization advertises the
+  installed version and tools. Verification distinguishes readable and missing
+  saved snapshots, rejects noisy/failed adapter startup and keeps private sentinel
+  stdout/stderr/error content out of reports. Existing real SCIP, strict RDF/SHACL,
+  persistence/query/viewer and no-model setup checks also passed.
+- Architecture passed with **18 advisory findings**, unchanged in count. Five new
+  setup complexity findings prompted separating parsing, config editing and plan
+  preparation helpers; no policy or baseline was changed. Generated license notices,
+  release documentation, changed guide links, workflow YAML, extraction inventory
+  and whitespace checks passed.
+
+An initial suite overlapped an output-cleaning rebuild and reported four missing
+compiled-core errors. The affected eight checks passed after rebuilding, and the
+final full suite above ran without concurrent rebuilds and passed.
+
+Windows CI now includes the generated-launcher test as well as configuration and
+preservation checks; hosted execution is pending. Actual Codex/Claude/OpenCode
+client trust/discovery and authenticated sessions remain separate from launching
+their configured commands through the MCP SDK. Codex project config and OpenCode
+1.x upstream reference formats were checked; Claude's documentation site remained
+inaccessible from this environment. OpenCode v2 schema is detected for manual
+review, not advertised as supported. No live model, private consumer checkout/graph modification, hosted deployment
+or npm publication was performed by this increment.
+
+
 ## S1 automatic project skill setup, 2026-11-11 Central
 
 Implemented for review on the accepted onboarding queue; see
