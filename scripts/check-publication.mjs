@@ -199,6 +199,18 @@ try {
     if (!(await readFile(join(freshProject, '.gitignore'), 'utf8')).includes('.context-graph/')) {
       throw new Error('Setup did not exclude generated evidence from Git');
     }
+    const skillPreview = JSON.parse(await npx(documented.npxCommands[0][0], 'setup', '--client', 'codex', '--json'));
+    if (!skillPreview.ready || skillPreview.applied || skillPreview.files[0]?.action !== 'unchanged' ||
+        skillPreview.packageVersion !== registryPackages.get('@weftlet/toolkit').manifest.version) {
+      throw new Error('Packed init must install the current managed skill without manual copying');
+    }
+    const otherSkill = JSON.parse(await npx(documented.npxCommands[0][0], 'setup', '--client', 'claude', '--json'));
+    if (otherSkill.files[0]?.action !== 'create') throw new Error('Packed setup preview failed');
+    const appliedSkill = JSON.parse(await npx(documented.npxCommands[0][0], 'setup', '--client', 'claude',
+      '--apply', '--expect-plan', otherSkill.planId, '--json'));
+    if (!appliedSkill.applied || (await readFile(join(freshProject, appliedSkill.files[0].path), 'utf8')) !== otherSkill.files[0].after) {
+      throw new Error('Packed setup did not install the previewed skill');
+    }
     if (packages.some(([name]) => !servedArchives.has(name))) {
       throw new Error('Fresh npx setup did not fetch both prepared archives from the disposable registry');
     }

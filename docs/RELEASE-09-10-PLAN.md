@@ -132,13 +132,15 @@ a separate public-demo tutorial, manual agent setup, CI scenarios and release
 history. Both npm archives include their generated changelogs. This delivers the
 manual workflow guidance for I2/I6 and copyable I5 examples. I3 client profiles
 are documented with verification limits; they do not establish real-client
-acceptance. I4's setup helper remains unimplemented. I7 has a bounded independent
+acceptance. The subsequent S1 increment adds init/setup skill installation and
+managed updates; MCP registration and broader I4 integration remain. I7 has a bounded independent
 code-only tutorial/CLI/MCP smoke, not a live semantic or hosted consumer pass.
-The manual guides do not imply automatic skill installation or MCP registration.
+See [project skill setup](guides/PROJECT-SETUP.md) for the candidate installation
+commands; the manual profiles remain the fallback and MCP registration path.
 
 The source documentation increment merged in PR 85. The separate website is
 under review; publication is on hold while its release-update automation is
-prepared. S1 setup is next, followed by the sequence in the current 1.0 queue.
+prepared. S1 is implemented for review; S2/S4 follow in the current 1.0 queue.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 
