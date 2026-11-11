@@ -3,8 +3,9 @@
 [Documentation home](../README.md) · [Project guide](PROJECT-GUIDE.md)
 
 MCP exposes saved evidence. A skill tells the agent when and how to use it.
-Configure both, then verify them in a fresh client session. This is manual setup;
-`weftlet init` does not register clients or install instruction files.
+Configure both, then verify them in a fresh client session. Published 0.9 uses
+the manual setup below. The 0.10 candidate adds [automatic skill installation](PROJECT-SETUP.md)
+through `init` and `setup`; MCP registration remains manual in that increment.
 
 ## 1. Choose a stable server command
 
@@ -83,6 +84,10 @@ Other MCP clients can use the same command, arguments and environment in their
 own configuration format. Tool-name prefixes may be added by the client.
 
 ## 3. Install the packaged workflow skill
+
+With the 0.10 candidate, use [project setup](PROJECT-SETUP.md) to install and
+update managed copies. The following is the manual alternative for 0.9 or
+projects managing their own instructions.
 
 Copy `node_modules/@weftlet/toolkit/templates/context-graph-development/SKILL.md`
 to the appropriate project location. Use the same content for each client:

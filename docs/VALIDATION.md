@@ -1,5 +1,40 @@
 # Validation evidence
 
+## S1 automatic project skill setup, 2026-11-11 Central
+
+Implemented for review on the accepted onboarding queue; see
+[ADR 048](ADR-048-project-skill-setup.md) and [project setup](guides/PROJECT-SETUP.md).
+Init installs the selected provider's project skill by default, with explicit
+client selection/opt-out and bulk governing-source patterns. Existing projects
+can preview/apply setup, bind application to a plan ID, and update unchanged
+managed copies while preserving customized instructions. No model is used.
+
+Linux/Node 24.19.0/pnpm 10.18.2: build and full deterministic run passed
+**38 core + 1,082 toolkit tests**, with three optional integrations skipped.
+Two interactive confirmation/cancellation cases and one configuration-path
+collision case were added after full-suite discovery and passed separately.
+The affected init/interactive suite (7 tests) passed again after extracting the
+skill preflight helper; typechecking also passed. Earlier focused setup coverage
+includes three client destinations, alternate cwd/spaces, stale-plan refusal,
+managed upgrades, CRLF, junction/symlink refusal, lock contention and preservation
+of existing configuration/instructions. Hosted Windows qualification is pending.
+
+Architecture passed with 18 advisory findings. A temporary 19th complexity
+finding in the initializer prompted factoring skill preflight into its own
+helper; no policy or baseline was relaxed. License, release-documentation,
+changed-guide links, workflow YAML, extraction inventory and whitespace checks
+passed. Fresh packed npm/npx smoke passed, including default init installation
+and explicit second-client preview/apply, alongside existing SCIP/RDF/SHACL,
+saved-query and MCP checks. A rebuilt final helper-refactor archive passed that
+same full packed-consumer smoke before the review handoff.
+
+The shared writer checks current bytes and coordinates toolkit writers, but
+multiple files/init steps are not one transaction. Interrupted-process recovery
+and customization conflicts are documented. Actual client-session skill
+discovery, automatic MCP registration (S2), and broader setup diagnostics (S4)
+remain separate. Publication is held; no live provider, private consumer,
+website deployment or npm publishing action was performed.
+
 ## Accepted onboarding queue and publication hold, 2026-11-10 Central
 
 The maintainer accepted S1–S7 from the setup audit and requested a publication
