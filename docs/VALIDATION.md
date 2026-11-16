@@ -1,5 +1,59 @@
 # Validation evidence
 
+## S3 managed CI scaffolding, 2026-11-12 UTC
+
+Implemented for review; see [ADR 050](ADR-050-ci-scaffolding.md) and
+[CI setup](guides/CI-SETUP.md). `setup ci` previews/applies standalone GitHub
+workflows, retains existing jobs/settings, and supports npm/pnpm root installs,
+nested packages, selected build/test scripts and an explicit architecture policy.
+Optional generation preserves the configured Codex/Claude/OpenCode provider and
+requires a selected runner, environment, CLI pin and document/byte budgets. It
+uses manual/default-branch dispatch with an explicit model checkbox; no workflow
+is dispatched by setup and no credentials are read or written by the helper.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and the full suite passed **38 core +
+1,106 toolkit tests**, with the same three optional integrations skipped.
+Focused tests cover all three provider profiles, hosted API versus self-hosted
+account/saved authentication, secrets limited to the hydration step, YAML parsing,
+large read-only lockfile guards, root/nested package selection, existing workflow
+and config preservation, stale inputs, managed/CRLF updates, customized targets,
+unsafe paths, linked directories and selected-script validation. The final nine
+CI-planner cases also passed after making their policy fixture canonical.
+
+Fresh packed npm/npx and pnpm consumers passed. The CI smoke uses a nested package
+resolving the installed toolkit through the ancestor dependency layout, executes
+the generated build/test/config-validation/no-model-plan commands, and checks
+repeat setup and existing-workflow byte preservation in both npm and pnpm fixtures.
+Frozen install steps are structurally checked; these smoke fixtures use the
+existing independent archive-install checks rather than replaying package-manager
+installation from YAML. Existing real SCIP, strict RDF/SHACL, saved queries,
+viewer and MCP smoke also passed. The first CI smoke attempt correctly rejected
+a fixture with an unpinned pnpm manager; the final fixtures explicitly cover the
+intended npm layout and pinned pnpm project instead of relaxing the requirement.
+
+Architecture passed with **18 advisory findings**; two new setup complexity
+signals were resolved by factoring project inspection and provider checks, without
+policy/baseline changes. Release-documentation, inventory, generated license
+notices, changed local guide links, workflow YAML and whitespace checks passed.
+
+Windows CI includes the new planner/CLI cases. Actual generated consumer workflow
+dispatch, provider login/model usage, self-hosted provisioning and environment
+protection remain target-project checks. No graph/cache upload is generated;
+verified snapshot delivery remains S6, and local retention remains R1–R5. No
+private consumer change, model call, GitHub generation dispatch, website change
+or npm publication occurred. Publication is still held.
+
+### S2/S4 hosted follow-up
+
+For commit `0ce05172231f3a3f1e8b2be790c29f56fd369bfa`,
+[hosted run 43104016367](https://github.com/jchewitt/weftlet/actions/runs/43104016367)
+passed Linux deterministic/packed/browser checks, Windows storage/startup (including
+the generated MCP launcher) and Windows relationship retrieval. The PR-event run
+43104069050 also passed those three jobs. This closes the pending hosted platform
+qualification for that increment; actual development-client trust/discovery and
+live authentication remain distinct checks.
+
+
 ## S2/S4 managed MCP registration and verification, 2026-11-11 UTC
 
 Implemented for review on the S1 foundation; see [ADR 049](ADR-049-project-mcp-setup.md)

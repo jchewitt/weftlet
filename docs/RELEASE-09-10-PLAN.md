@@ -141,7 +141,8 @@ commands and [MCP setup](guides/MCP-SETUP.md); manual profiles remain a fallback
 
 The source documentation increment merged in PR 85. The separate website is
 under review; publication is on hold while its release-update automation is
-prepared. S1 and S2/S4 are implemented for review; S3 follows in the current 1.0 queue.
+prepared. S1, S2/S4 and S3 are implemented for review. S3 adds managed standalone CI
+workflows; S5 assisted integration follows in the current 1.0 queue.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

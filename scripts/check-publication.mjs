@@ -10,6 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { smokeMappingProposals } from './smoke-mapping-proposals.mjs';
+import { smokeCiSetup } from './smoke-ci-setup.mjs';
 import { smokeProjectSetup } from './smoke-project-setup.mjs';
 import { smokeTraversal } from './smoke-traversal.mjs';
 import { pnpmInvocation } from './package-manager.mjs';
@@ -228,6 +229,7 @@ try {
       }
     }
     await smokeProjectSetup(freshProject, registryPackages.get('@weftlet/toolkit').manifest.version);
+    await smokeCiSetup(freshProject, join(freshProject, 'node_modules/@weftlet/toolkit'));
   } finally {
     registry.closeAllConnections();
     await new Promise((resolve) => registry.close(resolve));
@@ -249,6 +251,7 @@ try {
       `${JSON.stringify(
         {
           name: 'context-graph-publication-smoke',
+          packageManager: 'pnpm@10.18.2',
           private: true,
           type: 'module',
           dependencies: {
@@ -759,6 +762,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     await client.close();
   }
   await smokeProjectSetup(consumer, registryPackages.get('@weftlet/toolkit').manifest.version, 'publication-smoke');
+  await smokeCiSetup(consumer, installedRoot, false);
   await smokeMappingProposals(installedRoot, documentConfig);
   console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {

@@ -3,6 +3,10 @@
 [Documentation home](../README.md) · [Project guide](PROJECT-GUIDE.md) ·
 [Agent setup](AGENTS.md)
 
+The unreleased 0.10 candidate adds [automatic CI scaffolding](CI-SETUP.md) with
+`weftlet setup ci`: preview/apply standalone PR-check and optional trusted-generation
+workflows while preserving existing CI. Published 0.9 uses the examples below.
+
 A typical project builds a committed graph in trusted CI, retains a private
 snapshot and lets local agents/viewers query it. CI does not automatically update
 desktop MCP processes or local heads. An HTML report is also not a snapshot store.
@@ -127,8 +131,9 @@ Docker is not a prerequisite for these local/static instructions.
 
 ## Qualification
 
-These are copyable consumer examples, not workflows automatically installed or
-executed by toolkit setup. Their config/preview commands and the tutorial's
+The examples on this page remain manually adapted. The candidate
+[setup helper](CI-SETUP.md) generates and installs its own managed workflows after
+explicit application, and dispatches none. Their config/preview commands and the tutorial's
 code-only flow are checked locally. Workflow structure and client profiles are
 reviewed examples; actual hosted dispatch, secrets, provider authentication,
 private delivery and client UI acceptance require validation in the target project.

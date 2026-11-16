@@ -175,3 +175,18 @@ Move to [CI and evidence delivery](../guides/CI.md) for a credential-free PR
 workflow and opt-in trusted generation. For a richer asynchronous flow, inspect
 `examples/pipeline` (discovery → analysis → admission → planning → execution →
 outcomes); its broader linkage remains bounded by actual extracted evidence.
+
+### Candidate: install the CI checks
+
+With the unreleased 0.10 candidate installed, use [CI setup](../guides/CI-SETUP.md)
+in the demo project to generate a standalone PR workflow:
+
+```sh
+npx weftlet setup ci --checks --dry-run
+npx weftlet setup ci --checks --apply --expect-plan <plan-id>
+```
+
+Select `--test-script`/`--build-script` only for scripts present in the demo's
+package.json. Commit the config, lockfile and generated workflow. This checks
+configuration and committed hydration scope without model credentials. Add trusted
+generation separately after reviewing its provider, budgets and delivery needs.
