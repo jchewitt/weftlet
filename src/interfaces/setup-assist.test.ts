@@ -1,5 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
 import { mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -14,7 +16,8 @@ it('source CLI previews, reviews and applies a saved proposal from another cwd w
     config.repositoryRoot = '.'; config.semantic.provider = 'codex-cli'; config.semantic.auth = { mode: 'chatgpt' };
     await writeFile(join(root, 'context-graph.config.json'), JSON.stringify(config));
     await mkdir(join(root, 'docs')); await writeFile(join(root, 'docs/intent.md'), '# Public intent');
-    const base = ['--import', resolve('node_modules/tsx/dist/loader.mjs'), resolve('src/cli.ts'), 'setup', 'assist', '--directory', root];
+    const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
+    const base = ['--import', tsx, resolve('src/cli.ts'), 'setup', 'assist', '--directory', root];
     const result = await exec(process.execPath, [...base, '--input', 'docs/intent.md', '--dry-run', '--json'], { cwd: tmpdir() });
     expect(JSON.parse(result.stdout)).toMatchObject({ modelCalled: false, requests: 1, retries: 0 });
     const options = { directory: root, inputs: ['docs/intent.md'] };

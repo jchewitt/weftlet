@@ -44,6 +44,22 @@ Inventory, licensing, release-documentation consistency and local guide links
 were checked. No private consumer source, hydration or paid/provider request was
 used in this qualification.
 
+### S5 Windows CLI harness correction
+
+The original `d641397` hosted Linux checks and Windows relationship checks
+passed. Windows setup qualification failed before the assisted CLI could start:
+the new test supplied a drive-letter path to Node's ESM `--import` option,
+which requires a file URL (`ERR_UNSUPPORTED_ESM_URL_SCHEME`, protocol `d:`).
+The other 42 tests in that setup step passed. See the
+[original failed run](https://github.com/jchewitt/weftlet/actions/runs/43930078165).
+
+The test now resolves the installed `tsx` entry and converts it with
+`pathToFileURL`, matching the existing cross-platform CI setup test launcher.
+The focused CLI lifecycle test passes locally. Product code and test assertions
+are unchanged; no Windows test is skipped or weakened. Native Windows
+qualification is recorded by the updated [PR 93 checks](https://github.com/jchewitt/weftlet/pull/93/checks),
+separately from this Linux test result.
+
 ### S3 hosted follow-up
 
 The CI scaffolding source at `f95e6dd` in [PR 92](https://github.com/jchewitt/weftlet/pull/92)
