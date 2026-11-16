@@ -9,6 +9,7 @@ Start with the path that matches your task:
 | Connect Codex, Claude Code or OpenCode and install the skill | [Agent setup](guides/AGENTS.md) |
 | Install/update project skills automatically (0.10 candidate) | [Project skill setup](guides/PROJECT-SETUP.md) |
 | Register and verify project MCP tools (0.10 candidate) | [Automatic MCP setup](guides/MCP-SETUP.md) |
+| Adapt setup to an existing project (0.10 candidate) | [Assisted setup](guides/ASSISTED-SETUP.md) |
 | Install managed GitHub workflows (0.10 candidate) | [CI setup](guides/CI-SETUP.md) |
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | See what changed between releases | [Release overview](RELEASES.md), [toolkit changelog](../CHANGELOG.md), [core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) |

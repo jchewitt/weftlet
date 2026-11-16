@@ -1,5 +1,60 @@
 # Validation evidence
 
+## S5 optional assisted integration, 2026-11-16 Central
+
+Implemented for review; [ADR 051](ADR-051-assisted-setup.md) and the
+[assisted setup guide](guides/ASSISTED-SETUP.md) describe the contract. Selected
+inputs are previewed before one explicit Codex/Claude/OpenCode request. Typed
+recommendations become deterministic source-array, skill/MCP and CI additions.
+Saved plans are reviewed/applied without another provider request. Existing
+source authority is preserved unless an exact reviewed change is explicitly
+accepted; graph assertions, snapshots and semantic artifacts are not edited.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: final build and full frozen-source rerun passed
+**38 core + 1,119 toolkit tests**, with **3 optional integrations skipped**
+(openCAESAR, enforcing-SELinux compiler, and real OpenCode CLI integration).
+The final focused planner/CLI/provider/shared-Codex regression run passed 17 tests.
+The full rerun supersedes an earlier run whose diagnostic test was edited while
+an older module remained loaded; no failure from that run is counted as a pass.
+
+The new public cases cover selected-input consent, manifest-body exclusion,
+credential-pattern/type/size/link checks, strict output fields and source-path
+membership, preserved config/authentication, separate authority acceptance,
+existing workflow jobs/triggers/permissions/comments, customized targets,
+stale inputs/lockfiles, changes during model execution and tampered proposals.
+Disk-round-trip identity includes absent optional sections; a fresh CLI process
+reviews/applies a saved proposal from another cwd. Repeat planning after a
+completed setup produces no changes. Private existing MCP settings remain
+unchanged and absent from the proposal's public fields.
+
+Mocked provider boundaries cover independent Codex account and Claude login
+requests, isolated OpenCode API credentials, disabled tools, selected provider
+only, cancellation/deadlines, failure propagation and no automatic retry/fallback.
+The existing mapping-provider tests also pass after sharing its isolated Codex
+request implementation. Semantic extraction/assembly/cache identities are
+unchanged. These checks do **not** establish live model usefulness, actual login
+acceptance, development-client loading, or a dispatched consumer workflow.
+
+Fresh npm/npx and pnpm archive consumers passed, including assisted input preview
+from another cwd with no model/module loading, generated CI steps, skill/MCP
+setup and the existing real TypeScript/SCIP, RDF/SPARQL/strict-SHACL, saved-query,
+viewer and MCP smoke checks. No package was published by these archive tests.
+Architecture passes with **18 advisory findings** and no policy/baseline change.
+Inventory, licensing, release-documentation consistency and local guide links
+were checked. No private consumer source, hydration or paid/provider request was
+used in this qualification.
+
+### S3 hosted follow-up
+
+The CI scaffolding source at `f95e6dd` in [PR 92](https://github.com/jchewitt/weftlet/pull/92)
+passed hosted Linux deterministic/packed/browser checks and Windows
+storage/startup/setup and relationship-retrieval checks. See
+[the PR run](https://github.com/jchewitt/weftlet/actions/runs/43925156315).
+Those results qualify S3; S5's hosted results are separate from the local results
+above. Source-side docs dispatch remains draft PR 87 when checked; the maintainer
+reports the receiver is configured and authorizes reviewed publication, with an
+end-to-end docs-agent check after release. No release is claimed by this record.
+
 ## S3 managed CI scaffolding, 2026-11-12 UTC
 
 Implemented for review; see [ADR 050](ADR-050-ci-scaffolding.md) and
@@ -9,7 +64,9 @@ nested packages, selected build/test scripts and an explicit architecture policy
 Optional generation preserves the configured Codex/Claude/OpenCode provider and
 requires a selected runner, environment, CLI pin and document/byte budgets. It
 uses manual/default-branch dispatch with an explicit model checkbox; no workflow
-is dispatched by setup and no credentials are read or written by the helper.
+is dispatched by setup and no credentials are provisioned or authentication changed.
+Existing package-manager settings are read privately for stale-plan guards; their
+contents are omitted from public previews.
 
 Linux / Node 24.19.0 / pnpm 10.18.2: build and the full suite passed **38 core +
 1,106 toolkit tests**, with the same three optional integrations skipped.

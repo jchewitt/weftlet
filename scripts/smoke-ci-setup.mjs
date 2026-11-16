@@ -50,5 +50,12 @@ export async function smokeCiSetup(consumer, installedRoot, initialize = true) {
   if ((await run()).files[0].action !== 'unchanged' || await readFile(join(consumer, '.github/workflows/existing.yml'), 'utf8') !== existing) {
     throw Error('CI setup must preserve existing workflows and repeat without changes');
   }
+  const assisted = JSON.parse((await execute(process.execPath, [join(installedRoot, 'dist/cli.js'),
+    'setup', 'assist', '--directory', consumer, '--config', initialize ? 'context-graph.config.json' : 'preview.config.json',
+    '--input', 'tools/ci project/package.json', '--input', '.github/workflows/existing.yml', '--dry-run', '--json'],
+    { cwd: temporary, timeout: 60_000, maxBuffer: 2 * 1024 * 1024 })).stdout);
+  if (assisted.modelCalled !== false || assisted.files.length !== 2 || !assisted.inputId || assisted.requests !== 1) {
+    throw Error('Installed assisted setup must preview bounded inputs without loading a provider');
+  }
   await rm(temporary, { recursive: true, force: true });
 }

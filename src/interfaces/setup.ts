@@ -1,3 +1,4 @@
+import { runAssistedSetup } from './setup-assist.js';
 import { runCiSetup } from './setup-ci.js';
 import { applyProjectSetup, planProjectSetup, type ProjectSetupOptions } from '../application/setup/project.js';
 import { verifyProjectSetup } from '../application/setup/verify.js';
@@ -33,6 +34,7 @@ function parseSetupArgs(args: readonly string[]) {
 }
 
 export async function runSetup(args: readonly string[]): Promise<void> {
+  if (args[0] === 'assist') return runAssistedSetup(args.slice(1));
   if (args[0] === 'ci') return runCiSetup(args.slice(1));
   const { clients, values, flags } = parseSetupArgs(args);
   if (flags.has('--apply') && flags.has('--dry-run')) throw Error('Choose --apply or --dry-run, not both');
