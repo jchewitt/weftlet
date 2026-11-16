@@ -29,7 +29,7 @@ function matchesIdentity(value: Record<string, unknown>, key: string, source: Se
       (field) => value[field] === config[field as keyof typeof config]);
 }
 
-function reusableArtifact(value: unknown, key: string, source: SemanticSource,
+export function reusableArtifact(value: unknown, key: string, source: SemanticSource,
   config: ContextGraphConfig['semantic'], modelIdentity: string): value is SemanticArtifact {
   if (!record(value) || !matchesIdentity(value, key, source, config, modelIdentity) ||
     !record(value.source) || value.source.digest !== source.digest ||

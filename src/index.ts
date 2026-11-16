@@ -16,6 +16,8 @@ export * from "./graph/rdf.js";
 export * from "./extraction/providers.js";
 export * from './application/hydration-plan.js';
 export * from './application/cache-adoption.js';
+export { exportSnapshot, type ExportSnapshotOptions } from './application/delivery/export.js';
+export { importSnapshot, type ImportSnapshotOptions } from './application/delivery/import.js';
 export * from './application/hydration-failure.js';
 export * from './extraction/semantic-diagnostics.js';
 export * from './graph/identity-preflight.js';
