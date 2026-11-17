@@ -123,6 +123,18 @@ Follow [agent setup](../guides/AGENTS.md) inside `search-demo`. Use its absolute
 config and installed MCP entry. Copy the packaged skill to your client's project
 skill directory. Reconnect and confirm the advertised tools.
 
+With the unreleased 0.10 candidate installed, replace those manual steps with
+[automatic project setup](../guides/MCP-SETUP.md):
+
+```sh
+npx weftlet setup --client codex --mcp --dry-run
+npx weftlet setup --client codex --mcp --apply --expect-plan <plan-id> --verify --snapshot <saved-id>
+```
+
+Select your development client, use the snapshot ID from hydration, then restart
+that client and confirm its tools. The verification probe reads existing evidence;
+it makes no model request.
+
 Give the agent this task:
 
 > Use context-graph-development and the saved graph before editing. The owner is

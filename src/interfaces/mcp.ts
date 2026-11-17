@@ -18,6 +18,7 @@ import { graphCatalogTool, graphFactTool, handleGraphDiscoveryTool } from './gra
 import { graphCompatibilityTool, handleGraphCompatibility } from './graph-compatibility.js';
 import { graphCoverageTool, handleCodeCoverage } from './code-coverage.js';
 import { mappingPlanTool, mappingReadTool, handleMappingTool } from './mapping-proposals.js';
+import { toolkitIdentity } from '../infrastructure/package-identity.js';
 
 async function main(): Promise<void> {
   const local = resolve('context-graph.config.json');
@@ -25,8 +26,9 @@ async function main(): Promise<void> {
     process.env.CONTEXT_GRAPH_CONFIG ??
     local;
   const application = await createContextGraphApplication(configPath);
+  const identity = await toolkitIdentity();
   const server = new Server(
-    { name: 'context-graph', version: '0.1.0' },
+    { name: 'context-graph', version: identity.version },
     {
       capabilities: { tools: {} },
       instructions:

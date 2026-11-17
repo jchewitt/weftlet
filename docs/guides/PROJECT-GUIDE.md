@@ -227,7 +227,8 @@ invent approved requirements to make graph coverage look complete.
 The 0.10 candidate also [installs project agent skills](PROJECT-SETUP.md) during
 init. Use `--client` to select clients or `--no-skill` to opt out; existing
 projects use `weftlet setup`. Bulk governing paths can be supplied with repeated
-`--approved-intent-source` flags. Published 0.9 uses the manual skill instructions.
+`--approved-intent-source` flags. Add `--mcp` to setup for [project server registration
+and verification](MCP-SETUP.md). Published 0.9 uses the manual skill instructions.
 
 Use Node 24+ and a Git repository. In the project root:
 

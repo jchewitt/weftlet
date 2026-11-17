@@ -58,7 +58,9 @@ export async function applySetupFiles(root: string, changes: readonly SetupFileC
       await recheck(change);
       const temporary = `${target}.${randomUUID()}.tmp`;
       try {
-        await writeFile(temporary, change.after, { flag: 'wx' });
+        // Client settings may already contain credentials; replacement must not widen permissions.
+        const mode = change.before === null ? 0o600 : (await lstat(target)).mode & 0o777;
+        await writeFile(temporary, change.after, { flag: 'wx', mode });
         await recheck(change);
         // Hard-link publication creates a complete file and fails if another writer won.
         if (change.before === null) await link(temporary, target);

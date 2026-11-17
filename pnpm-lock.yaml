@@ -41,6 +41,9 @@ importers:
       import-meta-resolve:
         specifier: 4.2.0
         version: 4.2.0
+      jsonc-parser:
+        specifier: 3.3.1
+        version: 3.3.1
       mdast-util-from-markdown:
         specifier: 2.1.0
         version: 2.1.0
@@ -50,6 +53,9 @@ importers:
       rdf-validate-shacl:
         specifier: 0.6.5
         version: 0.6.5
+      smol-toml:
+        specifier: 1.9.1
+        version: 1.9.1
       sparqljs:
         specifier: 3.7.4
         version: 3.7.4
@@ -3274,6 +3280,10 @@ packages:
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
+
+  smol-toml@1.9.1:
+    resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
+    engines: {node: '>= 18'}
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -9303,6 +9313,8 @@ snapshots:
   siginfo@2.0.0: {}
 
   sisteransi@1.0.5: {}
+
+  smol-toml@1.9.1: {}
 
   source-map-js@1.2.2: {}
 

@@ -51,8 +51,8 @@ it leaves existing graph configuration and other project instructions intact.
 Commit the selected instruction files with the project. The installed skill
 describes when to query, follow citations/relationships, report gaps and check
 freshness. [Register MCP](AGENTS.md#2-register-your-client) and reload the
-client as needed to make the graph tools available. This increment installs
-skills; automatic MCP registration is the next task.
+client as needed to make the graph tools available. Init installs
+skills; [automatic MCP registration and verification](MCP-SETUP.md) now build on it.
 
 ## Updates and project customizations
 

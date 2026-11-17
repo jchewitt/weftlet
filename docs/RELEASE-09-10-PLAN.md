@@ -133,14 +133,15 @@ history. Both npm archives include their generated changelogs. This delivers the
 manual workflow guidance for I2/I6 and copyable I5 examples. I3 client profiles
 are documented with verification limits; they do not establish real-client
 acceptance. The subsequent S1 increment adds init/setup skill installation and
-managed updates; MCP registration and broader I4 integration remain. I7 has a bounded independent
+managed updates. S2/S4 add previewed MCP registration and fresh protocol
+verification; broader I4 integration remains. I7 has a bounded independent
 code-only tutorial/CLI/MCP smoke, not a live semantic or hosted consumer pass.
 See [project skill setup](guides/PROJECT-SETUP.md) for the candidate installation
-commands; the manual profiles remain the fallback and MCP registration path.
+commands and [MCP setup](guides/MCP-SETUP.md); manual profiles remain a fallback.
 
 The source documentation increment merged in PR 85. The separate website is
 under review; publication is on hold while its release-update automation is
-prepared. S1 is implemented for review; S2/S4 follow in the current 1.0 queue.
+prepared. S1 and S2/S4 are implemented for review; S3 follows in the current 1.0 queue.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

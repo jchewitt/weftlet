@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "866a6666edefd8c222a095200582b0917b5436c3a537c03f6d634114c04af5a4"
+      "destinationSha256": "8534b6633bffca5be0befa8d82bdfb6a50074bf54da404a5351a2f21808e3ad9"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "b2e83182d9356eda0cba7301cd75cf7efa671af5f33ee5cc482915d44dd1b531"
+      "destinationSha256": "9dcedbcc53f1a45a6d3fd6bbcea42962be2e317a168592b6b62a4628d648aacf"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "94a3bba92225cbe1afe8f6bf9f4b0760287a34aa988f5d0b114df8e0555af412"
+      "destinationSha256": "e8d04bd5893bc93b1cb3c9ab179f0a01a52474e81199b934040b8a2a3263f287"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "175cd3add1088226e194eda7581e92b294d8ed2519bc549c69c4adc42ceed190"
+      "destinationSha256": "933eb741337c3067ec46a76a91ea7648be1186d058c5e1afe0e7e6c47062b900"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -339,14 +339,14 @@
       "destinationPath": "tests/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "755299ad4dde6c0565e441ef468fcf197b636d1c08a558e8e459f884b36e638c"
+      "destinationSha256": "07951aa262626572650865554e184f5104bd356bbe92f76749a200c417376869"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "472dba24db993bdd3db244bee2418c709dc42a06331fdaa753765a875843ebf9"
+      "destinationSha256": "029ddb57a3a31c884ed2c14d5620c528c6a9881391fe7c3cfbb5bf22edc1cb87"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -582,6 +582,7 @@
     ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
     ".changeset/guided-project-documentation.md",
+    ".changeset/project-mcp-registration.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -646,6 +647,7 @@
     "docs/ADR-046-semantic-physical-file-validation.md",
     "docs/ADR-047-provider-choice.md",
     "docs/ADR-048-project-skill-setup.md",
+    "docs/ADR-049-project-mcp-setup.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -688,6 +690,7 @@
     "docs/guides/AGENTS.md",
     "docs/guides/CI.md",
     "docs/guides/EVIDENCE-DECISIONS.md",
+    "docs/guides/MCP-SETUP.md",
     "docs/guides/PROJECT-GUIDE.md",
     "docs/guides/PROJECT-SETUP.md",
     "docs/licenses/REVIEW.md",
@@ -960,6 +963,7 @@
     "scripts/same-group-study/v3-rows.ts",
     "scripts/same-group-study/v3-signals.ts",
     "scripts/smoke-mapping-proposals.mjs",
+    "scripts/smoke-project-setup.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/test-explorer-browser.ts",
     "scripts/update-inventory.mjs",
@@ -1001,8 +1005,15 @@
     "src/application/semantic-run.ts",
     "src/application/semantic-scope.ts",
     "src/application/setup/files.ts",
+    "src/application/setup/mcp-config.test.ts",
+    "src/application/setup/mcp-config.ts",
+    "src/application/setup/mcp-launcher.ts",
+    "src/application/setup/mcp.test.ts",
+    "src/application/setup/mcp.ts",
+    "src/application/setup/project.ts",
     "src/application/setup/skills.test.ts",
     "src/application/setup/skills.ts",
+    "src/application/setup/verify.ts",
     "src/cli.ts",
     "src/configuration/cache.test.ts",
     "src/configuration/document-traversal.ts",
@@ -1139,6 +1150,7 @@
     "src/infrastructure/artifact-paths.ts",
     "src/infrastructure/json-digest.ts",
     "src/infrastructure/module-resolution.ts",
+    "src/infrastructure/package-identity.ts",
     "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
     "src/interfaces/code-coverage.test.ts",
@@ -1248,6 +1260,7 @@
     "tests/opencode-consumer.test.ts",
     "tests/owner-intent.test.ts",
     "tests/physical-file-kinds.test.ts",
+    "tests/project-mcp.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf-scaling-parity.test.ts",
     "tests/rdf.test.ts",
