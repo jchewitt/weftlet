@@ -135,3 +135,25 @@ it('refuses alias expansion/duplicate keys and replacement of an existing check 
   expect(() => integrateChecks('on: push\non: pull_request\njobs: {}', scaffold)).toThrow();
   expect(() => integrateChecks('on: push\njobs: {weftlet_checks: {runs-on: self-hosted}}', scaffold)).toThrow('differs');
 });
+
+it('rejects inherited workflow environments and preserves every file when assisted CI isolation cannot be established', async () => {
+  const options = await fixture();
+  const workflowPath = join(options.directory, '.github/workflows/ci.yml');
+  const before = await readFile(workflowPath, 'utf8');
+  const configPath = join(options.directory, 'context-graph.config.json');
+  const configBefore = await readFile(configPath);
+  for (const environment of ['env: {DEPLOY_TOKEN: "${{ secrets.DEPLOY_TOKEN }}"}', 'env: {NODE_ENV: test}', 'env: "${{ vars }}"']) {
+    const content = `${environment}\n${before}`;
+    await writeFile(workflowPath, content);
+    await expect(propose(options)).rejects.toThrow('workflow-level environment');
+    expect(await readFile(workflowPath, 'utf8')).toBe(content);
+    expect(await readFile(configPath)).toEqual(configBefore);
+    await expect(stat(join(options.directory, '.mcp.json'))).rejects.toMatchObject({ code: 'ENOENT' });
+  }
+  await writeFile(workflowPath, `env: {}\n${before}`);
+  const plan = await propose(options);
+  await applyAssistedPlan(plan, plan.planId);
+  const applied = parse(await readFile(workflowPath, 'utf8'));
+  expect(applied.env).toEqual({});
+  expect(applied.jobs.existing).toEqual(parse(before).jobs.existing);
+});
