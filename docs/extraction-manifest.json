@@ -577,6 +577,7 @@
     ".github/workflows/context-graph.yml"
   ],
   "authoredPaths": [
+    ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
     ".changeset/assisted-project-setup.md",
     ".changeset/automatic-project-skills.md",
@@ -597,6 +598,7 @@
     ".gitignore",
     ".npmrc",
     ".nvmrc",
+    "AGENTS.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "README.md",
