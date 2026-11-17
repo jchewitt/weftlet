@@ -3,16 +3,26 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.9.0",
-      "previousVersion": "0.8.1"
+      "version": "0.10.0",
+      "previousVersion": "0.9.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.9.0",
-      "previousVersion": "0.8.1"
+      "version": "0.10.0",
+      "previousVersion": "0.9.0"
     }
   ],
   "changesets": [
-    "canonical-semantic-file-contract.md"
+    "assisted-project-setup.md",
+    "automatic-project-skills.md",
+    "claude-extraction-choice.md",
+    "declared-retention-reviews.md",
+    "guided-project-documentation.md",
+    "onboarding-qualification.md",
+    "project-ci-scaffolding.md",
+    "project-mcp-registration.md",
+    "read-only-cache-profile.md",
+    "temporary-clean-comparison.md",
+    "verified-snapshot-delivery.md"
   ]
 }
