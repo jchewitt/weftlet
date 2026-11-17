@@ -129,10 +129,10 @@ reviewed private delivery. On self-hosted runners, generation uses your existing
 setup increment adds no cache retention policy.
 
 Use the [delivery guide](CI.md#scenario-c-acquire-evidence-locally-and-reconnect-the-agent)
-for the current manual process. The accepted S6 export/import task will provide a
-verified bundle workflow. Public repository artifacts must not be treated as a
-private evidence store. Delivery, automatic desktop refresh and the global cache
-budget are separate from installing these CI jobs.
+for delivery choices. The candidate's [snapshot export/import](SNAPSHOT-DELIVERY.md)
+provides a verified selected-snapshot bundle with explicit local activation.
+Choose a trusted artifact channel and access policy before adding an upload step;
+this scaffolder leaves that project-specific choice to you.
 
 ## Managed updates and recovery
 

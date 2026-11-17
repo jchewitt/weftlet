@@ -2,7 +2,7 @@
 
 Status: unreleased 0.10 candidate. These commands are available in this candidate;
 published 0.9 uses the [manual copy workflow](AGENTS.md#3-install-the-packaged-workflow-skill).
-Publication is on hold at the maintainer's request.
+Release status is tracked in the [work queue](../1.0-WORK-QUEUE.md).
 
 ## New projects
 

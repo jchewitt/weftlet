@@ -1,208 +1,261 @@
-# Tutorial: understand and change Document Search
+# Tutorial: set up, query and change Document Search
 
-[Documentation home](../README.md) · [Project guide](../guides/PROJECT-GUIDE.md)
+[Documentation home](../README.md) · [Project guide](../guides/PROJECT-GUIDE.md) ·
+[Qualification record](../ONBOARDING-QUALIFICATION.md)
 
-Use the packaged `examples/generic-typescript` project in a new disposable Git
-repository. It has one product document, a search service, a repository interface
-and a test. You will preview selected inputs, build evidence, inspect intent/code
-links, connect an agent and verify a small change.
+**This walkthrough targets the unreleased 0.10 candidate.** Install reviewed
+candidate archives until that release is available; published 0.9 does not have
+these setup/delivery commands. The [manual client setup](../guides/AGENTS.md#manual-registration-and-customization)
+remains available for older releases. See [release status](../RELEASING.md).
 
-Node 24+, npm and Git are required. The semantic branch needs a supported model
-provider and explicitly approved model work. Output assertions vary with the
-model: the tutorial does not promise a fixed fact count or automatic function-level
-rule mapping.
+You will install Weftlet in a disposable project, connect a development client,
+preview and build evidence, make a test change, and deliver the graph to another
+checkout. The public demo contains a product document, `SearchService`, a
+`DocumentRepository` interface and a test. Node 24+, npm and Git are required.
 
-## 1. Create the independent project
+There are two paths through the same steps:
 
-In a new empty directory:
+- **Code-only first pass:** zero model requests. Learn setup, indexing, queries,
+  MCP, CI configuration and delivery with missing product intent visible.
+- **Intent + code:** select the demo owner document and use your chosen extraction
+  provider. Review the no-model preview before authorizing extraction. Model output
+  varies; expect cited assertions, not a fixed fact count or guaranteed method binding.
+
+The automated packaged walkthrough follows the first path. Separate deterministic
+fixtures exercise semantic extraction contracts and cache reuse; live provider
+quality/authentication and actual development-client loading have their own checks.
+
+## 1. Install in a new empty project
+
+Create an empty directory named `search-demo`, open a terminal there, and run:
 
 ```sh
 npm init -y
-npm install --save-dev @weftlet/toolkit
 ```
 
-Copy the public example without copying Weftlet's Git history:
+During candidate testing, install the reviewed pair as described in
+[releasing/installing candidate archives](../RELEASING.md), replacing these paths:
 
 ```sh
-node --input-type=module -e "import {cpSync} from 'node:fs'; cpSync('node_modules/@weftlet/toolkit/examples/generic-typescript', 'search-demo', {recursive:true});"
-cd search-demo
-npm install --save-dev @weftlet/toolkit typescript@5.5.4 vitest@3.2.4
+npm install --save-dev "/path/to/reviewed-core.tgz" "/path/to/reviewed-toolkit.tgz" typescript@5.5.4 vitest@3.2.4
 ```
 
-The second install makes `search-demo` self-contained, with its own lockfile and
-CLI. Inspect `docs/search-capability.md`, `src/search.ts` and `test/search.test.ts`.
-The code trims a query then delegates to `DocumentRepository.search`. The owner
-text declares a capability, query service, repository/search contracts and test
-evidence. It does not specify every edge case of trimming.
+After the candidate is published, the equivalent normal registry install is
+`npm install --save-dev @weftlet/toolkit typescript@5.5.4 vitest@3.2.4`.
+Core is installed with toolkit; ordinary registry consumers need only toolkit.
+Keep your generated lockfile.
 
-`docs/` is this demo's layout, not a required Weftlet convention. In a real
-project, select existing specifications wherever they live. The [source guide](../guides/PROJECT-GUIDE.md#what-counts-as-a-source-today)
-explains supported inputs, what intent documents represent and planned external
-connectors. The demo's explicit graph IDs are illustrative, not a required authoring schema.
-
-The included config already selects `docs`, `src` and `test`, declares the public
-owner document and uses RDF. Do not run `init` over it. This tutorial treats that
-public document as the example's declared source; do not copy its approval policy
-into your own product without review.
+Copy the packaged public example into this empty project, preserving the
+package.json that records your installed dependencies:
 
 ```sh
-node -e "require('node:fs').writeFileSync('.gitignore', 'node_modules/\n.context-graph/\nweftlet-*.json\n');"
+node --input-type=module -e "import {cpSync,readdirSync} from 'node:fs'; import {join} from 'node:path'; const example='node_modules/@weftlet/toolkit/examples/generic-typescript'; for (const name of readdirSync(example)) if(name!=='package.json') cpSync(join(example,name),name,{recursive:true,force:false,errorOnExist:true});"
+npm pkg set type=module "scripts.test=vitest run" "scripts.typecheck=tsc --noEmit"
+node -e "require('node:fs').writeFileSync('.gitignore','node_modules/\n.context-graph/\nweftlet-*.json\n.tutorial-artifacts/\n');"
 git init
-npx weftlet config validate
+npx --no-install weftlet config validate
 ```
 
-Commit the example and lockfile using your normal Git identity. Then run
-`npx vitest run` to check the original example.
+This is a new-project copy recipe, not an updater for existing repositories. It
+refuses to overwrite example destinations. No Git history is copied. The demo
+already includes graph configuration, so use `setup`, not `init`, from here.
+An existing real project follows the [project guide](../guides/PROJECT-GUIDE.md).
 
-## 2. Choose the model or take a code-only first pass
+Read `docs/search-capability.md`, `src/search.ts` and `test/search.test.ts`. The
+service trims a query and delegates to its repository. The owner describes the
+capability/contracts and test evidence, but does not specify every trimming edge
+case. Its explicit concept IDs illustrate the model; ordinary docs need no such
+schema or mandatory `docs/` folder. The demo's `types: []` keeps unrelated tooling
+ambient declarations out of this standard-library-only TypeScript project; use
+the appropriate types for your own application's runtime.
 
-The example defaults to Codex / ChatGPT login. Install/login to Codex through its
-normal setup, or select a supported provider as described in
-[provider instructions](../PROVIDERS.md). Claude/OpenCode extraction requires the
-0.10 candidate until it is published; a Claude/OpenCode MCP client can query the
-released graph independently of how it was extracted.
+## 2. Select sources and one extraction provider
 
-For a no-model first pass, edit `semanticSources` to `[]` before committing.
-Hydration will index real code and deterministic evidence with no selected prose
-extraction. Expect no semantic product-intent assertions; this is not completion
-of the intent-to-code portion. Restore `semanticSources: ["docs"]`, commit and
-approve semantic work when ready to continue that branch.
+For the **code-only path**, change `semanticSources` to `[]` in
+`context-graph.config.json`. Keep `codeRoots: ["src"]` and `evidenceRoots: ["test"]`.
+An approved-source pattern does not select documents by itself, so no semantic
+product-intent assertions are expected on this path.
 
-## 3. Preview and hydrate
+For the **intent + code path**, retain `semanticSources: ["docs"]`. The demo
+config designates `docs/search-capability.md` as governing via
+`approvedIntentSources`. Review that choice for this example. In your own repo,
+select existing governing requirements in bulk through configuration; there is
+no separate per-document acceptance screen. See [evidence decisions](../guides/EVIDENCE-DECISIONS.md).
 
-After committing the selected configuration:
+Choose Codex, Claude Code or API-based OpenCode using the
+[provider guide](../PROVIDERS.md). Use that provider's normal login/API credentials;
+Claude/OpenCode extraction does not require Codex. The development client chosen
+next can be different. Setup and saved queries need no model login.
+
+## 3. Install the skill, MCP registration and CI checks
+
+The commands below choose Codex as the **development client**. Substitute
+`--client claude` or `--client opencode`, or repeat the flag for multiple clients:
 
 ```sh
-npx weftlet doctor
-npx weftlet hydrate --plan --ref HEAD --json
+npx --no-install weftlet setup --client codex --mcp --dry-run --json
+npx --no-install weftlet setup --client codex --mcp --apply --expect-plan PLAN_ID --verify --json
 ```
 
-With prose enabled, expect the selected `docs/search-capability.md` and its byte
-budget/cache status. On a fresh project its semantic artifact should be a miss.
-With prose disabled, expect zero selected semantic documents. Review the plan;
-only then explicitly authorize/run the model-backed build:
+Replace `PLAN_ID` with `planId` from the preview, keeping the same client/options.
+Inspect the skill, launcher and registration paths. Verification starts the
+installed MCP server and checks its version/tools. Before hydration, omit
+`--snapshot`: you are checking the connection, not claiming evidence exists.
+Restart your client, review its project trust prompt, then confirm it discovers
+the skill and Weftlet tools. [Agent setup](../guides/AGENTS.md) covers client-side checks.
+
+Scaffold credential-free PR checks before the initial commit:
 
 ```sh
-npx weftlet hydrate --ref HEAD > weftlet-first.json
+npx --no-install weftlet setup ci --checks --test-script test --build-script typecheck --dry-run --json
+npx --no-install weftlet setup ci --checks --test-script test --build-script typecheck --apply --expect-plan CI_PLAN_ID --json
 ```
 
-Record the exact `snapshotId` from that receipt as `SNAPSHOT_ID` in the commands
-below. The graph must publish only after strict validation succeeds.
+Use the CI preview's own `planId` for `CI_PLAN_ID`. This adds a standalone workflow
+and preserves any existing workflows. It runs configured project tests/type checks
+and a no-model hydration plan; it does not build a graph in ordinary PRs.
+Trusted model-backed generation and artifact delivery are separate choices in the
+[CI guide](../guides/CI-SETUP.md). Setup never dispatches a GitHub workflow.
 
-## 4. Inspect intent and code together
+Commit the example, config, lockfile, skill/launcher/client settings and workflow
+using your normal Git identity. Then prove the lockfile reproduces installation:
 
 ```sh
-npx weftlet graph catalog --snapshot SNAPSHOT_ID --view intent --max-nodes 20 --json
-npx weftlet impact scan --snapshot SNAPSHOT_ID --owner-doc docs/search-capability.md --changed-file src/search.ts --task "Review query normalization and downstream effects" --max-facts 60 --max-depth 3 --json
-npx weftlet graph coverage --snapshot SNAPSHOT_ID --max-items 20 --json
-npx weftlet viewer serve --snapshot SNAPSHOT_ID --port 4317
+npm ci
+npm test
+npm run typecheck
 ```
 
-In the viewer, start with intent and inspect the owner-cited assertions. Follow
-relationships to contracts, implementation and tests. Compare citations with the
-actual files. Check which TypeScript files were indexed. Semantic IDs such as
-`component:query-service` are business concepts, not guaranteed exact code-symbol
-bindings. If no explicit binding exists, keep that gap visible rather than
-assuming it refers to a particular method.
-
-For focused CLI exploration, take an exact node ID returned by the catalog:
+## 4. Preview and build committed evidence
 
 ```sh
-npx weftlet graph neighbors --snapshot SNAPSHOT_ID --node EXACT_NODE_ID --direction both --max-facts 30 --json
+npx --no-install weftlet hydrate --plan --ref HEAD --json
 ```
 
-Use exact assertion IDs with `graph fact`. For a portable report, run `viewer
-export --snapshot SNAPSHOT_ID --node EXACT_NODE_ID --output ./search-report`.
-Open it using the [portable hosting instructions](../PORTABLE-EXPLORER.md), not
-an assumed `file://` browser flow. It covers the exported neighborhood, not the
-entire saved graph.
-
-## 5. Connect an agent
-
-Follow [agent setup](../guides/AGENTS.md) inside `search-demo`. Use its absolute
-config and installed MCP entry. Copy the packaged skill to your client's project
-skill directory. Reconnect and confirm the advertised tools.
-
-With the unreleased 0.10 candidate installed, replace those manual steps with
-[automatic project setup](../guides/MCP-SETUP.md):
+Code-only: expect zero selected semantic documents and zero planned extractions.
+Intent + code: expect the owner document, its source authority, byte budget and
+cache status. Resolve selection/budget problems before proceeding. Once you have
+approved the selected model work (if any):
 
 ```sh
-npx weftlet setup --client codex --mcp --dry-run
-npx weftlet setup --client codex --mcp --apply --expect-plan <plan-id> --verify --snapshot <saved-id>
+npx --no-install weftlet hydrate --ref HEAD --json --quiet > weftlet-first.json
 ```
 
-Select your development client, use the snapshot ID from hydration, then restart
-that client and confirm its tools. The verification probe reads existing evidence;
-it makes no model request.
+Record the receipt's `snapshotId` as `SNAPSHOT_ID` below. Publication follows
+identity and strict graph validation. The receipt is metadata, not the graph file.
 
-Give the agent this task:
-
-> Use context-graph-development and the saved graph before editing. The owner is
-> docs/search-capability.md; the candidate file is src/search.ts. Explain how the
-> service delegates to its repository, which tests cover the behavior, and what
-> the owner does not specify. Then add a test showing that leading/trailing
-> whitespace is removed before delegation. Preserve the service's behavior.
-
-Inspect the actual `impact.scan` call and the cited evidence. The new test checks
-implementation behavior; it must not silently become an approved business rule.
-If you want trimming to be an approved requirement, update/review the owner
-source explicitly as a separate product decision.
-
-## 6. Validate, repeat and assess limits
-
-Run `npx vitest run`, review the diff and commit the change. Then:
+## 5. Query and inspect the saved graph
 
 ```sh
-npx weftlet hydrate --plan --ref HEAD --json
-npx weftlet hydrate --ref HEAD > weftlet-after.json
-npx weftlet invariant check --ref HEAD
+npx --no-install weftlet graph catalog --snapshot SNAPSHOT_ID --view intent --max-nodes 20 --json
+npx --no-install weftlet impact scan --snapshot SNAPSHOT_ID --owner-doc docs/search-capability.md --changed-file src/search.ts --task "Review query normalization and downstream effects" --max-facts 60 --max-depth 3 --json
+npx --no-install weftlet graph coverage --snapshot SNAPSHOT_ID --max-items 20 --json
+npx --no-install weftlet setup --client codex --mcp --verify --snapshot SNAPSHOT_ID --json
+npx --no-install weftlet viewer serve --snapshot SNAPSHOT_ID --port 4317
 ```
 
-The unchanged owner document should reuse its compatible semantic artifact even
-though code/test assembly reflects the new commit. Repeat hydration without
-changes and compare receipt snapshot ID/content digest and extracted/reused counts:
+Check the snapshot commit, indexed files, citations, authority and truncation.
+The code-only path has implementation evidence and an intent gap. On the semantic
+path, compare owner-cited assertions against the original text. A business concept
+such as `component:query-service` is not automatically an exact method binding.
+
+Open the URL printed by the viewer. Start from an intent or implementation node,
+expand its neighborhood and follow relevant contracts/tests. For the same saved
+relationships in the CLI:
 
 ```sh
-npx weftlet hydrate --ref HEAD > weftlet-repeat.json
+npx --no-install weftlet graph neighbors --snapshot SNAPSHOT_ID --node EXACT_NODE_ID --direction both --max-facts 30 --json
 ```
 
-The unchanged repeat should extract zero and reuse the selected artifact, with
-stable snapshot identity/digest. A code-only run should extract/reuse zero.
-Investigate disagreement before accepting the trial; do not edit the cache.
-Graph conformance, passing tests and reuse are distinct checks.
+Use an exact node ID from the catalog/result, and `graph fact` for an exact
+assertion ID. Continue bounded queries with identical arguments and the returned
+continuation token. For a portable neighborhood report, use `viewer export
+--snapshot SNAPSHOT_ID --node EXACT_NODE_ID --output .tutorial-artifacts/report`;
+see the [portable report instructions](../PORTABLE-EXPLORER.md) for hosting it.
 
-Move to [CI and evidence delivery](../guides/CI.md) for a credential-free PR
-workflow and opt-in trusted generation. For a richer asynchronous flow, inspect
-`examples/pipeline` (discovery → analysis → admission → planning → execution →
-outcomes); its broader linkage remains bounded by actual extracted evidence.
+## 6. Make a small agent-assisted change
 
-### Candidate: install the CI checks
+Ask your client:
 
-With the unreleased 0.10 candidate installed, use [CI setup](../guides/CI-SETUP.md)
-in the demo project to generate a standalone PR workflow:
+> Use context-graph-development and Weftlet before editing. The owner is
+> docs/search-capability.md; the candidate file is src/search.ts. Report the saved
+> commit, intent coverage, repository delegation, relevant tests and unresolved
+> requirements. Follow relevant exact relationships and read the cited source.
+> Add a test that confirms the trimmed query reaches the repository exactly once.
+> Preserve service behavior and owner documentation. Do not hydrate or call an
+> extraction model without my approval.
+
+The existing test checks a returned trimmed value. This new test inspects the
+actual repository argument and invocation count. If you are doing the tutorial
+without a development client, append this to `test/search.test.ts` yourself:
+
+```ts
+it('passes the trimmed query to the repository exactly once', async () => {
+  const calls: string[] = [];
+  const service = new SearchService({ search: async query => { calls.push(query); return []; } });
+  await service.search('\t context \n');
+  expect(calls).toEqual(['context']);
+});
+```
+
+Inspect the agent's actual `impact.scan`/follow-up tool calls, not just its statement
+that it used the graph. In the code-only path it should report absent semantic
+intent and read the owner directly. The test documents implementation behavior;
+turning trimming into an approved product requirement would require a separate
+reviewed owner-source change.
+
+Before committing, query `SNAPSHOT_ID` again. The old graph stays readable and
+reports excluded working changes; it cannot validate your draft. Run `npm test`
+and `npm run typecheck`, review the diff, then commit.
+
+## 7. Refresh the final commit and check reuse
 
 ```sh
-npx weftlet setup ci --checks --dry-run
-npx weftlet setup ci --checks --apply --expect-plan <plan-id>
+npx --no-install weftlet hydrate --plan --ref HEAD --json
+npx --no-install weftlet hydrate --ref HEAD --json --quiet > weftlet-after.json
+npx --no-install weftlet invariant check --ref HEAD
+npx --no-install weftlet hydrate --ref HEAD --json --quiet > weftlet-repeat.json
 ```
 
-Select `--test-script`/`--build-script` only for scripts present in the demo's
-package.json. Commit the config, lockfile and generated workflow. This checks
-configuration and committed hydration scope without model credentials. Add trusted
-generation separately after reviewing its provider, budgets and delivery needs.
+Use the new receipt's snapshot ID for subsequent queries. The unchanged repeat
+should retain snapshot ID/content digest and extract zero. Code-only runs also
+reuse zero semantic artifacts. On the semantic path, unchanged compatible owner
+artifacts should be reused. Investigate unexpected extraction before authorizing
+more model work. Strict graph conformance, configured invariant checks, project
+tests and human product review answer different questions.
 
-### Optional candidate: adapt an existing project with your assistant
+## 8. Deliver the graph to another checkout
 
-After the deterministic tutorial, an existing project can use
-[assisted setup](../guides/ASSISTED-SETUP.md) to propose document selections and
-add the generated Weftlet check job to its own workflow. Select only the files
-you want sent to the configured provider:
+Using the final receipt's `snapshotId`:
 
 ```sh
-npx --no-install weftlet setup assist --input package.json --input docs/search-capability.md --dry-run
+npx --no-install weftlet snapshot export --snapshot FINAL_SNAPSHOT_ID --output .tutorial-artifacts/bundle > weftlet-delivery.json
 ```
 
-The document path above exists in the copied demo. The preview makes no model call.
-Follow the guide to request one proposal, inspect its changes and apply its saved
-plan. This optional model exercise is separate from the deterministic tutorial;
-it uses your chosen provider's account/API credentials and normal usage terms.
+The receipt contains `manifestSha256`. Download/copy the bundle through your
+trusted private delivery channel, retaining the successful run/commit and hash.
+In another checkout of the same committed project, run `npm ci`, then:
+
+```sh
+npx --no-install weftlet snapshot import --input /path/to/bundle --expect-digest TRUSTED_MANIFEST_SHA256 --dry-run
+npx --no-install weftlet snapshot import --input /path/to/bundle --expect-digest TRUSTED_MANIFEST_SHA256 --activate --expect-head none
+npx --no-install weftlet setup --client codex --mcp --verify --snapshot FINAL_SNAPSHOT_ID --json
+```
+
+`none` is for a receiving store without a head. For an existing head, inspect it
+and use its exact ID; see [snapshot delivery](../guides/SNAPSHOT-DELIVERY.md).
+Activation requires compatible config/scope/extractors. Imported historical
+evidence retains its original commit and authority. Transfer never extracts
+prose or certifies the current diff. Optional semantic artifacts require explicit
+`--include-semantic` at both ends and additional source/contract verification.
+
+Reconnect the receiving client and repeat the saved query. CI can use the same
+export/import boundary after trusted generation. For an existing project's layout
+or workflows, [assisted setup](../guides/ASSISTED-SETUP.md) can propose reviewed
+integration changes through your selected provider; its no-model preview is
+`weftlet setup assist --input package.json --input docs/search-capability.md --dry-run`.
+
+You now have the complete local development/delivery loop. For broader async and
+cross-service examples, explore `examples/pipeline`. Before adopting Weftlet as a
+project gate, follow the [consumer acceptance checklist](../CONSUMER-TRIAL.md) and
+retain the actual versions, commits, checks and unresolved evidence gaps.

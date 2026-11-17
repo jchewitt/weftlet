@@ -13,7 +13,8 @@ import { smokeMappingProposals } from './smoke-mapping-proposals.mjs';
 import { smokeCiSetup } from './smoke-ci-setup.mjs';
 import { smokeProjectSetup } from './smoke-project-setup.mjs';
 import { smokeTraversal } from './smoke-traversal.mjs';
-import { pnpmInvocation } from './package-manager.mjs';
+import { npmCliPath, pnpmInvocation } from './package-manager.mjs';
+import { smokeOnboarding } from './smoke-onboarding.mjs';
 import { checkReleaseDocumentation, checkPackedReleaseDocumentation } from './release-documentation.mjs';
 
 const toolkitRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -35,20 +36,6 @@ function run(command, args, cwd) {
 function runPnpm(args, cwd) {
   const invocation = pnpmInvocation(args);
   return run(invocation.command, invocation.args, cwd);
-}
-
-async function npmCliPath() {
-  // Invoke npm's JavaScript entry point directly, including on Windows where npm.cmd
-  // cannot be launched through execFile without a shell.
-  const candidates = [
-    ...(process.env.npm_execpath?.endsWith('npm-cli.js') ? [process.env.npm_execpath] : []),
-    join(dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js'),
-    resolve(dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js'),
-  ];
-  for (const candidate of candidates) {
-    try { await access(candidate); return candidate; } catch {}
-  }
-  throw new Error('npm CLI not found beside Node; install Node with npm to run the npx smoke test');
 }
 
 await checkReleaseDocumentation(toolkitRoot);
@@ -764,6 +751,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   await smokeProjectSetup(consumer, registryPackages.get('@weftlet/toolkit').manifest.version, 'publication-smoke');
   await smokeCiSetup(consumer, installedRoot, false);
   await smokeMappingProposals(installedRoot, documentConfig);
+  console.log(JSON.stringify(await smokeOnboarding(destination, coreArchive, toolkitArchive, await npmCliPath())));
   console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });

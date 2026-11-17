@@ -1,4 +1,19 @@
 import { closeSync, openSync, readSync, realpathSync } from 'node:fs';
+import { access } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+
+/** Launch npm without shell/.cmd assumptions, including from a pnpm script on Windows. */
+export async function npmCliPath() {
+  const candidates = [
+    ...(process.env.npm_execpath?.endsWith('npm-cli.js') ? [process.env.npm_execpath] : []),
+    join(dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js'),
+    resolve(dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js'),
+  ];
+  for (const candidate of candidates) {
+    try { await access(candidate); return candidate; } catch {}
+  }
+  throw new Error('npm CLI not found beside Node; install Node with npm to run the consumer check');
+}
 
 /** npm_execpath can be either a JS entry point or pnpm's standalone native executable. */
 export function pnpmInvocation(args, executable = process.env.npm_execpath) {
