@@ -1,18 +1,34 @@
-import { execFile } from 'node:child_process';
+import { execFile, type ExecFileOptions } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
-import { afterEach, expect, it } from 'vitest';
+import { afterEach, beforeEach, expect, it } from 'vitest';
 
 const execute = promisify(execFile);
 const cli = resolve('src/cli.ts');
 const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
 const roots: string[] = [];
+const pending = new Set<Promise<unknown>>();
+let cancellation = new AbortController();
+beforeEach(() => { cancellation = new AbortController(); });
+// A case starts several independent CLIs. Keep the 20-second process bound,
+// allowing their aggregate Windows startup cost without changing product limits.
+const cliTest = (name: string, run: () => Promise<void>) => it(name, run, 120_000);
+function tracked(program: string, args: string[], options: ExecFileOptions) {
+  const request = execute(program, args, { ...options, encoding: 'utf8', signal: cancellation.signal });
+  const closed = new Promise<void>(resolve => request.child.once('close', () => resolve()));
+  const complete = request.finally(() => closed);
+  pending.add(complete);
+  void complete.then(() => pending.delete(complete), () => pending.delete(complete));
+  return complete;
+}
 
 afterEach(async () => {
+  cancellation.abort();
+  await Promise.allSettled([...pending]);
   await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 })));
 });
 
@@ -43,8 +59,8 @@ throw Error('Coverage must not initialize ${name}');\n`);
   });
   const configPath = join(root, 'context-graph.config.json');
   await writeFile(configPath, JSON.stringify(config));
-  const git = async (...args: string[]) => (await execute('git', ['-c', 'maintenance.auto=false',
-    '-c', 'gc.auto=0', '--no-optional-locks', ...args], { cwd: root })).stdout.trim();
+  const git = async (...args: string[]) => (await tracked('git', ['-c', 'maintenance.auto=false',
+    '-c', 'gc.auto=0', '--no-optional-locks', ...args], { cwd: root, timeout: 20_000 })).stdout.trim();
   await git('init', '--quiet');
   await git('add', '.');
   await git('-c', 'user.name=Public Fixture', '-c', 'user.email=fixture@example.invalid',
@@ -52,7 +68,7 @@ throw Error('Coverage must not initialize ${name}');\n`);
   const commitSha = await git('rev-parse', 'HEAD');
   await mkdir(join(root, '.context-graph'));
   await writeFile(join(root, '.context-graph/retained.json'), '{"snapshot":"retained","artifact":"retained"}\n');
-  const run = (...args: string[]) => execute(process.execPath, ['--import', tsx, cli, ...args], { cwd: root, timeout: 20_000 });
+  const run = (...args: string[]) => tracked(process.execPath, ['--import', tsx, cli, ...args], { cwd: root, timeout: 20_000 });
   return { root, config, configPath, git, commitSha, run };
 }
 
@@ -64,7 +80,7 @@ async function failed(run: (...args: string[]) => Promise<{ stdout: string; stde
     });
 }
 
-it('renders a prospective JSON/human plan from committed bytes without execution or state writes', async () => {
+cliTest('renders a prospective JSON/human plan from committed bytes without execution or state writes', async () => {
   const { root, configPath, git, commitSha, run } = await fixture();
   await writeFile(join(root, 'docs/owner.md'), '# Dirty checkout\n[Untracked](untracked.md)\n');
   await writeFile(join(root, 'docs/untracked.md'), '# New uncommitted intent\n');
@@ -105,7 +121,7 @@ it('renders a prospective JSON/human plan from committed bytes without execution
   await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
 });
 
-it('returns complete budget failures and explicit safety frontiers with exit 1', async () => {
+cliTest('returns complete budget failures and explicit safety frontiers with exit 1', async () => {
   const { root, config, configPath, run } = await fixture();
   config.semantic.maxDocuments = 1;
   await writeFile(configPath, JSON.stringify(config));
@@ -125,7 +141,7 @@ it('returns complete budget failures and explicit safety frontiers with exit 1',
   await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
 });
 
-it('rejects missing, unknown and misplaced traversal arguments before application startup', async () => {
+cliTest('rejects missing, unknown and misplaced traversal arguments before application startup', async () => {
   const { root, run } = await fixture();
   for (const args of [
     ['documents', 'plan', '--json'],
@@ -141,7 +157,7 @@ it('rejects missing, unknown and misplaced traversal arguments before applicatio
   }
 });
 
-it('loads an operation policy and reports source classification separately without changing hydration inputs', async () => {
+cliTest('loads an operation policy and reports source classification separately without changing hydration inputs', async () => {
   const { root, configPath, git, run } = await fixture();
   const policy = { schemaVersion: 1, roles: ['roadmap', 'queue', 'draft'].map(name => ({
     id: `plan-${name}`, pattern: `docs/${name}.md`, role: 'plan',
@@ -175,7 +191,7 @@ it('loads an operation policy and reports source classification separately witho
   await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
 });
 
-it('keeps ambiguous roles and ineligible owners visible when traversal and budgets pass', async () => {
+cliTest('keeps ambiguous roles and ineligible owners visible when traversal and budgets pass', async () => {
   const { root, run } = await fixture();
   await writeFile(join(root, 'documents.policy.json'), JSON.stringify({ schemaVersion: 1,
     roles: [{ id: 'owner-is-validation', pattern: 'docs/owner.md', role: 'validation' },
@@ -197,7 +213,7 @@ it('keeps ambiguous roles and ineligible owners visible when traversal and budge
   await expect(readFile(join(root, 'unexpected-import'))).rejects.toMatchObject({ code: 'ENOENT' });
 });
 
-it('rejects malformed, oversized and misplaced document policy before execution starts', async () => {
+cliTest('rejects malformed, oversized and misplaced document policy before execution starts', async () => {
   const { root, run } = await fixture();
   const args = ['documents', 'plan', '--entry', 'docs/owner.md', '--document-policy', 'bad.policy.json'];
   for (const content of ['{"schemaVersion":', '{"schemaVersion":1,"unknown":"PRIVATE_POLICY_TEXT"}',
