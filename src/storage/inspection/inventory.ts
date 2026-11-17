@@ -55,7 +55,7 @@ export async function inventoryCache(options: InventoryOptions) {
     byteIdenticalGroups: [...byteGroups.values()].filter(paths => paths.length > 1),
     limitations: ['Read-only observation, not an atomic census, retention plan or deletion authorization. Concurrent mutation can require a new scan.',
       'Layout recognition is not ownership proof. Head references are not active-scope registrations or permanent pins.',
-      'Pins, archive destinations and active-scope registrations have no supported R2 format; their status is not evaluated. Unknown objects remain protected.',
+      'Inventory does not load retention policies or active-scope/archive registries; their status is not evaluated here. Unknown objects remain protected.',
       'Lease markers report possible activity; PID/age does not prove that an operation is active or abandoned.',
       'Metadata-only snapshots are not integrity-checked. --verify parses complete JSON and hashes bytes, but does not verify SHACL, semantic reuse or the producer content digest.',
       'Unique logical/allocation totals deduplicate observed device/inode identities, not reflinks, filesystem compression or shared extents. Windows allocation is unavailable.',

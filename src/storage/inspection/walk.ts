@@ -53,6 +53,7 @@ function entryMetadata(root: string, local: string, kind: CacheObject['kind'], i
   return { root, path: local, ...cacheLayout(local), kind, logicalBytes: kind === 'directory' ? 0 : Number(info.size),
       allocatedBytes: process.platform !== 'win32' && info.blocks >= 0n && info.blocks <= BigInt(Math.floor(Number.MAX_SAFE_INTEGER / 512)) ? Number(info.blocks) * 512 : null,
       physicalIdentity: info.ino ? `${info.dev}:${info.ino}` : undefined, modifiedAt: info.mtime.toISOString(),
+      revision: [info.dev, info.ino, info.size, info.mtimeNs, info.ctimeNs, info.nlink].join(':'), linkCount: Number(info.nlink),
       inspection: 'not-inspected', headReferences: [], protection: [kind === 'link' ? 'link-not-followed' : 'read-only-inventory-no-deletion-decision'],
       activity: 'unknown', pinState: 'not-evaluated', archiveState: 'not-evaluated' };
 }

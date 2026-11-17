@@ -84,6 +84,22 @@ export async function smokeOnboarding(parent, coreArchive, toolkitArchive, npmCl
   assert.ok(profile.sections.facts.records > 0);
   assert.deepEqual(await readFile(originalPath), originalBytes);
 
+  const policyFile = join(parent, 'retention-policy.json'), planFile = join(parent, 'retention-review.json');
+  const retention = async (...args) => JSON.parse(await command(dirname(project), process.execPath,
+    [join(installed, 'dist/cli.js'), 'cache', 'retention', ...args, '--json', '--quiet']));
+  await retention('init', '--file', policyFile);
+  const policy = await readJson(policyFile);
+  policy.profiles.push({ path: '.', repositoryId: config.repositoryId, owner: 'public-tutorial', reason: 'Active fixture' });
+  policy.activeScopes.push({ profile: '.', head: 'default', owner: 'public-tutorial', reason: 'Current evidence' });
+  await writeFile(policyFile, JSON.stringify(policy));
+  const retentionArgs = ['--root', join(project, '.context-graph'), '--policy', policyFile];
+  const review = await retention('plan', ...retentionArgs);
+  assert.equal(review.readyForReview, true); assert.equal(review.canApply, false);
+  assert.equal(review.totals.candidateFiles, 0);
+  await writeFile(planFile, JSON.stringify(review));
+  assert.equal((await retention('check', ...retentionArgs, '--plan', planFile)).unchanged, true);
+  assert.deepEqual(await readFile(originalPath), originalBytes);
+
   const testPath = join(project, 'test/search.test.ts');
   // Execute the reviewed packaged tutorial's test, so the prose example cannot silently drift.
   const tutorial = await readFile(join(installed, 'docs/tutorials/DOCUMENT-SEARCH.md'), 'utf8');

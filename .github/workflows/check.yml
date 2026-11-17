@@ -83,4 +83,4 @@ jobs:
       - name: Packaged tutorial with independent receiving checkout
         run: pnpm test:onboarding
       - name: Independent comparisons, cancellation and workspace isolation
-        run: pnpm exec vitest run tests/clean-comparison.test.ts src/storage/comparison-workspace.test.ts tests/cache-inspection.test.ts tests/cache-inspection-cli.test.ts
+        run: pnpm exec vitest run tests/clean-comparison.test.ts src/storage/comparison-workspace.test.ts tests/cache-inspection.test.ts tests/cache-inspection-cli.test.ts tests/retention-plan.test.ts tests/retention-cli.test.ts
