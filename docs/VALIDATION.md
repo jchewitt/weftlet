@@ -31,8 +31,18 @@ release-documentation and license checks passed, as did local Markdown target
 and workflow-YAML checks. This is targeted S7 validation; the full 1,134-test
 toolkit suite is recorded under S6 below, not relabeled as a new S7 run.
 
-A dedicated native Windows onboarding job is added; its candidate result is
-pending. Existing client setup tests and the now-successful S6 Windows run remain
+The initial native Windows onboarding jobs exposed two separate failures: PR run
+44025446190 reached the smoke harness's four-minute npm-install deadline; push run
+44025331471 reached the receiving checkout and rejected the Git-CRLF-converted
+launcher as customized. Launcher comparison now tolerates only CRLF/LF conversion,
+keeps the actual bytes in plan/CAS checks, and still rejects real edits. Cold
+install/ci operations have a bounded ten-minute deadline; test/type-check commands
+retain two minutes. All **11 focused MCP setup tests** passed locally, including
+CRLF preservation and customized-code rejection. Build and the complete fresh
+installed tutorial passed again on Linux, including the receiving-checkout MCP
+probe (zero model calls); inventory and release-documentation checks passed.
+Native Windows requalification
+of this correction is pending. Existing client setup tests and the now-successful S6 Windows run remain
 separate evidence. Actual Codex/Claude/OpenCode client loading, live authentication,
 model usefulness and dispatched consumer artifact delivery remain explicitly
 manual qualification. No paid/provider request, private consumer mutation,

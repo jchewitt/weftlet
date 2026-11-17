@@ -14,7 +14,12 @@ export async function smokeOnboarding(parent, coreArchive, toolkitArchive, npmCl
   await mkdir(project);
   const command = async (cwd, program, args, timeout = 120_000) =>
     (await execute(program, args, { cwd, timeout, windowsHide: true, maxBuffer: 4 * 1024 * 1024 })).stdout;
-  const npm = (cwd, ...args) => command(cwd, process.execPath, [npmCli, ...args], 240_000);
+  const npm = (cwd, ...args) => {
+    console.error(`[onboarding] npm ${args[0]} (${cwd === project ? 'project' : 'receiver'})`);
+    // Cold Windows npm extraction can exceed four minutes. Keep test/typecheck
+    // deadlines separate from registry download/install time, and bound both.
+    return command(cwd, process.execPath, [npmCli, ...args], ['install', 'ci'].includes(args[0]) ? 600_000 : 120_000);
+  };
   const git = (cwd, ...args) => command(cwd, 'git', args);
   const commit = async message => {
     await git(project, 'add', '--all');

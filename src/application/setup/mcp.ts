@@ -65,12 +65,15 @@ export async function prepareMcpSetup(options: McpSetupOptions) {
   const receiptBefore = await inspectSetupPath(root, receiptPath);
   const receipt = readReceipt(receiptBefore);
   const launcherBefore = await inspectSetupPath(root, launcher.path);
-  const launcherAction = launcherBefore === launcher.content ? 'unchanged' : launcherBefore === null ? 'create' :
+  // Git may convert this generated text file to CRLF in a fresh Windows checkout.
+  // Compare only that formatting difference; keep the actual bytes for plan/CAS checks.
+  const launcherUnchanged = launcherBefore?.replaceAll('\r\n', '\n') === launcher.content;
+  const launcherAction = launcherUnchanged ? 'unchanged' : launcherBefore === null ? 'create' :
     receipt.launchers[launcher.path] === contentDigest(launcherBefore) ? (options.update ? 'update' : 'update-available') : 'conflict';
   const command = options.absoluteLauncher ? process.execPath : 'node';
   const args = options.absoluteLauncher ? [resolve(root, launcher.path)] : ['-e', launcher.bootstrap];
   const changes: SetupFileChange[] = [{ path: configPath, before: configBytes, after: configBytes },
-    { path: launcher.path, before: launcherBefore, after: launcher.content }];
+    { path: launcher.path, before: launcherBefore, after: launcherUnchanged ? launcherBefore! : launcher.content }];
   const registrations = [];
   for (const client of clients) {
     const path = await clientPath(root, client);

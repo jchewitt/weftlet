@@ -53,7 +53,8 @@ substitute for a real logged-in client/model session.
   recorded in [VALIDATION.md](VALIDATION.md).
 - **Native Windows:** a separate `windows-onboarding` job runs the complete
   packaged walkthrough so it does not add work to the already long storage/startup
-  job. Its result must be recorded after the candidate job finishes. Existing
+  job. The first runs found a cold npm-install deadline and CRLF launcher
+  recognition defect; both have corrections awaiting Windows requalification. Existing
   Windows setup/storage tests remain distinct evidence.
 - **macOS:** unqualified and outside the maintainer's current priority.
 - **Codex / Claude / OpenCode development clients:** generated configuration and
