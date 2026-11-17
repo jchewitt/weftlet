@@ -100,15 +100,15 @@
       "sourcePath": "tools/context-graph/examples/generic-typescript/tsconfig.json",
       "destinationPath": "examples/generic-typescript/tsconfig.json",
       "sourceSha256": "a17aa32444c0c221cf70e409eda56832cda18c66014fc6ff1924fcf1108d0c2e",
-      "modified": false,
-      "destinationSha256": "a17aa32444c0c221cf70e409eda56832cda18c66014fc6ff1924fcf1108d0c2e"
+      "modified": true,
+      "destinationSha256": "889f52608a0de3903cf83f9a18f2e2f6614009a0f9e37a48dcf5db52208c5575"
     },
     {
       "sourcePath": "tools/context-graph/package.json",
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "12cefa00ce45a23fda1e889a3d7453484ae6d32f4e43308907fbd83ffa85e2f8"
+      "destinationSha256": "a922682c9fe00d88faf19bc946526277edd123109aa3174beae8ee36b8e8b847"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "3f766d546e96a7607c595f89945a1a645d017a450cfc083064b2c8521486355f"
+      "destinationSha256": "1a37d14bd4d897cfeb67735e394b278a05549b8b532457066a06fdcb7dcba530"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -583,6 +583,7 @@
     ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
     ".changeset/guided-project-documentation.md",
+    ".changeset/onboarding-qualification.md",
     ".changeset/project-ci-scaffolding.md",
     ".changeset/project-mcp-registration.md",
     ".changeset/release-plan.json",
@@ -663,6 +664,7 @@
     "docs/GRAPHIFY-EVALUATION.md",
     "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",
+    "docs/ONBOARDING-QUALIFICATION.md",
     "docs/OPENCAESAR-SELINUX.md",
     "docs/OWNER-INTENT-081-ACCEPTANCE.md",
     "docs/OWNER-INTENT-RETRIEVAL.md",
@@ -909,6 +911,7 @@
     "scripts/benchmark-shacl.mjs",
     "scripts/build-explorer.mjs",
     "scripts/call-study/run.ts",
+    "scripts/check-onboarding.mjs",
     "scripts/check-release-plan.mjs",
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
@@ -973,6 +976,7 @@
     "scripts/same-group-study/v3-signals.ts",
     "scripts/smoke-ci-setup.mjs",
     "scripts/smoke-mapping-proposals.mjs",
+    "scripts/smoke-onboarding.mjs",
     "scripts/smoke-project-setup.mjs",
     "scripts/smoke-snapshot-delivery.mjs",
     "scripts/smoke-traversal.mjs",

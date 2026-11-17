@@ -84,6 +84,23 @@ Weftlet does not automatically log a GitHub-hosted runner into a ChatGPT account
 
 ## Scenario C: acquire evidence locally and reconnect the agent
 
+For the 0.10 candidate, follow [snapshot delivery](SNAPSHOT-DELIVERY.md): export
+one successful CI snapshot, download its bundle, and obtain its manifest SHA-256
+from the trusted run receipt. From the receiving project:
+
+```sh
+npx --no-install weftlet snapshot import --input /path/to/bundle --expect-digest TRUSTED_MANIFEST_SHA256 --dry-run
+npx --no-install weftlet snapshot import --input /path/to/bundle --expect-digest TRUSTED_MANIFEST_SHA256
+```
+
+The default import makes the graph queryable by exact ID. Add
+`--activate --expect-head none` for a compatible empty local head, or pass the
+current head's exact ID when replacing it. Verify the saved graph through
+`setup --mcp --verify --snapshot SNAPSHOT_ID`, then reconnect the actual client.
+The delivery guide covers configuration mismatches and optional semantic artifacts.
+
+### Manual staging for published 0.9 or customized delivery
+
 Download the exact successful run's artifact into a **new staging directory**.
 Use your normal authenticated GitHub UI or CLI, then on Linux/WSL:
 

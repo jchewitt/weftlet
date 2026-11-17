@@ -2,11 +2,44 @@
 
 [Documentation home](../README.md) · [Project guide](PROJECT-GUIDE.md)
 
-MCP exposes saved evidence. A skill tells the agent when and how to use it.
-Configure both, then verify them in a fresh client session. Published 0.9 uses
-the manual setup below. The 0.10 candidate adds [automatic skill installation](PROJECT-SETUP.md)
-through `init` and `setup`, plus [MCP registration and verification](MCP-SETUP.md)
-through `setup --mcp`.
+MCP exposes saved evidence. A project skill tells the agent when and how to use
+it. The **unreleased 0.10 candidate** installs both through the commands below.
+Published 0.9 and customized installations use the
+[manual alternative](#manual-registration-and-customization).
+
+## Automatic project setup (0.10 candidate)
+
+Install the reviewed toolkit in your project and retain its graph configuration.
+Choose your development client (`codex`, `claude` or `opencode`):
+
+```sh
+npx --no-install weftlet setup --client codex --mcp --dry-run --json
+npx --no-install weftlet setup --client codex --mcp --apply --expect-plan PLAN_ID --verify --json
+```
+
+Replace `PLAN_ID` with the preview's exact ID. Repeat `--client` for additional
+clients. This installs the packaged skill and project MCP registration while
+preserving unrelated settings. It makes no model request. `init` installs skills
+for new configurations; `setup --mcp` adds the server registration. Existing
+configurations use `setup` directly.
+
+With saved evidence, add `--snapshot SNAPSHOT_ID` to verification. The probe starts
+the installed server and checks its package version, tools and saved snapshot.
+Then restart your chosen client, accept its reviewed project trust prompt and
+confirm actual skill discovery and tool use. Continue at
+[verify connection and usage](#4-verify-the-connection-and-usage).
+
+[Skill setup](PROJECT-SETUP.md) and [MCP setup](MCP-SETUP.md) explain managed
+updates, customized-file conflicts, alternate working directories, Windows/WSL
+paths and interruption recovery. The [demo tutorial](../tutorials/DOCUMENT-SEARCH.md)
+walks through the full development loop. Extraction provider selection is separate
+from development-client setup; either can use Codex, Claude or OpenCode according
+to its supported authentication contract.
+
+## Manual registration and customization
+
+Use this section for published 0.9, unsupported client configuration versions, or
+projects deliberately managing their own skill and server entries.
 
 ## 1. Choose a stable server command
 

@@ -1,5 +1,53 @@
 # Validation evidence
 
+## S7 guided onboarding and packaged qualification, 2026-11-17 UTC
+
+Implemented for review; see the rewritten [Document Search tutorial](tutorials/DOCUMENT-SEARCH.md)
+and [qualification matrix](ONBOARDING-QUALIFICATION.md). Candidate instructions now
+lead with automatic skill/MCP/CI setup and verified delivery, with manual paths
+retained for 0.9/customization. No release is claimed by this record.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: the independent `test:onboarding` run passed.
+The final full packed-consumer check also passed with the tutorial embedded:
+prepared core/toolkit archives, fresh npm/npx and pnpm consumers, frozen npm
+installation in two independent checkouts, real TypeScript indexing, strict graph
+validation, saved queries and fresh MCP probes. The tutorial copies shipped demo
+assets, installs the skill/server and selected CI checks, runs the exact test
+snippet from the packaged guide, queries while dirty, commits/refreshes, repeats
+without changing identity/digest, and imports into the second checkout with guarded
+activation. Original snapshot bytes, existing workflows and customized skill bytes
+are retained. The recorded tutorial used **zero model calls**, two committed
+snapshots, and a verified receiving checkout. Semantic intent quality/reuse is
+not inferred from this code-only branch; existing packed semantic traversal/reuse
+checks passed separately in the same publication harness.
+
+The initial fresh demo type check exposed newer ambient Node declarations
+incompatible with TypeScript 5.5. The demo now explicitly selects `types: []`,
+appropriate to its standard-library-only source. Strict source checking remains
+enabled; the fix is confined to the public example. The subsequent walkthrough
+passed. The **45 focused tests** for portable fixtures, real indexing/RDF,
+package-manager invocation and release documentation passed. Build, inventory,
+release-documentation and license checks passed, as did local Markdown target
+and workflow-YAML checks. This is targeted S7 validation; the full 1,134-test
+toolkit suite is recorded under S6 below, not relabeled as a new S7 run.
+
+The initial native Windows onboarding jobs exposed two separate failures: PR run
+44025446190 reached the smoke harness's four-minute npm-install deadline; push run
+44025331471 reached the receiving checkout and rejected the Git-CRLF-converted
+launcher as customized. Launcher comparison now tolerates only CRLF/LF conversion,
+keeps the actual bytes in plan/CAS checks, and still rejects real edits. Cold
+install/ci operations have a bounded ten-minute deadline; test/type-check commands
+retain two minutes. All **11 focused MCP setup tests** passed locally, including
+CRLF preservation and customized-code rejection. Build and the complete fresh
+installed tutorial passed again on Linux, including the receiving-checkout MCP
+probe (zero model calls); inventory and release-documentation checks passed.
+Native Windows requalification
+of this correction is pending. Existing client setup tests and the now-successful S6 Windows run remain
+separate evidence. Actual Codex/Claude/OpenCode client loading, live authentication,
+model usefulness and dispatched consumer artifact delivery remain explicitly
+manual qualification. No paid/provider request, private consumer mutation,
+publication, global cache cap or storage cleanup occurred in S7.
+
 ## S6 verified snapshot delivery, 2026-11-16 UTC
 
 Implemented for review, not merged or published. [ADR 052](ADR-052-snapshot-delivery.md)
@@ -38,8 +86,12 @@ Release-documentation and license checks passed. Architecture checks passed with
 snapshot validation and import orchestration. They remain visible review items;
 no rule was disabled, exception added or baseline expanded.
 
-The Windows job includes these transfer regressions; its result is pending for this
-increment. No private graph transfer, hosted artifact delivery, live provider call,
+November 17 update: PR 94 at `b44556a08c49ff14b9436d4b958862c608e0dc5b`
+passed all Linux and Windows push/PR checks. One duplicate Windows run was cancelled
+near its 15-minute job limit after tests but before inventory/license checks ended.
+Its [rerun](https://github.com/jchewitt/weftlet/actions/runs/43969119773/job/133836645957)
+completed successfully, including those checks; no timeout or validation setting
+was changed. No private graph transfer, hosted artifact delivery, live provider call,
 power-loss recovery, hostile-local-writer sandbox or full-scale >1 GiB transfer is
 claimed. Existing large-graph lifecycle/canonical hashing regressions passed in
 the full suite. Global storage reservation, retention/GC and compact representation

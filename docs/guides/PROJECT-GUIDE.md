@@ -5,7 +5,8 @@
 
 This guide takes an existing TypeScript Git repository from installation to an
 agent-assisted change. The released baseline is 0.9.0. The 0.10 development
-branch adds Claude/OpenCode extraction; those options are explicitly marked below.
+branch adds independent Claude/OpenCode extraction, automatic skill/MCP/CI setup
+and verified snapshot delivery; candidate commands are marked below.
 Use a reviewed published version or reviewed release archives, not an assumed
 future npm version. See the [release history](../RELEASES.md).
 
@@ -359,9 +360,20 @@ coverage flags are part of the answer, not optional debugging information.
 
 ## 7. Connect your agent and do a change
 
-Follow [agent setup](AGENTS.md) to register the stdio MCP server and install the
-packaged workflow skill. These are two separate steps. Ask the agent to use the
-skill explicitly for the first trial.
+With the 0.10 candidate, preview and install the project skill and MCP registration
+in one flow (choose `codex`, `claude` or `opencode`):
+
+```sh
+npx --no-install weftlet setup --client codex --mcp --dry-run --json
+npx --no-install weftlet setup --client codex --mcp --apply --expect-plan PLAN_ID --verify --snapshot SNAPSHOT_ID --json
+```
+
+Use the preview's `planId` and the saved graph's exact ID. Setup preserves existing
+configuration and customized files. Reconnect the development client, review its
+trust prompt and confirm the skill/tools are loaded. Published 0.9 uses the
+[manual setup](AGENTS.md#manual-registration-and-customization). Both paths lead to
+the same cited-query workflow. Ask the agent to use the skill explicitly for the
+first trial.
 
 A useful task prompt is:
 
@@ -402,6 +414,8 @@ current release it retains a full comparison snapshot/index; run deliberately
 with adequate disk space, not on every edit. Temporary comparisons and retention
 are tracked separately. Do not delete unknown cache objects as part of setup.
 
-Continue with [CI scenarios and snapshot delivery](CI.md). For a trial, retain
+The candidate can [export/import the verified snapshot](SNAPSHOT-DELIVERY.md)
+for another checkout; activate a compatible local head explicitly and reconnect
+the receiving agent. Continue with [CI scenarios and snapshot delivery](CI.md). For a trial, retain
 bounded query receipts, exact versions, citations, limitations and human findings
 using the [consumer evaluation guide](../CONSUMER-TRIAL.md).

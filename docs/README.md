@@ -17,6 +17,7 @@ Start with the path that matches your task:
 | Understand authority labels and resolve unapproved/conflicting evidence | [Evidence decisions](guides/EVIDENCE-DECISIONS.md) |
 | Configure a model provider | [Provider reference](PROVIDERS.md) |
 | Browse or export a graph | [Viewer](VIEWER.md), [portable reports](PORTABLE-EXPLORER.md) |
+| Check onboarding qualification and remaining manual checks | [Onboarding qualification](ONBOARDING-QUALIFICATION.md) |
 | Assess a real-project trial | [Consumer trial](CONSUMER-TRIAL.md), [validation evidence](VALIDATION.md) |
 | Contribute or understand upcoming work | [Roadmap](ROADMAP.md), [0.10 plan](RELEASE-09-10-PLAN.md), [2.0 plan](WEFTLET-2.0-PLAN.md) |
 

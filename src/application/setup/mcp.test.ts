@@ -48,6 +48,25 @@ it('binds plans to configuration bytes and rejects customized registrations befo
   expect(await readdir(root)).not.toContain('.agents');
   expect((await verifyProjectSetup(options)).server.status).toBe('not-started');
 });
+it('recognizes a CRLF-converted launcher without rewriting it and still rejects real edits', async () => {
+  const options = await fixture(), plan = await planProjectSetup(options);
+  await applyProjectSetup(options, plan.planId);
+  const launcher = join(options.directory!, plan.mcp!.launcher.path);
+  const crlf = (await readFile(launcher, 'utf8')).replaceAll('\n', '\r\n');
+  await writeFile(launcher, crlf);
+  const repeat = await planProjectSetup(options);
+  expect(repeat.ready).toBe(true);
+  expect(repeat.mcp!.launcher.action).toBe('unchanged');
+  const file = repeat.mcp!.files.find(item => item.path === plan.mcp!.launcher.path)!;
+  expect(file.beforeSha256).toBe(file.afterSha256);
+  await applyProjectSetup(options, repeat.planId);
+  expect(await readFile(launcher, 'utf8')).toBe(crlf);
+  await writeFile(launcher, crlf.replace('process.chdir(root)', 'process.chdir("..")'));
+  const edited = await planProjectSetup({ ...options, update: true });
+  expect(edited.ready).toBe(false);
+  expect(edited.mcp!.launcher.action).toBe('conflict');
+  await expect(applyProjectSetup({ ...options, update: true }, edited.planId)).rejects.toThrow('customized');
+});
 it('supports managed updates to absolute launchers but never overwrites an edited launcher', async () => {
   const options = await fixture(), plan = await planProjectSetup(options);
   await applyProjectSetup(options, plan.planId);

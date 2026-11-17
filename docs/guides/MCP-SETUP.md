@@ -3,7 +3,7 @@
 [Documentation home](../README.md) · [Project skills](PROJECT-SETUP.md)
 
 Status: **unreleased 0.10 candidate**, implemented for review. Published 0.9 uses
-[manual registration](AGENTS.md#2-register-your-client). Publication remains on hold.
+[manual registration](AGENTS.md#2-register-your-client). See the [work queue](../1.0-WORK-QUEUE.md) for release status.
 
 ## Connect an existing project
 
