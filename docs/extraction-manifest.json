@@ -595,6 +595,7 @@
     "architecture.context-graph.config.json",
     "architecture.policy.json",
     "context-graph.config.json",
+    "docs/1.0-ONBOARDING-GAP-AUDIT.md",
     "docs/1.0-WORK-QUEUE.md",
     "docs/ADR-001-standalone-baseline.md",
     "docs/ADR-002-saved-evidence.md",
