@@ -1,5 +1,36 @@
 # Validation evidence
 
+## R2 read-only inventory and representation profiling, November 17, 2026 (Central)
+
+Implemented for review; [ADR 054](ADR-054-cache-inventory-profile.md),
+[guide](guides/CACHE-INSPECTION.md) and [public measurements](assessments/storage-profile-r2.md).
+A generated public 64-module / 160-function corpus passed real SCIP hydration,
+strict validation and publication: 124,532 facts / 231,213,517 snapshot bytes.
+A streamed profile took 16,960 ms; verified inventory and full file hashes matched
+before/after, and the saved snapshot reloaded. The 100,000-entry provenance/string
+fingerprint bounds were reached and reported; every fact still contributed to byte
+totals. No private graph, provider request, pruning or storage-format change occurred.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build passed. The full deterministic run
+passed 1,153 toolkit tests and 38 core tests, with three optional integration
+skips. Follow-up checks after the CLI dispatch/read-boundary refinements passed
+11 inspection/CLI/real-corpus tests and nine existing document-guard/cache-adoption
+tests. The initial packed tutorial exposed a real `--root` dispatch collision
+with document planning; cache inspection now dispatches first, with an actual
+source-CLI regression. Its smoke helper also no longer appends a conflicting config.
+
+Architecture passed with the existing 22 advisory findings and no new baseline.
+Inventory, license and release-documentation checks passed. The final complete
+packed-consumer harness passed with fresh npm/npx and pnpm consumers: no-model
+setup, real SCIP, RDF/SPARQL/strict SHACL, viewer/MCP and the installed tutorial.
+The tutorial exercised `cache usage --root --verify` and `cache profile --snapshot`
+from another cwd, preserved snapshot bytes, then completed clean comparison and
+verified delivery to an independently installed receiving checkout. No model calls
+were made. The earlier package failure is resolved by this final run.
+Native Windows R2 checks are configured in the existing onboarding workflow;
+hosted R2 results remain pending. There is no R2 npm release or global budget claim.
+
+
 ## R1 independent temporary clean comparisons, 2026-11-17 UTC
 
 Hosted qualification at `dc6231f`: both Linux publication jobs and both existing
@@ -9,7 +40,9 @@ failed while arranging a directory swap: Windows returned EPERM because the
 operation's lease handle was still open. The fixture now asserts this native
 protection and successful owned cleanup on Windows; POSIX still exercises actual
 swapped-root rejection. This changes no production lease/cleanup behavior and is
-not a claim that a swapped-root scenario ran on Windows. Requalification follows.
+not a claim that a swapped-root scenario ran on Windows. Requalification at `8543be5` passed all eight hosted checks: both Linux
+publication jobs and both Windows onboarding, storage/startup and retrieval jobs
+(runs `44123251788` and `44123272758`).
 PR 95's two duplicate-job reruns also passed; all of its checks are now green.
 
 
@@ -46,8 +79,7 @@ CLI clean comparison/receipt in the no-model tutorial. The final shared-contract
 refactor also passed the standalone packed tutorial: frozen installs, fresh real
 SCIP/strict validation, comparison receipt/cleanup, unchanged snapshot, transfer
 and fresh receiving-checkout MCP. All tutorial runs made zero model calls.
-Native Windows R1 checks are configured in the onboarding job and
-remain pending until the candidate runs. No live provider, Docker/SELinux,
+Native Windows R1 qualification passed at `8543be5` as recorded above. No live provider, Docker/SELinux,
 private consumer action, cache eviction, global budget or npm release is claimed.
 
 ## S7 guided onboarding and packaged qualification, 2026-11-17 UTC

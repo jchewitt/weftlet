@@ -284,7 +284,9 @@ Do not silently drop linked dependencies to satisfy a document limit.
 
 The document byte/count budgets do not bound graph size or total cache storage.
 There is currently no enforced 10 GiB cache cap; see the
-[storage plan](../CACHE-RETENTION-PLAN.md). Keep graph/cache outputs ignored.
+[storage plan](../CACHE-RETENTION-PLAN.md). Candidate `cache usage` and `cache profile`
+provide read-only [inventory and byte measurements](CACHE-INSPECTION.md) before
+retention decisions. Keep graph/cache outputs ignored.
 
 ## 4. Select extraction authentication
 
