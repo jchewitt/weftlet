@@ -4,11 +4,12 @@
 [Agent setup](AGENTS.md) · [CI and evidence delivery](CI.md)
 
 This guide takes an existing TypeScript Git repository from installation to an
-agent-assisted change. The released baseline is 0.9.0. The 0.10 development
-branch adds independent Claude/OpenCode extraction, automatic skill/MCP/CI setup
-and verified snapshot delivery; candidate commands are marked below.
-Use a reviewed published version or reviewed release archives, not an assumed
-future npm version. See the [release history](../RELEASES.md).
+agent-assisted change using the **0.10.0 release scope**: independent
+Claude/OpenCode extraction, automatic skill/MCP/CI setup, verified snapshot
+delivery and storage inspection/review. Check the [release history](../RELEASES.md)
+and your installed version before following these commands. Use verified registry
+packages when available, or matching reviewed archives for prepublication testing.
+Manual setup paths for 0.9 remain documented.
 
 ## 1. Understand what you are building
 
@@ -225,11 +226,11 @@ invent approved requirements to make graph coverage look complete.
 
 ## 2. Install and initialize
 
-The 0.10 candidate also [installs project agent skills](PROJECT-SETUP.md) during
+Version 0.10.0 [installs project agent skills](PROJECT-SETUP.md) during
 init. Use `--client` to select clients or `--no-skill` to opt out; existing
 projects use `weftlet setup`. Bulk governing paths can be supplied with repeated
 `--approved-intent-source` flags. Add `--mcp` to setup for [project server registration
-and verification](MCP-SETUP.md). Published 0.9 uses the manual skill instructions.
+and verification](MCP-SETUP.md). Existing 0.9 installations use the manual skill instructions.
 
 Use Node 24+ and a Git repository. In the project root:
 
@@ -284,7 +285,7 @@ Do not silently drop linked dependencies to satisfy a document limit.
 
 The document byte/count budgets do not bound graph size or total cache storage.
 There is currently no enforced 10 GiB cache cap; see the
-[storage plan](../CACHE-RETENTION-PLAN.md). Candidate `cache usage` and `cache profile`
+[storage plan](../CACHE-RETENTION-PLAN.md). Version 0.10.0 `cache usage` and `cache profile`
 provide read-only [inventory and byte measurements](CACHE-INSPECTION.md) before
 retention decisions. Keep graph/cache outputs ignored.
 
@@ -297,8 +298,8 @@ extraction CLI nor model credentials.
 | Extraction option | Status / authentication |
 | --- | --- |
 | `codex-cli` | Released; existing ChatGPT login by default, or explicitly selected API key |
-| `claude-cli` | 0.10 candidate; Claude account login or explicit API key, without Codex |
-| `opencode-cli` | 0.10 candidate; tested CLI 1.19.5, selected saved API key or explicit key, required `provider/model`; OAuth separate |
+| `claude-cli` | 0.10.0; Claude account login or explicit API key, without Codex |
+| `opencode-cli` | 0.10.0; tested CLI 1.19.5, selected saved API key or explicit key, required `provider/model`; OAuth separate |
 | `module` | Trusted custom adapter implementing the provider contract |
 
 Choose the model you have access to. API billing is opt-in and is never a fallback
@@ -362,7 +363,7 @@ coverage flags are part of the answer, not optional debugging information.
 
 ## 7. Connect your agent and do a change
 
-With the 0.10 candidate, preview and install the project skill and MCP registration
+With 0.10.0, preview and install the project skill and MCP registration
 in one flow (choose `codex`, `claude` or `opencode`):
 
 ```sh
@@ -372,7 +373,7 @@ npx --no-install weftlet setup --client codex --mcp --apply --expect-plan PLAN_I
 
 Use the preview's `planId` and the saved graph's exact ID. Setup preserves existing
 configuration and customized files. Reconnect the development client, review its
-trust prompt and confirm the skill/tools are loaded. Published 0.9 uses the
+trust prompt and confirm the skill/tools are loaded. Existing 0.9 installations use the
 [manual setup](AGENTS.md#manual-registration-and-customization). Both paths lead to
 the same cited-query workflow. Ask the agent to use the skill explicitly for the
 first trial.
@@ -412,7 +413,7 @@ not every product requirement. Missing required evidence is not a pass. Test and
 runtime acceptance remain project responsibilities.
 
 `clean-compare --ref HEAD` independently rebuilds and compares the digest. The
-candidate R1 implementation uses temporary snapshot/index/compiler storage and
+0.10.0 implementation uses temporary snapshot/index/compiler storage and
 removes its own output after completion, retaining a compact receipt under
 `comparison-receipts` in the configured storage root. Use `--json` to get that
 receipt's path and the original snapshot ID. The independent comparison ID is
@@ -426,12 +427,12 @@ isolated. SIGINT/SIGTERM request cancellation; active tools settle before cleanu
 After a hard kill, inspect the operation's `work/compare-*/lease.json` and confirm
 it has stopped before removing only that temporary directory.
 
-Released 0.9 retains full comparison copies. R1 is candidate work until published;
-see [ADR 053](../ADR-053-temporary-clean-comparison.md) and the release changelog.
+Version 0.9 retains full comparison copies; 0.10.0 changes subsequent comparisons
+to temporary output. See [ADR 053](../ADR-053-temporary-clean-comparison.md) and the release changelog.
 It still needs temporary build space and does not enforce the planned 10 GiB cap
 or delete historical copies. Do not delete unknown cache objects as part of setup.
 
-The candidate can [export/import the verified snapshot](SNAPSHOT-DELIVERY.md)
+Version 0.10.0 can [export/import the verified snapshot](SNAPSHOT-DELIVERY.md)
 for another checkout; activate a compatible local head explicitly and reconnect
 the receiving agent. Continue with [CI scenarios and snapshot delivery](CI.md). For a trial, retain
 bounded query receipts, exact versions, citations, limitations and human findings

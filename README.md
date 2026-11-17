@@ -65,15 +65,20 @@ and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
 
 ## Start here
 
+The guides below describe the **0.10.0 release scope**, including project setup,
+provider choice and storage inspection. Check the [release overview](docs/RELEASES.md)
+and installed package version for availability; these instructions are not an npm
+publication receipt.
+
 - **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
 - **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
 - **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
-- **[Automatic project setup (0.10 candidate)](docs/guides/PROJECT-SETUP.md)** — install skills during init or add them to an existing project; [register and verify MCP](docs/guides/MCP-SETUP.md) with preserved settings and managed updates. [CI scaffolding](docs/guides/CI-SETUP.md) adds standalone workflows with selected project checks and optional trusted generation. [Assisted setup](docs/guides/ASSISTED-SETUP.md) uses your configured provider to propose reviewed document, skill/MCP and existing-CI integration changes.
+- **[Automatic project setup](docs/guides/PROJECT-SETUP.md)** — install skills during init or add them to an existing project; [register and verify MCP](docs/guides/MCP-SETUP.md) with preserved settings and managed updates. [CI scaffolding](docs/guides/CI-SETUP.md) adds standalone workflows with selected project checks and optional trusted generation. [Assisted setup](docs/guides/ASSISTED-SETUP.md) uses your configured provider to propose reviewed document, skill/MCP and existing-CI integration changes.
 - **[Act on evidence and authority labels](docs/guides/EVIDENCE-DECISIONS.md)** — how agents use reference/draft material, report conflicts, and how users inspect or rectify results.
 - **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
-- **[Review retention (candidate)](docs/guides/CACHE-RETENTION.md)** — declare managed profiles, active scopes and historical pins; inspect and recheck a non-destructive retention plan.
-- **[Measure local graph storage (candidate)](docs/guides/CACHE-INSPECTION.md)** — inventory cache roots/profiles and profile saved snapshot fields before retention decisions.
-- **[Verified snapshot delivery (0.10 candidate)](docs/guides/SNAPSHOT-DELIVERY.md)** — export selected evidence in CI, verify/import it locally, and explicitly select it for agents and the viewer.
+- **[Review retention](docs/guides/CACHE-RETENTION.md)** — declare managed profiles, active scopes and historical pins; inspect and recheck a non-destructive retention plan.
+- **[Measure local graph storage](docs/guides/CACHE-INSPECTION.md)** — inventory cache roots/profiles and profile saved snapshot fields before retention decisions.
+- **[Verified snapshot delivery](docs/guides/SNAPSHOT-DELIVERY.md)** — export selected evidence in CI, verify/import it locally, and explicitly select it for agents and the viewer.
 - **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
 
 ## Set up a project
@@ -120,13 +125,13 @@ ChatGPT login. API billing requires explicitly selecting `api-key`; credentials 
 environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
 for both modes and their tentative validation status. The earlier `@launch-echo/tently@0.1.0` release predates this option.
 
-The 0.10 development candidate adds `init --provider claude-cli`, selecting Claude Code
+The 0.10.0 release scope includes `init --provider claude-cli`, selecting Claude Code
 for extraction and optional mapping proposals without Codex. It supports Claude account login
 or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
-The candidate also adds `opencode-cli` extraction with explicitly selected API credentials
+It also includes `opencode-cli` extraction with explicitly selected API credentials
 and a required `provider/model`; see [OpenCode setup and limits](docs/PROVIDERS.md#opencode).
 OpenCode subscription/OAuth login remains tracked work. Client registration and verification
-are implemented for review in the [0.10 candidate](docs/guides/MCP-SETUP.md).
+are included in [automatic MCP setup](docs/guides/MCP-SETUP.md).
 A compatible MCP client can already query saved evidence without any extraction provider.
 
 ```sh
@@ -657,7 +662,7 @@ weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
 
 No configuration switch enables automatic inference. The proposal command reuses the existing
 `semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
-the default; the 0.10 candidate also uses the selected Claude or OpenCode provider.
+the default; 0.10.0 also uses the selected Claude or OpenCode provider.
 Configured API-key mode is optional for either CLI. A compatible module must separately export
 `createMappingProposalProvider(config)` with matching `identity` and
 `propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is
@@ -669,7 +674,7 @@ snapshot/key. Neither MCP tool invokes a provider. Agents must treat rationale a
 content and follow the cited rule and exact symbol IDs. The CLI reports progress on stderr using
 opaque IDs; `--quiet` suppresses progress. Provider failures preserve all existing graph evidence.
 
-Refresh a committed snapshot using this candidate to record code coverage before proposing.
+Refresh a committed snapshot with the installed toolkit to record code coverage before proposing.
 Missing indexing/ownership, unresolved document selectors and budget overflow block inference.
 Historical evidence stays labeled historical; working edits are excluded and draft-overlay
 proposal generation is not yet supported. Saved artifacts live in the configured graph storage

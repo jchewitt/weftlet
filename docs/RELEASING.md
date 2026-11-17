@@ -122,6 +122,14 @@ fallback. JavaScript pnpm and standalone `@pnpm/exe` are supported for local too
 
 ## Keeping installation documentation current
 
+Before reviewing a version PR or preparing a release, follow the repository's
+[release-documentation skill](https://github.com/jchewitt/weftlet/blob/main/.agents/skills/release-documentation/SKILL.md).
+It adds a review of feature descriptions, guides, the separate demo tutorial,
+agent setup and CI examples to the automated checks below. Record that review in
+the PR and validation ledger. GitHub Actions runs the scripted checks, not the
+skill prose; passing those checks alone does not establish that all explanations
+are current. The maintainer skill is repository-only, not a consumer npm asset.
+
 The manifests own versions for this checkout/archive; registry publication is a separate fact.
 Changesets versioning regenerates the sections between `weftlet:release:start` and
 `weftlet:release:end` in both package READMEs and this guide. Do not edit those sections by hand.

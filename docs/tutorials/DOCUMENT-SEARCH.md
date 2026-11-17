@@ -3,10 +3,11 @@
 [Documentation home](../README.md) · [Project guide](../guides/PROJECT-GUIDE.md) ·
 [Qualification record](../ONBOARDING-QUALIFICATION.md)
 
-**This walkthrough targets the unreleased 0.10 candidate.** Install reviewed
-candidate archives until that release is available; published 0.9 does not have
-these setup/delivery commands. The [manual client setup](../guides/AGENTS.md#manual-registration-and-customization)
-remains available for older releases. See [release status](../RELEASING.md).
+**This walkthrough covers the 0.10.0 release scope.** Check
+[release status](../RELEASES.md) and use the matching verified registry package or
+reviewed archives. Existing 0.9 installations can follow
+[manual client setup](../guides/AGENTS.md#manual-registration-and-customization);
+the automatic setup/delivery steps below require 0.10.0.
 
 You will install Weftlet in a disposable project, connect a development client,
 preview and build evidence, make a test change, and deliver the graph to another
@@ -33,17 +34,22 @@ Create an empty directory named `search-demo`, open a terminal there, and run:
 npm init -y
 ```
 
-During candidate testing, install the reviewed pair as described in
-[releasing/installing candidate archives](../RELEASING.md), replacing these paths:
+For a verified registry release containing the 0.10.0 functionality:
+
+```sh
+npm install --save-dev @weftlet/toolkit typescript@5.5.4 vitest@3.2.4
+```
+
+Core is installed with toolkit; ordinary registry consumers need only toolkit.
+For prepublication testing, instead install the reviewed pair from
+[release preparation](../RELEASING.md), replacing these paths:
 
 ```sh
 npm install --save-dev "/path/to/reviewed-core.tgz" "/path/to/reviewed-toolkit.tgz" typescript@5.5.4 vitest@3.2.4
 ```
 
-After the candidate is published, the equivalent normal registry install is
-`npm install --save-dev @weftlet/toolkit typescript@5.5.4 vitest@3.2.4`.
-Core is installed with toolkit; ordinary registry consumers need only toolkit.
-Keep your generated lockfile.
+Keep your generated lockfile and verify that the installed package version matches
+the release or archive pair you selected.
 
 Copy the packaged public example into this empty project, preserving the
 package.json that records your installed dependencies:

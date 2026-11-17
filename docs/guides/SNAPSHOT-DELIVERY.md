@@ -2,8 +2,9 @@
 
 [Documentation home](../README.md) · [CI guide](CI.md) · [Agent setup](AGENTS.md)
 
-**Availability: unreleased 0.10 candidate.** Published 0.9 does not include these
-commands. Use the matching reviewed candidate before following this guide.
+Included in the **0.10.0 release scope**; check [release status](../RELEASES.md).
+Use matching core/toolkit versions on both ends. For existing 0.9 installations,
+see [manual staging](CI.md#manual-staging-for-09-or-customized-delivery).
 
 Use snapshot delivery when trusted CI or another workstation has already built
 the evidence that your local agents and viewer should query. The bundle preserves

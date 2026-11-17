@@ -3,11 +3,11 @@
 [Documentation home](../README.md) · [Project guide](PROJECT-GUIDE.md)
 
 MCP exposes saved evidence. A project skill tells the agent when and how to use
-it. The **unreleased 0.10 candidate** installs both through the commands below.
-Published 0.9 and customized installations use the
+it. The **0.10.0 release scope** includes installation of both through the commands
+below; see [release status](../RELEASES.md). Existing 0.9 and customized installations use the
 [manual alternative](#manual-registration-and-customization).
 
-## Automatic project setup (0.10 candidate)
+## Automatic project setup
 
 Install the reviewed toolkit in your project and retain its graph configuration.
 Choose your development client (`codex`, `claude` or `opencode`):
@@ -38,7 +38,7 @@ to its supported authentication contract.
 
 ## Manual registration and customization
 
-Use this section for published 0.9, unsupported client configuration versions, or
+Use this section for 0.9, unsupported client configuration versions, or
 projects deliberately managing their own skill and server entries.
 
 ## 1. Choose a stable server command
@@ -119,7 +119,7 @@ own configuration format. Tool-name prefixes may be added by the client.
 
 ## 3. Install the packaged workflow skill
 
-With the 0.10 candidate, use [project setup](PROJECT-SETUP.md) to install and
+With 0.10.0, use [project setup](PROJECT-SETUP.md) to install and
 update managed copies. The following is the manual alternative for 0.9 or
 projects managing their own instructions.
 
@@ -208,13 +208,13 @@ replace the project's installed skill file.
 ## Extraction versus development support
 
 A development client only needs saved querying. For new semantic extraction,
-released 0.9 uses Codex or a configured module. The 0.10 candidate adds Claude's
+0.9 uses Codex or a configured module. The 0.10.0 release scope adds Claude's
 own login/API path and OpenCode API credentials without Codex. See
 [provider configuration and qualification](../PROVIDERS.md). Do not install a
 second CLI just to query a graph. MCP uses no Weftlet cloud key.
 
 The server's protocol behavior is tested through fresh CLI/MCP consumer checks.
-The candidate also tests generated registrations and launcher startup.
+Generated registrations and launcher startup are also covered by deterministic tests.
 These manual client profiles remain configuration examples; actual authenticated
 Claude/OpenCode development sessions are not established by those tests. Codex
 reference pages were checked for this guide; Claude's documentation site

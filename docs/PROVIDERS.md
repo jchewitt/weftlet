@@ -1,9 +1,9 @@
 # Semantic provider contract
 
-Codex CLI is the released built-in adapter through 0.9.0. The 0.10 development
-candidate adds Claude Code and OpenCode CLI extraction and optional mapping proposals. Its
-deterministic orchestration is tested; authenticated model execution remains
-unvalidated. OpenCode initially supports API credentials; subscription/OAuth support is separate. The module extension
+Codex CLI remains the default built-in adapter. The 0.10.0 release scope includes
+independent Claude Code and OpenCode CLI extraction and optional mapping proposals.
+Their orchestration is tested deterministically; live authenticated model execution
+for those two adapters remains unvalidated. OpenCode initially supports API credentials; subscription/OAuth support is separate. The module extension
 contract remains available; an arbitrary executable is not compatible merely
 because it accepts stdin.
 
@@ -84,14 +84,14 @@ continue using their ChatGPT login; this change does not provision or copy accou
 
 ## Claude Code
 
-Status: implemented in the 0.10 development candidate, **not yet published**.
+Included in the **0.10.0 release scope**; see [release status](RELEASES.md).
 No Codex executable, Codex login or OpenAI API key is required. Claude Code is
 installed and authenticated separately by the operator. The adapter currently
 requires Claude Code **2.1.321 or later within major version 2**: the contract was
 inspected on 2.1.321, including customization isolation and structured-output
 flags. This is not a claim that every later CLI version has been tested.
 
-For a fresh project using this candidate:
+For a fresh project using 0.10.0:
 
 ```sh
 weftlet init --provider claude-cli --yes --semantic-source docs/product --model sonnet
@@ -300,7 +300,7 @@ These prove launcher plumbing, not live Codex authentication or semantic quality
 authentication follow-up remain deferred at the maintainer's request.
 
 
-Traversal hydration in the next minor candidate keeps the built-in Codex source/prompt contract
+Traversal hydration keeps the built-in Codex source/prompt contract
 unchanged. Its validated `documentTraversal` controls are excluded from the Codex artifact pool
 partition; classification is attached during assembly. Validation documents are excluded from
 semantic calls and counted only against traversal read limits. Module providers use a separate
@@ -311,7 +311,7 @@ reuse does not discover those external dependencies. See [ADR 026](ADR-026-trave
 
 ## OpenCode
 
-The **unpublished 0.10 candidate** supports OpenCode **1.19.5**, using an explicit
+The **0.10.0 release scope** supports OpenCode **1.19.5**, using an explicit
 `provider/model` and either its selected saved API credential or an environment
 variable. Codex and Claude are not required. No provider is chosen automatically.
 The maintainer approved API credentials first; subscription/OAuth refresh is a

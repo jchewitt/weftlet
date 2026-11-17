@@ -23,14 +23,33 @@ npm registry or a substitute for detailed upgrade notes.
 | [0.3.0–0.5.0](../CHANGELOG.md#050) | No-model hydration preview, validation improvements, artifact reuse, timeout diagnostics, canonical file helpers and ten-minute timeout support. |
 | [0.1.2–0.2.1](../CHANGELOG.md#021) | Release automation, committed TypeScript selection, document links, Windows launchers and document identity repair. |
 
-## Unreleased work
+## 0.10.0 release scope
 
-The 0.10 candidate adds independent Claude Code and initial OpenCode API
-extraction, automatic project skill installation through init/setup, and bulk
-governing-source patterns in init. Automatic MCP registration is next;
-see the [0.10 plan](RELEASE-09-10-PLAN.md) and pending `.changeset` entries in Git.
-It has not been published merely because it appears on a branch. Storage retention,
-architecture-only packaging and the 2.0 hosted review/AI service remain separate.
+The integrated release includes:
+
+- Independent Claude Code and initial OpenCode API extraction and mapping
+  proposals. Neither requires Codex; live authentication/model quality and actual
+  client loading retain their separately recorded qualification limits.
+- Automatic project skills, bulk governing-source configuration, MCP registration
+  and verification, GitHub CI scaffolding, and optional provider-assisted setup
+  with a reviewed change plan.
+- Verified snapshot export/import for CI-to-local delivery and a complete public
+  tutorial using fresh installed packages.
+- Independent clean comparisons with temporary output and compact receipts,
+  read-only cache inventory/size profiling, and declared retention plan/check
+  commands. Retention reviews never remove data; coordinated pruning, the global
+  10 GiB budget and compact storage remain subsequent milestones.
+
+This describes release contents, not registry availability. Check the matching
+[GitHub package releases](https://github.com/jchewitt/weftlet/releases), npm version
+and generated changelogs before installing. For prepublication testing, use the
+matching reviewed archives from [release preparation](RELEASING.md). The
+[validation record](VALIDATION.md) keeps preparation, publication, consumer
+acceptance and docs-site delivery separate.
+
+Architecture-only packaging and the 2.0 hosted review/AI service remain separate
+plans. The [work queue](1.0-WORK-QUEUE.md) records remaining 1.0 storage and
+consumer-acceptance work; this minor release is not a complete 1.0 claim.
 
 ## Before upgrading
 
