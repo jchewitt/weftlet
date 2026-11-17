@@ -28,7 +28,14 @@ from another cwd, preserved snapshot bytes, then completed clean comparison and
 verified delivery to an independently installed receiving checkout. No model calls
 were made. The earlier package failure is resolved by this final run.
 Native Windows R2 checks are configured in the existing onboarding workflow;
-hosted R2 results remain pending. There is no R2 npm release or global budget claim.
+hosted R2 Linux, Windows onboarding (including the new inspection commands), and
+retrieval jobs passed at `a4553c2`. Both existing Windows storage jobs failed in
+`document-coverage.test.ts`: multiple CLI invocations exceeded a shared 30-second
+case deadline, and cleanup raced the remaining child. The fixture now allows
+120 seconds per multi-invocation case while retaining the 20-second per-process
+bound; teardown aborts and awaits child close before removing its workspace.
+All six tests pass locally. Hosted requalification follows; product/model timeouts
+and validation requirements are unchanged. There is no R2 npm release or global budget claim.
 
 
 ## R1 independent temporary clean comparisons, 2026-11-17 UTC
