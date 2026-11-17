@@ -27,6 +27,8 @@ export interface CacheObject {
   allocatedBytes: number | null;
   physicalIdentity?: string;
   modifiedAt: string;
+  revision: string;
+  linkCount: number;
   inspection: 'not-inspected' | 'metadata-only' | 'json-complete' | 'bytes-hashed' | 'invalid' | 'limited' | 'changed' | 'unreadable';
   metadata?: { repositoryId?: string; snapshotId?: string; commitSha?: string; configurationDigest?: string };
   sha256?: string;

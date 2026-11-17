@@ -55,7 +55,8 @@ they are information for later policy work, not deletion candidates.
 Head references are visible, but an old head is not automatically an active scope
 or permanent pin. Lease-marker presence indicates possible activity, not proof of
 a live process or abandoned work. Pins, archive state and active registrations are
-`not-evaluated` until the R3 contract exists. Unknown and unreadable objects remain
+`not-evaluated` by inventory. Use the separate
+[retention review](CACHE-RETENTION.md) to evaluate a declared policy. Unknown and unreadable objects remain
 explicit. No file age authorizes cleanup.
 
 The default bound is 100,000 entries (up to 1,000,000 with `--max-entries`) and
@@ -113,8 +114,8 @@ output with deterministic public prose extraction. Run `pnpm benchmark:storage`
 in the source repository to reproduce it without external model calls.
 
 R2 provides measurements. R1 stops accumulating successful comparison copies;
-R3 will add coordinated leases, active scopes, explicit pins and reviewed prune
-plans. R4 will enforce the global budget and temporary-build reservations, and R5
+R3a adds [declared retention reviews](CACHE-RETENTION.md). R3b will add coordinated
+leases, active-scope registration and reviewed removal. R4 will enforce the global budget and temporary-build reservations, and R5
 will qualify compact storage using these measurements. There is no enforced 10 GiB
 cap or prune command in R2. Keep current evidence and semantic artifacts until a
 reviewed retention plan can identify safe recovery and deletion boundaries.

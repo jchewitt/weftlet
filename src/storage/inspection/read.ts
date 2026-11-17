@@ -4,6 +4,7 @@ import type { BigIntStats } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname } from 'node:path';
 import { JSONParser } from '@streamparser/json';
+import { parseUniqueJson } from '../../infrastructure/unique-json.js';
 import { safeTransferPath } from '../transfer-files.js';
 
 import { InspectionError } from './errors.js';
@@ -51,7 +52,10 @@ async function* fileChunks(handle: FileHandle) {
   }
 }
 
-export async function inspectSmallJson(path: string, maxBytes = 1024 * 1024) {
+export async function inspectSmallJson(path: string, maxBytes = 1024 * 1024, uniqueKeys = false) {
+  return (await inspectSmallJsonRecord(path, maxBytes, uniqueKeys)).value;
+}
+export async function inspectSmallJsonRecord(path: string, maxBytes = 1024 * 1024, uniqueKeys = false) {
   return withInspectionFile(path, maxBytes, async handle => {
     const chunks: Buffer[] = []; let bytes = 0;
     for await (const chunk of fileChunks(handle)) {
@@ -59,7 +63,10 @@ export async function inspectSmallJson(path: string, maxBytes = 1024 * 1024) {
       if (bytes > maxBytes) throw new InspectionError('limit', 'Inspection byte limit exceeded');
       chunks.push(chunk);
     }
-    try { return JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown; }
+    try {
+      const bytes = Buffer.concat(chunks);
+      return { value: (uniqueKeys ? parseUniqueJson : JSON.parse)(bytes.toString('utf8')) as unknown, sha256: createHash('sha256').update(bytes).digest('hex') };
+    }
     catch (error) { if (error instanceof SyntaxError) throw new InspectionError('invalid-json', 'Invalid JSON document'); throw error; }
   });
 }

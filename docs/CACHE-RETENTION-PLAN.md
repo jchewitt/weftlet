@@ -59,6 +59,19 @@ pin/archive/active-scope states are explicitly distinguished. R3 will define tho
 coordination/ownership states before they can authorize any deletion. R2 does not
 implement a budget, change semantic identity or prune historical consumer files.
 
+## R3a implementation update — November 17, 2026
+
+The non-destructive declaration/review portion is implemented for review in
+[ADR 055](ADR-055-declared-retention-reviews.md): separate policy scaffolding,
+current/previous/pin protections, explicit exact-target head retirement, per-object
+reasons/dependencies/recovery notes, and stale decision-plan checking. See the
+[guide](guides/CACHE-RETENTION.md). All reports have `canApply: false`.
+
+R3 is not complete: **R3b** must integrate reader/writer/GC leases, active-scope
+registration, transactional current/previous tracking and crash recovery before
+applying a reviewed plan. R3a's manual previous declaration and observational scan
+are not substitutes for those contracts. Existing cache files remain untouched.
+
 ## Bounded tasks
 
 | Task | Deliverable and acceptance |

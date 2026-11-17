@@ -1,6 +1,6 @@
 import { dirname, join } from 'node:path';
 import { lstat } from 'node:fs/promises';
-import { inspectFileDigest, inspectJson, inspectSmallJson, InspectionError } from './read.js';
+import { inspectFileDigest, inspectJson, inspectSmallJsonRecord, InspectionError } from './read.js';
 import { object, snapshotMetadata, type CacheObject } from './layout.js';
 import { physicalArtifactKey } from '../../infrastructure/artifact-paths.js';
 
@@ -10,8 +10,7 @@ export async function inspectCacheObject(entry: CacheObject, verify: boolean, ma
   try {
     signal?.throwIfAborted();
     const now = await lstat(path, { bigint: true });
-    if (Number(now.size) !== entry.logicalBytes || now.mtime.toISOString() !== entry.modifiedAt ||
-        (entry.physicalIdentity && `${now.dev}:${now.ino}` !== entry.physicalIdentity)) {
+    if ([now.dev, now.ino, now.size, now.mtimeNs, now.ctimeNs, now.nlink].join(':') !== entry.revision) {
       throw new InspectionError('changed', 'File changed since enumeration');
     }
     await readMetadata(entry, path, verify, maxBytes, signal);
@@ -43,6 +42,7 @@ export function linkInventory(objects: CacheObject[]) {
 async function readMetadata(entry: CacheObject, path: string, verify: boolean, maxBytes: number, signal?: AbortSignal) {
   if (entry.category === 'snapshot') {
     const result = await inspectJson(path, { manifestOnly: !verify, maxBytes, signal });
+    if (verify && result.sections.facts !== 'array') throw new InspectionError('invalid-json', 'Snapshot facts array missing');
     entry.metadata = snapshotMetadata(result.manifest);
     if (!entry.metadata) throw new InspectionError('invalid-json', 'Snapshot manifest missing or malformed');
     const filename = entry.path.split('/').at(-1);
@@ -51,14 +51,14 @@ async function readMetadata(entry: CacheObject, path: string, verify: boolean, m
     }
     entry.inspection = result.jsonComplete ? 'json-complete' : 'metadata-only'; entry.sha256 = result.sha256;
   } else if (['head', 'comparison-receipt', 'lease-marker'].includes(entry.category)) {
-    const value = await inspectSmallJson(path, Math.min(maxBytes, 1024 * 1024));
+    const { value, sha256 } = await inspectSmallJsonRecord(path, Math.min(maxBytes, 1024 * 1024), true);
     if (!object(value)) throw new InspectionError('invalid-json', 'Expected metadata object');
     if (entry.category === 'head') {
       if (typeof value.snapshotId !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/.test(value.snapshotId)) throw new InspectionError('invalid-json', 'Invalid head identifier');
       entry.metadata = { snapshotId: value.snapshotId };
     }
     if (entry.category === 'lease-marker') entry.activity = 'lease-marker-present-unverified';
-    entry.inspection = 'json-complete';
+    entry.inspection = 'json-complete'; entry.sha256 = sha256;
   } else if (verify) {
     const result = entry.category === 'scip-index' ? await inspectFileDigest(path, maxBytes, signal) : await inspectJson(path, { maxBytes, signal });
     entry.sha256 = result.sha256; entry.inspection = entry.category === 'scip-index' ? 'bytes-hashed' : 'json-complete';

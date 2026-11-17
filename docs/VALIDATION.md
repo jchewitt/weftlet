@@ -1,5 +1,30 @@
 # Validation evidence
 
+## R3a declared retention reviews, November 17, 2026 (Central)
+
+Implemented for review; [ADR 055](ADR-055-declared-retention-reviews.md) and
+[operator guide](guides/CACHE-RETENTION.md). The separate policy declares managed
+profiles, active/previous generations, exact-target released heads and historical
+pins. Planning and stale-plan checking are read-only; every report has
+`canApply: false`. No collector, global byte cap or coordinated deletion is claimed.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and 41 focused tests passed across
+retention, inventory, real SCIP corpus inspection, snapshot delivery and independent
+comparison. After duplicate-key rejection was added to policy/report parsing,
+the build and 19 inspection/retention tests passed again. Cases cover preserved
+bytes, current/previous/pinned/legacy references, expired pins, advanced heads,
+edited/stale reports, scan bounds, hardlinks, symlinks and possible lease activity.
+
+The fresh packed-consumer onboarding tutorial passed with two independent npm
+installations, real SCIP/strict validation, repeated snapshot preservation,
+temporary clean comparison and verified delivery. Installed retention init/plan/check
+ran from another cwd, protected the active head and preserved snapshot bytes.
+No model calls occurred. Inventory, license and release-documentation checks passed;
+architecture passed with 21 advisory findings and no baseline update. Native Windows
+retention checks are added to hosted onboarding; their result remains pending.
+Reader/writer/GC coordination, actual removal and enforced budget/compact-storage
+acceptance remain subsequent milestones.
+
 ## R2 read-only inventory and representation profiling, November 17, 2026 (Central)
 
 Implemented for review; [ADR 054](ADR-054-cache-inventory-profile.md),
