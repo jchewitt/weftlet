@@ -4,7 +4,7 @@ import { prepareMcpSetup, type McpSetupOptions } from './mcp.js';
 import { planSkillSetup } from './skills.js';
 
 export interface ProjectSetupOptions extends McpSetupOptions { mcp?: boolean; skills?: boolean }
-async function prepare(options: ProjectSetupOptions) {
+export async function prepareProjectSetup(options: ProjectSetupOptions) {
   const skill = options.skills === false ? undefined : await planSkillSetup(options);
   const mcp = options.mcp ? await prepareMcpSetup(options) : undefined;
   if (!skill && !mcp) throw Error('Select skills or --mcp for setup');
@@ -15,9 +15,9 @@ async function prepare(options: ProjectSetupOptions) {
     skill, mcp: mcp?.plan, planId: contentDigest(JSON.stringify([skill?.planId, mcp?.plan.planId])) };
   return { plan, changes };
 }
-export async function planProjectSetup(options: ProjectSetupOptions) { return (await prepare(options)).plan; }
+export async function planProjectSetup(options: ProjectSetupOptions) { return (await prepareProjectSetup(options)).plan; }
 export async function applyProjectSetup(options: ProjectSetupOptions, expectedPlanId: string) {
-  const { plan, changes } = await prepare(options);
+  const { plan, changes } = await prepareProjectSetup(options);
   if (plan.planId !== expectedPlanId) throw Error('Setup plan is stale; preview again before applying.');
   if (!plan.ready) throw Error('Setup needs review: existing customized files are preserved; --update accepts only unchanged managed entries.');
   await applySetupFiles(plan.root, changes);

@@ -17,7 +17,7 @@ function owned(text: string) {
 function managed(body: string, packageVersion: string) {
   return `${marker}${JSON.stringify({ schemaVersion: 1, packageVersion, bodySha256: contentDigest(body) })}\n${body}`;
 }
-async function prepare(options: CiSetupOptions) {
+export async function prepareCiSetup(options: CiSetupOptions) {
   if (!options.checks && !options.generate) throw Error('Choose --checks and/or --generate');
   const project = await inspectCiProject(options);
   const profile = generationProfile(project.config, options);
@@ -51,9 +51,9 @@ async function prepare(options: CiSetupOptions) {
   };
   return { plan: { ...plan, planId: contentDigest(JSON.stringify(plan)) }, changes };
 }
-export async function planCiSetup(options: CiSetupOptions) { return (await prepare(options)).plan; }
+export async function planCiSetup(options: CiSetupOptions) { return (await prepareCiSetup(options)).plan; }
 export async function applyCiSetup(options: CiSetupOptions, expectedPlanId: string) {
-  const { plan, changes } = await prepare(options);
+  const { plan, changes } = await prepareCiSetup(options);
   if (plan.planId !== expectedPlanId) throw Error('CI setup plan is stale; preview again before applying');
   if (!plan.ready) throw Error('CI setup preserves customized workflows; review the proposed content or use --update for unchanged managed copies');
   await applySetupFiles(plan.root, changes);

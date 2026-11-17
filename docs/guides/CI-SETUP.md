@@ -4,7 +4,7 @@
 
 Status: **unreleased 0.10 candidate**, implemented for review. Published 0.9 uses
 [copyable examples](CI.md). Install the candidate as a project dependency before
-using these commands. Publication remains on hold.
+using these commands, and check its release notes for availability.
 
 ## Add ordinary PR checks
 
@@ -55,7 +55,8 @@ root lockfiles and package-manager metadata. It adds standalone Weftlet workflow
 and preserves other files, triggers, permissions and jobs byte for byte. This is
 also useful when existing CI is complex: review the new job separately, or copy its
 steps into your own workflow deliberately. Optional model-assisted integration
-into existing jobs is the separate S5 task.
+is available through [assisted setup](ASSISTED-SETUP.md), which can add a
+separate check job while preserving existing jobs.
 
 Supported installs are `npm ci` and `pnpm install --frozen-lockfile`. pnpm requires
 an exact root `packageManager` version; an explicit npm version is also honored.

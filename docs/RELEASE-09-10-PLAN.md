@@ -7,8 +7,8 @@ are 0.9.0 and 0.10.0 for the fixed core/toolkit pair. 0.9.0 is now published;
 within its recorded scope. Official 1.0 remains a separate release decision.
 
 November 10 scheduling update: S1–S7 are now accepted in the
-[current 1.0 queue](1.0-WORK-QUEUE.md), which owns execution order and the active
-publication hold. Keep implementation increments separate; the 0.10 label does
+[current 1.0 queue](1.0-WORK-QUEUE.md), which owns execution order and publication readiness. The November 16 maintainer instruction lifts the earlier
+publication hold after docs-trigger setup. Keep implementation increments separate; the 0.10 label does
 not require putting all remaining storage/onboarding work into one release.
 
 ## 0.9 — Canonical semantic file contract
@@ -139,10 +139,12 @@ code-only tutorial/CLI/MCP smoke, not a live semantic or hosted consumer pass.
 See [project skill setup](guides/PROJECT-SETUP.md) for the candidate installation
 commands and [MCP setup](guides/MCP-SETUP.md); manual profiles remain a fallback.
 
-The source documentation increment merged in PR 85. The separate website is
-under review; publication is on hold while its release-update automation is
-prepared. S1, S2/S4 and S3 are implemented for review. S3 adds managed standalone CI
-workflows; S5 assisted integration follows in the current 1.0 queue.
+The source documentation increment merged in PR 85. The maintainer reports the separate website
+release trigger is configured and authorizes reviewed publication (November 16).
+Notify the maintainer after publishing so its agent can verify the pipeline.
+S1, S2/S4, S3 and S5 are implemented for review. S3 adds managed standalone CI
+workflows; [S5 assisted integration](guides/ASSISTED-SETUP.md) proposes bounded
+changes to selected project setup. S6 verified snapshot delivery follows.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

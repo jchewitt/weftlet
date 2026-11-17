@@ -190,3 +190,19 @@ Select `--test-script`/`--build-script` only for scripts present in the demo's
 package.json. Commit the config, lockfile and generated workflow. This checks
 configuration and committed hydration scope without model credentials. Add trusted
 generation separately after reviewing its provider, budgets and delivery needs.
+
+### Optional candidate: adapt an existing project with your assistant
+
+After the deterministic tutorial, an existing project can use
+[assisted setup](../guides/ASSISTED-SETUP.md) to propose document selections and
+add the generated Weftlet check job to its own workflow. Select only the files
+you want sent to the configured provider:
+
+```sh
+npx --no-install weftlet setup assist --input package.json --input docs/search-capability.md --dry-run
+```
+
+The document path above exists in the copied demo. The preview makes no model call.
+Follow the guide to request one proposal, inspect its changes and apply its saved
+plan. This optional model exercise is separate from the deterministic tutorial;
+it uses your chosen provider's account/API credentials and normal usage terms.
