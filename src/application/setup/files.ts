@@ -7,7 +7,7 @@ export const contentDigest = (content: string) => createHash('sha256').update(co
 const missing = (error: unknown) => (error as NodeJS.ErrnoException).code === 'ENOENT';
 
 /** Inspect each in-project path component without following directory/file links. */
-export async function inspectSetupPath(root: string, path: string): Promise<string | null> {
+export async function inspectSetupPath(root: string, path: string, maxBytes = 262_144): Promise<string | null> {
   const target = resolve(root, path), local = relative(root, target);
   if (!local || isAbsolute(local) || local.split(/[\\/]/).includes('..')) throw Error('Setup path must be inside the project');
   const parts = local.split(/[\\/]/);
@@ -20,7 +20,7 @@ export async function inspectSetupPath(root: string, path: string): Promise<stri
     if (index < parts.length - 1) {
       if (!info.isDirectory()) throw Error(`Setup parent must be a directory: ${current}`);
     } else {
-      if (!info.isFile() || info.nlink !== 1 || info.size > 262_144) throw Error(`Setup requires a regular, unshared file of at most 256 KiB: ${current}`);
+      if (!info.isFile() || info.nlink !== 1 || info.size > maxBytes) throw Error(`Setup requires a regular, unshared file of at most ${maxBytes} bytes: ${current}`);
       return readFile(current, 'utf8');
     }
   }
@@ -31,6 +31,7 @@ export interface SetupFileChange {
   path: string;
   before: string | null;
   after: string;
+  maxBytes?: number;
 }
 
 /** A project lock coordinates toolkit writers; each file is rechecked before replacement. */
@@ -45,7 +46,7 @@ export async function applySetupFiles(root: string, changes: readonly SetupFileC
     throw error;
   }
   const recheck = async (change: SetupFileChange) => {
-    if (await inspectSetupPath(root, change.path) !== change.before) throw Error(`Setup plan is stale for ${change.path}; preview again.`);
+    if (await inspectSetupPath(root, change.path, change.maxBytes) !== change.before) throw Error(`Setup plan is stale for ${change.path}; preview again.`);
   };
   try {
     await lock.writeFile(JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
