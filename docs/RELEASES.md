@@ -26,7 +26,8 @@ npm registry or a substitute for detailed upgrade notes.
 ## Unreleased work
 
 The 0.10 candidate adds independent Claude Code and initial OpenCode API
-extraction. Shared skill/client onboarding and these guides are in development;
+extraction, automatic project skill installation through init/setup, and bulk
+governing-source patterns in init. Automatic MCP registration is next;
 see the [0.10 plan](RELEASE-09-10-PLAN.md) and pending `.changeset` entries in Git.
 It has not been published merely because it appears on a branch. Storage retention,
 architecture-only packaging and the 2.0 hosted review/AI service remain separate.

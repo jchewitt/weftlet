@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "4cd8759254c8e44fc530af71ed6a9a2c8ffaef0956b5b8714a0f29da5e1efe8d"
+      "destinationSha256": "94a3bba92225cbe1afe8f6bf9f4b0760287a34aa988f5d0b114df8e0555af412"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "ac1f845ee274630d99a05ec420aa95e0e8261499a11f4c06cedac967bbab2e78"
+      "destinationSha256": "175cd3add1088226e194eda7581e92b294d8ed2519bc549c69c4adc42ceed190"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/automatic-project-skills.md",
     ".changeset/claude-extraction-choice.md",
     ".changeset/config.json",
     ".changeset/guided-project-documentation.md",
@@ -644,6 +645,7 @@
     "docs/ADR-045-owner-intent-retrieval.md",
     "docs/ADR-046-semantic-physical-file-validation.md",
     "docs/ADR-047-provider-choice.md",
+    "docs/ADR-048-project-skill-setup.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -687,6 +689,7 @@
     "docs/guides/CI.md",
     "docs/guides/EVIDENCE-DECISIONS.md",
     "docs/guides/PROJECT-GUIDE.md",
+    "docs/guides/PROJECT-SETUP.md",
     "docs/licenses/REVIEW.md",
     "docs/licenses/lru-cache-11.5.3-BlueOak.md",
     "docs/licenses/negotiate-1.0.1-BSD.txt",
@@ -997,6 +1000,9 @@
     "src/application/semantic-artifact-store.ts",
     "src/application/semantic-run.ts",
     "src/application/semantic-scope.ts",
+    "src/application/setup/files.ts",
+    "src/application/setup/skills.test.ts",
+    "src/application/setup/skills.ts",
     "src/cli.ts",
     "src/configuration/cache.test.ts",
     "src/configuration/document-traversal.ts",
@@ -1152,11 +1158,14 @@
     "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/identity-preflight.test.ts",
+    "src/interfaces/init-interactive.test.ts",
     "src/interfaces/init.test.ts",
     "src/interfaces/init.ts",
     "src/interfaces/mapping-proposals.test.ts",
     "src/interfaces/mapping-proposals.ts",
     "src/interfaces/opencode-readiness.ts",
+    "src/interfaces/setup.test.ts",
+    "src/interfaces/setup.ts",
     "src/interfaces/viewer.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
