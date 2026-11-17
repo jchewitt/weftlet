@@ -215,3 +215,55 @@ npm install --save-dev "/path/to/weftlet/.release/weftlet-core-0.9.0.tgz" "/path
 
 Check registry hashes, transitive core resolution and provenance. Deprecating the previous
 `@launch-echo` names is a separate action after replacement verification; never unpublish them.
+
+
+## Automatic documentation updates after publication
+
+The release workflow's `docs` job runs only after the exact archives for **both** packages are
+verified on npm and the `records` job has completed their immutable GitHub tags/releases. It
+sends one explicit `repository_dispatch` event, `weftlet-release-published`, to the private
+`jchewitt/weftlet-docs` repository. It does not rely on either package-specific GitHub Release
+event, or on a version-bump commit, to wake the documentation updater.
+
+The event carries schema version 1, source repository, the full source commit, both stable
+package names/versions and verified SHA-512 archive integrities, and a canonical `releaseKey`.
+The key is SHA-256 of UTF-8 `JSON.stringify({sourceCommit,packages:[{name,version},...]})` with
+property order exactly as shown, no whitespace/newline, and package order core then toolkit.
+The docs receiver independently verifies the event and publication, compares source/API and
+changelog changes, validates the updated comprehensive site/tutorial, and publishes it without
+requiring a recurring review PR. Dispatch acceptance does not mean documentation is published.
+
+### Required scoped authorization and activation
+
+Configure **`WEFTLET_DOCS_DISPATCH_TOKEN`** as an Actions secret in **this source repository**.
+Use a fine-grained token authorized only for `jchewitt/weftlet-docs`, with **Contents: write**
+(and its automatically included metadata access), or an equivalently scoped GitHub App token
+provided by the established secrets process. The source repository's `GITHUB_TOKEN` cannot
+write to this other private repository. Do not reuse npm, hosting, backend or unrelated tokens.
+Only the secret name belongs in source; never print values or API response bodies in logs.
+
+The docs receiver workflow must first exist on its default branch and have its separately
+required source-read and noninteractive automation credentials configured. The dispatch sender
+is staged code, not proof those credentials or hosting are active. No credential is created or
+copied by these scripts. Missing dispatch authorization fails clearly after publication without
+changing the already-published npm release or discarding the previous site.
+
+### Failure and recovery
+
+After a failed `docs` job, inspect the docs repository's runs and release state before retrying,
+especially if a network timeout made acceptance uncertain. Re-run only the failed job on the
+original source run; it restores the same manifest and sends the same combined release key.
+A receiver must deduplicate that key durably and mark it documented only after validated
+publication succeeds. It must not mark dispatch acceptance or generated-but-failed content as
+published. Do not create another npm release merely to recover documentation. A rerun dispatch
+never creates/moves package tags, republishes npm archives or changes source main.
+
+Run the sender's offline contract tests with:
+
+```sh
+node --test scripts/docs-release-dispatch.test.mjs
+```
+
+The tests mock dispatch transport and include malformed/partial identities, stable repeat keys,
+changed version/source identities, failure/retry behavior and workflow dependency placement.
+Neither this test nor ordinary CI invokes the docs receiver or performs model extraction.
