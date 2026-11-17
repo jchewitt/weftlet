@@ -1,0 +1,112 @@
+import { randomUUID } from 'node:crypto';
+import { link, lstat, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+import { sha256 } from '@weftlet/core';
+import { fileDigest, copyTransferFile, requireFreeSpace, safeTransferPath, transferDirectory } from '../../storage/transfer-files.js';
+import { snapshotPath, semanticArtifactPath } from '../../storage/storage.js';
+import { activationHead, deliveryContext, deliveryState } from './context.js';
+import { assertBundle, manifestByteLimit, transferLimit, validDigest, type TransferFile } from './contract.js';
+import { checkpoint, sameValue, validateTransferredSnapshot, type TransferControl } from './validation.js';
+import { validateBundleArtifact } from './semantic.js';
+
+export interface ImportSnapshotOptions extends TransferControl {
+  readonly input: string;
+  readonly expectDigest: string;
+  readonly includeSemantic?: boolean;
+  readonly activate?: boolean;
+  /** null means no head must exist. Required when activating. */
+  readonly expectHead?: string | null;
+  readonly dryRun?: boolean;
+  readonly maxBytes?: number;
+}
+export async function importSnapshot(configPath: string, options: ImportSnapshotOptions) {
+  if (!validDigest(options.expectDigest)) throw Error('Import requires the trusted manifest SHA-256 via --expect-digest');
+  if (options.activate !== (options.expectHead !== undefined) && (options.activate || options.expectHead !== undefined)) {
+    throw Error('--activate requires --expect-head <id|none>; --expect-head requires --activate');
+  }
+  const maxBytes = transferLimit(options.maxBytes), input = resolve(options.input);
+  await safeTransferPath(input, true);
+  const manifestPath = join(input, 'manifest.json');
+  // Bound before buffering this small file; snapshot and artifact copying stays streamed.
+  await fileDigest(manifestPath, manifestByteLimit);
+  const raw = await readFile(manifestPath);
+  if (raw.length > manifestByteLimit || sha256(raw) !== options.expectDigest) throw Error('Bundle manifest integrity mismatch');
+  let bundle: unknown;
+  try { bundle = JSON.parse(raw.toString('utf8')); }
+  catch { throw Error('Invalid bundle manifest JSON'); }
+  assertBundle(bundle, maxBytes);
+  const names = (await readdir(input)).sort();
+  if (!sameValue(names, ['manifest.json', ...bundle.files.map(file => file.name)].sort())) throw Error('Bundle contains missing or unlisted files');
+  const context = await deliveryContext(configPath);
+  if (bundle.snapshot.repositoryId !== context.config.repositoryId) throw Error('Bundle belongs to a different repository identity');
+  await transferDirectory(context.storageRoot);
+  await requireFreeSpace(context.storageRoot, bundle.payloadBytes + manifestByteLimit);
+  const transfers = join(context.storageRoot, 'transfers');
+  await transferDirectory(transfers);
+  const stage = join(transfers, `import-${randomUUID()}`);
+  await mkdir(stage, { mode: 0o700 });
+  try {
+    await writeFile(join(stage, 'lease.json'), JSON.stringify({ kind: 'snapshot-import', pid: process.pid,
+      startedAt: new Date().toISOString(), reservedPayloadBytes: bundle.payloadBytes }), { flag: 'wx', mode: 0o600 });
+    for (const entry of bundle.files) {
+      checkpoint(options, 'verify-payload');
+      const copied = await copyTransferFile(join(input, entry.name), join(stage, entry.name), entry.bytes, options.signal);
+      if (!sameValue(copied, { bytes: entry.bytes, sha256: entry.sha256 })) throw Error('Bundle payload integrity mismatch');
+    }
+    const validated = await validateTransferredSnapshot(join(stage, 'snapshot.json'), options);
+    const { snapshot } = validated;
+    if (!sameValue(snapshot.manifest, bundle.snapshot) || validated.persistedGraphDigest !== bundle.persistedGraphDigest) {
+      throw Error('Persisted snapshot identity or canonical digest mismatch');
+    }
+    const evidenceState = await deliveryState(context, snapshot);
+    const headName = options.activate ? activationHead(context, snapshot) : undefined;
+    if (options.activate && (!evidenceState.configurationMatches || !evidenceState.extractionCompatible)) {
+      throw Error('Mismatched configuration or extractors: import by ID without --activate to inspect historical evidence');
+    }
+    if (headName && (await context.store.headId(headName) ?? null) !== options.expectHead) throw Error('Snapshot head changed; inspect it before activation');
+    const installs: { entry: TransferFile; destination: string }[] = [{ entry: bundle.files[0]!,
+      destination: await context.store.file(snapshot.manifest.snapshotId) ?? snapshotPath(context.storageRoot, snapshot.manifest.snapshotId) }];
+    if (options.includeSemantic && bundle.files.length - 1 !== snapshot.manifest.semanticArtifactKeys.length) throw Error('Bundle does not include the requested semantic artifacts');
+    for (const entry of bundle.files.slice(1)) {
+      checkpoint(options, 'validate-semantic-artifact');
+      // Even excluded cache payloads must be intact. Adoption additionally checks local Git/config.
+      await validateBundleArtifact(join(stage, entry.name), entry.semanticKey!, options.includeSemantic ? context : undefined);
+      if (options.includeSemantic) installs.push({ entry, destination: await context.artifacts.file(entry.semanticKey!) ??
+        semanticArtifactPath(context.semanticRoots.primary, entry.semanticKey!) });
+    }
+    // Check every collision before installing anything; concurrent winners are rechecked below.
+    for (const item of installs) await existingMatches(item.destination, item.entry);
+    if (!options.dryRun) {
+      for (const { entry, destination } of installs) {
+        checkpoint(options, 'install-verified-evidence');
+        await transferDirectory(dirname(destination));
+        if (await existingMatches(destination, entry)) continue;
+        try { await link(join(stage, entry.name), destination); }
+        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
+        // Remove our staging link before the regular-file boundary check (nlink === 1).
+        await rm(join(stage, entry.name));
+        if (!(await existingMatches(destination, entry))) throw Error('Imported evidence disappeared before publication');
+      }
+      checkpoint(options, 'activate-snapshot');
+      if (headName) {
+        await safeTransferPath(join(context.storageRoot, 'heads'), true, true);
+        await context.store.updateHead(headName, snapshot.manifest.snapshotId, { expectedSnapshotId: options.expectHead! });
+      }
+    }
+    return { operation: 'snapshot-import', dryRun: options.dryRun ?? false, snapshotId: snapshot.manifest.snapshotId,
+      manifestSha256: options.expectDigest, contentDigest: snapshot.manifest.contentDigest,
+      persistedGraphDigest: validated.persistedGraphDigest, payloadBytes: bundle.payloadBytes,
+      semanticArtifacts: options.includeSemantic ? installs.length - 1 : 0,
+      activated: Boolean(headName && !options.dryRun), ...(headName ? { headName } : {}),
+      strictValidation: true, evidenceState, producerContentDigest: 'preserved-not-recomputed' as const };
+  } finally { await rm(stage, { recursive: true, force: true }); }
+}
+async function existingMatches(path: string, entry: TransferFile): Promise<boolean> {
+  try {
+    await safeTransferPath(path);
+    if ((await lstat(path)).size !== entry.bytes) throw Error('Immutable evidence collision: existing byte length differs; nothing was overwritten');
+    const actual = await fileDigest(path, entry.bytes);
+    if (!sameValue(actual, { bytes: entry.bytes, sha256: entry.sha256 })) throw Error('Immutable evidence collision: existing bytes differ; nothing was overwritten');
+    return true;
+  } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return false; throw error; }
+}

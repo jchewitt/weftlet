@@ -1,5 +1,51 @@
 # Validation evidence
 
+## S6 verified snapshot delivery, 2026-11-16 UTC
+
+Implemented for review, not merged or published. [ADR 052](ADR-052-snapshot-delivery.md)
+and the [delivery guide](guides/SNAPSHOT-DELIVERY.md) describe the directory-bundle,
+trusted manifest hash, canonical persisted-graph digest and explicit head-selection
+contract. The producer's pre-persistence `contentDigest` is retained, not falsely
+reported as recomputed from persisted JSON. Extraction/cache identities are unchanged.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and full deterministic suite passed
+**38 core + 1,134 toolkit tests**, with **3 optional integrations skipped**
+(openCAESAR, enforcing SELinux and real OpenCode). All 15 new transfer/CLI tests
+passed, including real public TypeScript/SCIP and semantic extraction through strict
+hydration, bundle export/import, exact stored-byte equality, saved queries, repeat
+import, cache validation and independent repeat hydration with **0 extracted / 1
+reused** artifact. Existing cross-process head readers/writers also passed after
+head compare-and-swap coordination was added.
+The final focused transfer/CLI/head-lifecycle rerun passed **18 tests**, including
+the strengthened assertion that strict-validation failure preserves a preexisting
+head and its exact snapshot bytes.
+
+Negative cases cover trusted-manifest and payload corruption, strict graph/type
+failure, wrong repository/configuration, unsafe bundle names, symlinks/junctions,
+hardlinked payloads, unsupported overlays, semantic contract mismatch, immutable
+byte collision, stale head expectations, competing imports, cancellation, byte
+limits and preservation of operation-external files. Dry runs install no evidence
+or heads; temporary copies are removed. Historical/dirty saved evidence retains
+freshness metadata and `eligibleForCurrentDiffValidation: false`.
+
+Fresh npm/npx and pnpm packed-consumer smoke passed, including installed CLI export
+and repeat import of the real traversal-hydrated fixture, unchanged snapshot bytes,
+canonical digests, saved queries and configuration-mismatch reporting. The receiving
+configuration points at an unavailable adapter/provider: transfer succeeds without
+loading either. Existing installed MCP/viewer/SPARQL/strict-SHACL checks passed.
+Release-documentation and license checks passed. Architecture checks passed with
+**21 advisory findings**: the 3 added complexity signals are in bundle validation,
+snapshot validation and import orchestration. They remain visible review items;
+no rule was disabled, exception added or baseline expanded.
+
+The Windows job includes these transfer regressions; its result is pending for this
+increment. No private graph transfer, hosted artifact delivery, live provider call,
+power-loss recovery, hostile-local-writer sandbox or full-scale >1 GiB transfer is
+claimed. Existing large-graph lifecycle/canonical hashing regressions passed in
+the full suite. Global storage reservation, retention/GC and compact representation
+remain R1–R5; this milestone enforces only its explicit transfer payload allowance
+and performs a free-disk preflight. macOS remains unqualified.
+
 ## S5 optional assisted integration, 2026-11-16 Central
 
 Implemented for review; [ADR 051](ADR-051-assisted-setup.md) and the

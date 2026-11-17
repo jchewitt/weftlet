@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { smokeSnapshotDelivery } from './smoke-snapshot-delivery.mjs';
 
 /** Run the installed CLI, provider contract and runtime assets from an independent packed consumer. */
 export async function smokeTraversal(consumer, installedRoot, baseConfig, policy) {
@@ -107,6 +108,7 @@ export function createSemanticExtractor(config) {
       throw new Error('Installed path pagination must retain exact cited evidence across the shared capability');
     }
   } finally { await client.close(); }
+  await smokeSnapshotDelivery(consumer, installedRoot, config, first.snapshotId);
   const before = await readFile(join(consumer, config.storagePath, 'heads/default.json'), 'utf8');
   config.documentTraversal.maxReadDocuments = 1;
   await writeFile(join(consumer, 'traversal.config.json'), JSON.stringify(config));

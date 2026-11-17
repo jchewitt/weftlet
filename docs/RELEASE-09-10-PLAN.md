@@ -142,9 +142,10 @@ commands and [MCP setup](guides/MCP-SETUP.md); manual profiles remain a fallback
 The source documentation increment merged in PR 85. The maintainer reports the separate website
 release trigger is configured and authorizes reviewed publication (November 16).
 Notify the maintainer after publishing so its agent can verify the pipeline.
-S1, S2/S4, S3 and S5 are implemented for review. S3 adds managed standalone CI
+S1, S2/S4, S3, S5 and S6 are implemented for review. S3 adds managed standalone CI
 workflows; [S5 assisted integration](guides/ASSISTED-SETUP.md) proposes bounded
-changes to selected project setup. S6 verified snapshot delivery follows.
+changes to selected project setup. [S6 snapshot delivery](guides/SNAPSHOT-DELIVERY.md)
+adds explicit verified CI-to-local transfer. S7 final qualification follows.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

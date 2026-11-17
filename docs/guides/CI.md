@@ -7,6 +7,12 @@ The unreleased 0.10 candidate adds [automatic CI scaffolding](CI-SETUP.md) with
 `weftlet setup ci`: preview/apply standalone PR-check and optional trusted-generation
 workflows while preserving existing CI. Published 0.9 uses the examples below.
 
+The candidate also supports [verified snapshot export/import](SNAPSHOT-DELIVERY.md).
+Use that flow for new CI-to-local integrations: export a selected successful
+snapshot, retain its manifest hash through a trusted channel, then import locally
+with explicit optional activation. The manual staging approach below remains
+available for published 0.9 and customized delivery.
+
 A typical project builds a committed graph in trusted CI, retains a private
 snapshot and lets local agents/viewers query it. CI does not automatically update
 desktop MCP processes or local heads. An HTML report is also not a snapshot store.

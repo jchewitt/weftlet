@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "9237810e4c8c2c3e0b53c8a050f3f2129f4f575c1f1a9607611f7b3e88da99a8"
+      "destinationSha256": "dc69093d09fad9ff27ad262c01cbb87bc9bfb04e6ec953007dd63239b0052a3a"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "fabb6dd5a1c179ecbd48103b0076c94aec882f081b7893ed17b855d0512d35ad"
+      "destinationSha256": "263d6b451dfe7999dd06e0dd7db6623d60a45eafc96841c26b77f7f1ca58f3c3"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "a5f0383badeab8bba57e54c478343fea434247bfdb1fae1d282e6934393d0325"
+      "destinationSha256": "9c7e6d61b895c2f746a9538a07a355b9aa71ca5527aca9f15cc6bc9c1b57d792"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -586,6 +586,7 @@
     ".changeset/project-ci-scaffolding.md",
     ".changeset/project-mcp-registration.md",
     ".changeset/release-plan.json",
+    ".changeset/verified-snapshot-delivery.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -652,6 +653,7 @@
     "docs/ADR-049-project-mcp-setup.md",
     "docs/ADR-050-ci-scaffolding.md",
     "docs/ADR-051-assisted-setup.md",
+    "docs/ADR-052-snapshot-delivery.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -699,6 +701,7 @@
     "docs/guides/MCP-SETUP.md",
     "docs/guides/PROJECT-GUIDE.md",
     "docs/guides/PROJECT-SETUP.md",
+    "docs/guides/SNAPSHOT-DELIVERY.md",
     "docs/licenses/REVIEW.md",
     "docs/licenses/lru-cache-11.5.3-BlueOak.md",
     "docs/licenses/negotiate-1.0.1-BSD.txt",
@@ -971,6 +974,7 @@
     "scripts/smoke-ci-setup.mjs",
     "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-project-setup.mjs",
+    "scripts/smoke-snapshot-delivery.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/test-explorer-browser.ts",
     "scripts/update-inventory.mjs",
@@ -985,6 +989,12 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/delivery/context.ts",
+    "src/application/delivery/contract.ts",
+    "src/application/delivery/export.ts",
+    "src/application/delivery/import.ts",
+    "src/application/delivery/semantic.ts",
+    "src/application/delivery/validation.ts",
     "src/application/document-classification.test.ts",
     "src/application/document-code-bindings.ts",
     "src/application/document-coverage.ts",
@@ -1203,6 +1213,8 @@
     "src/interfaces/setup-ci.ts",
     "src/interfaces/setup.test.ts",
     "src/interfaces/setup.ts",
+    "src/interfaces/snapshot-delivery.test.ts",
+    "src/interfaces/snapshot-delivery.ts",
     "src/interfaces/viewer.ts",
     "src/mcp.ts",
     "src/repository/committed-tree.ts",
@@ -1212,10 +1224,12 @@
     "src/storage/artifact-paths.test.ts",
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
+    "src/storage/head-lock.ts",
     "src/storage/mapping-proposals.test.ts",
     "src/storage/mapping-proposals.ts",
     "src/storage/streaming-json.test.ts",
     "src/storage/streaming-json.ts",
+    "src/storage/transfer-files.ts",
     "src/telemetry.ts",
     "src/visualization/evidence-sources.ts",
     "src/visualization/explorer-assets.ts",
@@ -1296,6 +1310,7 @@
     "tests/semantic-cache-reuse.test.ts",
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",
+    "tests/snapshot-delivery.test.ts",
     "tests/snapshot-lifecycle.test.ts",
     "tests/static-calls.test.ts",
     "tests/traversal-hydration.test.ts"

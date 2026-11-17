@@ -1,5 +1,7 @@
+import { withHeadLock } from './head-lock.js';
+import { safeTransferPath } from './transfer-files.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { mkdir, writeFile, link, rm, stat } from 'node:fs/promises';
+import { mkdir, writeFile, link, rm, stat, lstat } from 'node:fs/promises';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
@@ -43,7 +45,7 @@ function safeKey(key: string): string {
   return key;
 }
 
-function snapshotPath(root: string, snapshotId: string, legacy = false): string {
+export function snapshotPath(root: string, snapshotId: string, legacy = false): string {
   if (
     snapshotId.length > 256 ||
     !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(snapshotId) ||
@@ -136,7 +138,7 @@ export class FileSnapshotStore implements SnapshotStore {
     return snapshotId ? this.readManifest(snapshotId) : undefined;
   }
 
-  private async headId(headName: string): Promise<string | undefined> {
+  async headId(headName: string): Promise<string | undefined> {
     const key = safeKey(headName);
     const head = await readWithLegacyPath<{ snapshotId: string }>(
       join(this.root, 'heads', `${physicalArtifactKey(key)}.json`),
@@ -145,14 +147,44 @@ export class FileSnapshotStore implements SnapshotStore {
     return head?.snapshotId;
   }
 
-  async updateHead(headName: string, snapshotId: string): Promise<void> {
+  async updateHead(headName: string, snapshotId: string, condition?: { expectedSnapshotId: string | null }): Promise<void> {
+    const destination = join(this.root, 'heads', `${physicalArtifactKey(safeKey(headName))}.json`);
+    // Immutable snapshot verification can scan a large file. Keep it outside the
+    // short head lock; retention/GC must coordinate separately with active readers.
     if (!(await this.readManifest(snapshotId))) throw new Error('Cannot point a head to an absent snapshot');
-    return atomicJson(join(this.root, 'heads', `${physicalArtifactKey(safeKey(headName))}.json`), { snapshotId });
+    await mkdir(dirname(destination), { recursive: true });
+    await withHeadLock(`${destination}.lock`, async () => {
+      if (condition) await safeTransferPath(destination, false, true);
+      if (condition && (await this.headId(headName) ?? null) !== condition.expectedSnapshotId) throw Error('Snapshot head changed; inspect it and retry with an explicit current expectation');
+      await atomicJson(destination, { snapshotId });
+    });
+  }
+
+  /** Locate committed bytes, retaining legacy filenames without migrating them. */
+  file(snapshotId: string): Promise<string | undefined> {
+    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true), existingFile);
   }
 }
 
+async function existingFile(path: string): Promise<string | undefined> {
+  try {
+    const info = await lstat(path);
+    if (!info.isFile() || info.isSymbolicLink()) throw Error('Expected an ordinary storage file');
+    return path;
+  } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined; throw error; }
+}
+export const semanticArtifactPath = (root: string, key: string) => join(root, 'artifacts', 'semantic', `${physicalArtifactKey(safeKey(key))}.json`);
+
 export class SemanticArtifactStore {
   constructor(private readonly root: string, private readonly legacyRoots: readonly string[] = []) {}
+
+  async file(key: string): Promise<string | undefined> {
+    for (const root of [this.root, ...this.legacyRoots]) {
+      const path = await readWithLegacyPath(semanticArtifactPath(root, key), join(root, 'artifacts', 'semantic', `${safeKey(key)}.json`), existingFile);
+      if (path) return path;
+    }
+    return undefined;
+  }
 
   async read(key: string): Promise<SemanticArtifact | undefined> {
     return (await this.readEntry(key))?.artifact;
