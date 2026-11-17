@@ -1,22 +1,12 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import type { ContextGraphConfig } from "../configuration/config.js";
 import { scipSourcePatterns } from '../configuration/scip-project.js';
 import { buildCodeInventory } from '../extraction/code-inventory.js';
 import type {
   ExtractionContext,
-  FactExtractor,
   GraphSnapshot,
   GraphDiagnostic,
-  InvariantEvaluator,
-  RuntimeTraceReference,
-  RuntimeEvidenceProvider,
-  SnapshotStore,
 } from "@weftlet/core";
-import type { GitRepository } from "../repository/git.js";
 import { contractPatternRoots } from "../repository/glob.js";
-import type { OntologyCompiler } from "../extraction/ontology.js";
-import type { SemanticHydrator } from "../extraction/semantic.js";
-import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
 import { repositoryFileExtractorIdentity, repositoryContractExtractorIdentity, scipSymbolExtractorIdentity } from '../extraction/static.js';
 import { sha256, stableJson, stableJsonDigest } from "../infrastructure/util.js";
 import { assembleDocumentCodeBindings } from './document-code-bindings.js';
@@ -33,49 +23,14 @@ import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
 import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
 import { SemanticProviderError } from '../extraction/semantic-process.js';
-import { hydrateSemanticSources, type HydrationProgressEvent } from './semantic-run.js';
+import { hydrateSemanticSources } from './semantic-run.js';
 export type { HydrationProgressEvent } from './semantic-run.js';
 import { graphAssemblyVersion, graphAssemblyIdentity, documentExtractionVersions } from './extraction-identity.js';
 import { assertGraphIdentities } from '../graph/identity-preflight.js';
 import { measureValidationPhase } from '../graph/validation-progress.js';
-
-export interface HydrationOptions {
-  readonly signal?: AbortSignal;
-  readonly onProgress?: (event: HydrationProgressEvent) => void;
-  readonly ref: string;
-  readonly headName: string;
-  readonly forceSemantic?: boolean;
-  readonly snapshotSuffix?: string;
-  readonly requireClean?: boolean;
-  /** Explicit local diagnostics may disclose repository identities, producers and citations. */
-  readonly validationDetails?: boolean;
-  readonly semanticSources?: readonly string[];
-  readonly runtimeEvidenceRevision?: RuntimeEvidenceRevision;
-}
-
-export interface RuntimeEvidenceRevision {
-  readonly commitSha: string;
-  readonly digest: string;
-  readonly references: readonly RuntimeTraceReference[];
-}
-
-export interface HydrationResult {
-  readonly snapshot: GraphSnapshot;
-  readonly semanticExtracted: number;
-  readonly semanticReused: number;
-}
-
-export interface HydratorDependencies {
-  readonly config: ContextGraphConfig;
-  readonly repository: GitRepository;
-  readonly snapshotStore: SnapshotStore;
-  readonly semanticHydrator: SemanticHydrator;
-  readonly staticIndexer: StaticIndexer;
-  readonly ontologyCompiler: OntologyCompiler;
-  readonly runtimeEvidenceProvider: RuntimeEvidenceProvider;
-  readonly extractorFactory: (scip: ScipIndexResult) => readonly FactExtractor[];
-  readonly invariantEvaluators: readonly InvariantEvaluator[];
-}
+import { runCleanComparison } from './clean-comparison.js';
+import type { HydrationOptions, HydrationResult, HydratorDependencies, RuntimeEvidenceRevision } from './hydration-contract.js';
+export type * from './hydration-contract.js';
 
 export class ContextGraphHydrator {
   constructor(private readonly dependencies: HydratorDependencies) {}
@@ -364,20 +319,7 @@ export class ContextGraphHydrator {
   }
 
   async compareClean(options: Omit<HydrationOptions, 'snapshotSuffix'>): Promise<HydrationResult> {
-    const store = this.dependencies.snapshotStore;
-    const current = store.readHeadManifest ? await store.readHeadManifest(options.headName)
-      : (await store.readHead(options.headName))?.manifest;
-    if (!current) throw new Error('No incremental snapshot exists to compare');
-    const clean = await this.hydrate({
-      ...options,
-      headName: `${options.headName}-clean`,
-      snapshotSuffix: `clean-${Date.now()}`,
-    });
-    if (clean.snapshot.manifest.contentDigest !== current.contentDigest) {
-      throw new Error(
-        `Clean hydration drift: ${current.contentDigest} != ${clean.snapshot.manifest.contentDigest}`,
-      );
-    }
-    return clean;
+    return runCleanComparison(this.dependencies, options, (dependencies, isolatedOptions) =>
+      new ContextGraphHydrator(dependencies).hydrate(isolatedOptions));
   }
 }

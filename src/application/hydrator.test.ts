@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
 import { GitRepository } from "../repository/git.js";
-import { ContextGraphHydrator } from "./hydrator.js";
+import { ContextGraphHydrator, type HydratorDependencies } from "./hydrator.js";
 import { SemanticHydrator } from "../extraction/semantic.js";
 import { SemanticArtifactStore, FileSnapshotStore } from "../storage/storage.js";
 import { RepositoryFileExtractor } from "../extraction/static.js";
@@ -112,7 +112,7 @@ describe('commit-keyed hydration', () => {
     let acceptedTraceId = 'accepted-trace';
     let dockerReady = false;
     let indexCalls = 0;
-    const hydrator = new ContextGraphHydrator({
+    const dependencies: HydratorDependencies = {
       config,
       repository,
       snapshotStore,
@@ -168,7 +168,11 @@ describe('commit-keyed hydration', () => {
         new RepositoryFileExtractor(repository, config.codeRoots, scip.digest),
       ],
       invariantEvaluators: [],
-    });
+    };
+    const hydrator = new ContextGraphHydrator({ ...dependencies, cleanComparison: {
+      storageRoot, // These deterministic fixture tools write no files.
+      createTools: () => ({ staticIndexer: dependencies.staticIndexer, ontologyCompiler: dependencies.ontologyCompiler }),
+    } });
 
     await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow(
       'Docker preflight failed',
@@ -238,7 +242,7 @@ describe('commit-keyed hydration', () => {
     await git(root, 'commit', '-m', 'improve search again');
     const current = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     const clean = await hydrator.compareClean({ ref: 'HEAD', headName: 'default' });
-    expect(clean.snapshot.manifest.baseSha).not.toBe(current.snapshot.manifest.baseSha);
+    expect(clean.snapshot.manifest.baseSha).toBe(await repository.firstParent(current.snapshot.manifest.commitSha));
     expect(clean.snapshot.manifest.contentDigest).toBe(current.snapshot.manifest.contentDigest);
 
     const forced = await hydrator.hydrate({

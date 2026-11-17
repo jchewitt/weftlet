@@ -362,7 +362,13 @@ export class SemanticHydrator {
     private readonly config: ContextGraphConfig['semantic'],
     private readonly store: SemanticArtifactStore,
     private readonly extractor: SemanticExtractor,
+    private readonly cacheOnly = false,
   ) {}
+
+  /** Revalidate reusable artifacts, without provider calls or legacy-store promotion. */
+  forCleanComparison(): SemanticHydrator {
+    return new SemanticHydrator(this.config, this.store, this.extractor, true);
+  }
 
   async hydrate(
     source: SemanticSource,
@@ -381,12 +387,13 @@ export class SemanticHydrator {
       // Planning remains read-only. Execution can copy an inspected legacy hit
       // atomically without rewriting its original artifact or extraction identity.
       checkpoint();
-      if (cached.origin === 'legacy') options.onPhase?.('semantic-cache-write');
-      const artifact = cached.origin === 'legacy'
+      if (cached.origin === 'legacy' && !this.cacheOnly) options.onPhase?.('semantic-cache-write');
+      const artifact = cached.origin === 'legacy' && !this.cacheOnly
         ? await this.promoteLegacy(source, cached.artifact!, forceRevision) : cached.artifact!;
       return { artifact, reused: true };
     }
     if (cached.status !== 'miss') throw new Error(cached.reason);
+    if (this.cacheOnly) throw new Error('Clean comparison requires a validated compatible semantic artifact. Preview and explicitly hydrate missing evidence before comparing; no model call was made.');
 
     checkpoint();
     options.onPhase?.('semantic-extract');

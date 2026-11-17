@@ -409,10 +409,25 @@ configuration and incompatible extractors. Invariant checks cover configured det
 not every product requirement. Missing required evidence is not a pass. Test and
 runtime acceptance remain project responsibilities.
 
-`clean-compare --ref HEAD` independently rebuilds and compares the digest. In the
-current release it retains a full comparison snapshot/index; run deliberately
-with adequate disk space, not on every edit. Temporary comparisons and retention
-are tracked separately. Do not delete unknown cache objects as part of setup.
+`clean-compare --ref HEAD` independently rebuilds and compares the digest. The
+candidate R1 implementation uses temporary snapshot/index/compiler storage and
+removes its own output after completion, retaining a compact receipt under
+`comparison-receipts` in the configured storage root. Use `--json` to get that
+receipt's path and the original snapshot ID. The independent comparison ID is
+temporary; query the retained original ID afterward.
+
+Comparison reuses validated semantic artifacts and makes no model calls. If an
+artifact is missing or incompatible, inspect `hydrate --plan --json` with the same
+scope, then explicitly hydrate after reviewing the extraction budget. The normal
+head and earlier evidence survive failed comparisons. Concurrent comparisons are
+isolated. SIGINT/SIGTERM request cancellation; active tools settle before cleanup.
+After a hard kill, inspect the operation's `work/compare-*/lease.json` and confirm
+it has stopped before removing only that temporary directory.
+
+Released 0.9 retains full comparison copies. R1 is candidate work until published;
+see [ADR 053](../ADR-053-temporary-clean-comparison.md) and the release changelog.
+It still needs temporary build space and does not enforce the planned 10 GiB cap
+or delete historical copies. Do not delete unknown cache objects as part of setup.
 
 The candidate can [export/import the verified snapshot](SNAPSHOT-DELIVERY.md)
 for another checkout; activate a compatible local head explicitly and reconnect

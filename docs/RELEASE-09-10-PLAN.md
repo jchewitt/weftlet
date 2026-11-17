@@ -146,7 +146,8 @@ S1–S7 are implemented for review. S3 adds managed standalone CI
 workflows; [S5 assisted integration](guides/ASSISTED-SETUP.md) proposes bounded
 changes to selected project setup. [S6 snapshot delivery](guides/SNAPSHOT-DELIVERY.md)
 adds explicit verified CI-to-local transfer. [S7 qualification](ONBOARDING-QUALIFICATION.md) records the packaged development/delivery
-walkthrough and explicitly separates live client/provider acceptance. Storage R1 follows.
+walkthrough and explicitly separates live client/provider acceptance. Storage R1 is implemented for review in [ADR 053](ADR-053-temporary-clean-comparison.md);
+R2 read-only inventory/profiling follows.
 Directory/submodule and public export-surface cleanup is recorded in the roadmap
 for later; no source files or exports are reorganized here.
 

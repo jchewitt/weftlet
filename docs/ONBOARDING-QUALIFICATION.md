@@ -54,7 +54,9 @@ substitute for a real logged-in client/model session.
 - **Native Windows:** a separate `windows-onboarding` job runs the complete
   packaged walkthrough so it does not add work to the already long storage/startup
   job. The first runs found a cold npm-install deadline and CRLF launcher
-  recognition defect; both have corrections awaiting Windows requalification. Existing
+  recognition defect. The corrected complete walkthrough passed in hosted job
+  [134100002269](https://github.com/jchewitt/weftlet/actions/runs/44100812712/job/134100002269)
+  at `f296c84`. Existing
   Windows setup/storage tests remain distinct evidence.
 - **macOS:** unqualified and outside the maintainer's current priority.
 - **Codex / Claude / OpenCode development clients:** generated configuration and

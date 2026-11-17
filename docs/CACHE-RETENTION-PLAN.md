@@ -40,6 +40,15 @@ JSON; `ScipTypeScriptIndexer.index()` keys its artifact by snapshot identity.
 `resolveStorageRoot()` partitions by config/checkout without user-wide retention.
 `runtimeEvidencePolicy.retentionDays` governs evidence eligibility, not disk GC.
 
+## R1 implementation update — November 17, 2026
+
+Implemented for review in [ADR 053](ADR-053-temporary-clean-comparison.md): isolated
+independent builds, read-only validated semantic reuse, compact success/failure
+receipts and operation-owned cleanup. Repeated successful comparisons no longer
+retain full graph/index/compiler copies or clean heads. Hard-kill recovery and
+cross-process GC remain R3; the candidate does not delete old output or implement
+the global budget. R2 read-only inventory/profiling is next.
+
 ## Bounded tasks
 
 | Task | Deliverable and acceptance |

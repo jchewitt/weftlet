@@ -248,11 +248,20 @@ async function main(): Promise<void> {
     return;
   }
   if (command === 'clean-compare') {
-    const result = await application.snapshotChecks.compare(
-      impactRequestFromArgs(args),
-      valueAfter(args, '--ref') ?? 'HEAD',
-    );
-    process.stdout.write(`${result.snapshot.manifest.contentDigest}\n`);
+    const controller = new AbortController();
+    const cancel = () => controller.abort();
+    process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
+    try {
+      const result = await application.snapshotChecks.compare(
+        impactRequestFromArgs(args), valueAfter(args, '--ref') ?? 'HEAD', { signal: controller.signal },
+      );
+      process.stdout.write(`${args.includes('--json') ? JSON.stringify({
+        contentDigest: result.snapshot.manifest.contentDigest, semanticExtracted: result.semanticExtracted,
+        semanticReused: result.semanticReused, comparison: result.comparison,
+      }, null, 2) : result.snapshot.manifest.contentDigest}\n`);
+    } finally {
+      process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
+    }
     return;
   }
   if (command === 'impact' && subcommand === 'scan') {

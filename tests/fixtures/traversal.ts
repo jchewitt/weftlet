@@ -5,13 +5,14 @@ import { join } from 'node:path';
 import { promisify } from 'node:util';
 import type { ContextGraphConfig } from '../../src/configuration/config.js';
 import { resolveStorageRoot } from '../../src/configuration/cache.js';
-import { ContextGraphHydrator } from '../../src/application/hydrator.js';
+import { ContextGraphHydrator, type HydratorDependencies } from '../../src/application/hydrator.js';
 import { createSemanticArtifactStore } from '../../src/application/semantic-artifact-store.js';
 import { CodexCliSemanticExtractor, SemanticHydrator, type SemanticOutput } from '../../src/extraction/semantic.js';
 import { DirectRdfOntologyCompiler } from '../../src/extraction/ontology.js';
 import { RepositoryFileExtractor, RepositoryContractExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer } from '../../src/extraction/static.js';
 import { GitRepository } from '../../src/repository/git.js';
 import { FileSnapshotStore } from '../../src/storage/storage.js';
+import type { ExtractionContext } from '@weftlet/core';
 
 const execute = promisify(execFile);
 const stages = ['discovery', 'analysis', 'admission', 'planning', 'execution', 'outcomes'];
@@ -87,18 +88,23 @@ export function traversalApplication(fixture: Awaited<ReturnType<typeof traversa
       JSON.stringify(parsePublicProse(await fixture.repository.readFileAt(commit, path))));
     return { stdout: '', stderr: '' };
   } }, async () => 'chatgpt');
-  const hydrator = new ContextGraphHydrator({ config, repository: fixture.repository, snapshotStore: store,
-    semanticHydrator: new SemanticHydrator(config.semantic, createSemanticArtifactStore(fixture.root, config), provider),
-    staticIndexer: { async index(context) {
+  const createTools = (root: string) => ({
+    staticIndexer: { async index(context: ExtractionContext) {
       indexes++;
-      return realScip ? new ScipTypeScriptIndexer(config.scip, storage).index(context)
+      return realScip ? new ScipTypeScriptIndexer(config.scip, root).index(context)
         : { path: 'offline.scip', digest: 'fixture-index', version: config.scip.version, mode: 'full' as const };
     } },
-    ontologyCompiler: new DirectRdfOntologyCompiler(storage), runtimeEvidenceProvider: { collect: async () => [] },
+    ontologyCompiler: new DirectRdfOntologyCompiler(root),
+  });
+  const dependencies: HydratorDependencies = { config, repository: fixture.repository, snapshotStore: store,
+    semanticHydrator: new SemanticHydrator(config.semantic, createSemanticArtifactStore(fixture.root, config), provider),
+    ...createTools(storage), cleanComparison: { storageRoot: storage, createTools },
+    runtimeEvidenceProvider: { collect: async () => [] },
     extractorFactory: scip => [new RepositoryFileExtractor(fixture.repository, ['src', 'test'], scip.digest),
       ...(realScip ? [new RepositoryContractExtractor(fixture.repository, config.contractPatterns, ['src', 'test']),
         new ScipSymbolExtractor(fixture.repository, scip)] : [])], invariantEvaluators: [],
-  });
-  return { store, storage, hydrator, calls, indexes: () => indexes,
+  };
+  const hydrator = new ContextGraphHydrator(dependencies);
+  return { store, storage, hydrator, dependencies, calls, indexes: () => indexes,
     hydrate: () => hydrator.hydrate({ ref: 'HEAD', headName: 'default' }) };
 }
