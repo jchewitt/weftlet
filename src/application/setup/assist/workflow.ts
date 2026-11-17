@@ -11,6 +11,12 @@ export function integrateChecks(before: string, scaffold: string) {
   if (!triggers.length || triggers.some((name: string) => !['push', 'pull_request', 'workflow_dispatch'].includes(name))) {
     throw Error('Assisted CI integration supports push, pull_request and workflow_dispatch only; use a separate scaffold for privileged/reusable workflows');
   }
+  // GitHub merges workflow env into every job, even when job.env is provided.
+  // Preserve existing jobs rather than guessing which inherited values are credentials.
+  if (original.env !== undefined && original.env !== null &&
+      (typeof original.env !== 'object' || Array.isArray(original.env) || Object.keys(original.env).length > 0)) {
+    throw Error('Existing workflow has workflow-level environment variables; use a separate CI scaffold to keep Weftlet checks isolated');
+  }
   const job = { ...template.jobs.checks, permissions: { contents: 'read' }, env: template.env, defaults: template.defaults };
   const old = original.jobs.weftlet_checks;
   if (old && stableJson(old) !== stableJson(job)) throw Error('Existing weftlet_checks job differs; preserve it and review the standalone CI proposal manually');
