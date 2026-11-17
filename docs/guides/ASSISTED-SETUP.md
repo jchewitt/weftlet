@@ -121,8 +121,11 @@ Ubuntu, a 20-minute timeout and `contents: read`. No selected script runs during
 setup; it will run if you later commit and execute that workflow.
 
 Only `push`, `pull_request`, and `workflow_dispatch` workflows are supported for
-this additive integration. Privileged/reusable triggers, YAML aliases and a
-conflicting `weftlet_checks` job require manual integration. Existing jobs are
+this additive integration. Workflows with nonempty workflow-level `env` require
+a separate scaffold: GitHub would otherwise pass those variables, potentially
+including credentials, to the added install/build/test job. Empty or absent
+workflow environments are supported. Privileged/reusable triggers, YAML aliases
+and a conflicting `weftlet_checks` job require manual integration. Existing jobs are
 not rewritten or given new dependencies. General model-authored YAML surgery is
 outside this contract. A separate managed no-model workflow is also available.
 
