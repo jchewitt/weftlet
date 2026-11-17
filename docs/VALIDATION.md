@@ -1,5 +1,55 @@
 # Validation evidence
 
+## R1 independent temporary clean comparisons, 2026-11-17 UTC
+
+Hosted qualification at `dc6231f`: both Linux publication jobs and both existing
+Windows storage/retrieval jobs passed. Both complete Windows installed tutorials
+passed, as did all six comparison lifecycle tests. The new workspace test alone
+failed while arranging a directory swap: Windows returned EPERM because the
+operation's lease handle was still open. The fixture now asserts this native
+protection and successful owned cleanup on Windows; POSIX still exercises actual
+swapped-root rejection. This changes no production lease/cleanup behavior and is
+not a claim that a swapped-root scenario ran on Windows. Requalification follows.
+PR 95's two duplicate-job reruns also passed; all of its checks are now green.
+
+
+Implemented for review; see [ADR 053](ADR-053-temporary-clean-comparison.md).
+Comparison performs independent indexing/assembly/strict validation in an owned
+workspace, reuses validated semantic artifacts without model calls, and keeps a
+compact receipt after removing temporary graph/index/compiler output. Normal
+heads, earlier snapshots, source files and semantic artifacts remain intact.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and the full deterministic suite passed
+**38 core + 1,143 toolkit tests**, with the three optional integrations skipped
+(openCAESAR, enforcing SELinux, real OpenCode). Final workspace-initialization
+cleanup and receipt-status clarification were followed by a rebuild and **9 focused
+comparison/storage tests**, including an additional legacy-cache read-only test.
+The full suite count is the earlier run, not a claimed rerun after that final test.
+Architecture review then identified a type dependency cycle and coordinator
+complexity warning. Shared contracts and receipt construction were separated;
+rebuild and **22 focused comparison/storage/compatibility tests** passed afterward.
+
+Public real-SCIP checks rebuild three times (including concurrently), complete
+strict SHACL, compare exact digests and preserve every preexisting storage-file
+fingerprint. No permanent comparison head/snapshot/index remains; three bounded
+receipts do. Separate tests cover actual strict SHACL rejection, compiler failure,
+digest drift, missing cache, cancellation, concurrent normal head publication,
+legacy reuse without promotion/provider access, atomic immutable receipts and
+linked/swapped workspace rejection. Existing large-graph lifecycle, traversal,
+file-name bounds and explicit document-binding comparisons also passed.
+
+Architecture checks passed with **22 advisory findings**, with neither new warning
+remaining. Inventory, license and release-documentation checks passed. The full
+fresh npm/npx and pnpm packed-consumer harness passed, including real indexing,
+RDF/SPARQL/strict SHACL, semantic traversal/reuse, viewer/MCP, and the installed
+CLI clean comparison/receipt in the no-model tutorial. The final shared-contract
+refactor also passed the standalone packed tutorial: frozen installs, fresh real
+SCIP/strict validation, comparison receipt/cleanup, unchanged snapshot, transfer
+and fresh receiving-checkout MCP. All tutorial runs made zero model calls.
+Native Windows R1 checks are configured in the onboarding job and
+remain pending until the candidate runs. No live provider, Docker/SELinux,
+private consumer action, cache eviction, global budget or npm release is claimed.
+
 ## S7 guided onboarding and packaged qualification, 2026-11-17 UTC
 
 Implemented for review; see the rewritten [Document Search tutorial](tutorials/DOCUMENT-SEARCH.md)
@@ -41,8 +91,18 @@ retain two minutes. All **11 focused MCP setup tests** passed locally, including
 CRLF preservation and customized-code rejection. Build and the complete fresh
 installed tutorial passed again on Linux, including the receiving-checkout MCP
 probe (zero model calls); inventory and release-documentation checks passed.
-Native Windows requalification
-of this correction is pending. Existing client setup tests and the now-successful S6 Windows run remain
+Native Windows requalification passed at `f296c84` in
+[job 134100002269](https://github.com/jchewitt/weftlet/actions/runs/44100812712/job/134100002269)
+(12m21s): the complete packaged tutorial, including receiving-checkout MCP.
+The same PR run's Linux deterministic suite passed but its fresh `npm exec`
+packaging subprocess hit its existing three-minute install deadline; that job
+requires a rerun before the PR is ready. The duplicate Windows storage run
+also hit an existing 30-second document-coverage test deadline (904 other checks
+passed); its matching push job passed. Both failed PR jobs were rerun without
+changing those checks or deadlines. The matching push run
+[44100800723](https://github.com/jchewitt/weftlet/actions/runs/44100800723)
+passed all four jobs at the same `f296c84` source (Linux publication gate and all
+three Windows jobs, including the second complete onboarding pass). Existing client setup tests and the now-successful S6 Windows run remain
 separate evidence. Actual Codex/Claude/OpenCode client loading, live authentication,
 model usefulness and dispatched consumer artifact delivery remain explicitly
 manual qualification. No paid/provider request, private consumer mutation,

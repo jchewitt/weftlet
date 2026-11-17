@@ -91,6 +91,13 @@ export async function smokeOnboarding(parent, coreArchive, toolkitArchive, npmCl
   assert.equal(repeat.semanticExtracted, 0); assert.equal(repeat.semanticReused, 0);
   assert.deepEqual(await readFile(originalPath), originalBytes);
   await cli(project, 'invariant', 'check', '--ref', 'HEAD');
+  const comparison = await cli(project, 'clean-compare', '--ref', 'HEAD', '--json');
+  assert.equal(comparison.contentDigest, after.contentDigest);
+  assert.equal(comparison.comparison.temporaryOutputRemoved, true);
+  assert.equal(comparison.comparison.originalSnapshotId, after.snapshotId);
+  assert.equal((await readJson(comparison.comparison.receiptPath)).strictValidationPassed, true);
+  assert.equal(await store.read(comparison.comparison.independentSnapshotId), undefined);
+  assert.equal((await store.readHead('default')).manifest.snapshotId, after.snapshotId);
   const output = join(parent, 'tutorial bundle');
   const exported = await cli(project, 'snapshot', 'export', '--snapshot', after.snapshotId, '--output', output);
   await git(parent, 'clone', '--quiet', '--no-hardlinks', project, receiver);

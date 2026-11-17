@@ -2,7 +2,7 @@
 import type { AgentSemanticScopeResolver } from "./agent-context.js";
 import type { ImpactScanRequest, SnapshotStore } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
-import type { ContextGraphHydrator } from "./hydrator.js";
+import type { ContextGraphHydrator, HydrationOptions } from "./hydrator.js";
 import { incompatibleSnapshotExtractors, requiredSnapshotExtractorVersions } from './extraction-identity.js';
 
 // Final checks must use the same scope resolver as prepared impact scans, without silently
@@ -56,9 +56,9 @@ export class SnapshotChecks {
     return this.readTarget(await this.target(request, ref));
   }
 
-  async compare(request: ImpactScanRequest, ref = 'HEAD') {
+  async compare(request: ImpactScanRequest, ref = 'HEAD', options: Pick<HydrationOptions, 'signal' | 'onProgress'> = {}) {
     const target = await this.target(request, ref);
     await this.readTarget(target);
-    return this.hydrator.compareClean(target);
+    return this.hydrator.compareClean({ ...target, ...options });
   }
 }

@@ -114,6 +114,15 @@ export async function createContextGraphApplication(configPath: string) {
     runtimeEvidenceProvider,
     extractorFactory,
     invariantEvaluators: adapter.invariantEvaluators,
+    cleanComparison: {
+      storageRoot,
+      createTools: root => ({
+        staticIndexer: new ScipTypeScriptIndexer(config.scip, root),
+        ontologyCompiler: config.ontology.backend === 'opencaesar'
+          ? new OpenCaesarOntologyCompiler(config.ontology, repositoryRoot, root)
+          : new DirectRdfOntologyCompiler(root),
+      }),
+    },
   });
   const headName = 'default';
   const scopeResolver = config.agentContext

@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "21c85659b372f699da707d9f86f7d3afa62d04c4f56c9f6f2c00421df74f74a2"
+      "destinationSha256": "bf8624da4f84c0d6d8f4a9e850c81afdddf335c83e73a4cb50521f0b29835561"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "dc69093d09fad9ff27ad262c01cbb87bc9bfb04e6ec953007dd63239b0052a3a"
+      "destinationSha256": "3530bd45e5fbc899e778c85be2752265301069bf69ce11d4b59b5d2bda995ecc"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "0f621369c01d4bc586b885e15fdb6f258800fdab3a9ea009982666b8991fe4da"
+      "destinationSha256": "e87a02492c837e7b63a101fc4459c39a715be64fa01ce6e4d56a2a0ac3288274"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "95b02709378ae5b37e2d3e3ae0ce80801fdb3385b0ec96f1e999ad5c59e5e9ae"
+      "destinationSha256": "545688f3d25c31e9f8ed5d097e50b9a47f203812b07b3397b414d269ea73b9f4"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "dc4e89d0afa6c571034b262e4c84e331940b668c87aa47101277c8215a72c24a"
+      "destinationSha256": "5d0052f78912442bc3a3f329a9c076445a72553185c023b7fddc5d8facad89fb"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -465,7 +465,7 @@
       "destinationPath": "src/application/snapshot-checks.ts",
       "sourceSha256": "3c8e01b886d49ce8323b6275019fd503ec3bbbb21671808e228880cc0f853d07",
       "modified": true,
-      "destinationSha256": "db0d088932820a3e34af3b71e3722e0b6e4bd1e0b7d04534bd806ff79cd0811f"
+      "destinationSha256": "2422776bd2a2d02564e2c344cf66de16c2b8f2b454f526e70feafac9095914a3"
     },
     {
       "sourcePath": "tools/context-graph/src/static.test.ts",
@@ -587,6 +587,7 @@
     ".changeset/project-ci-scaffolding.md",
     ".changeset/project-mcp-registration.md",
     ".changeset/release-plan.json",
+    ".changeset/temporary-clean-comparison.md",
     ".changeset/verified-snapshot-delivery.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -655,6 +656,7 @@
     "docs/ADR-050-ci-scaffolding.md",
     "docs/ADR-051-assisted-setup.md",
     "docs/ADR-052-snapshot-delivery.md",
+    "docs/ADR-053-temporary-clean-comparison.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -993,6 +995,7 @@
     "scripts/version-packages.mjs",
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
+    "src/application/clean-comparison.ts",
     "src/application/delivery/context.ts",
     "src/application/delivery/contract.ts",
     "src/application/delivery/export.ts",
@@ -1009,6 +1012,7 @@
     "src/application/explorer-service.ts",
     "src/application/extraction-identity.ts",
     "src/application/extractor-results.ts",
+    "src/application/hydration-contract.ts",
     "src/application/hydration-failure.ts",
     "src/application/hydration-inputs.ts",
     "src/application/hydration-plan.ts",
@@ -1228,6 +1232,8 @@
     "src/storage/artifact-paths.test.ts",
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
+    "src/storage/comparison-workspace.test.ts",
+    "src/storage/comparison-workspace.ts",
     "src/storage/head-lock.ts",
     "src/storage/mapping-proposals.test.ts",
     "src/storage/mapping-proposals.ts",
@@ -1261,6 +1267,7 @@
     "tests/cache-adoption.test.ts",
     "tests/canonical-semantic-files.test.ts",
     "tests/claude-consumer.test.ts",
+    "tests/clean-comparison.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
     "tests/contract-compatibility.test.ts",

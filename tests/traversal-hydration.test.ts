@@ -102,14 +102,16 @@ it('keeps traversal, unchanged repeat and clean comparison within physical filen
   expect(clean).toMatchObject({ semanticExtracted: 0, semanticReused: 6,
     snapshot: { manifest: { contentDigest: first.snapshot.manifest.contentDigest } } });
   expect(clean.snapshot.manifest.snapshotId).toContain('-document-selection-v1-');
-  expect(clean.snapshot.manifest.snapshotId).toMatch(/-clean-\d+-runtime-/);
+  expect(clean.snapshot.manifest.snapshotId).toMatch(/-clean-[a-f0-9]{12}-runtime-/);
   expect(clean.snapshot.manifest.snapshotId.length).toBeGreaterThan(215);
   const withoutSnapshot = (facts: typeof first.snapshot.facts) => facts.map(({ snapshotId: _snapshotId, ...fact }) => fact);
   expect(withoutSnapshot(clean.snapshot.facts)).toEqual(withoutSnapshot(first.snapshot.facts));
   expect(clean.snapshot.facts.every(fact => fact.snapshotId === clean.snapshot.manifest.snapshotId)).toBe(true);
   expect(clean.snapshot.manifest.documentSelection).toEqual(first.snapshot.manifest.documentSelection);
   expect(await app.store.readHead('default')).toEqual(first.snapshot);
-  expect(await app.store.readHead('default-clean')).toEqual(clean.snapshot);
+  expect(await app.store.readHead('default-clean')).toBeUndefined();
+  expect(await app.store.read(clean.snapshot.manifest.snapshotId)).toBeUndefined();
+  expect(clean.comparison?.temporaryOutputRemoved).toBe(true);
   expect(app.calls).toHaveLength(6);
   for (const path of await readdir(app.storage, { recursive: true })) {
     expect(path.split(/[\\/]/).every(part => part.length <= 133)).toBe(true);
