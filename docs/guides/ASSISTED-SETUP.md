@@ -1,7 +1,7 @@
 # Assisted project integration
 
-**0.10 candidate source feature.** Use the version containing this change after
-publication. `weftlet setup assist` uses your configured Codex, Claude, or OpenCode
+Included in the **0.10.0 release scope**; see [release status](../RELEASES.md).
+`weftlet setup assist` uses your configured Codex, Claude, or OpenCode
 CLI to propose a project-specific setup, then shows a reviewable change plan.
 Basic [skill](PROJECT-SETUP.md), [MCP](MCP-SETUP.md), and [CI setup](CI-SETUP.md)
 remain available without a model.

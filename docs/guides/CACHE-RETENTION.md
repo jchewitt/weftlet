@@ -1,6 +1,7 @@
 # Review cache retention
 
-**Candidate R3a commands; not included in published 0.9.0.** This step turns the
+Included in the **0.10.0 release scope**; see [release status](../RELEASES.md).
+These review commands turn the
 [cache inventory](CACHE-INSPECTION.md) into an explicit retention review. It names
 managed profiles, active heads, previous generations and exceptional historical
 pins. Planning and checking read saved data without Git, providers or hydration.

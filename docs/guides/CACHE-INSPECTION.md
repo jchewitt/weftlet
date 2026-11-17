@@ -1,6 +1,7 @@
 # Measure local graph storage
 
-**Candidate R2 commands; not part of published 0.9.0.** Use these before choosing
+Included in the **0.10.0 release scope**; see [release status](../RELEASES.md).
+Use these commands before choosing
 retention or a new snapshot representation. Both commands read saved files and
 emit reports; they work without a model, Docker, Git checkout or loaded adapter.
 They leave snapshots, semantic artifacts and heads unchanged.

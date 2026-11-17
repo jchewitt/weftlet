@@ -1,5 +1,34 @@
 # Validation evidence
 
+## Integrated 0.10.0 release-documentation review, November 17, 2026 (Central)
+
+Reviewed the integrated source at `de415eb` and pending changesets using the
+repository release-documentation skill. Updated the README, documentation index,
+provider reference, release overview, setup/CI/storage/delivery guides and public
+tutorial to describe the 0.10.0 release scope without claiming npm publication.
+Removed stale future-MCP and document-traversal wording and aligned two pending
+changeset descriptions before bot-generated changelogs. Versioned/generated boxes,
+manifests and historical release/validation records remain unchanged. Existing
+evidence-authority guidance, the packaged agent skill and public example code need
+no change for this availability correction. Manual 0.9 setup remains documented;
+live Claude/OpenCode authentication, actual client loading and semantic quality
+remain separate qualifications. R3a stays review-only, with no pruning or byte cap.
+
+Independent static reviews of PRs 87–98 completed. The sole blocking finding was
+PR 93's inherited workflow environment: `ee87965` fixes that isolation boundary,
+passed 10 focused tests and received independent re-review. The same three-file
+fix was propagated to PRs 93–98. PR 89 merged as `a39ab08`; the remaining PRs are
+subject to sequential CI/merge checks. Static review is distinct from execution
+evidence; this entry does not claim every PR merged or the release published.
+
+Documentation-only checks: `docs:release:check` passed; 36 release-documentation
+and three version-package tests passed. The 15 changed guide/index/README pages
+passed 224 local link/anchor checks and 14 JSON example parses; illustrative
+Markdown inside fenced examples was excluded from navigation checks. Whitespace
+checks passed. Inventory regeneration and the complete publication gate remain
+part of final integration/release qualification. No model calls, provider logins,
+npm publication or docs-site dispatch occurred during this review.
+
 ## R3a declared retention reviews, November 17, 2026 (Central)
 
 Implemented for review; [ADR 055](ADR-055-declared-retention-reviews.md) and

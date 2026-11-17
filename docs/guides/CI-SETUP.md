@@ -2,9 +2,9 @@
 
 [Documentation home](../README.md) · [CI scenarios and delivery](CI.md)
 
-Status: **unreleased 0.10 candidate**, implemented for review. Published 0.9 uses
-[copyable examples](CI.md). Install the candidate as a project dependency before
-using these commands, and check its release notes for availability.
+Included in the **0.10.0 release scope**; check [release status](../RELEASES.md)
+and install the matching toolkit as a project dependency. Existing 0.9
+installations can use the [copyable examples](CI.md).
 
 ## Add ordinary PR checks
 
@@ -129,7 +129,7 @@ reviewed private delivery. On self-hosted runners, generation uses your existing
 setup increment adds no cache retention policy.
 
 Use the [delivery guide](CI.md#scenario-c-acquire-evidence-locally-and-reconnect-the-agent)
-for delivery choices. The candidate's [snapshot export/import](SNAPSHOT-DELIVERY.md)
+for delivery choices. The [snapshot export/import](SNAPSHOT-DELIVERY.md)
 provides a verified selected-snapshot bundle with explicit local activation.
 Choose a trusted artifact channel and access policy before adding an upload step;
 this scaffolder leaves that project-specific choice to you.

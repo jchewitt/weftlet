@@ -3,15 +3,16 @@
 [Documentation home](../README.md) · [Project guide](PROJECT-GUIDE.md) ·
 [Agent setup](AGENTS.md)
 
-The unreleased 0.10 candidate adds [automatic CI scaffolding](CI-SETUP.md) with
+The 0.10.0 release scope includes [automatic CI scaffolding](CI-SETUP.md) with
 `weftlet setup ci`: preview/apply standalone PR-check and optional trusted-generation
-workflows while preserving existing CI. Published 0.9 uses the examples below.
+workflows while preserving existing CI. Check [release status](../RELEASES.md)
+before installation. Existing 0.9 installations can use the examples below.
 
-The candidate also supports [verified snapshot export/import](SNAPSHOT-DELIVERY.md).
+It also includes [verified snapshot export/import](SNAPSHOT-DELIVERY.md).
 Use that flow for new CI-to-local integrations: export a selected successful
 snapshot, retain its manifest hash through a trusted channel, then import locally
 with explicit optional activation. The manual staging approach below remains
-available for published 0.9 and customized delivery.
+available for 0.9 and customized delivery.
 
 A typical project builds a committed graph in trusted CI, retains a private
 snapshot and lets local agents/viewers query it. CI does not automatically update
@@ -76,15 +77,15 @@ private cache design keyed by source/model/extractor identity and validated on
 read. Do not upload all user caches or make caches from untrusted jobs authoritative.
 The initial example makes no cross-run semantic reuse promise.
 
-Claude/OpenCode generation can use the candidate provider contracts once released
-and qualified for your environment. Preserve the same trust boundaries and select
+Claude/OpenCode generation uses the 0.10.0 provider contracts after qualification
+for your environment. Preserve the same trust boundaries and select
 the matching CLI/auth settings; do not rename the executable in this Codex example.
 Codex account login remains an option on an appropriately managed trusted runner;
 Weftlet does not automatically log a GitHub-hosted runner into a ChatGPT account.
 
 ## Scenario C: acquire evidence locally and reconnect the agent
 
-For the 0.10 candidate, follow [snapshot delivery](SNAPSHOT-DELIVERY.md): export
+With 0.10.0, follow [snapshot delivery](SNAPSHOT-DELIVERY.md): export
 one successful CI snapshot, download its bundle, and obtain its manifest SHA-256
 from the trusted run receipt. From the receiving project:
 
@@ -99,7 +100,7 @@ current head's exact ID when replacing it. Verify the saved graph through
 `setup --mcp --verify --snapshot SNAPSHOT_ID`, then reconnect the actual client.
 The delivery guide covers configuration mismatches and optional semantic artifacts.
 
-### Manual staging for published 0.9 or customized delivery
+### Manual staging for 0.9 or customized delivery
 
 Download the exact successful run's artifact into a **new staging directory**.
 Use your normal authenticated GitHub UI or CLI, then on Linux/WSL:
@@ -154,7 +155,7 @@ Docker is not a prerequisite for these local/static instructions.
 
 ## Qualification
 
-The examples on this page remain manually adapted. The candidate
+The examples on this page remain manually adapted. The 0.10.0
 [setup helper](CI-SETUP.md) generates and installs its own managed workflows after
 explicit application, and dispatches none. Their config/preview commands and the tutorial's
 code-only flow are checked locally. Workflow structure and client profiles are
