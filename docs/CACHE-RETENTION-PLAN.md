@@ -47,7 +47,17 @@ independent builds, read-only validated semantic reuse, compact success/failure
 receipts and operation-owned cleanup. Repeated successful comparisons no longer
 retain full graph/index/compiler copies or clean heads. Hard-kill recovery and
 cross-process GC remain R3; the candidate does not delete old output or implement
-the global budget. R2 read-only inventory/profiling is next.
+the global budget. R2 follows below.
+
+## R2 implementation update — November 17, 2026
+
+Implemented for review in [ADR 054](ADR-054-cache-inventory-profile.md): read-only
+`cache usage` across roots/profiles and streamed `cache profile` byte attribution.
+See the [guide](guides/CACHE-INSPECTION.md) and [public measurements](assessments/storage-profile-r2.md).
+Metadata-only previews, full JSON/byte checks, unknown allocation and unsupported
+pin/archive/active-scope states are explicitly distinguished. R3 will define those
+coordination/ownership states before they can authorize any deletion. R2 does not
+implement a budget, change semantic identity or prune historical consumer files.
 
 ## Bounded tasks
 
@@ -88,8 +98,9 @@ and hard-budget enforcement. Do not collapse all six tasks into one release diff
   not constitute a hard cap, especially for subprocess-produced files.
 - Git can reconstruct source, but not necessarily identical model artifacts or an
   available old tool/model environment. Exact-evidence archives are opt-in.
-- Suggested `cache usage`, `cache prune --dry-run`, `cache pin/unpin` and archive
-  commands are proposals. Do not document them as available before implementation.
+- `cache usage` and `cache profile` are implemented R2 candidate commands.
+  `cache prune --dry-run`, `cache pin/unpin` and archive commands remain proposals.
+  Do not document these future commands as available before implementation.
 
 ## Regression matrix
 

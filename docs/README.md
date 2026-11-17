@@ -13,6 +13,7 @@ Start with the path that matches your task:
 | Install managed GitHub workflows (0.10 candidate) | [CI setup](guides/CI-SETUP.md) |
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | Transfer a verified saved snapshot to a local project (0.10 candidate) | [Snapshot delivery](guides/SNAPSHOT-DELIVERY.md) |
+| Measure local graph/cache storage (candidate) | [Cache inspection](guides/CACHE-INSPECTION.md) |
 | See what changed between releases | [Release overview](RELEASES.md), [toolkit changelog](../CHANGELOG.md), [core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) |
 | Understand authority labels and resolve unapproved/conflicting evidence | [Evidence decisions](guides/EVIDENCE-DECISIONS.md) |
 | Configure a model provider | [Provider reference](PROVIDERS.md) |

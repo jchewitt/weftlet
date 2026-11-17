@@ -73,6 +73,17 @@ export async function smokeOnboarding(parent, coreArchive, toolkitArchive, npmCl
   const store = new FileSnapshotStore(join(project, '.context-graph'));
   const originalPath = await store.file(first.snapshotId), originalBytes = await readFile(originalPath);
 
+  const usage = JSON.parse(await command(dirname(project), process.execPath,
+    [join(installed, 'dist/cli.js'), 'cache', 'usage', '--root', join(project, '.context-graph'), '--verify', '--json', '--quiet']));
+  assert.equal(usage.complete, true);
+  assert.ok(usage.byClass.snapshot.logicalBytes > 0);
+  assert.equal(usage.danglingHeads.length, 0);
+  const profile = await cli(project, 'cache', 'profile', '--snapshot', first.snapshotId, '--json', '--quiet');
+  assert.equal(profile.jsonComplete, true);
+  assert.equal(profile.physicalBytes, originalBytes.length);
+  assert.ok(profile.sections.facts.records > 0);
+  assert.deepEqual(await readFile(originalPath), originalBytes);
+
   const testPath = join(project, 'test/search.test.ts');
   // Execute the reviewed packaged tutorial's test, so the prose example cannot silently drift.
   const tutorial = await readFile(join(installed, 'docs/tutorials/DOCUMENT-SEARCH.md'), 'utf8');

@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "corpus": {
+    "modules": 64,
+    "functionsPerModule": 160,
+    "documents": 18,
+    "selectedDocumentBytes": 2390,
+    "codeBytes": 1214081,
+    "facts": 124532,
+    "semanticExtracted": 18
+  },
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "hydrateMs": 216773,
+  "profileMs": 16960,
+  "byClass": {
+    "head": {
+      "entries": 1,
+      "logicalBytes": 157,
+      "uniqueLogicalBytes": 157,
+      "allocatedKnownBytes": 4096,
+      "allocatedUnknownEntries": 0
+    },
+    "scip-index": {
+      "entries": 1,
+      "logicalBytes": 9856753,
+      "uniqueLogicalBytes": 9856753,
+      "allocatedKnownBytes": 9859072,
+      "allocatedUnknownEntries": 0
+    },
+    "semantic-artifact": {
+      "entries": 18,
+      "logicalBytes": 38930,
+      "uniqueLogicalBytes": 38930,
+      "allocatedKnownBytes": 73728,
+      "allocatedUnknownEntries": 0
+    },
+    "snapshot": {
+      "entries": 1,
+      "logicalBytes": 231213517,
+      "uniqueLogicalBytes": 231213517,
+      "allocatedKnownBytes": 231215104,
+      "allocatedUnknownEntries": 0
+    },
+    "temporary": {
+      "entries": 2,
+      "logicalBytes": 2842,
+      "uniqueLogicalBytes": 2842,
+      "allocatedKnownBytes": 4096,
+      "allocatedUnknownEntries": 0
+    },
+    "unknown": {
+      "entries": 7,
+      "logicalBytes": 0,
+      "uniqueLogicalBytes": 0,
+      "allocatedKnownBytes": 0,
+      "allocatedUnknownEntries": 0
+    }
+  },
+  "measurements": {
+    "schemaVersion": 1,
+    "kind": "snapshot-representation-profile",
+    "physicalBytes": 231213517,
+    "sha256": "5a14b8dac92644febd109ebebdefa7a269f16e75bfc72d0bca88495df18bc705",
+    "jsonComplete": true,
+    "validation": "JSON syntax and basic snapshot structure only; strict SHACL and producer content digest are not revalidated",
+    "measurement": "UTF-8 compact JSON value bytes; key/colon and array punctuation included where stated. Not a compressed-size estimate.",
+    "sections": {
+      "diagnostics": {
+        "records": 0,
+        "compactValueBytes": 2
+      },
+      "facts": {
+        "records": 124532,
+        "compactValueBytes": 231189606
+      },
+      "invariants": {
+        "records": 0,
+        "compactValueBytes": 2
+      },
+      "manifest": {
+        "records": 1,
+        "compactValueBytes": 23819
+      },
+      "runtimeEvidence": {
+        "records": 0,
+        "compactValueBytes": 2
+      },
+      "unresolved": {
+        "records": 0,
+        "compactValueBytes": 2
+      }
+    },
+    "factFields": {
+      "authority": {
+        "occurrences": 123889,
+        "compactValueBytes": 1610233,
+        "compactKeyAndValueBytes": 3096901
+      },
+      "codeBinding": {
+        "occurrences": 18,
+        "compactValueBytes": 18680,
+        "compactKeyAndValueBytes": 18932
+      },
+      "codeCall": {
+        "occurrences": 30848,
+        "compactValueBytes": 38672526,
+        "compactKeyAndValueBytes": 39011854
+      },
+      "codeOccurrence": {
+        "occurrences": 92933,
+        "compactValueBytes": 20199584,
+        "compactKeyAndValueBytes": 21779445
+      },
+      "confidence": {
+        "occurrences": 124532,
+        "compactValueBytes": 124532,
+        "compactKeyAndValueBytes": 1743448
+      },
+      "extractionReview": {
+        "occurrences": 123889,
+        "compactValueBytes": 1858173,
+        "compactKeyAndValueBytes": 4212064
+      },
+      "extractor": {
+        "occurrences": 124532,
+        "compactValueBytes": 6103090,
+        "compactKeyAndValueBytes": 7597474
+      },
+      "id": {
+        "occurrences": 124532,
+        "compactValueBytes": 8219112,
+        "compactKeyAndValueBytes": 8841772
+      },
+      "object": {
+        "occurrences": 124532,
+        "compactValueBytes": 39046588,
+        "compactKeyAndValueBytes": 40167376
+      },
+      "predicate": {
+        "occurrences": 124532,
+        "compactValueBytes": 1307797,
+        "compactKeyAndValueBytes": 2802181
+      },
+      "provenance": {
+        "occurrences": 124532,
+        "compactValueBytes": 30474320,
+        "compactKeyAndValueBytes": 32093236
+      },
+      "snapshotId": {
+        "occurrences": 124532,
+        "compactValueBytes": 16936352,
+        "compactKeyAndValueBytes": 18555268
+      },
+      "sourceAuthority": {
+        "occurrences": 108,
+        "compactValueBytes": 1080,
+        "compactKeyAndValueBytes": 3024
+      },
+      "subject": {
+        "occurrences": 124532,
+        "compactValueBytes": 48404305,
+        "compactKeyAndValueBytes": 49649625
+      }
+    },
+    "compactKnownSectionBytes": 231213517,
+    "physicalMinusCompactKnownBytes": 0,
+    "unprofiledRootFields": [],
+    "largestRecordBytes": 23819,
+    "repetition": {
+      "entities": {
+        "occurrences": 249064,
+        "compactValueBytes": 87450893,
+        "trackedDistinctValues": 31533,
+        "repeatedOccurrences": 217531,
+        "repeatedValueBytes": 74798313,
+        "untrackedOccurrences": 0,
+        "complete": true,
+        "maxDistinct": 100000
+      },
+      "provenance": {
+        "occurrences": 124532,
+        "compactValueBytes": 30474320,
+        "trackedDistinctValues": 100000,
+        "repeatedOccurrences": 392,
+        "repeatedValueBytes": 72732,
+        "untrackedOccurrences": 24140,
+        "complete": false,
+        "maxDistinct": 100000
+      },
+      "factStrings": {
+        "occurrences": 4269857,
+        "compactValueBytes": 139403850,
+        "trackedDistinctValues": 100000,
+        "repeatedOccurrences": 4057879,
+        "repeatedValueBytes": 124422127,
+        "untrackedOccurrences": 111978,
+        "complete": false,
+        "maxDistinct": 100000
+      },
+      "diagnostics": {
+        "occurrences": 0,
+        "compactValueBytes": 0,
+        "trackedDistinctValues": 0,
+        "repeatedOccurrences": 0,
+        "repeatedValueBytes": 0,
+        "untrackedOccurrences": 0,
+        "complete": true,
+        "maxDistinct": 100000
+      }
+    },
+    "limitations": [
+      "Repetition categories overlap; do not add their byte counts together or treat them as guaranteed savings.",
+      "Equal node IDs alone do not establish equivalent records; full payload fingerprints preserve differing labels, authority and provenance.",
+      "Source-document bytes are not recorded by legacy snapshots. Artifact count does not bound indexed-code or snapshot size.",
+      "Distinct-value limits disclose incomplete repetition tracking; every record still contributes to section and field byte totals."
+    ]
+  },
+  "checks": {
+    "realScip": true,
+    "strictHydrationPassed": true,
+    "savedSnapshotReadable": true,
+    "inventoryAndSnapshotPreserved": true,
+    "externalModelCalls": 0
+  },
+  "limitations": [
+    "Generated public corpus, not the private consumer graph; repeated source patterns influence repetition.",
+    "Timings are one run on this host, not a cross-platform performance guarantee.",
+    "Peak hydration memory/disk and compressed-size savings are not measured."
+  ]
+}

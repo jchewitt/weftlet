@@ -75,7 +75,8 @@
     "evaluate:indirect": "tsx scripts/indirect-retrieval-study/run.ts",
     "evaluate:same-group": "tsx scripts/same-group-study/run.ts",
     "test:viewer:browser": "tsx scripts/test-explorer-browser.ts",
-    "test:onboarding": "node scripts/check-onboarding.mjs"
+    "test:onboarding": "node scripts/check-onboarding.mjs",
+    "benchmark:storage": "tsx scripts/storage-study/run.ts"
   },
   "engines": {
     "node": ">=24.0.0"
