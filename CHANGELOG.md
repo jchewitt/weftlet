@@ -1,5 +1,30 @@
 # @weftlet/toolkit
 
+## 0.10.0
+
+### Minor Changes
+
+- d641397: Add opt-in assisted project setup using the configured Codex, Claude or OpenCode CLI. Preview selected inputs, request a bounded typed proposal, review source/skill/MCP/CI changes, and apply the saved plan without another model call. Existing workflow jobs and private client settings are preserved; source-authority changes require explicit acceptance.
+- 145fd85: Install the packaged development skill during init, with client selection and an opt-out. Add `weftlet setup` preview/apply for existing projects, versioned managed-copy updates and preservation of customized skills. Support bulk governing-source patterns during initialization. MCP registration remains a separate setup step.
+- 9231050: Add independent Claude Code and OpenCode CLI extraction and mapping proposals with explicit account or API-key authentication, provider-aware initialization and diagnostics, bounded structured output and isolated cache identity. Neither adapter requires Codex. OpenCode initially supports explicitly selected API credentials on its tested 1.19.5 CLI contract; subscription/OAuth login is separate. Live backend authentication and semantic quality validation remain pending. Project onboarding is described in the accompanying setup changes.
+- f95e6dd: Add `setup ci` to preview and install managed GitHub workflows without replacing existing CI. Support npm/pnpm, nested workspace packages, selected test/build scripts and architecture policies, plus opt-in trusted Codex/Claude/OpenCode generation using explicit hosted API or self-hosted authentication. Setup preserves custom workflows and performs no model call or workflow dispatch.
+- 0ce0517: Add preview/apply MCP registration for project Codex, Claude Code and OpenCode 1.x configurations. Preserve unrelated settings and customized entries, support portable or absolute launchers, and verify fresh stdio startup, tools and optional saved-snapshot access without model calls. Report the installed toolkit version in MCP initialization.
+- b44556a: Add explicit snapshot export/import with trusted manifest checksums, streamed payload verification, canonical persisted-graph hashes and strict graph validation. Preserve immutable bytes, source authority and historical/configuration status. Semantic cache transfer is opt-in and adoption checks committed sources and extraction identity. Head activation uses an explicit compare-and-swap expectation; transfer never loads project adapters or starts extraction.
+
+### Patch Changes
+
+- 1df6d1b: Add `cache retention init`, `plan`, and `check` for declared active scopes, previous generations, historical pins and exact-target head retirement. Review reports preserve existing evidence, explain candidate dependencies and recovery limits, and detect stale or edited decision inputs. Removal and coordinated GC remain a separate milestone.
+- 9231050: Make release history visible and include changelogs in both package archives. Add a guided project walkthrough, a public Document Search tutorial, manual Codex/Claude/OpenCode skill and MCP setup, and copyable credential-free/trusted-generation CI examples. Distinguish released features, candidate providers, saved graph conformance and final-commit evidence checks.
+  
+  Clarify current prose/code/test/runtime inputs, flexible repository document locations, intent-document authoring and the distinction between existing repository extensions and planned external source connectors.
+  
+  Document evidence-authority decision scenarios, viewer inspection and source/config remediation. Update the packaged agent skill to distinguish governing sources from contextual proposals and to report relevant unresolved decisions without implying automatic approval or logging.
+- f778da1: Make automatic skill/MCP/CI setup and verified snapshot delivery the main tutorial path. Add a complete packaged no-model demo qualification through a test change, exact-commit refresh, repeat and independent receiving checkout. Keep live provider/client qualification separate. Explicitly scope the public demo's ambient TypeScript types so unrelated tooling declarations do not break its type check.
+- a4553c2: Add read-only `cache usage` inventory and streamed `cache profile` measurements, including logical/available allocated bytes, head and lease references, explicit integrity/limit states, and bounded full-payload repetition accounting. Inspection requires no provider or hydration and preserves saved evidence. Retention and budget enforcement remain separate work.
+- dc6231f: Build clean comparisons in isolated temporary snapshot/index/compiler storage and retain compact verification receipts. Reuse validated semantic artifacts without model calls, preserve normal heads during failures and concurrent publication, and expose receipt details through `clean-compare --json`.
+- Updated dependencies [9231050]
+  - @weftlet/core@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes

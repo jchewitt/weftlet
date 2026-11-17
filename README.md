@@ -84,7 +84,7 @@ publication receipt.
 ## Set up a project
 
 <!-- weftlet:release:start -->
-Package versions in this checkout/archive: `@weftlet/toolkit@0.9.0` and `@weftlet/core@0.9.0`.
+Package versions in this checkout/archive: `@weftlet/toolkit@0.10.0` and `@weftlet/core@0.10.0`.
 <!-- weftlet:release:end -->
 
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
