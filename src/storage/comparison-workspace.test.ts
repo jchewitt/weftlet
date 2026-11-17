@@ -24,6 +24,15 @@ it('refuses linked cache parents and swapped operation roots', async () => {
   await expect(createComparisonWorkspace(storage)).rejects.toThrow('symbolic links or junctions');
   await rm(join(storage, 'work'));
   const operation = await createComparisonWorkspace(storage);
+  if (process.platform === 'win32') {
+    // Windows protects a directory with an open lease handle from this swap.
+    // Assert that native boundary; do not close the lease just to stage an attack.
+    await expect(rename(operation.root, `${operation.root}-retained`)).rejects.toMatchObject({ code: 'EPERM' });
+    await operation.dispose();
+    expect(await readdir(join(storage, 'work'))).toEqual([]);
+    expect(await readdir(outside)).toEqual([]);
+    return;
+  }
   await rename(operation.root, `${operation.root}-retained`);
   await symlink(outside, operation.root, process.platform === 'win32' ? 'junction' : 'dir');
   await expect(operation.dispose()).rejects.toThrow('symbolic links or junctions');

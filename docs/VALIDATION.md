@@ -2,6 +2,17 @@
 
 ## R1 independent temporary clean comparisons, 2026-11-17 UTC
 
+Hosted qualification at `dc6231f`: both Linux publication jobs and both existing
+Windows storage/retrieval jobs passed. Both complete Windows installed tutorials
+passed, as did all six comparison lifecycle tests. The new workspace test alone
+failed while arranging a directory swap: Windows returned EPERM because the
+operation's lease handle was still open. The fixture now asserts this native
+protection and successful owned cleanup on Windows; POSIX still exercises actual
+swapped-root rejection. This changes no production lease/cleanup behavior and is
+not a claim that a swapped-root scenario ran on Windows. Requalification follows.
+PR 95's two duplicate-job reruns also passed; all of its checks are now green.
+
+
 Implemented for review; see [ADR 053](ADR-053-temporary-clean-comparison.md).
 Comparison performs independent indexing/assembly/strict validation in an owned
 workspace, reuses validated semantic artifacts without model calls, and keeps a
