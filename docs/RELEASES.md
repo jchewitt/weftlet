@@ -38,8 +38,8 @@ The integrated release includes:
   tutorial using fresh installed packages.
 - Independent clean comparisons with temporary output and compact receipts,
   read-only cache inventory/size profiling, and declared retention plan/check
-  commands. Retention reviews never remove data; coordinated pruning, the global
-  10 GiB budget and compact storage remain subsequent milestones.
+  commands. Retention reviews never remove data; coordinated pruning, configurable
+  history retention and compact storage remain subsequent milestones.
 
 Both 0.10.0 packages are published on npm from
 `402c9f898330fff79f7ca8fad2f1bae1dcbd4ec0`; downloaded archives match their reviewed

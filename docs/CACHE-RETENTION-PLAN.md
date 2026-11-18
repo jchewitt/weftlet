@@ -8,12 +8,31 @@ small independently qualified increments.
 
 ## Outcome and evidence
 
-Provide a configurable **10 GiB (10,737,418,240 bytes) user-cache-wide budget**
-across repositories, checkouts and configuration profiles, with optional repository
-sub-budgets. Keep usable current evidence for active scopes, a small rollback
-allowance and reusable semantic artifacts. Old full graphs are disposable unless
-explicitly pinned or archived. A per-profile 10 GiB allowance does not meet this goal.
-The policy/default for other installations must be stated explicitly before rollout.
+**Maintainer clarification, November 18, 2026:** the proposed 10 GiB value is a
+configurable **retention target for accumulated local history**, not a hard limit
+on a graph, extraction coverage or a necessary build. This supersedes the original
+handoff's hard-cap and write-growth enforcement proposals. Keep the complete usable
+current evidence for active scopes, a small rollback allowance and reusable semantic
+artifacts. A necessary graph may exceed the target and must remain buildable and
+queryable when the filesystem has capacity.
+
+R4 should support a user-cache-wide target across repositories, checkouts and
+profiles, optional repository targets, and an explicit **keep indefinitely** mode.
+A proposed 10 GiB target is 10,737,418,240 bytes, not a released default. Indefinite
+retention disables automatic history eviction; explicit operator removal remains a
+separate reviewed action. Temporary operation-owned cleanup still applies, and
+indefinite retention is not a backup guarantee.
+
+Report current/previous/pinned/reusable/temporary/historical bytes separately. Only
+eligible history can be reclaimed under the selected policy. If protected evidence
+alone exceeds a target, retain it, report the overage and its protection reasons,
+and offer an explicit target/pin/archive choice. Never reject a necessary graph,
+truncate facts, narrow scope or delete current evidence merely to meet this target.
+Actual disk exhaustion and an independently configured free-space safety floor
+remain operational constraints, distinct from retention policy. Estimates and
+transient peak reporting help operators plan capacity; they are not an implicit
+10 GiB build quota. The rollout/default and concrete config names remain R4 design
+work, not options already accepted by the toolkit.
 
 Consumer observations on installed 0.9.0 (not independently measured upstream):
 
@@ -72,6 +91,29 @@ registration, transactional current/previous tracking and crash recovery before
 applying a reviewed plan. R3a's manual previous declaration and observational scan
 are not substitutes for those contracts. Existing cache files remain untouched.
 
+## R3b1 implementation update — November 17, 2026 (Central)
+
+[ADR 056](ADR-056-cache-coordination.md) adds the internal operation-scoped
+coordination foundation: concurrent shared activity, exclusive maintenance after
+draining participants, bounded/cancellable waiting, owned-marker cleanup and a
+scoped snapshot facade. Interrupted owners remain visible blockers. Independent
+process tests exercise these boundaries; no collector or automatic recovery exists.
+
+Complete R3b in two further reviewable steps:
+
+- **R3b2 — Lifecycle adoption:** bind managed cache roots, integrate complete
+  hydration/query/comparison/delivery and shared-artifact lifecycles, coordinate
+  multiple roots in a fixed order, and publish current/previous references
+  transactionally. Establish an explicit legacy-client migration boundary.
+- **R3b3 — Reviewed removal and recovery:** revalidate plans under exclusive
+  coordination, retire heads before dependent snapshots, preserve unknown data,
+  and add bounded, explicit interrupted-operation recovery. No PID/age-based
+  stealing; no applying R3a plans without the new coordinated contract.
+
+R3b1 is not wired into normal CLI/MCP operations yet; existing saved-evidence
+reads remain unchanged. This split keeps compatibility and removal independently
+reviewable before R4 retention policy and R5 compact storage.
+
 ## Bounded tasks
 
 | Task | Deliverable and acceptance |
@@ -79,20 +121,22 @@ are not substitutes for those contracts. Existing cache files remain untouched.
 | R1 — Independent temporary clean comparisons | Build and strictly validate independently in an operation-owned snapshot/index workspace, reading validated shared semantic artifacts. On success write a compact receipt binding source SHA, scope/config/tool identities, both digests, check result and timestamp; remove only that workspace. Repeated comparisons must not accumulate permanent graph/index copies or clean heads. Failures/cancellation preserve the normal head and save bounded diagnostics. Full failure payload retention is explicit and budgeted. |
 | R2 — Inventory and representation profile | Measure logical/allocated bytes per class, per repository/profile and total. Profile actual public large-graph bytes by section/field, repeated entities/provenance/strings and indexes before choosing a new format. Inventory must distinguish owned, unknown, corrupt, active, pinned and archived data; a prefix read is not an integrity verdict. No deletion in this increment. |
 | R3 — Coordination and retention plans | Define active-scope registration, explicit owner/reason/expiry pins, current/previous references and cross-process read/write/GC leases. Produce a dry-run plan with sizes, reasons, references, protection, recovery cost and reclaim estimate; reject stale plans before applying. Legacy heads are not automatically permanent active-scope registrations. Unknown objects remain protected until classified. |
-| R4 — Enforced global budget | Account for permanent data and temporary peaks across all profiles, plus repository sub-budgets and a free-disk floor. Preflight, reserve under a lease and enforce growth during writes/index/build output. If required current/pinned data and build space cannot fit, report the minimum and explicit operator choices; preserve current evidence and never narrow source scope or raise model budgets silently. |
+| R4 — Configurable history retention | Account across profiles with optional repository targets and explicit indefinite retention. Reclaim only eligible unpinned history under coordinated policy, preserve current/previous/pinned evidence and reusable artifacts, and report protected overages without blocking a necessary graph or narrowing coverage. Report temporary peaks and real disk capacity separately; retention settings do not change extraction identity. |
 | R5 — Compact/deduplicated evidence | Choose format from R2 measurements. Evaluate interned entities/provenance/strings, compressed/chunked/query-oriented records, separate integrity-bound manifests and content-addressed normalized SCIP blobs. Preserve exact logical identity, authority, citations, facts and query equivalence. Similar payloads cannot merge distinct provenance. Include legacy reads and migration/rollback qualification. |
 | R6 — Explicit private archive/restore | Optional user-configured NAS/object destination with authenticated/encrypted transfer, checksums, producing config/tool identities, required semantic/index artifacts and receipts. Verify remote bytes and restore before any approved eviction. Keep a local archive index; failures never authorize deletion. Restores remain historical and never substitute for current-commit acceptance. |
 
 R1 can ship separately to stop successful-comparison accumulation. It does not
-implement the global cap or authorize sweeping the existing 67 GiB consumer cache.
+implement the retention target or authorize sweeping the existing 67 GiB consumer cache.
 R2 profiling informs R5; R3 coordination is a prerequisite to destructive pruning
-and hard-budget enforcement. Do not collapse all six tasks into one release diff.
+and retention-policy application. Do not collapse all six tasks into one release diff.
 
 ## Storage and safety contract
 
-- Current compatible snapshots for actively registered scopes and at most one
-  prior known-good generation are budgeted; extra historical graphs require pins.
-  Existing pointers need explicit migration/disposition, not silent deletion.
+- Preserve current compatible snapshots for actively registered scopes and the
+  selected prior known-good generation. Pins protect additional historical graphs
+  when automatic retention is enabled; indefinite retention keeps history without
+  requiring a pin for every generation. Existing pointers need explicit
+  migration/disposition, not silent deletion.
 - Semantic artifacts are a separate cheap reusable store. Preserve valid retained
   graph references and a bounded cold reuse allowance; recovery cost must expose
   which evictions could require model work. Pruning never invokes a model.
@@ -103,23 +147,46 @@ and hard-budget enforcement. Do not collapse all six tasks into one release diff
 - Leases, not file age alone, distinguish active work from abandoned scratch.
   Account for concurrent work, crash grace periods and publication ordering so
   readers cannot observe deleted live objects, dangling heads or partial graphs.
-- Pins do not silently exceed the cap. Report the pinned/current minimum, precise
-  protections and explicit budget/unpin/archive/scope choices. Retention settings
-  are operational and must not alter semantic identity or create a new profile.
+- Current/previous/pinned evidence may exceed a retention target. Report the
+  protected minimum and precise reasons, then offer explicit target/unpin/archive
+  choices. Never silently evict it or require reduced graph coverage to meet the
+  target. Indefinite retention must not trigger automatic historical eviction.
+  Retention settings are operational and must not alter semantic identity or
+  create a new profile.
 - Report logical versus allocated/deduplicated bytes, steady use versus build peak,
-  selected-document bytes versus indexed-code/output bytes. Estimates alone do
-  not constitute a hard cap, especially for subprocess-produced files.
+  selected-document bytes versus indexed-code/output bytes. Estimates alone do not
+  predict exact peak usage, especially for subprocess-produced files. Retention
+  policy is not a per-operation write quota.
 - Git can reconstruct source, but not necessarily identical model artifacts or an
   available old tool/model environment. Exact-evidence archives are opt-in.
 - `cache usage` and `cache profile` are implemented R2 candidate commands.
   `cache prune --dry-run`, `cache pin/unpin` and archive commands remain proposals.
   Do not document these future commands as available before implementation.
 
+## Long-term history and backup guidance
+
+Indefinite local retention can consume the available disk and does not protect
+against disk loss. For historical evidence that must be recoverable, use an
+explicit private backup/archive destination with access controls and encryption.
+Preserve exact snapshot bytes, source/config/tool identities, checksums, required
+semantic artifacts and indexes, and validation receipts. Verify a restore before
+any separately approved local eviction. Git restores source, but cannot guarantee
+identical historical model outputs. Restored evidence remains historical.
+
+The existing S6 export/import is a verified snapshot-transfer mechanism, not an
+automated backup service or a promise of complete semantic-artifact coverage.
+Follow its manifest and explicit artifact-selection limits. R6 archive/restore
+and the 2.0 remote/database storage work can supply managed long-term retention
+later; a remote query backend alone is not a backup or an archival durability
+contract. No cloud destination, upload or archival automation is enabled here.
+
 ## Regression matrix
 
 Qualification includes repeated independent strict clean comparisons without
 permanent growth; active/current/previous/pinned preservation across old profiles;
-global/repository accounting and disk-floor enforcement; build peak reservations;
+global/repository retention accounting; configurable/indefinite retention;
+complete graphs larger than the target; protected-overage reports and separate
+real-disk capacity failures;
 concurrent readers/writers/GC; stale-plan refusal; cancellation/crash recovery;
 failed extraction/validation/publication preserving the last usable graph;
 semantic reuse without hidden paid recovery; explicit archive failure/restore

@@ -27,5 +27,18 @@ The guides describe the **0.10.0 release scope**. Check the [release overview](R
 and installed package changelog for availability; a guide is not proof of npm
 publication. Manual setup paths remain documented for 0.9 installations.
 Client examples do not establish live authentication or agent behavior. Storage
-inspection and retention reviews are included; applying removal, a global byte cap
+inspection and retention reviews are included; applying removal, configurable history retention
 and hosted approval remain separate work.
+
+## Detailed graph and implementation references
+
+These references retain the exact contracts behind the introductory README.
+
+| Topic | Reference |
+| --- | --- |
+| Committed code selection and repository adapters | [TypeScript source indexing](ADR-010-committed-source-indexing.md), [canonical file nodes](ADR-020-canonical-physical-file-producers.md) |
+| Document links and asynchronous routes | [Document links](ADR-011-explicit-document-links.md), [routing declarations](ADR-014-routing-declarations.md) |
+| Exact neighborhoods, bounded paths and ranking | [Neighbors](ADR-029-exact-graph-neighborhoods.md), [paths](ADR-030-bounded-evidence-paths.md), [indirect relationships](ADR-042-indirect-local-relationships.md), [shared symbols](ADR-043-shared-symbol-specificity.md) |
+| Symbols, calls and intent mappings | [SCIP evidence](ADR-032-scip-code-evidence.md), [document bindings](ADR-033-document-symbol-bindings.md), [static calls](ADR-035-static-call-evidence.md), [optional proposals](ADR-039-mapping-proposals.md) |
+| Producer/consumer obligations and comparison | [Declarations](ADR-036-contract-obligation-declarations.md), [compatibility](ADR-037-selected-contract-compatibility.md) |
+| Code coverage and strict validation | [Monorepo coverage](ADR-038-monorepo-code-coverage.md), [SHACL validation](ADR-017-shacl-validation-union.md) |

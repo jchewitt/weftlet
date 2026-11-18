@@ -126,7 +126,7 @@ cache hits. SCIP indexes and compiler environments are rebuilt when needed.
 - Export needs space for one new bundle. Import stages one payload copy before
   linking installed files; identical existing files still need staging space.
   Validation holds the graph object in memory. Large graphs still need appropriate
-  Node heap limits. These limits are not the planned user-wide 10 GiB cache policy.
+  Node heap limits. These per-transfer limits are separate from the planned user-wide history-retention target.
 - Existing snapshots/artifacts are immutable. Different bytes for the same ID/key
   cause a collision, even if only formatting changed. Inspect the two producers;
   do not delete current evidence or edit digests as a shortcut.

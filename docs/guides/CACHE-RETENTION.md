@@ -140,9 +140,29 @@ private unless reviewed. They do not include graph facts, prompts or source text
 
 ## What comes next
 
-R3b adds reader/writer/GC coordination, active-scope registration, transactional
-current/previous references, stale-plan checks under exclusive coordination and
-bounded crash recovery before enabling reviewed removal. R4 adds budget reservations,
-peak-growth enforcement and a disk floor. R5 qualifies compact storage based on the
+The internal [R3b1 coordination foundation](../ADR-056-cache-coordination.md) is
+implemented for review with cross-process tests. It is not yet active in normal
+CLI/MCP operations. R3b2 adopts it across complete storage lifecycles and adds
+transactional current/previous references; R3b3 adds revalidation under exclusive
+coordination and explicit crash recovery before enabling reviewed removal. R4 adds
+configurable history-retention targets and an explicit keep-indefinitely mode.
+These targets will not cap necessary graphs or reduce extraction coverage. Protected
+current/previous/pinned evidence can exceed a target, with an overage report; real
+disk capacity remains a separate constraint. R5 qualifies compact storage based on the
 [representation study](../assessments/storage-profile-r2.md). Until then, these
 commands help inspect and review retention without altering existing evidence.
+
+## Planning retention and long-term history
+
+The proposed 10 GiB value concerns accumulated retained history, not an individual
+graph or build. R4 will make the target configurable, including indefinite retention.
+Those options are planned, not settings recognized by the current commands. A
+retention target is not permission to delete current or pinned evidence.
+
+For backups or longer-lived historical evidence, preserve exact snapshot bytes and
+their source/configuration/tool manifests, checksums, required artifacts and
+validation receipts in an explicitly selected private destination. Verify a restore
+before approving local removal. See [snapshot delivery](SNAPSHOT-DELIVERY.md) for
+the existing bounded export/import contract and
+[long-term guidance](../CACHE-RETENTION-PLAN.md#long-term-history-and-backup-guidance)
+for its distinction from planned R6/2.0 archival and remote storage.

@@ -8,6 +8,7 @@ export function cacheLayout(path: string): { category: CacheClass; profile: stri
     ['scip-index', /^(.*\/)?scip\/[^/]+\.scip$/],
     ['comparison-receipt', /^(.*\/)?comparison-receipts\/[^/]+\.json$/],
     ['lease-marker', /^(.*\/)?work\/compare-[^/]+\/lease\.json$/],
+    ['lease-marker', /^(.*\/)?\.weftlet-coordination\/(?:gate\.lock|participants\/[^/]+)$/],
     ['temporary', /^(.*\/)?work\/.*$/],
     ['temporary', /^(.*\/)?(?:snapshots|heads|scip|artifacts\/semantic)\/[^/]+\.(?:tmp|lock)$/],
   ];

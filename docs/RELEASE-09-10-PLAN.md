@@ -156,6 +156,9 @@ for later; no source files or exports are reorganized here.
 
 The November 10 [cache-retention intake](CACHE-RETENTION-PLAN.md) is tracked
 separately: stop permanent successful-comparison duplicates, profile graph size,
-then coordinate retention and a user-wide 10 GiB budget. Release ordering is a
-maintainer decision; no 10 GiB cap or prune command is implied by this provider
-increment. Preserve the existing consumer cleanup boundary.
+then coordinate retention and a user-wide history target. The November 18 maintainer
+clarification makes the proposed 10 GiB target configurable, permits indefinite
+retention and explicitly excludes a hard cap on necessary graphs/builds. See the
+canonical storage plan for protected-overage behavior. Release ordering is a
+maintainer decision; no automatic pruning is implied by this provider increment.
+Preserve the existing consumer cleanup boundary.

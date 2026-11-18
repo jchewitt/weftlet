@@ -1,5 +1,34 @@
 # Validation evidence
 
+## Cache coordination foundation and retention direction, November 18, 2026
+
+Candidate work based on `66ea5f6` after independently reviewed navigation PR 100
+merged. ADR 056 introduces an internal shared-activity/exclusive-maintenance
+protocol and scoped snapshot access. Existing production storage paths remain
+unchanged; this does not enable pruning, crash recovery or automatic retention.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and 38 focused tests across eight files
+passed. Actual independent processes exercise concurrent admission, maintenance
+draining and killed owners; filesystem checks cover marker ownership, links,
+changed roots, unknown records, separate roots and saved-byte preservation.
+Independent review found no correctness blocker and requested active-cancellation
+coverage. Added passing regressions verify that shared/exclusive callbacks and
+pending snapshot-file consumers retain protection after abort until they settle.
+Full deterministic/packaging and hosted Windows outcomes are recorded with the PR.
+
+The maintainer clarified retention policy: configurable history targets and an
+explicit indefinite mode, rather than a hard per-graph/build cap. Current and pinned
+evidence survives a target overage, with clear accounting; real disk constraints
+remain separate. Updated the storage plan, work queue, guides, roadmap and 2.0
+archive direction. These remain design requirements, not new runtime settings.
+
+The README is reduced to purpose, quick start, agent connection, viewer and
+documentation links. Detailed Markdown guides/tutorials/ADRs remain in GitHub;
+the docs index now points directly to the advanced contracts formerly summarized
+in the README. Generated release-version blocks remain unchanged. Provider/client
+contracts, example code, authority guidance and release history require no behavior
+change. No model calls, private cache access, deletion or publication occurred.
+
 ## Documentation website navigation, November 18, 2026 (UTC)
 
 The root README now links directly to the published documentation website,

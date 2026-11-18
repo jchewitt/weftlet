@@ -42,6 +42,21 @@ The first complete demonstration is: a repository with sparse documentation prod
 candidate rules; a reviewer resolves a real disagreement; a documentation PR is merged; an
 agent retrieves the approved, scoped decision through MCP and identifies any remaining code gap.
 
+## Historical storage and backup direction — November 18, 2026
+
+Local retention should support configurable history targets and an explicit
+keep-indefinitely mode. A retention target must not limit a necessary graph,
+truncate coverage or delete protected current evidence. The current implementation
+sequence and policy are in the [storage plan](CACHE-RETENTION-PLAN.md).
+
+Future remote/database storage may also support long-term historical archives,
+but query hosting and backup durability are separate contracts. Archive exact
+snapshot/artifact bytes and producing identities with checksums and access controls;
+verify restore before local eviction. Retained or restored evidence keeps its
+historical identity and authority. Indefinite local history alone is not a backup.
+Managed archive automation remains later R6/hosting work; the 1.0 coordination
+increment does not add an archive service or require a remote database.
+
 ## Current capabilities and gaps
 
 | Area | Available in 0.2.0 | Work proposed here |
