@@ -83,9 +83,14 @@ it('preserves a queryable head and cleans its temporary file when publication ca
   } satisfies Parameters<FileSnapshotStore['write']>[0];
   await store.write(saved);
   await store.updateHead('default', 'saved');
+  const next = { ...saved, manifest: { ...saved.manifest, snapshotId: 'next', contentDigest: 'next-digest' } };
+  await store.write(next);
+  const before = await readFile(join(root, 'heads/default.json'));
   const error = Object.assign(new Error('persistent lock'), { code: 'EPERM' });
   mocks.rename.mockRejectedValue(error);
-  await expect(store.updateHead('default', 'saved')).rejects.toBe(error);
+  await expect(store.updateHead('default', 'next')).rejects.toBe(error);
   expect(await store.readHead('default')).toEqual(saved);
+  expect(await readFile(join(root, 'heads/default.json'))).toEqual(before);
+  expect(await store.read('next')).toEqual(next);
   expect(await readdir(join(root, 'heads'))).toEqual(['default.json']);
 });

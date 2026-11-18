@@ -18,6 +18,13 @@ the final diff and independently reran those 27 checks. Documentation/version
 checks, relative destinations, original source identities and `git diff --check`
 passed. Full publication and hosted Linux/Windows outcomes are recorded in the
 candidate PR after execution; focused tests alone are not those acceptance results.
+The initial full local run passed 1,196 toolkit and 38 core tests but found two old
+expectations: exact head JSON omitted the new schema version, and a rename-failure
+test attempted a same-ID publication that is now intentionally a no-op. Tests were
+updated to check the versioned record and fail a distinct-target publication,
+retaining old head bytes and both snapshots. No runtime correction was required;
+19 focused tests covering those cases and generation tracking pass. Superseded CI
+runs are not acceptance; final checks qualify the corrected test suite.
 
 Documentation updates ADR 058, coordination/retention guides, the storage plan and
 1.0 queue. README stays concise and links to the detailed docs; provider setup,
