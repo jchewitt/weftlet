@@ -2,7 +2,7 @@ import { execFile, spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
-import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, expect, it } from 'vitest';
@@ -32,7 +32,7 @@ it('leaves unmarked reads untouched and requires explicit quiescence for idempot
   expect(first).toMatchObject({ changed: true, pruningEnabled: false });
   expect(await enable(cache)).toMatchObject({ changed: false, rootId: first.rootId });
   if (process.platform === 'win32') expect(await enable(cache.toUpperCase())).toMatchObject({ changed: false, rootId: first.rootId });
-  expect(await managedRootForPath(join(cache, 'future', 'file.json'))).toBe(cache);
+  expect(await managedRootForPath(join(cache, 'future', 'file.json'))).toBe(await realpath(cache));
   expect(await readFile(join(cache, '.weftlet-coordination/root.json'))).toEqual(bytes);
   await expect(store.file('absent')).rejects.toThrow('enclosing');
   expect(() => store.read('../escape')).toThrow('safe storage identifier');
@@ -119,7 +119,7 @@ it('exposes explicit activation/status through the real CLI without needing a pr
   expect(await readdir(cache)).toEqual([]);
   await expect(run('enable', '--root', cache)).rejects.toThrow('quiescence');
   expect(JSON.parse((await run('enable', '--root', cache, '--acknowledge-quiescence')).stdout)).toMatchObject({ changed: true, pruningEnabled: false });
-  expect(JSON.parse((await run('status', '--root', cache)).stdout).managedRoot).toBe(cache);
+  expect(JSON.parse((await run('status', '--root', cache)).stdout).managedRoot).toBe(await realpath(cache));
   await expect(run('enable', '--root', cache, '--acknowledge-quiescence', '--unexpected')).rejects.toThrow('Invalid');
 });
 
@@ -129,7 +129,7 @@ it('protects external aliases into managed descendants and refuses aliases escap
   await mkdir(profile); await enable(cache);
   const alias = join(external, 'alias');
   await symlink(profile, alias, process.platform === 'win32' ? 'junction' : 'dir');
-  expect(await managedRootForPath(join(alias, 'missing', 'snapshot.json'))).toBe(cache);
+  expect(await managedRootForPath(join(alias, 'missing', 'snapshot.json'))).toBe(await realpath(cache));
   await withManagedCacheAccess([alias], async () => {
     expect(await participants(cache)).toHaveLength(1);
     await expect(withCacheMaintenance(cache, async () => undefined, { timeoutMs: 75 })).rejects.toMatchObject({ phase: 'drain' });

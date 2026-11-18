@@ -33,7 +33,14 @@ invalid-ID rejection changed into a promise rejection; the store now validates I
 before asynchronous admission, retaining the existing regression unchanged. That
 failed run is not acceptance. The independently reviewed correction passes build
 and 28 focused tests, including the unchanged identifier regression; fresh hosted
-checks qualify the corrected candidate. No live provider, real Docker/SELinux or private consumer run
+checks qualify the corrected candidate. The corrected production code then passed
+hosted Linux (1,189 toolkit + 38 core tests, three optional skips), packaging,
+browser interaction and Windows storage/retrieval. Windows onboarding passed the
+packaged tutorial and 27 comparison/inspection/retention checks, then exposed three
+fixture expectations comparing an 8.3 temp alias (`RUNNER~1`) with the returned
+physical path. Expectations now use the physical filesystem path; alias admission,
+escape rejection and uppercase-path assertions remain. No runtime code changed in
+that test-only correction, which requires a fresh hosted Windows pass. No live provider, real Docker/SELinux or private consumer run
 is claimed. Existing filesystem coordination assumptions remain cooperative and
 local; parent-wide inventory/retention reports remain observational.
 
