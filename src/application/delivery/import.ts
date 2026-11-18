@@ -1,3 +1,5 @@
+import { withManagedCacheAccess } from '../../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from '../cache-operation.js';
 import { randomUUID } from 'node:crypto';
 import { link, lstat, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -20,6 +22,11 @@ export interface ImportSnapshotOptions extends TransferControl {
   readonly maxBytes?: number;
 }
 export async function importSnapshot(configPath: string, options: ImportSnapshotOptions) {
+  const context = await deliveryContext(configPath);
+  return withManagedCacheAccess([...cacheOperationPaths(context.repositoryRoot, context.config), options.input],
+    () => importSnapshotOwned(context, options), { signal: options.signal });
+}
+async function importSnapshotOwned(context: Awaited<ReturnType<typeof deliveryContext>>, options: ImportSnapshotOptions) {
   if (!validDigest(options.expectDigest)) throw Error('Import requires the trusted manifest SHA-256 via --expect-digest');
   if (options.activate !== (options.expectHead !== undefined) && (options.activate || options.expectHead !== undefined)) {
     throw Error('--activate requires --expect-head <id|none>; --expect-head requires --activate');
@@ -37,7 +44,6 @@ export async function importSnapshot(configPath: string, options: ImportSnapshot
   assertBundle(bundle, maxBytes);
   const names = (await readdir(input)).sort();
   if (!sameValue(names, ['manifest.json', ...bundle.files.map(file => file.name)].sort())) throw Error('Bundle contains missing or unlisted files');
-  const context = await deliveryContext(configPath);
   if (bundle.snapshot.repositoryId !== context.config.repositoryId) throw Error('Bundle belongs to a different repository identity');
   await transferDirectory(context.storageRoot);
   await requireFreeSpace(context.storageRoot, bundle.payloadBytes + manifestByteLimit);

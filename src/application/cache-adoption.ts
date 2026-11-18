@@ -1,3 +1,5 @@
+import { withManagedCacheAccess } from '../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from './cache-operation.js';
 import type { DocumentSelectionRecord, ImpactScanRequest, SemanticArtifact, SemanticSource } from '@weftlet/core';
 import { loadConfig, type ContextGraphConfig } from '../configuration/config.js';
 import { resolveSemanticStorageRoots, resolveStorageRoot, semanticCachePartition } from '../configuration/cache.js';
@@ -124,6 +126,11 @@ function previousArtifactRoot(repositoryRoot: string, config: ContextGraphConfig
 export async function adoptSemanticCache(configPath: string,
   options: SemanticCacheAdoptionOptions): Promise<SemanticCacheAdoption> {
   const [loaded, previous] = await Promise.all([loadConfig(configPath), loadConfig(options.fromConfigPath)]);
+  return withManagedCacheAccess([...cacheOperationPaths(loaded.repositoryRoot, loaded.config),
+    ...cacheOperationPaths(previous.repositoryRoot, previous.config)], () => adoptSemanticCacheLoaded(loaded, previous, options));
+}
+async function adoptSemanticCacheLoaded(loaded: Awaited<ReturnType<typeof loadConfig>>,
+  previous: Awaited<ReturnType<typeof loadConfig>>, options: SemanticCacheAdoptionOptions): Promise<SemanticCacheAdoption> {
   const { config, repositoryRoot } = loaded;
   if (repositoryRoot !== previous.repositoryRoot) {
     throw new Error('Cache adoption requires both configurations to resolve to the same checkout.');

@@ -1,5 +1,42 @@
 # Validation evidence
 
+## Managed cache lifecycle candidate, November 18, 2026
+
+R3b2a is based on merged foundation commit `b314553e20c28b4be35e7ace0b7e998698753955`.
+Explicit root activation is separate from graph configuration and requires quiesced,
+upgraded clients. Application operations and raw store I/O adopt coordination;
+filename-producing methods require caller-owned scopes. No removal, automatic
+recovery, head-format migration, retention limit or npm publication is enabled.
+
+Linux / Node 24.19.0 / pnpm 10.18.2: build and 14 new focused tests passed across
+managed access, full lifecycles and raw producer lifetimes. Tests include separate
+processes declaring roots in opposite order, external aliases, malformed/overlapping
+roots, cancelled admission, delayed child work, synchronous invariant failure and
+complete HTTP query/export scopes. The public pipeline exercises real SCIP,
+strict RDF/SHACL, unchanged hydration reuse, independent clean comparison,
+provider-free saved queries, plan/adoption, profile and verified export/import.
+Saved snapshot/artifact fingerprints and configuration remain unchanged; successful
+comparisons add only their existing compact receipt. Compiler/indexer lifetime
+failure tests mock external process boundaries, not validation results.
+
+Independent review identified and resolved six lifetime/ownership gaps, followed
+by a Windows path-casing idempotence correction with a native-only regression.
+A cloud environment restart interrupted the aggregate deterministic and initial
+packaging commands; neither interrupted command is recorded as a pass. Focused
+checks passed after recovery: 25 tests across five files (14 lifecycle/activation
+regressions plus 11 foundation/scoped-store checks). Build, documentation, inventory,
+licenses, relative links and governance (22 advisory findings) passed. Full
+Linux/Windows and fresh packed-consumer
+outcomes will be recorded with the candidate PR. No live provider, real Docker/SELinux or private consumer run
+is claimed. Existing filesystem coordination assumptions remain cooperative and
+local; parent-wide inventory/retention reports remain observational.
+
+Documentation adds the activation/custom-integration guide and ADR 057, updates
+the retention plan and 1.0 queue, and leaves the concise README pointing to the
+docs index. Detailed Markdown remains packaged/site source. Provider/client setup,
+evidence authority, examples, graph identities and release versions are unchanged;
+the changeset supplies the next generated release entry.
+
 ## Cache coordination foundation and retention direction, November 18, 2026
 
 Candidate work based on `66ea5f6` after independently reviewed navigation PR 100

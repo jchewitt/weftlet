@@ -1,3 +1,4 @@
+import { coordinateMethods } from '../storage/coordination/managed-access.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { createHash, randomUUID } from 'node:crypto';
 import { createReadStream, createWriteStream } from 'node:fs';
@@ -116,7 +117,7 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
     private readonly config: ContextGraphConfig['ontology'],
     private readonly repositoryRoot: string,
     private readonly storageRoot: string,
-  ) {}
+  ) { return coordinateMethods(this, [storageRoot], ['compile'], ['compile']); }
 
   checkReady(): Promise<void> {
     return requireLinuxDocker(this.repositoryRoot);
@@ -196,7 +197,9 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
 
 /** Default compiler preserves asserted semantics without Java, Docker, or an OWL reasoner. */
 export class DirectRdfOntologyCompiler implements OntologyCompiler {
-  constructor(private readonly storageRoot: string) {}
+  constructor(private readonly storageRoot: string) {
+    return coordinateMethods(this, [storageRoot], ['compile'], ['compile']);
+  }
 
   async compile(snapshotId: string, artifacts: readonly SemanticArtifact[]): Promise<OntologyCompileResult> {
     const { namedNode } = DataFactory;

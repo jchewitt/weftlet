@@ -1,3 +1,5 @@
+import { coordinateMethods } from '../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from './cache-operation.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { SavedGraphExplorationService } from "./saved-exploration.js";
 import { SnapshotGraphExplorationService } from "../graph/neighborhood.js";
@@ -39,7 +41,7 @@ import { OtlpJsonRuntimeEvidenceProvider } from "../extraction/telemetry.js";
 import { SnapshotChecks } from "./snapshot-checks.js";
 import { resolveConsumerModule } from "../infrastructure/module-resolution.js";
 import { requiredSnapshotExtractorVersions } from './extraction-identity.js';
-import { MappingProposalService } from './mapping-proposals.js';
+import { MappingProposalService, type MappingOperationOptions } from './mapping-proposals.js';
 import { FileMappingProposalStore } from '../storage/mapping-proposals.js';
 import { createMappingProvider, mappingProviderIdentity } from '../extraction/mapping-provider.js';
 
@@ -133,7 +135,7 @@ export async function createContextGraphApplication(configPath: string) {
     : new SnapshotImpactQueryService(snapshotStore, headName);
   const expectedExtractors = requiredSnapshotExtractorVersions(config);
   const queryService = new SavedEvidenceQueryService(rawQueryService, repository, sha256(stableJson(config)), expectedExtractors);
-  return {
+  const application = {
     ...loaded,
     storageRoot,
     repository,
@@ -159,5 +161,18 @@ export async function createContextGraphApplication(configPath: string) {
       providerIdentity: mappingProviderIdentity(config.semantic), timeoutMs: config.semantic.timeoutMs ?? 120_000,
       provider: () => createMappingProvider(config.semantic, repositoryRoot),
     }),
+  };
+  const paths = cacheOperationPaths(repositoryRoot, config);
+  return { ...application,
+    ontologyCompiler: coordinateMethods(application.ontologyCompiler, paths, ['compile'], ['compile']),
+    queryService: coordinateMethods(application.queryService, paths, ['scan']),
+    discoveryService: coordinateMethods(application.discoveryService, paths, ['catalog', 'fact']),
+    explorationService: coordinateMethods(application.explorationService, paths, ['neighbors']),
+    pathService: coordinateMethods(application.pathService, paths, ['paths']),
+    compatibilityService: coordinateMethods(application.compatibilityService, paths, ['assess']),
+    codeCoverageService: coordinateMethods(application.codeCoverageService, paths, ['coverage']),
+    snapshotChecks: coordinateMethods(application.snapshotChecks, paths, ['read', 'compare']),
+    mappingProposalService: coordinateMethods(application.mappingProposalService, paths, ['plan', 'read', 'propose'], [],
+      (method, args) => ({ signal: method === 'propose' ? (args[1] as MappingOperationOptions | undefined)?.signal : undefined })),
   };
 }

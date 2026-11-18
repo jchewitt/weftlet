@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { inventoryCache } from '../storage/inspection/inventory.js';
 import { profileSnapshot } from '../storage/inspection/profile.js';
-import { cacheInspectionRoots, inspectionSnapshot } from '../application/cache-inspection/context.js';
+import { cacheInspectionRoots, withInspectionSnapshot } from '../application/cache-inspection/context.js';
 
 function parse(args: readonly string[]) {
   const operation = args[1];
@@ -50,8 +50,9 @@ export async function runCacheInspection(args: readonly string[], defaultConfig:
         '\nRead-only inventory; no deletion decisions. Use --json for object status, references and limitations; --verify for full JSON/byte reads.\n');
       if (!report.complete || report.danglingHeads.length || report.objects.some(entry => entry.inspection === 'invalid')) process.exitCode = 1;
     } else {
-      const path = values.has('--file') ? resolve(values.get('--file')!) : await inspectionSnapshot(values.get('--config') ?? defaultConfig(), values.get('--snapshot')!);
-      const report = await profileSnapshot(path, { maxBytes, maxRecordBytes, maxDistinct, signal: controller.signal, onProgress: progress });
+      const profile = (path: string) => profileSnapshot(path, { maxBytes, maxRecordBytes, maxDistinct, signal: controller.signal, onProgress: progress });
+      const report = values.has('--file') ? await profile(resolve(values.get('--file')!)) :
+        await withInspectionSnapshot(values.get('--config') ?? defaultConfig(), values.get('--snapshot')!, profile, { signal: controller.signal });
       process.stdout.write(selected.has('--json') ? JSON.stringify(report, null, 2) + '\n' :
         `Snapshot profile: ${report.physicalBytes} stored bytes; ${report.sections.facts?.records ?? 0} facts.\n` +
         Object.entries(report.sections).map(([name, section]) => `${name}: ${section.compactValueBytes} compact JSON value bytes`).join('\n') +

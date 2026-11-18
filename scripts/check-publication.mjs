@@ -9,6 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { smokeCacheCoordination } from './smoke-cache-coordination.mjs';
 import { smokeMappingProposals } from './smoke-mapping-proposals.mjs';
 import { smokeCiSetup } from './smoke-ci-setup.mjs';
 import { smokeProjectSetup } from './smoke-project-setup.mjs';
@@ -74,6 +75,8 @@ try {
     if (expectedName === '@weftlet/toolkit') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
+        'dist/storage/coordination/managed-access.js', 'dist/storage/coordination/managed-root.js',
+        'dist/storage/coordination/snapshot-access.js', 'docs/guides/CACHE-COORDINATION.md',
         'dist/visualization/explorer-assets/index.html', 'dist/visualization/explorer-assets/app.js',
         'dist/visualization/explorer-assets/style.css', 'dist/visualization/explorer-assets/app.js.LEGAL.txt',
         'dist/visualization/explorer-assets/CYTOSCAPE-LICENSE.txt',
@@ -751,6 +754,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   await smokeProjectSetup(consumer, registryPackages.get('@weftlet/toolkit').manifest.version, 'publication-smoke');
   await smokeCiSetup(consumer, installedRoot, false);
   await smokeMappingProposals(installedRoot, documentConfig);
+  await smokeCacheCoordination(consumer, installedRoot, 'publication-smoke');
   console.log(JSON.stringify(await smokeOnboarding(destination, coreArchive, toolkitArchive, await npmCliPath())));
   console.log('Packed npm exec/npx setup and config passed. Installed consumer: no-model hydration preview and cache adoption, traversal hydration/cache reuse and document evidence APIs, runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {

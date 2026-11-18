@@ -1,3 +1,5 @@
+import { withManagedCacheAccess } from '../../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from '../cache-operation.js';
 import { randomUUID } from 'node:crypto';
 import { lstat, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -17,6 +19,10 @@ export interface ExportSnapshotOptions extends TransferControl {
 }
 export async function exportSnapshot(configPath: string, options: ExportSnapshotOptions) {
   const context = await deliveryContext(configPath), maxBytes = transferLimit(options.maxBytes);
+  return withManagedCacheAccess([...cacheOperationPaths(context.repositoryRoot, context.config), options.output],
+    () => exportSnapshotOwned(context, options, maxBytes), { signal: options.signal });
+}
+async function exportSnapshotOwned(context: Awaited<ReturnType<typeof deliveryContext>>, options: ExportSnapshotOptions, maxBytes: number) {
   const output = resolve(options.output), parent = dirname(output);
   await transferDirectory(parent);
   // Bounded lock/staging names also work when the logical snapshot ID is very long.

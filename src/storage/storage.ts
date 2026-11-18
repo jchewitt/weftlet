@@ -1,3 +1,4 @@
+import { coordinateMethods } from './coordination/managed-access.js';
 import { withHeadLock } from './head-lock.js';
 import { safeTransferPath } from './transfer-files.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
@@ -68,7 +69,9 @@ export function snapshotPath(root: string, snapshotId: string, legacy = false): 
 }
 
 export class FileSnapshotStore implements SnapshotStore {
-  constructor(private readonly root: string) {}
+  constructor(private readonly root: string) {
+    return coordinateMethods(this, [root], ['write', 'read', 'readRevision', 'readHead', 'readHeadManifest', 'headId', 'updateHead', 'file'], ['file']);
+  }
 
   async write(snapshot: GraphSnapshot): Promise<void> {
     const destination = snapshotPath(this.root, snapshot.manifest.snapshotId);
@@ -176,7 +179,9 @@ async function existingFile(path: string): Promise<string | undefined> {
 export const semanticArtifactPath = (root: string, key: string) => join(root, 'artifacts', 'semantic', `${physicalArtifactKey(safeKey(key))}.json`);
 
 export class SemanticArtifactStore {
-  constructor(private readonly root: string, private readonly legacyRoots: readonly string[] = []) {}
+  constructor(private readonly root: string, private readonly legacyRoots: readonly string[] = []) {
+    return coordinateMethods(this, [root, ...legacyRoots], ['read', 'readEntry', 'write', 'file'], ['file']);
+  }
 
   async file(key: string): Promise<string | undefined> {
     for (const root of [this.root, ...this.legacyRoots]) {

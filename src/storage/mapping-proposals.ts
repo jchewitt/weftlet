@@ -1,3 +1,4 @@
+import { coordinateMethods } from './coordination/managed-access.js';
 import { link, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { MappingProposalArtifact, MappingProposalStore } from '@weftlet/core';
@@ -5,7 +6,7 @@ import { temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
 
 /** Separate immutable proposal namespace; never writes graph snapshots, heads or semantic artifacts. */
 export class FileMappingProposalStore implements MappingProposalStore {
-  constructor(private readonly root: string) {}
+  constructor(private readonly root: string) { return coordinateMethods(this, [root], ['read', 'write']); }
   private path(key: string) {
     if (!/^[a-f0-9]{64}$/.test(key)) throw Error('Invalid mapping proposal key');
     return join(this.root, 'artifacts', 'mapping-proposals', `${key}.json`);

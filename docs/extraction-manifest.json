@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "1a37d14bd4d897cfeb67735e394b278a05549b8b532457066a06fdcb7dcba530"
+      "destinationSha256": "b4759598292fcc3b52b2ed0570f564354eda72c16fa07e89ffdb52250f7fea22"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "bf8624da4f84c0d6d8f4a9e850c81afdddf335c83e73a4cb50521f0b29835561"
+      "destinationSha256": "61dee37aded8a0618c9870efa37ae917ab8a2dab5501ba126ba58a4be75abb58"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "2b629775b063fbd2128c34424995f5debbd0fddced6bcd9129a85781541db66e"
+      "destinationSha256": "7c986b4ecd945e0d34fe44db877b7dfa716a858bcab6e6e0e61e901d967ff499"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "545688f3d25c31e9f8ed5d097e50b9a47f203812b07b3397b414d269ea73b9f4"
+      "destinationSha256": "c71789ced051a9b1c4a86d29bcc6149580608d894815c02b3efbe4a80ded17bc"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "263d6b451dfe7999dd06e0dd7db6623d60a45eafc96841c26b77f7f1ca58f3c3"
+      "destinationSha256": "39255b3b71214a0c75cf5d2dc44ac55d814f064bebaadd710840176c89013964"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "5f8757daa6dec3c7cc3ea3829fc2dc102608ad26beae8cd3f4e3de94a1e5e468"
+      "destinationSha256": "aad5e50a9c0b38916ae08e82bfd80a95b70924bae52b0eab63cabeb67164db2b"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
@@ -479,14 +479,14 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "790822f66e92d64ce79a0cee68593567085481cad3c3162083530a50e6f3f108"
+      "destinationSha256": "7e52f72fc166132a5564ed174d69ca45e7b490bd74f1438980fc7e4f04306523"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "9c7e6d61b895c2f746a9538a07a355b9aa71ca5527aca9f15cc6bc9c1b57d792"
+      "destinationSha256": "fea533ca0761d638c80971fc656609619b2e8bad41f79ed7402ecdd23a7b7a8b"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/cache-coordination-foundation.md",
     ".changeset/config.json",
+    ".changeset/managed-cache-lifecycles.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -654,6 +655,7 @@
     "docs/ADR-054-cache-inventory-profile.md",
     "docs/ADR-055-declared-retention-reviews.md",
     "docs/ADR-056-cache-coordination.md",
+    "docs/ADR-057-managed-cache-lifecycles.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -698,6 +700,7 @@
     "docs/extraction-manifest.json",
     "docs/guides/AGENTS.md",
     "docs/guides/ASSISTED-SETUP.md",
+    "docs/guides/CACHE-COORDINATION.md",
     "docs/guides/CACHE-INSPECTION.md",
     "docs/guides/CACHE-RETENTION.md",
     "docs/guides/CI-SETUP.md",
@@ -979,6 +982,7 @@
     "scripts/same-group-study/v3-order.ts",
     "scripts/same-group-study/v3-rows.ts",
     "scripts/same-group-study/v3-signals.ts",
+    "scripts/smoke-cache-coordination.mjs",
     "scripts/smoke-ci-setup.mjs",
     "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-onboarding.mjs",
@@ -1001,6 +1005,7 @@
     "scripts/version-packages.test.ts",
     "src/application/cache-adoption.ts",
     "src/application/cache-inspection/context.ts",
+    "src/application/cache-operation.ts",
     "src/application/clean-comparison.ts",
     "src/application/delivery/context.ts",
     "src/application/delivery/contract.ts",
@@ -1197,8 +1202,10 @@
     "src/infrastructure/json-digest.ts",
     "src/infrastructure/module-resolution.ts",
     "src/infrastructure/package-identity.ts",
+    "src/infrastructure/settle-all.ts",
     "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
+    "src/interfaces/cache-coordination.ts",
     "src/interfaces/cache-inspection.ts",
     "src/interfaces/cache-retention.ts",
     "src/interfaces/code-coverage.test.ts",
@@ -1244,6 +1251,8 @@
     "src/storage/comparison-workspace.test.ts",
     "src/storage/comparison-workspace.ts",
     "src/storage/coordination/access.ts",
+    "src/storage/coordination/managed-access.ts",
+    "src/storage/coordination/managed-root.ts",
     "src/storage/coordination/markers.ts",
     "src/storage/coordination/snapshot-access.ts",
     "src/storage/head-lock.ts",
@@ -1331,6 +1340,9 @@
     "tests/implementation-coverage.test.ts",
     "tests/indirect-retrieval.test.ts",
     "tests/large-graph-lifecycle.test.ts",
+    "tests/managed-cache-access.test.ts",
+    "tests/managed-cache-lifecycle.test.ts",
+    "tests/managed-producer-lifetime.test.ts",
     "tests/mapping-proposals.test.ts",
     "tests/module-boundaries.test.ts",
     "tests/monorepo-coverage.test.ts",

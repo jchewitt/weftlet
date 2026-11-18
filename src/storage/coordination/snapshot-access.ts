@@ -1,9 +1,13 @@
+import { withManagedCacheAccess } from './managed-access.js';
+import { managedRootForPath } from './managed-root.js';
 import { FileSnapshotStore } from '../storage.js';
 import { withCacheAccess, type CacheAccessOptions } from './access.js';
 
 /** One lease spans head lookup, reads, publication and any file-copy callback. */
 export async function withSnapshotAccess<T>(root: string, run: (store: SnapshotAccess) => Promise<T>, options: CacheAccessOptions = {}): Promise<T> {
-  return withCacheAccess(root, async () => {
+  const access = async <R>(run: () => Promise<R>) => await managedRootForPath(root)
+    ? withManagedCacheAccess([root], run, options) : withCacheAccess(root, run, options);
+  return access(async () => {
     const raw = new FileSnapshotStore(root), pending = new Set<Promise<unknown>>();
     let active = true;
     function track<R>(operation: () => Promise<R>): Promise<R> {
@@ -30,7 +34,7 @@ export async function withSnapshotAccess<T>(root: string, run: (store: SnapshotA
       // Even mistakenly unawaited calls must settle before maintenance can enter.
       await Promise.allSettled([...pending]);
     }
-  }, options);
+  });
 }
 export type SnapshotAccess = Pick<FileSnapshotStore, 'read' | 'readHead' | 'readHeadManifest' | 'headId' | 'readRevision' | 'write' | 'updateHead'> & {
   /** Consume the path within the callback; an escaped path is not protected after it settles. */

@@ -140,11 +140,11 @@ private unless reviewed. They do not include graph facts, prompts or source text
 
 ## What comes next
 
-The internal [R3b1 coordination foundation](../ADR-056-cache-coordination.md) is
-implemented for review with cross-process tests. It is not yet active in normal
-CLI/MCP operations. R3b2 adopts it across complete storage lifecycles and adds
-transactional current/previous references; R3b3 adds revalidation under exclusive
-coordination and explicit crash recovery before enabling reviewed removal. R4 adds
+[R3b1 coordination](../ADR-056-cache-coordination.md) is merged. The
+[R3b2a lifecycle candidate](CACHE-COORDINATION.md) adds explicit managed-root
+activation and complete operation scopes. R3b2b adds transactional current/previous
+references; R3b3 adds revalidation under exclusive coordination and explicit crash
+recovery before enabling reviewed removal. R4 adds
 configurable history-retention targets and an explicit keep-indefinitely mode.
 These targets will not cap necessary graphs or reduce extraction coverage. Protected
 current/previous/pinned evidence can exceed a target, with an overage report; real
