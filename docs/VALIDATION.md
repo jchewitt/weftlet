@@ -26,8 +26,14 @@ packaging commands; neither interrupted command is recorded as a pass. Focused
 checks passed after recovery: 25 tests across five files (14 lifecycle/activation
 regressions plus 11 foundation/scoped-store checks). Build, documentation, inventory,
 licenses, relative links and governance (22 advisory findings) passed. Full
-Linux/Windows and fresh packed-consumer
-outcomes will be recorded with the candidate PR. No live provider, real Docker/SELinux or private consumer run
+Linux/Windows outcomes will be recorded with the candidate PR. The recovered fresh
+packed-consumer run passed, including the managed CLI/public helpers and complete
+tutorial/receiving checkout. Initial hosted Linux qualification caught a synchronous
+invalid-ID rejection changed into a promise rejection; the store now validates IDs
+before asynchronous admission, retaining the existing regression unchanged. That
+failed run is not acceptance. The independently reviewed correction passes build
+and 28 focused tests, including the unchanged identifier regression; fresh hosted
+checks qualify the corrected candidate. No live provider, real Docker/SELinux or private consumer run
 is claimed. Existing filesystem coordination assumptions remain cooperative and
 local; parent-wide inventory/retention reports remain observational.
 

@@ -48,6 +48,10 @@ export async function requireManagedCacheScope(paths: readonly string[]) {
     throw Error('Managed cache paths require an enclosing withManagedCacheAccess operation through file consumption');
   }
 }
+/** Track a filename-producing operation while requiring protection supplied by its consumer. */
+export function withManagedCachePath<T>(paths: readonly string[], run: () => Promise<T>, options?: CacheAccessOptions): Promise<T> {
+  return track(scopes.getStore(), requireManagedCacheScope(paths).then(() => withManagedCacheAccess(paths, run, options)));
+}
 /** Preserve class/private-field receivers; wrap only the explicitly declared async API. */
 export function coordinateMethods<T extends object>(target: T, paths: readonly string[], methods: readonly (keyof T)[], scopedPaths: readonly (keyof T)[] = [], optionsFor?: (method: keyof T, args: readonly unknown[]) => CacheAccessOptions): T {
   const selected = new Set(methods), requiresScope = new Set(scopedPaths);
@@ -55,7 +59,7 @@ export function coordinateMethods<T extends object>(target: T, paths: readonly s
     const value = Reflect.get(object, name, receiver);
     if (!selected.has(name as keyof T) || typeof value !== 'function') return value;
     return (...args: unknown[]) => requiresScope.has(name as keyof T)
-      ? track(scopes.getStore(), requireManagedCacheScope(paths).then(() => withManagedCacheAccess(paths, () => Reflect.apply(value, object, args), optionsFor?.(name as keyof T, args))))
+      ? withManagedCachePath(paths, () => Reflect.apply(value, object, args), optionsFor?.(name as keyof T, args))
       : withManagedCacheAccess(paths, () => Reflect.apply(value, object, args), optionsFor?.(name as keyof T, args));
   } });
 }

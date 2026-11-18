@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "fea533ca0761d638c80971fc656609619b2e8bad41f79ed7402ecdd23a7b7a8b"
+      "destinationSha256": "fc5bf3bdc89cec8f4630aaecba36b668b7d400143d51eb50fda837cc90c8b55f"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",

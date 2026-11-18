@@ -1,4 +1,4 @@
-import { coordinateMethods } from './coordination/managed-access.js';
+import { coordinateMethods, withManagedCacheAccess, withManagedCachePath } from './coordination/managed-access.js';
 import { withHeadLock } from './head-lock.js';
 import { safeTransferPath } from './transfer-files.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
@@ -70,7 +70,7 @@ export function snapshotPath(root: string, snapshotId: string, legacy = false): 
 
 export class FileSnapshotStore implements SnapshotStore {
   constructor(private readonly root: string) {
-    return coordinateMethods(this, [root], ['write', 'read', 'readRevision', 'readHead', 'readHeadManifest', 'headId', 'updateHead', 'file'], ['file']);
+    return coordinateMethods(this, [root], ['write', 'readRevision', 'readHead', 'readHeadManifest', 'headId', 'updateHead']);
   }
 
   async write(snapshot: GraphSnapshot): Promise<void> {
@@ -102,7 +102,9 @@ export class FileSnapshotStore implements SnapshotStore {
   }
 
   read(snapshotId: string): Promise<GraphSnapshot | undefined> {
-    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true));
+    // Preserve synchronous identifier rejection before any asynchronous admission/I/O.
+    const path = snapshotPath(this.root, snapshotId), legacy = snapshotPath(this.root, snapshotId, true);
+    return withManagedCacheAccess([this.root], () => readWithLegacyPath<GraphSnapshot>(path, legacy));
   }
 
   /** Cache invalidation for read-only query sessions; not a cryptographic integrity claim. */
@@ -165,7 +167,8 @@ export class FileSnapshotStore implements SnapshotStore {
 
   /** Locate committed bytes, retaining legacy filenames without migrating them. */
   file(snapshotId: string): Promise<string | undefined> {
-    return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true), existingFile);
+    const path = snapshotPath(this.root, snapshotId), legacy = snapshotPath(this.root, snapshotId, true);
+    return withManagedCachePath([this.root], () => readWithLegacyPath(path, legacy, existingFile));
   }
 }
 

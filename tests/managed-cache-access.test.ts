@@ -35,6 +35,8 @@ it('leaves unmarked reads untouched and requires explicit quiescence for idempot
   expect(await managedRootForPath(join(cache, 'future', 'file.json'))).toBe(cache);
   expect(await readFile(join(cache, '.weftlet-coordination/root.json'))).toEqual(bytes);
   await expect(store.file('absent')).rejects.toThrow('enclosing');
+  expect(() => store.read('../escape')).toThrow('safe storage identifier');
+  expect(() => store.file('../escape')).toThrow('safe storage identifier');
   await withSnapshotAccess(cache, async scoped => expect(await scoped.withFile('absent', async path => path)).toBeUndefined());
   expect(await participants(cache)).toEqual([]);
 });
