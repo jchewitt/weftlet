@@ -1,5 +1,67 @@
 # Validation evidence
 
+## 0.10.0 integration and release qualification, November 17, 2026 (Central)
+
+PRs [87–98](https://github.com/jchewitt/weftlet/pulls?q=is%3Apr+is%3Amerged)
+received independent agent reviews and merged sequentially with their reviewed
+integration trees and passing current-head qualification. PR 93's inherited
+workflow-environment finding was fixed in `ee87965`; the Windows CLI fixture's
+aggregate timeout/child-close cleanup fix was backported in `22104df` and reviewed
+independently. Product timeouts and assertions were unchanged. Redundant and
+superseded CI runs were cancelled; their results are not counted as passes.
+
+The bot-generated [release PR 86](https://github.com/jchewitt/weftlet/pull/86)
+received a separate independent review at
+`fae64a64bcc4675e1a0ccf331b7b0b541dc3f516`. Both packages advance to 0.10.0,
+consuming exactly 11 changesets. Release plan, changelogs, generated documentation
+and extraction inventory agree; original source-attribution hashes are unchanged.
+No uncommitted storage-coordination implementation is included. The release merged
+as `402c9f898330fff79f7ca8fad2f1bae1dcbd4ec0`.
+
+[Candidate qualification 44199904855](https://github.com/jchewitt/weftlet/actions/runs/44199904855)
+passed all four jobs. Linux passed 1,164 toolkit tests and 38 core tests, with three
+optional integration skips, architecture checks (22 advisory findings), inventory,
+licenses and fresh packed-consumer smoke using real TypeScript indexing and strict
+RDF/SHACL. The sandboxed browser test passed local/portable navigation, filters,
+paths, layout restoration and assertion parity. Native Windows passed storage,
+startup, provider lifecycle, setup, fixed-budget relationship retrieval and
+packaged onboarding/comparison checks. This is deterministic/public-fixture
+qualification, not live Claude/OpenCode authentication, semantic quality, actual
+client UI loading or new TradePilot acceptance.
+
+[Release run 44201809568](https://github.com/jchewitt/weftlet/actions/runs/44201809568)
+passed preparation and npm accepted both archives using trusted publishing. Attempt 1
+stopped after 21 visibility checks for toolkit; both exact versions subsequently
+became public. Independent downloads match the prepared archives byte for byte
+(core 22,587 bytes; toolkit 920,400 bytes) and the registry SHA-512 values:
+
+```text
+@weftlet/core@0.10.0
+sha512-p6e/+J6Wvo4mwn5Ic6NNc+i3g5bd6P6ZBfCV7Toyk0B74MnfHF3io+jSlQrX1lBnB1LDgOYe4CQdTRm2ErI6Hg==
+@weftlet/toolkit@0.10.0
+sha512-ZQ9UMWpti3pE47CKMLPcu57rWtYj5vq4v1eF4hY5xXNPDuvF+PpH6hjC6H0Q0rJSjBIuXWKGE4sExk3m5TU0ZQ==
+```
+
+Saved acceptance receipts preserve those same package/integrity identities. Only
+failed jobs were rerun on the original workflow at the same source commit, restoring
+the original archives and receipts; no new version or preparation run was started.
+Attempt 2 passed publication verification, records and source-side docs dispatch.
+Both package tags and GitHub Releases resolve to the exact release commit above.
+The receiver accepted the combined release key
+`9611f0a14ea5fac324b6044218e60ec25b092bee69b19da40e14b7f5c1eb0999`.
+Its [run 44204740388](https://github.com/jchewitt/weftlet-docs/actions/runs/44204740388)
+passed intake but failed the updater-authentication preflight: `OPENAI_API_KEY`
+was unavailable and `CODEX_DOCS_MODEL` was empty. Generation, validation and website
+publication did not run. The separately owned docs environment needs configuration
+and recovery; no credentials were read or changed, no duplicate dispatch was sent,
+and this is not a new npm release failure.
+
+The post-merge [main qualification 44201809589](https://github.com/jchewitt/weftlet/actions/runs/44201809589)
+also passed all four jobs. The closing documentation-only record passed 39
+release-documentation/version tests, generated-documentation and inventory checks,
+and whitespace checks, with independent review. This publication does not complete the remaining storage
+milestones or authorize the official 1.0 release.
+
 ## Integrated 0.10.0 release-documentation review, November 17, 2026 (Central)
 
 Reviewed the integrated source at `de415eb` and pending changesets using the
