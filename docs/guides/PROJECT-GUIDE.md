@@ -284,7 +284,7 @@ sources are excluded from model intent extraction by default. See
 Do not silently drop linked dependencies to satisfy a document limit.
 
 The document byte/count budgets do not bound graph size or total cache storage.
-There is currently no enforced 10 GiB cache cap; see the
+Configurable history-retention targets (including indefinite retention) are planned; see the
 [storage plan](../CACHE-RETENTION-PLAN.md). Version 0.10.0 `cache usage` and `cache profile`
 provide read-only [inventory and byte measurements](CACHE-INSPECTION.md) before
 retention decisions. Keep graph/cache outputs ignored.
@@ -429,7 +429,7 @@ it has stopped before removing only that temporary directory.
 
 Version 0.9 retains full comparison copies; 0.10.0 changes subsequent comparisons
 to temporary output. See [ADR 053](../ADR-053-temporary-clean-comparison.md) and the release changelog.
-It still needs temporary build space and does not enforce the planned 10 GiB cap
+It still needs temporary build space and does not apply the planned history-retention policy
 or delete historical copies. Do not delete unknown cache objects as part of setup.
 
 Version 0.10.0 can [export/import the verified snapshot](SNAPSHOT-DELIVERY.md)

@@ -21,7 +21,7 @@ updates after npm publication are owned by the separate website thread. Keep the
 README and source guides aligned with it; do not duplicate that site's work here.
 
 November 10 intake: the [bounded local storage plan](CACHE-RETENTION-PLAN.md)
-records the consumer's 10 GiB user-wide budget, successful-comparison cleanup,
+records the consumer's configurable user-wide history-retention target, successful-comparison cleanup,
 coordinated retention and single-snapshot size profiling as separate increments.
 These are planned capabilities, not released cache commands.
 

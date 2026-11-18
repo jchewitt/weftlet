@@ -116,7 +116,8 @@ in the source repository to reproduce it without external model calls.
 
 R2 provides measurements. R1 stops accumulating successful comparison copies;
 R3a adds [declared retention reviews](CACHE-RETENTION.md). R3b will add coordinated
-leases, active-scope registration and reviewed removal. R4 will enforce the global budget and temporary-build reservations, and R5
-will qualify compact storage using these measurements. There is no enforced 10 GiB
-cap or prune command in R2. Keep current evidence and semantic artifacts until a
+leases, active-scope registration and reviewed removal. R4 will add configurable
+history-retention targets and indefinite retention, and R5 will qualify compact
+storage using these measurements. The proposed retention target will not cap a
+necessary graph or build. R2 itself adds no eviction policy or prune command. Keep current evidence and semantic artifacts until a
 reviewed retention plan can identify safe recovery and deletion boundaries.

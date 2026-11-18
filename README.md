@@ -1,683 +1,136 @@
 # Weftlet — Context Graph Toolkit
 
-**[Documentation website](https://weftlet.crowdpigeon.org/) · [Get started](https://weftlet.crowdpigeon.org/get-started/quickstart/) · [Tutorial](https://weftlet.crowdpigeon.org/tutorial/) · [API reference](https://weftlet.crowdpigeon.org/api/) · [Changelog](CHANGELOG.md)**
+**[Documentation](https://weftlet.crowdpigeon.org/) · [Get started](https://weftlet.crowdpigeon.org/get-started/quickstart/) · [Tutorial](https://weftlet.crowdpigeon.org/tutorial/) · [API reference](https://weftlet.crowdpigeon.org/api/) · [Changelog](CHANGELOG.md)**
 
-Weftlet is an open-source context-graph toolkit that helps AI development agents understand
-how a local change affects the broader product. It connects approved product intent, shared
-contracts, implementing code, downstream consumers, tests and observed runtime evidence.
+Weftlet helps AI development agents connect **why your product works a certain
+way** with **the code, contracts and downstream consumers affected by a change**.
+It combines product documents and TypeScript code relationships into a cited graph
+that agents can query through MCP and developers can explore in the browser.
 
-Agents can query cited evidence and explore dependencies across module and asynchronous
-boundaries. See the [roadmap](docs/ROADMAP.md) and [validation](docs/VALIDATION.md) for
-supported capabilities and limitations.
-For a first real-project evaluation, use the [private consumer trial](docs/CONSUMER-TRIAL.md)
-to retain reproducible queries, logs and human-reviewed findings.
-Proposed future capabilities are recorded in the [Weftlet 2.0 product plan](docs/WEFTLET-2.0-PLAN.md).
+If you plan features with Codex or Claude and keep the resulting requirements in
+Markdown, Weftlet makes that intent available across later development sessions.
+It also works with existing specifications, owner documents and repository READMEs.
+You choose which documents govern the product through configuration.
 
-## From planning conversations to shared development context
+- **Trace impact:** follow intent, shared contracts, implementations, tests and
+  documented dependencies across features, services and asynchronous boundaries.
+- **Give agents useful context:** install project skills and register MCP for
+  Codex, Claude Code or OpenCode.
+- **Explore saved evidence:** start from product intent, drill into relationships,
+  inspect citations, or export a focused portable report.
+- **Keep evidence accountable:** sources, assertion review, commit identity,
+  coverage and freshness remain visible in query results.
 
-Many AI-assisted projects begin with a planning session in Codex or Claude Code.
-That conversation may produce Markdown requirements, feature plans and task
-breakdowns. As implementation grows, the reasoning behind those decisions can
-become scattered across files and disconnected from the code it shaped.
+## Get started
 
-Weftlet brings selected, versioned documents into a queryable knowledge graph
-alongside code relationships. Agents can retrieve the relevant intent, follow
-shared contracts and downstream dependencies, and check the cited sources while
-planning a change. The aim is to keep development aligned with the product and
-help surface business drift across features, services and later agent sessions.
-Existing requirements and plans can already be your governing documentation;
-Weftlet does not ask you to accept each one. Configure `semanticSources` to select
-what it reads and `approvedIntentSources` to identify the authoritative files or
-path patterns, regardless of authorship. One pattern can cover an existing
-requirements directory. This is a source-policy declaration, not an interactive
-approval workflow. An extracted graph assertion's review status does not downgrade
-its governing source. See [source authority setup](docs/guides/PROJECT-GUIDE.md#configure-source-authority-no-per-document-acceptance).
+Use **Node.js 24+** in an existing Git repository. Install the toolkit locally so
+its CLI and generated MCP launchers use the project's dependency:
 
-The same approach fits repositories with maintained READMEs, reviewed documentation
-generated through CI, or versioned text exports alongside designs in Figma and
-work tracked in other tools. Configuration selects the files, ownership and roles
-that match your project's organization. Today those document inputs come from
-Git; planned Figma, Trello, GitHub Projects and further source adapters would let
-teams connect external product information more directly. Existing custom
-repository fact/check adapters are already a separate extension point.
-
-## What Weftlet reads today
-
-“Evidence” includes several inputs: selected product documents, TypeScript code
-and references, configured contracts, test/validation records, and optional
-supplied runtime traces. Weftlet does not run your tests or observe production
-merely by indexing their files.
-
-The built-in **product-intent extraction** reads selected committed `.md`, `.mdx`
-and `.txt` files. They can live anywhere in the repository: `docs/` is an example,
-not a required directory or document schema. Select existing owner specifications,
-business rules, constraints and cross-feature workflows through `semanticSources`.
-Source approval is configured separately; a folder name or model-generated summary
-does not establish approved intent. Code-only projects can build code evidence,
-with the missing product intent reported as a gap.
-
-Figma, Trello, GitHub Projects and other external source connectors are **planned**,
-not built-in integrations. Current repository adapters can add custom facts and
-checks; that is different from a ready-made remote source/synchronization adapter.
-You do not need to mirror Figma into a `docs/` directory to adopt the code tooling.
-See [source selection, document writing and adapter boundaries](docs/guides/PROJECT-GUIDE.md#what-counts-as-a-source-today)
-and the [future source-adapter plan](docs/WEFTLET-2.0-PLAN.md).
-
-## Start here
-
-The guides below describe the **0.10.0 release scope**, including project setup,
-provider choice and storage inspection. Check the [release overview](docs/RELEASES.md)
-and installed package version for availability; these instructions are not an npm
-publication receipt.
-
-- **[Guided project setup and development](docs/guides/PROJECT-GUIDE.md)** — sources, configuration, models, snapshots, agents and final checks.
-- **[Document Search tutorial](docs/tutorials/DOCUMENT-SEARCH.md)** — learn with the packaged public demo, including a code-only first pass.
-- **[Connect Codex, Claude Code or OpenCode](docs/guides/AGENTS.md)** — skill installation, MCP registration and a first verified tool call.
-- **[Automatic project setup](docs/guides/PROJECT-SETUP.md)** — install skills during init or add them to an existing project; [register and verify MCP](docs/guides/MCP-SETUP.md) with preserved settings and managed updates. [CI scaffolding](docs/guides/CI-SETUP.md) adds standalone workflows with selected project checks and optional trusted generation. [Assisted setup](docs/guides/ASSISTED-SETUP.md) uses your configured provider to propose reviewed document, skill/MCP and existing-CI integration changes.
-- **[Act on evidence and authority labels](docs/guides/EVIDENCE-DECISIONS.md)** — how agents use reference/draft material, report conflicts, and how users inspect or rectify results.
-- **[CI workflows and evidence delivery](docs/guides/CI.md)** — credential-free PR checks, trusted generation and local snapshot use.
-- **[Review retention](docs/guides/CACHE-RETENTION.md)** — declare managed profiles, active scopes and historical pins; inspect and recheck a non-destructive retention plan.
-- **[Measure local graph storage](docs/guides/CACHE-INSPECTION.md)** — inventory cache roots/profiles and profile saved snapshot fields before retention decisions.
-- **[Verified snapshot delivery](docs/guides/SNAPSHOT-DELIVERY.md)** — export selected evidence in CI, verify/import it locally, and explicitly select it for agents and the viewer.
-- **[Release history](docs/RELEASES.md)** · [Toolkit changelog](CHANGELOG.md) · [Core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) · [All documentation](docs/README.md).
-
-## Set up a project
+```sh
+npm install --save-dev @weftlet/toolkit
+npx weftlet init
+npx weftlet config validate
+npx weftlet doctor
+```
 
 <!-- weftlet:release:start -->
 Package versions in this checkout/archive: `@weftlet/toolkit@0.10.0` and `@weftlet/core@0.10.0`.
 <!-- weftlet:release:end -->
 
-Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
-automatically. Both packages are available on npm.
-See [release status](docs/RELEASING.md). Existing Tently users should follow
-the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
+`init` creates `context-graph.config.json`, offers source/provider/client choices,
+installs the selected project skills and adds graph output to `.gitignore`.
+It preserves existing configuration. Setup itself makes no model request.
+`@weftlet/core` is installed automatically as the toolkit's dependency.
 
-From your TypeScript project's directory (Node 24+):
+Choose **Codex, Claude Code or OpenCode** for semantic extraction; using Claude or
+OpenCode does not require Codex. Configure the chosen provider's authentication
+using the [provider guide](docs/PROVIDERS.md). Your development client and extraction
+provider can differ.
 
-```sh
-npx @weftlet/toolkit init
-npx @weftlet/toolkit config validate
-npx @weftlet/toolkit doctor
-```
+### Select your sources
 
-`init` asks for the repository ID, code roots, selected document paths, extraction provider and model, then writes
-`context-graph.config.json` and adds `.context-graph/` to `.gitignore`. It fills in the internal
-version fields, requires no Git commit or model login to run, and refuses to overwrite existing
-configuration. Setup makes no model requests. For automation:
+In the generated JSON configuration, `semanticSources` selects committed product
+documents and `approvedIntentSources` identifies your authoritative files or glob
+patterns. Existing approved plans can be designated in bulk; no per-document
+acceptance ceremony is required. The source remains authoritative even when an
+extracted interpretation is labeled inferred/unreviewed.
 
-```sh
-npx @weftlet/toolkit init --yes --repository-id your-org/your-project --code-root src --semantic-source docs/product --evidence-root tests
-```
+Documents can live anywhere in the repository. Built-in prose extraction reads
+`.md`, `.mdx` and `.txt`; code indexing supports TypeScript. Code-only projects can
+start with code evidence. Figma, Trello and GitHub Projects connectors are planned;
+custom repository fact/check adapters are already supported. See the
+[full project guide](docs/guides/PROJECT-GUIDE.md) for configuration and source roles.
 
-Source flags may be repeated. Without `--semantic-source`, non-interactive setup selects no
-documents. Owner-approved sources always start empty; explicitly review and set
-`approvedIntentSources` in the JSON file. Select contracts using `contractPatterns`.
-Use `--config .config/context-graph.json` for another configuration location,
-`--directory /path/to/project` to initialize another project, or `--no-gitignore` to leave
-ignore rules alone. Configuration remains JSON; `config show` displays the validated settings.
-
-Review the selected sources, configure the selected provider authentication when using semantic documents,
-and commit the inputs you want indexed before hydrating:
-
-Codex remains the default provider. With `semantic.provider: "codex-cli"`,
-`semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
-ChatGPT login. API billing requires explicitly selecting `api-key`; credentials stay in an
-environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
-for both modes and their tentative validation status. The earlier `@launch-echo/tently@0.1.0` release predates this option.
-
-The 0.10.0 release scope includes `init --provider claude-cli`, selecting Claude Code
-for extraction and optional mapping proposals without Codex. It supports Claude account login
-or explicitly selected API-key mode. See [Claude configuration and validation status](docs/PROVIDERS.md#claude-code).
-It also includes `opencode-cli` extraction with explicitly selected API credentials
-and a required `provider/model`; see [OpenCode setup and limits](docs/PROVIDERS.md#opencode).
-OpenCode subscription/OAuth login remains tracked work. Client registration and verification
-are included in [automatic MCP setup](docs/guides/MCP-SETUP.md).
-A compatible MCP client can already query saved evidence without any extraction provider.
+Commit the inputs you want indexed, then inspect the no-model preview before
+building a snapshot:
 
 ```sh
-npx @weftlet/toolkit hydrate --ref HEAD
-npx @weftlet/toolkit impact scan --changed-file src/search.ts --json
+npx weftlet hydrate --plan --ref HEAD
+npx weftlet hydrate --ref HEAD
 ```
 
-Hydration with selected documents may incur model charges. Saved queries do not call a model.
-Docker is optional for openCAESAR; the default RDF backend needs no Docker.
-For a project-local dependency, install `npm install --save-dev @weftlet/toolkit` and use
-`npx weftlet` or the compatible `npx context-graph` alias. MCP clients can launch
-`npx --yes --package @weftlet/toolkit weftlet-mcp` with `CONTEXT_GRAPH_CONFIG` set to
-the project's absolute configuration path. Pin a reviewed version for reproducible agent setup.
-
-Linux/WSL is the validated full-suite path. Native Windows has a recorded live Codex pass;
-the archive-byte, snapshot replacement and MCP startup regression suite also passes hosted
-Windows CI. Full native Windows release preparation remains separately unvalidated.
-See the [validation record](docs/VALIDATION.md).
-
-## Preview hydration before model work
-
-`hydrate --plan` requires toolkit **0.3.0 or newer**. Releases through 0.2.1 do not support
-this flag. With a supporting version installed, inspect a project's committed inputs:
+Hydration with selected semantic documents uses your configured model and may incur
+provider charges. The default RDF backend runs without Docker. Subsequent saved
+queries need no model call or rebuild:
 
 ```sh
-pnpm exec weftlet hydrate --plan --config /path/to/project/context-graph.config.json --ref HEAD
-pnpm exec weftlet hydrate --plan --json --config /path/to/project/context-graph.config.json --ref HEAD
+# Replace src/search.ts with a file from your project.
+npx weftlet impact scan --changed-file src/search.ts --json
 ```
 
-The human summary and JSON identify the resolved commit, current local configuration, selected
-documents and inclusion reasons, UTF-8 byte sizes, source approval, expected cache reuse and
-extraction counts, budget violations, and working changes excluded from the committed input.
-Direct-mode selection uses configured repository file/directory paths; `approvedIntentSources` uses its
-separate glob matcher. An explicit empty semantic source list selects no documents, fixing the
-earlier accidental expansion to the whole repository.
+### Connect your agent
 
-Planning reads Git objects and existing artifacts without loading a model provider or repository
-adapter, indexing code, collecting runtime evidence, validating the graph or writing snapshots.
-It does not check credentials or estimate tokens or dollars. Cache hits depend on unchanged
-inputs; corrupt or unreadable entries are reported separately from misses. `--force-semantic`
-shows planned re-extraction without allocating or writing a forced revision.
-
-A plan exits 0 when its source/cache/budget checks are ready. It exits 1 with the full plan when
-errors block those checks or incomplete selection needs review. Missing/no-document selectors
-and existing agent-selection limits are warnings; they do not add a new hydration gate that
-would prevent removing the last document and invalidating its relationships. All selected
-documents remain visible when budgets are exceeded.
-
-Source approval does not approve model assertions. In direct mode, validation-document labels
-reflect configured evidence roots and selected validation documents still undergo semantic
-extraction. The opt-in traversal mode below excludes them by default. See
-[ADR 016](docs/ADR-016-hydration-preview.md) and the [1.0 task list](docs/RELEASE-1.0-PLAN.md).
-
-Starting with **0.4.0**, preview also maps opaque diagnostic source IDs to local paths. Semantic
-failures report completed/remaining work and recovery guidance; `hydrate --json --quiet` emits
-their structured report on stderr. Built-in CLI providers can reuse completed artifacts after supported
-operational changes such as increasing a timeout. See [provider recovery](docs/PROVIDERS.md#limits-and-reuse)
-for preview, retry and explicit legacy-cache adoption instructions.
-
-## Preview linked document coverage
-
-Available since 0.6.0, this separate prospective preview inspects linked documents:
+Preview project MCP registration, then apply the reviewed plan. Replace `<plan-id>`
+with the ID returned by the preview; use `claude` or `opencode` instead of `codex`
+for another client:
 
 ```sh
-pnpm exec weftlet documents plan --entry docs/sot.md --entry docs/roadmap.md --root docs --ref HEAD
-pnpm exec weftlet documents plan --entry docs/sot.md --root docs --ref HEAD --json
+npx weftlet setup --client codex --mcp --dry-run
+npx weftlet setup --client codex --mcp --apply --expect-plan "<plan-id>" --verify
 ```
 
-Use your repository's exact committed entry paths. `--root` may repeat and defaults to the
-repository root. The operation follows supported Markdown links with cycle protection and
-deduplication, records citations and exclusions, and reports missing/ambiguous targets. Paths,
-approval matches and validation-evidence labels remain explicit; following a link never approves
-its contents. Git objects supply the input even while the checkout is dirty.
+Restart your client and complete its normal project/server trust prompts. Ask the
+agent to use `impact.scan` before a change, follow relevant relationships and check
+cited intent, coverage and freshness. The installed skill explains that workflow.
+See [agent integration](docs/guides/AGENTS.md) for client details and existing setups.
 
-This reports prospective coverage and **does not change hydration inputs or estimate cache/model
-work**. Continue using `hydrate --plan` for the current execution plan. This command does not modify configuration.
-Existing semantic document/byte budgets are compared after traversal, including validation
-documents. Independent read limits (`--max-read-documents`, `--max-read-bytes`,
-`--max-document-bytes`) leave an explicit unread frontier if reached. Incomplete coverage or
-exceeded extraction budgets return a report with exit status 1, without model calls or graph writes.
-The preview follows only supported local links; complete coverage is not a claim of complete
-product knowledge. See [ADR 023](docs/ADR-023-document-coverage-preview.md) for limits and the
-prospective-operation boundaries.
+### Browse the graph
 
-The preview also accepts an optional JSON source policy:
+Use the snapshot ID returned by hydration:
 
 ```sh
-pnpm exec weftlet documents plan --entry docs/sot.md --root docs --document-policy document-policy.json --json
+npx weftlet viewer serve --snapshot "<snapshot-id>"
 ```
 
-```json
-{
-  "schemaVersion": 1,
-  "roles": [
-    { "id": "intent", "pattern": "docs/sot.md", "role": "intent" },
-    { "id": "plans", "pattern": "docs/plans/**", "role": "plan" },
-    { "id": "checks", "pattern": "docs/validation/**", "role": "validation" }
-  ],
-  "owners": [
-    { "id": "sot-owner", "pattern": "docs/**", "ownerDocument": "docs/sot.md" }
-  ]
-}
-```
+The local explorer supports intent-first navigation, drag/pan/zoom and cited
+relationship drill-down. See the [viewer guide](docs/VIEWER.md) for portable reports.
 
-Roles are `intent`, `plan`, `validation` or `reference`; unmatched sources are `unclassified`
-unless configured evidence roots or approved intent sources provide a default. The owner must
-be read within the selected coverage, match `approvedIntentSources`, and have an unambiguous
-intent role. Owner mappings and links never transfer approval to another source or approve an
-assertion. Conflicting mappings remain explicit gaps.
+## Go deeper
 
-This file is an operation input, separate from `context-graph.config.json`. `ready` and the
-exit status still describe traversal and budget checks; inspect `classification.complete` and
-its issues for role/ownership gaps. The policy does not change current hydration or cache inputs.
-The public `extractDocumentEvidence` API separately emits cited document-presence and reference
-facts, including empty validation documents, without interpreting prose or treating a written
-“PASS” as proof that a test ran. Queries, RDF/SHACL and the viewer preserve its source metadata.
-See [ADR 025](docs/ADR-025-document-classification.md) for the contract and limits.
+The [documentation website](https://weftlet.crowdpigeon.org/) provides the searchable
+guide, tutorial and API reference. Detailed Markdown remains in this repository as
+source material for documentation updates:
 
-## Hydrate linked SOT and roadmap documents
+- [End-to-end project guide](docs/guides/PROJECT-GUIDE.md) and [public demo tutorial](docs/tutorials/DOCUMENT-SEARCH.md).
+- [Skills and MCP](docs/guides/AGENTS.md), [assisted setup](docs/guides/ASSISTED-SETUP.md), and [GitHub Actions/CI](docs/guides/CI.md).
+- [Evidence and authority decisions](docs/guides/EVIDENCE-DECISIONS.md), [snapshot delivery](docs/guides/SNAPSHOT-DELIVERY.md), and [retention reviews](docs/guides/CACHE-RETENTION.md).
+- [All repository documentation](docs/README.md), [release history](docs/RELEASES.md), [validation](docs/VALIDATION.md), and [roadmap](docs/ROADMAP.md).
 
-This checkout/archive adds opt-in traversal hydration; npm 0.5.0 does not support it. Merge this
-fragment into your normal configuration, using real committed entry paths and reviewed owner
-mappings. Keep the existing `semanticSources` array for direct-mode compatibility; traversal
-replaces its selection when enabled.
+## Contribute
 
-```json
-{
-  "documentTraversal": {
-    "entryPoints": ["docs/sot.md", "docs/roadmap.md"],
-    "roots": ["docs"],
-    "maxReadDocuments": 1000,
-    "maxReadBytes": 16777216,
-    "maxDocumentBytes": 1048576,
-    "policy": {
-      "schemaVersion": 1,
-      "roles": [
-        { "id": "intent", "pattern": "docs/sot.md", "role": "intent" },
-        { "id": "plans", "pattern": "docs/roadmap.md", "role": "plan" },
-        { "id": "checks", "pattern": "docs/validation/**", "role": "validation" }
-      ],
-      "owners": [
-        { "id": "product-owner", "pattern": "docs/**", "ownerDocument": "docs/sot.md" }
-      ]
-    }
-  }
-}
-```
-
-Review `approvedIntentSources` separately: an owner must already be explicitly approved. Preview
-with `weftlet hydrate --plan --json`, then run `weftlet hydrate --ref HEAD` after reviewing scope
-and cost. The plan reports all discovered documents, roles, ownership, exclusions, read limits,
-semantic budgets and expected artifact reuse. Validation documents receive presence/reference
-facts without model calls. `semantic.maxDocuments` and `maxSourceBytes` apply to semantic candidates;
-traversal read limits apply to every read document. Broken/ambiguous links, incomplete reads, role
-ambiguity or exceeded budgets stop new model work rather than silently trimming coverage.
-
-Ownership gaps remain diagnostics. Reaching an owner, choosing an intent role or reading an
-approved source never approves a model assertion. Plans/unclassified sources remain explicitly
-labeled, and model facts remain inferred/unreviewed. Complete coverage means the configured
-canonical links were followed, not that every product rule was found.
-
-Built-in CLI providers can reuse unchanged artifacts when enabling traversal or editing its policy/read
-limits. Role/owner metadata is assembled without rewriting those artifacts. Custom module
-providers use a separate full-config cache. Snapshots bind the configuration and selection, while
-old snapshots remain queryable. Draft overlays recompute reachability, invalidate changed sources
-and owners, and label incomplete coverage without making model calls.
-
-Traversal cannot be combined with `agentContext` or a direct programmatic source override; saved
-impact queries still accept owner/task filters. `documents plan` remains a prospective operation;
-its sidecar policy is not automatically adopted by hydration. See
-[ADR 026](docs/ADR-026-traversal-hydration.md) for identity, compatibility and limits.
-
-## SHACL validation and performance
-
-Starting with **0.5.0**, identity preflight runs before ontology/RDF work.
-`hydrate --json --quiet` reports conflicts using opaque references; `--validation-details` explicitly
-includes local identities, producer versions and citations. Validation emits phase timings,
-graph counts and completed validation groups. These are not completion-time estimates. Full SHACL remains required after a
-passing preflight. See [ADR 021](docs/ADR-021-identity-preflight-and-validation-timing.md).
-
-Version 0.5.0 also accepts `semantic.timeoutMs: 600000` for an approved ten-minute extraction
-attempt; the default remains two minutes. See [provider limits and reuse](docs/PROVIDERS.md#limits-and-reuse)
-before retrying with compatible cached artifacts.
-
-The toolkit uses JavaScript `rdf-validate-shacl` with bounded N3 subject groups. Each hydration
-validates the complete graph; semantic artifact reuse does not make validation incremental.
-There is no validation-result cache, Rust engine or GraphDB service. Saved queries do not rerun SHACL.
-
-Complete identity groups preserve conflicting assertions, and graph-wide class membership retains
-cross-record proof checks. The same strict shapes run on every target. The RDF encoder also serves
-streamed N-Quads exports and SPARQL; traversal projections have SPARQL equivalence tests. Hashing and
-snapshot JSON persistence/reload avoid a whole-graph string. Existing canonical digests, cache keys
-and immutable snapshot bytes are preserved. See [ADR 040](docs/ADR-040-bounded-graph-io.md) for the
-partition correctness boundary, public corpus regression and remaining memory limits.
-
-For large programmatic RDF exports, use `await graph.serializeTo(writable)` or consume
-`graph.serializeChunks()`. The `serialize()` convenience returns a single string and therefore
-remains subject to JavaScript's string-size limit.
-
-The 0.3.0 optimization built a complete temporary validation union. The measurements below describe
-that earlier implementation; they are not timings for the current richer code graph.
-
-In bounded, single-run public experiments, 2,000 facts with unique subject/object nodes took
-31.50 seconds in the original SHACL path, compared with 0.153 seconds to build the union and
-0.467 seconds for SHACL on that union. A 10,000-fact union case used about 1.3 GiB process RSS;
-the extra projection has a memory cost. These measurements do not reproduce the private consumer's
-full generation run or guarantee a production duration. See [ADR 017](docs/ADR-017-shacl-validation-union.md)
-for methodology, parity boundaries and remaining work. To run the bounded public benchmark from
-a development checkout:
+Use Node 24 and pnpm 10.18.2 in a checkout of this repository:
 
 ```sh
-pnpm build
-pnpm benchmark:shacl
-```
-
-The historical [T05 closeout](docs/ADR-027-validation-closeout.md) measures cold, repeated and changed inputs,
-plus worker, exact-result-key and Rust prototypes:
-the 10,000-fact public cases measured about 2.9–5.7 seconds, with material memory use. These are
-fixture measurements, not a private consumer capacity guarantee. The prototypes are development
-tools, not runtime options; every hydration still performs full validation. Reproduce that lifecycle study
-from a development checkout with `pnpm benchmark:validation`; raw results and commands are linked
-from the ADR.
-
-## Development
-
-The development source is organized by responsibility; see
-[toolkit modules and boundaries](docs/ADR-007-toolkit-modules.md). The two npm packages and
-their public library entry points retain the same API under the new package names.
-The module refactor was not part of the earlier Tently 0.1.0 release.
-
-The toolkit requires Node.js 24 or newer; Node 24 is the validated runtime.
-Use pnpm 10.18.2 for development. The neutral core package has no toolkit runtime dependencies
-and retains its separate Node.js 20.11+ declaration.
-
-```sh
-git clone https://github.com/jchewitt/weftlet.git
-cd weftlet
-nvm install
-nvm use
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test
-pnpm context-graph:publication-check
 ```
 
-The `.nvmrc` selects Node 24. If you do not use nvm, install Node 24 through your usual
-version manager. The project rejects unsupported Node versions during installation, and
-CLI/MCP startup reports a version error before loading runtime dependencies.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution rules,
+[module boundaries](docs/ADR-007-toolkit-modules.md) for the code layout, and
+[release instructions](docs/RELEASING.md) for the full packaging check and Changesets.
 
-The publication check packs and installs into a disposable consumer, indexes actual TypeScript
-and exercises the installed toolkit. It does not publish. Core and toolkit retain separate
-package boundaries; no product adapter is required.
+## License
 
-## Independent repository
-
-Copy `examples/generic-typescript` into a separate repository, or adapt its
-`context-graph.config.json` beside your own sources. Paths resolve relative to that configuration.
-Configure semantic source selection, TypeScript roots/indexer arguments, contract aliases,
-evidence roots, runtime evidence, storage and optional adapter explicitly.
-For tests excluded by the build config or workspace packages whose outputs are absent from
-committed archives, configure an [explicit TypeScript source project](docs/ADR-010-committed-source-indexing.md)
-with selected files and local package aliases.
-
-Repository adapters using **0.4.0 or newer** should import `repositoryFileNode` from
-`@weftlet/core` for physical-file nodes. It preserves canonical document IDs, spec/test Evidence
-and production Component kinds, including test files containing mocked calls or decorators.
-Keep business-concept nodes separate; see the [core API example](packages/core/README.md) and
-[producer decision](docs/ADR-020-canonical-physical-file-producers.md). After upgrading, rebuild
-the graph with compatible cached artifacts; historical snapshots remain queryable but cannot
-satisfy current validation with old extraction versions. Consumer-owned adapters must be migrated
-as well; the toolkit cannot correct nodes they still classify independently.
-
-In a selected document such as `docs/intent.md`, link a responsibility to its sources:
-
-```md
-Committed snapshots stay queryable during edits. See [snapshot storage](src/storage/storage.ts)
-and [lifecycle checks](tests/snapshot-lifecycle.test.ts).
-```
-
-[Explicit document links](docs/ADR-011-explicit-document-links.md) resolve against the recorded
-commit and retain source-line citations. Missing files produce diagnostics; directory mentions
-are not expanded. A reference does not approve intent or establish that a linked test passed.
-
-For a consumer that shares no typed symbol with its producer, opt into
-[explicit routing declarations](docs/ADR-014-routing-declarations.md) using `routingSources`.
-Each committed JSON record names a scoped binding and exact producer/consumer files. These
-are cited candidate dependencies; they do not assert an approved policy or observed delivery.
-
-Install the locally packed core and toolkit tarballs together. The installed commands are
-`weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases.
-Use the [versioned installation examples](docs/RELEASING.md#inspecting-and-consuming-releases)
-generated for this checkout/archive; then run `npx weftlet init`.
-
-Pass `--config /absolute/path/context-graph.config.json`
-to the CLI or set `CONTEXT_GRAPH_CONFIG` for MCP. No launcher rebuild is required for installed
-packages. `node mcp-launcher.mjs` is for development in this repository.
-
-```sh
-context-graph hydrate --config context-graph.config.json --ref HEAD
-context-graph impact scan --config context-graph.config.json --capability search --json
-context-graph visualize --config context-graph.config.json --capability search --output graph.html
-```
-
-**Available starting with 0.7.0:** for precise follow-up, copy the returned
-snapshot ID and a node ID from a cited fact:
-
-```sh
-weftlet graph neighbors --snapshot <snapshot-id> --node <node-id> --direction both --max-facts 20 --json
-```
-
-MCP exposes the same read-only operation as `graph.neighbors` with `snapshotId` and `nodeId`.
-Use `predicates` (CLI: repeat `--predicate`) to select relations and `direction` for incoming,
-outgoing or both. Follow `selection.continuation` with the same arguments to retrieve more
-assertions. `frontier.neighbors` identifies returned neighbors with other incident evidence;
-query one of those IDs with the same snapshot to investigate another area. These are exact-ID,
-one-hop reads of saved evidence: no model or indexer is invoked. Each assertion retains its own
-citations, authority and review state, including multiple assertions about the same edge.
-Page completion does not establish complete product coverage. See [the query contract](docs/ADR-029-exact-graph-neighborhoods.md).
-
-Starting with 0.7.0, Weftlet preserves typed `CodeSymbol` definitions and individual SCIP
-references, including local symbols, repeated same-file uses and one-based UTF-16 columns.
-From a physical-file node, request incoming `definedBy` facts to discover its symbols; from a
-symbol, request incoming/outgoing `references` to inspect exact occurrences. Native lexical
-enclosure is not a call graph. Resolution distinguishes indexed definitions, declaration-only
-targets and absent indexed definitions. Local ordinal IDs are scoped to the exact index; refresh
-code evidence before comparing revisions. See [code evidence and limits](docs/ADR-032-scip-code-evidence.md).
-Weftlet also resolves explicit Markdown symbol selectors in selected documents:
-
-```md
-[helper](../src/worker.ts#weftlet-symbol=Engine.execute)
-[implementation](../src/worker.ts#weftlet-symbol=execute "weftlet:implementedBy invariant:max-age")
-[check](../test/worker.test.ts#weftlet-symbol=check "weftlet:verifiedBy invariant:max-age")
-```
-
-The first link creates a Document→references→CodeSymbol relationship. The annotated forms require
-an exact existing business-node ID from the graph; discover it with `impact.scan`/`graph.neighbors`.
-They declare a mapping and retain its supporting assertions and review state. They do not prove
-that the implementation fulfills the rule or that a test passed. No function name or nearby prose
-automatically creates an implementation mapping. Approved source documents remain distinguishable
-from unreviewed extracted assertions.
-
-Selectors match an exact indexed name, symbol ID, or unambiguous native lexical name such as
-`Engine.execute` in the named file. For an alias or a specific occurrence, supply both one-based
-UTF-16 coordinates, for example `#weftlet-symbol=publicAlias&weftlet-line=1&weftlet-column=23`.
-The graph retains both the selected occurrence and all indexed target definitions, with digests
-and commit SHAs. Missing/ambiguous targets produce cited `implementationGaps`, with no guessed link.
-An indexed `.d.ts` declaration stays declaration-only. These links use the existing configured
-semantic/document-traversal scope and SCIP selection; they require no extra provider call.
-Validation documents stay outside intent extraction and can declare `verifiedBy`, not `implementedBy`.
-See [ADR 033](docs/ADR-033-document-symbol-bindings.md) for bounds and draft-overlay behavior.
-
-Version 0.7.0 also derives
-`calls` from actual TypeScript call/new syntax and exact SCIP identities. Query a function's
-incoming/outgoing `calls` to inspect callers/callees, or follow a bounded path using `calls` and
-`implementedBy`. Each assertion retains callsite and endpoint proofs, with explicit bodyless,
-external, optional and member-dispatch limits. Runtime execution is not implied. Values, callbacks
-and dynamic dispatch without a known target remain references and cited gaps. See
-[ADR 035](docs/ADR-035-static-call-evidence.md). Optional inferred-mapping proposals are available separately; see
-[ADR 039](docs/ADR-039-mapping-proposals.md).
-
-Selected Markdown documents can now declare producer guarantees and consumer requirements in
-optional `weftlet-obligation` JSON fences. Both sides name an exact scoped/versioned queue or
-stored-data contract and a repository endpoint. Agents retrieve these through `emits`/`consumes`
-neighborhoods and paths, with the original statement, citations and any documented domain, stage,
-constraint/unit and consumer revalidation requirement. Missing fields remain unknown. Declarations
-do not establish fulfillment, runtime delivery or compatibility; ordinary prose is not automatically
-converted into this format. See [the declaration format and example](docs/ADR-036-contract-obligation-declarations.md).
-These declarations are supported starting with 0.7.0.
-
-For two retrieved obligation facts, the published CLI supports:
-
-```sh
-weftlet graph compatibility --snapshot <snapshot-id> --producer-fact <fact-id> --consumer-fact <fact-id> --json
-```
-
-MCP `graph.compatibility` uses `snapshotId`, `producerFactId` and `consumerFactId`. It compares
-explicit numeric constraints with matching domain, measurement stage, units and contract version.
-Results distinguish compatible limits, an insufficient guarantee, disjoint limits, required
-consumer revalidation and unknowns. Both original citations and source approvals remain visible.
-This advisory assessment does not establish code fulfillment or a CI policy violation. See
-[comparison semantics and limits](docs/ADR-037-selected-contract-compatibility.md). The command
-reads saved evidence during edits without rebuilding it and is available starting with 0.7.0.
-
-Saved repository code coverage is separate from the returned-page relationship counts:
-
-```sh
-weftlet graph coverage --snapshot <snapshot-id> --max-items 20 --json
-weftlet graph coverage --snapshot <snapshot-id> --project services/api --max-items 50 --json
-```
-
-MCP `graph.coverage` accepts the same snapshot and an optional exact `projectRoot`; follow
-`selection.continuation` with identical arguments. It first pages package boundaries, then files
-within a chosen boundary. Reports distinguish `codeRoots`, requested SCIP entries, actual indexed
-documents, omitted files/packages, cross-package code references and unresolved/declaration-only
-targets. A selected directory or an import does not guarantee its files were indexed: configure
-`scip.sourceProject.include` and aliases for the intended code scope. Other indexer invocations
-retain unknown entry selection. Old snapshots without inventory report unknown coverage.
-The overview also appears in agent queries and the viewer; zero observations never prove no
-business impact. This is TypeScript-family source coverage grouped by nearest `package.json`,
-not universal language or compiler-project coverage. See [ADR 038](docs/ADR-038-monorepo-code-coverage.md).
-This feature requires a fresh snapshot from 0.7.0 or later (assembly 12); unchanged semantic
-artifacts remain reusable.
-
-The CLI also supports paths between two exact IDs:
-
-```sh
-weftlet graph paths --snapshot <snapshot-id> --from <node-id> --to <node-id> --direction both --max-depth 8 --json
-```
-
-MCP `graph.paths` takes `snapshotId`, `fromNodeId` and `toNodeId`. Direction defaults to outgoing;
-use `predicates` to select relations. `maxPaths` (default 5, up to 20) bounds page results;
-`maxSteps` (default 1000, up to 10000) bounds new candidate-edge examinations. Depth is 1–32;
-the search's total ceiling is 100,000 examinations. Responses report replay work separately.
-Follow `search.continuation` with identical inputs even if a work page contains no completed
-path. Depth cuts and total-work exhaustion remain explicit without pretending all dependencies
-were checked; inspect `frontier` and restart with greater depth or narrower endpoints/relations.
-Paths enumerate shorter cited routes first, prioritizing a direct connection before unrelated branches.
-They are associations, not proof of business compatibility. Pending frontiers report exact counts
-and up to 32 examples with explicit omissions; candidate-work and depth limits still apply.
-The HTML viewer uses the same engine and continuation on its displayed facts and selected layers.
-See [path semantics and limits](docs/ADR-030-bounded-evidence-paths.md).
-
-Semantic hydration requires a working configured provider. Direct RDF is the default;
-Docker/openCAESAR is an optional explicit backend. Run `context-graph doctor` for setup diagnostics.
-Committed indexing and ontology input use disposable archives, preserving the active checkout.
-Saved-snapshot queries do not invoke either dependency or refresh automatically. Responses report
-commit, configuration, source scope and excluded working changes. Use `hydrate` explicitly to
-refresh evidence; `--snapshot` selects historical evidence. Working-change overlays are a separate
-operation. `context-graph overlay --base-snapshot <id> --agent <name>` captures a bounded draft
-implementation overlay; query its returned ID with `--snapshot`. Changed prose is invalidated
-pending re-extraction. Queries compare captured file digests with current working bytes and
-report subsequent edits separately from captured and excluded changes. Older overlays without
-capture metadata have unknown freshness. Historical or draft evidence cannot validate a current diff.
-
-Impact queries [give near and indirect relationships bounded turns](docs/ADR-042-indirect-local-relationships.md)
-ahead of repeated detail and shared-import context. Ranking changes ordering, not saved facts or
-the reachable scope. Calls, cross-file references (including those without call proof) and file
-consumers share turns across distance groups, with source diversity within each group. Local
-detail has its own turns; unindexed symbol hubs follow local evidence unless explicitly queried.
-[Shared-symbol specificity](docs/ADR-043-shared-symbol-specificity.md) also gives turns to
-indexed consumers sharing a selectively referenced symbol with the producer. File-scope
-joins alone do not supply that signal. Equal evidence can still exceed a bounded page budget.
-These are ordering signals, not new assertions or proof of execution. All evidence remains in
-the reachable set. Responses identify the ranking version; after a ranking upgrade, restart
-scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
-
-The published toolkit includes a [coverage reporting correction](docs/ADR-024-implementation-coverage.md)
-that counts code relationships displayed under contracts as implementation
-evidence. New reports identify `coverage.scope: "returned-page"` and `countsAreNonExclusive: true`.
-Counts can overlap and describe returned evidence; they are not completeness percentages or proof
-that behavior is correct. Document/model claims and test-only evidence do not establish production
-implementation. The reporting fix works with saved snapshots without another hydration.
-
-[Relative import evidence](docs/ADR-013-relative-module-requests.md) now scopes module requests
-to the importing directory. An explicit refresh applies this extraction fix; saved snapshots
-keep their original facts. These requests remain unresolved evidence, while SCIP supplies
-typed-symbol links. Matching queue topic strings alone does not establish a downstream route.
-
-## Evidence limits
-
-Approved owner documents govern intent. Code describes implementation; tests describe what
-was checked; traces describe observed behavior for their deployment. Model assertions require
-valid citations and remain inferred/unreviewed even when their source is explicitly approved.
-Source approval is recorded separately from assertion review. Missing coverage is not a pass.
-
-The current implementation supports TypeScript SCIP indexing, immutable JSON snapshot envelopes,
-a lossless RDF/SPARQL query path, SHACL integrity checks, paginated `impact.scan` traversal and
-HTML/DOT/SVG output. Active OWL reasoning and a complete interactive explorer are not claimed.
-See `examples/pipeline` for a six-stage asynchronous flow and `docs/ADR-004-rdf-query-path.md`
-for query bounds and authority configuration.
-
-Never submit credentials, account data or private runtime payloads as semantic sources.
-Live provider tests are separate from deterministic CI. The maintainer authorized the GitHub
-export and migration from the published `@launch-echo` names to `@weftlet`. Registry publication requires
-an authorized npm identity. Repository visibility changes require separate authorization.
-
-For changes that should ship, run `pnpm changeset` and commit the generated release note.
-The bot prepares a version PR; merging it publishes those committed versions and records release
-tags. See [npm release instructions](docs/RELEASING.md) for checks, trust settings and recovery.
-
-See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
-[architecture policy](docs/architecture-policy.md) for deterministic governance.
-
-`weftlet viewer serve --snapshot <id>` opens a focused,
-intent-first local explorer over the full saved snapshot, with drag/pan/zoom and cited drill-down.
-Use `weftlet viewer export --snapshot <id> --node <exact-id> --output <new-directory>` for a
-[focused static report](docs/PORTABLE-EXPLORER.md) using the same application, with explicit
-frontier boundaries and no API requirement.
-See the [viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
-
-For development, `pnpm evaluate:impact` measures bounded candidate-file retrieval on Weftlet's
-own committed source without model calls. See the [evaluation protocol and baseline](docs/IMPACT-EVALUATION.md)
-for observed gaps and the distinction between retrieval measurements and live semantic quality.
-
-## License and provenance
-
-Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the
-[source inventory](docs/SOURCE-INVENTORY.md) for attribution and extraction history.
-
-## Optional mapping proposals (0.7.0)
-
-When an approved document describes a rule and links implementation files without naming the
-function, Weftlet can propose an exact rule-to-function mapping. This is opt-in, unreviewed
-inference; it never approves intent, proves compliance, or adds edges to the saved graph.
-Live model accuracy and usefulness validation are tentative and deferred to acceptance testing.
-The maintainer authorized including this optional feature in the 0.7.0 acceptance candidate;
-existing Codex hydration results do not establish the quality of these new proposals.
-
-Create `mapping-request.json` using a saved snapshot and its exact graph IDs:
-
-```json
-{
-  "snapshotId": "<saved-snapshot-id>",
-  "ruleId": "invariant:freshness",
-  "documentPath": "docs/owner.md",
-  "files": ["src/observations.ts"],
-  "maxCandidates": 8,
-  "maxInputBytes": 32768
-}
-```
-
-```sh
-weftlet mappings plan --request mapping-request.json
-# Review readiness, source/code proofs, exclusions, input size and expected requests.
-weftlet mappings propose --request mapping-request.json --allow-model
-weftlet mappings read --snapshot <saved-snapshot-id> --key <returned-key>
-```
-
-No configuration switch enables automatic inference. The proposal command reuses the existing
-`semantic` model, reasoning and explicit authentication selection: Codex ChatGPT login remains
-the default; 0.10.0 also uses the selected Claude or OpenCode provider.
-Configured API-key mode is optional for either CLI. A compatible module must separately export
-`createMappingProposalProvider(config)` with matching `identity` and
-`propose(input, { signal, timeoutMs })`; an ordinary semantic module is insufficient. There is
-one provider request per invocation, no automatic retry, and cache hits require no `--allow-model`.
-Prompt/schema bytes and candidate count are bounded; these do not represent a dollar/token cap.
-
-MCP `mapping.plan` returns the same no-model preview; `mapping.proposals` reads a saved result by
-snapshot/key. Neither MCP tool invokes a provider. Agents must treat rationale as untrusted model
-content and follow the cited rule and exact symbol IDs. The CLI reports progress on stderr using
-opaque IDs; `--quiet` suppresses progress. Provider failures preserve all existing graph evidence.
-
-Refresh a committed snapshot with the installed toolkit to record code coverage before proposing.
-Missing indexing/ownership, unresolved document selectors and budget overflow block inference.
-Historical evidence stays labeled historical; working edits are excluded and draft-overlay
-proposal generation is not yet supported. Saved artifacts live in the configured graph storage
-under `artifacts/mapping-proposals`; they may contain private rule/code identities and rationale.
-Keep them with the consumer. See [ADR 039](docs/ADR-039-mapping-proposals.md) for exact scope,
-caching and authority, and [the public evaluation protocol](evaluations/mapping-proposals/README.md).
+Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE) and the
+[source inventory](docs/SOURCE-INVENTORY.md) for attribution.
