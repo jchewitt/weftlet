@@ -9,6 +9,7 @@ import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/co
 import { atomicRename } from './atomic-rename.js';
 import { physicalArtifactKey, temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
 import { readJsonFile, readJsonProperty, writeJsonFile } from './streaming-json.js';
+import { parseSnapshotHead, type SnapshotHead } from './head-state.js';
 
 async function readJson<T>(path: string): Promise<T | undefined> {
   try {
@@ -70,7 +71,7 @@ export function snapshotPath(root: string, snapshotId: string, legacy = false): 
 
 export class FileSnapshotStore implements SnapshotStore {
   constructor(private readonly root: string) {
-    return coordinateMethods(this, [root], ['write', 'readRevision', 'readHead', 'readHeadManifest', 'headId', 'updateHead']);
+    return coordinateMethods(this, [root], ['write', 'readRevision', 'readHead', 'readHeadManifest', 'headId', 'readHeadState', 'updateHead']);
   }
 
   async write(snapshot: GraphSnapshot): Promise<void> {
@@ -144,12 +145,16 @@ export class FileSnapshotStore implements SnapshotStore {
   }
 
   async headId(headName: string): Promise<string | undefined> {
+    return (await this.readHeadState(headName))?.snapshotId;
+  }
+
+  async readHeadState(headName: string): Promise<SnapshotHead | undefined> {
     const key = safeKey(headName);
-    const head = await readWithLegacyPath<{ snapshotId: string }>(
+    const head = await readWithLegacyPath<unknown>(
       join(this.root, 'heads', `${physicalArtifactKey(key)}.json`),
       join(this.root, 'heads', `${key}.json`),
     );
-    return head?.snapshotId;
+    return head === undefined ? undefined : parseSnapshotHead(head);
   }
 
   async updateHead(headName: string, snapshotId: string, condition?: { expectedSnapshotId: string | null }): Promise<void> {
@@ -160,8 +165,16 @@ export class FileSnapshotStore implements SnapshotStore {
     await mkdir(dirname(destination), { recursive: true });
     await withHeadLock(`${destination}.lock`, async () => {
       if (condition) await safeTransferPath(destination, false, true);
-      if (condition && (await this.headId(headName) ?? null) !== condition.expectedSnapshotId) throw Error('Snapshot head changed; inspect it and retry with an explicit current expectation');
-      await atomicJson(destination, { snapshotId });
+      const current = await this.readHeadState(headName);
+      if (condition && (current?.snapshotId ?? null) !== condition.expectedSnapshotId) throw Error('Snapshot head changed; inspect it and retry with an explicit current expectation');
+      // An unchanged publication must preserve the rollback generation and head bytes.
+      if (current?.snapshotId === snapshotId) return;
+      // The current ID was already published. Check its ordinary file still exists,
+      // without parsing a potentially multi-GiB graph inside the short CAS lock.
+      if (current && !(await readWithLegacyPath(snapshotPath(this.root, current.snapshotId),
+        snapshotPath(this.root, current.snapshotId, true), existingFile))) throw Error('Cannot advance a head with an absent current snapshot');
+      await atomicJson(destination, { schemaVersion: 1, snapshotId,
+        ...(current ? { previousSnapshotId: current.snapshotId } : {}) });
     });
   }
 

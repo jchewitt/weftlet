@@ -1,5 +1,40 @@
 # Validation evidence
 
+## Atomic head generations candidate, November 18, 2026
+
+R3b2b starts from merged lifecycle commit `1ca2d5981e3cded57a3917bd7c80700e839532f1`.
+One atomic head record retains current/previous distinct published IDs; same-ID
+publication preserves bytes. Legacy reads, scoped public inspection, inventory and
+retention-plan reference accounting preserve historical snapshot bytes and semantic
+identities. No pruning, configurable target runtime setting or npm release is
+included. Configurable/indefinite retention remains R4, with no necessary-graph cap.
+
+Independent review caught a full old-snapshot parse under the head lock; this was
+replaced with a bounded ordinary-file existence check. The target manifest remains
+verified before lock acquisition. Linux / Node 24.19.0 / pnpm 10.18.2: build and 27 focused tests passed across
+head generations, retention reviews, inspection, scoped access and existing snapshot
+lifecycles (including nine new generation regressions). Independent review approved
+the final diff and independently reran those 27 checks. Documentation/version
+checks, relative destinations, original source identities and `git diff --check`
+passed. Full publication and hosted Linux/Windows outcomes are recorded in the
+candidate PR after execution; focused tests alone are not those acceptance results.
+
+Documentation updates ADR 058, coordination/retention guides, the storage plan and
+1.0 queue. README stays concise and links to the detailed docs; provider setup,
+source authority, tutorials and version blocks need no behavioral changes. The
+changeset records release behavior. No model calls or private consumer actions.
+
+### Prior lifecycle merge qualification
+
+PR 103 merged as `1ca2d5981e3cded57a3917bd7c80700e839532f1` after independent review.
+Exact reviewed head `314d18323af4c2eb161a7064bb55da2f8fb235ca` passed all four jobs in
+[runs 44381798360](https://github.com/jchewitt/weftlet/actions/runs/44381798360) and
+[44382332323](https://github.com/jchewitt/weftlet/actions/runs/44382332323): 1,189 toolkit
+and 38 core tests, 3 optional skips; full Linux packaging/browser; native Windows
+storage/startup, retrieval and onboarding, including 27 comparison/inspection tests
+and 25 coordination tests. The Windows physical-path fixture correction below is
+therefore qualified. Governance passed with 22 advisory findings. Not yet published.
+
 ## Managed cache lifecycle candidate, November 18, 2026
 
 R3b2a is based on merged foundation commit `b314553e20c28b4be35e7ace0b7e998698753955`.

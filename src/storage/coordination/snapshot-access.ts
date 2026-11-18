@@ -23,6 +23,7 @@ export async function withSnapshotAccess<T>(root: string, run: (store: SnapshotA
       readHead: name => track(() => raw.readHead(name)),
       readHeadManifest: name => track(() => raw.readHeadManifest(name)),
       headId: name => track(() => raw.headId(name)),
+      readHeadState: name => track(() => raw.readHeadState(name)),
       readRevision: id => track(() => raw.readRevision(id)),
       write: snapshot => track(() => raw.write(snapshot)),
       updateHead: (name, id, condition) => track(() => raw.updateHead(name, id, condition)),
@@ -36,7 +37,7 @@ export async function withSnapshotAccess<T>(root: string, run: (store: SnapshotA
     }
   });
 }
-export type SnapshotAccess = Pick<FileSnapshotStore, 'read' | 'readHead' | 'readHeadManifest' | 'headId' | 'readRevision' | 'write' | 'updateHead'> & {
+export type SnapshotAccess = Pick<FileSnapshotStore, 'read' | 'readHead' | 'readHeadManifest' | 'headId' | 'readHeadState' | 'readRevision' | 'write' | 'updateHead'> & {
   /** Consume the path within the callback; an escaped path is not protected after it settles. */
   withFile<T>(id: string, consume: (path: string | undefined) => Promise<T>): Promise<T>;
 };

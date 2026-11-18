@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "39255b3b71214a0c75cf5d2dc44ac55d814f064bebaadd710840176c89013964"
+      "destinationSha256": "94241f73168b67cd55d17eb31933f79a013017dc1de88a7e08c86cb34722c475"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "fc5bf3bdc89cec8f4630aaecba36b668b7d400143d51eb50fda837cc90c8b55f"
+      "destinationSha256": "be854756d406770dc9938907fff98a1811b55ee3dead065d5105aa8198a57d0f"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
+    ".changeset/atomic-head-generations.md",
     ".changeset/cache-coordination-foundation.md",
     ".changeset/config.json",
     ".changeset/managed-cache-lifecycles.md",
@@ -656,6 +657,7 @@
     "docs/ADR-055-declared-retention-reviews.md",
     "docs/ADR-056-cache-coordination.md",
     "docs/ADR-057-managed-cache-lifecycles.md",
+    "docs/ADR-058-atomic-head-generations.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -1256,6 +1258,7 @@
     "src/storage/coordination/markers.ts",
     "src/storage/coordination/snapshot-access.ts",
     "src/storage/head-lock.ts",
+    "src/storage/head-state.ts",
     "src/storage/inspection/errors.ts",
     "src/storage/inspection/inventory.ts",
     "src/storage/inspection/json-boundary.ts",
@@ -1334,6 +1337,7 @@
     "tests/fixtures/static-call-project.ts",
     "tests/fixtures/symbol-bindings.ts",
     "tests/fixtures/traversal.ts",
+    "tests/head-generations.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",

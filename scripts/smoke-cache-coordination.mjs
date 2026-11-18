@@ -22,6 +22,12 @@ export async function smokeCacheCoordination(project, installedRoot, snapshotId)
   }
   await withManagedCacheAccess([root], async () => withSnapshotAccess(root, async scoped => {
     if ((await scoped.read(snapshotId))?.manifest.snapshotId !== snapshotId) throw Error('Managed saved read failed');
+    await scoped.updateHead('generation-smoke', snapshotId);
+    const state = await scoped.readHeadState('generation-smoke');
+    if (state?.schemaVersion !== 1 || state.snapshotId !== snapshotId || state.previousSnapshotId !== undefined) {
+      throw Error('Installed atomic head state API failed');
+    }
+    await scoped.updateHead('generation-smoke', snapshotId, { expectedSnapshotId: snapshotId });
     await scoped.withFile(snapshotId, async current => {
       if (!current || !(await readFile(current)).equals(before)) throw Error('Managed access changed immutable snapshot bytes');
     });

@@ -3,6 +3,7 @@ import { lstat } from 'node:fs/promises';
 import { inspectFileDigest, inspectJson, inspectSmallJsonRecord, InspectionError } from './read.js';
 import { object, snapshotMetadata, type CacheObject } from './layout.js';
 import { physicalArtifactKey } from '../../infrastructure/artifact-paths.js';
+import { parseSnapshotHead } from '../head-state.js';
 
 export async function inspectCacheObject(entry: CacheObject, verify: boolean, maxBytes: number, signal?: AbortSignal) {
   if (entry.kind !== 'file' || entry.category === 'unknown' || entry.category === 'temporary') return;
@@ -24,10 +25,12 @@ export function linkInventory(objects: CacheObject[]) {
   const paths = new Map(objects.map(entry => [join(entry.root, entry.path), entry]));
   const danglingHeads: string[] = [];
   for (const head of objects.filter(entry => entry.category === 'head' && entry.metadata?.snapshotId)) {
-    const id = head.metadata!.snapshotId!, profile = join(head.root, head.profile);
-    const targets = [...new Set([physicalArtifactKey(id), id])].map(key => paths.get(join(profile, 'snapshots', `${key}.json`))).filter(Boolean) as CacheObject[];
-    if (!targets.length) danglingHeads.push(join(head.root, head.path));
-    for (const target of targets) { target.headReferences.push(join(head.root, head.path)); target.protection.push('head-referenced-activity-unverified'); }
+    const profile = join(head.root, head.profile);
+    for (const id of [head.metadata!.snapshotId!, head.metadata!.previousSnapshotId].filter((id): id is string => !!id)) {
+      const targets = [...new Set([physicalArtifactKey(id), id])].map(key => paths.get(join(profile, 'snapshots', `${key}.json`))).filter(Boolean) as CacheObject[];
+      if (!targets.length && !danglingHeads.includes(join(head.root, head.path))) danglingHeads.push(join(head.root, head.path));
+      for (const target of targets) { target.headReferences.push(join(head.root, head.path)); target.protection.push('head-referenced-activity-unverified'); }
+    }
   }
   const leased = objects.filter(entry => entry.category === 'lease-marker').map(entry => dirname(join(entry.root, entry.path)));
   for (const entry of objects) {
@@ -54,8 +57,10 @@ async function readMetadata(entry: CacheObject, path: string, verify: boolean, m
     const { value, sha256 } = await inspectSmallJsonRecord(path, Math.min(maxBytes, 1024 * 1024), true);
     if (!object(value)) throw new InspectionError('invalid-json', 'Expected metadata object');
     if (entry.category === 'head') {
-      if (typeof value.snapshotId !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/.test(value.snapshotId)) throw new InspectionError('invalid-json', 'Invalid head identifier');
-      entry.metadata = { snapshotId: value.snapshotId };
+      try {
+        const head = parseSnapshotHead(value);
+        entry.metadata = { snapshotId: head.snapshotId, ...(head.previousSnapshotId ? { previousSnapshotId: head.previousSnapshotId } : {}) };
+      } catch { throw new InspectionError('invalid-json', 'Invalid head generation record'); }
     }
     if (entry.category === 'lease-marker') entry.activity = 'lease-marker-present-unverified';
     entry.inspection = 'json-complete'; entry.sha256 = sha256;
