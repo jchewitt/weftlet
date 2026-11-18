@@ -12,6 +12,7 @@ npm registry or a substitute for detailed upgrade notes.
 
 | Release | Main changes |
 | --- | --- |
+| [0.10.0](../CHANGELOG.md#0100) | Independent Claude/OpenCode extraction, automatic skill/MCP/CI setup, assisted integration, verified snapshot delivery, temporary clean comparisons and read-only cache/retention reviews. |
 | [0.9.0](../CHANGELOG.md#090) | Reject inconsistent semantic physical-file kinds before reuse/assembly; version artifact acceptance while retaining old evidence. Preview extraction work before upgrading a graph. |
 | [0.8.1](../CHANGELOG.md#081) | Exact-owner intent priority and source-intent coverage accounting; saved graphs benefit without extraction. Restart pagination. |
 | [0.8.0](../CHANGELOG.md#080) | Intent catalog, exact facts, bundled Cytoscape explorer, local read API and focused portable reports. |
@@ -40,12 +41,11 @@ The integrated release includes:
   commands. Retention reviews never remove data; coordinated pruning, the global
   10 GiB budget and compact storage remain subsequent milestones.
 
-This describes release contents, not registry availability. Check the matching
-[GitHub package releases](https://github.com/jchewitt/weftlet/releases), npm version
-and generated changelogs before installing. For prepublication testing, use the
-matching reviewed archives from [release preparation](RELEASING.md). The
-[validation record](VALIDATION.md) keeps preparation, publication, consumer
-acceptance and docs-site delivery separate.
+Both 0.10.0 packages are published on npm from
+`402c9f898330fff79f7ca8fad2f1bae1dcbd4ec0`; downloaded archives match their reviewed
+SHA-512 values and exact prepared bytes. See the [validation record](VALIDATION.md)
+for publication/recovery evidence and the separate docs-site delivery status.
+Consumer acceptance and live-provider qualification remain distinct from publication.
 
 Architecture-only packaging and the 2.0 hosted review/AI service remain separate
 plans. The [work queue](1.0-WORK-QUEUE.md) records remaining 1.0 storage and
