@@ -28,7 +28,7 @@ export async function planRetention(options: RetentionPlanOptions) {
   for (const head of inventory.danglingHeads) issues.push({ code: 'dangling-head', path: head });
   const objects = inventory.objects.map(entry => retentionDecision(entry, references));
   const candidates = objects.filter(entry => entry.disposition === 'candidate');
-  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v1', root,
+  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v2', root,
     limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     policyDigest: persistedJsonDigest(policy), policy, inventoryDigest: persistedJsonDigest(inventory.objects),
     readyForReview: issues.length === 0, canApply: false,
@@ -40,7 +40,7 @@ export async function planRetention(options: RetentionPlanOptions) {
     objects, limitations: [
       'Review only. No deletion/apply command; coordinated read/write/GC leases and execution-time checks remain R3b.',
       'The policy declares ownership/protection intent, not product authority. Legacy heads remain protected until explicitly released at their exact target ID.',
-      'Current/previous/pin protection follows explicit declarations. Previous-generation tracking is manual until coordinated head publication exists.',
+      'Active scopes protect current and atomically tracked previous generations, plus any additional manually declared rollback snapshot. Legacy heads have no inferred predecessor.',
       'Semantic artifacts, indexes, receipts, unknown data and temporary work remain retained; this increment proposes only unshared snapshots and explicitly released heads.',
       'Reclaim totals are logical bytes, not guaranteed free-disk recovery. Builds, shared extents, external citations and unregistered readers are not inferred.',
       'Full JSON/hash inspection does not rerun SHACL or prove semantic reuse. Inventory is observational; this plan cannot authorize concurrent deletion.',

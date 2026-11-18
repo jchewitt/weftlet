@@ -56,5 +56,6 @@ export { FileMappingProposalStore } from './storage/mapping-proposals.js';
 
 export { withManagedCacheAccess } from './storage/coordination/managed-access.js';
 export { withSnapshotAccess, type SnapshotAccess } from './storage/coordination/snapshot-access.js';
+export type { SnapshotHead } from './storage/head-state.js';
 export { enableCacheCoordination, managedRootForPath } from './storage/coordination/managed-root.js';
 export type { CacheAccessOptions } from './storage/coordination/access.js';

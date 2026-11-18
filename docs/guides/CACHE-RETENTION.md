@@ -83,8 +83,13 @@ register every head as active. Undeclared legacy heads still protect their targe
 until their disposition is explicit. A released head must still point to the exact
 `snapshotId` in the declaration: if a writer advanced it, review is blocked rather
 than treating the newer evidence as disposable. Active heads follow their current
-target; **previous-generation tracking is manual in R3a**. Automatic current/previous
-bookkeeping belongs with coordinated publication in R3b.
+target. In released 0.10.0, previous-generation declarations are manual. The R3b2b
+candidate additionally protects the predecessor recorded atomically by new
+publishers; `previousSnapshotId` in the policy can protect another selected rollback
+snapshot and does not override that tracked protection. Legacy heads have no
+inferred predecessor. See [coordination](CACHE-COORDINATION.md#current-and-previous-generations)
+for upgrade requirements. Both head references must be accounted for before a
+future removal operation can retire the head. Review remains non-destructive.
 
 These declarations control local retention, separately from source approval in
 `context-graph.config.json`. They neither approve product assertions nor change

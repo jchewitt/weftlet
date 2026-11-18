@@ -86,11 +86,38 @@ An existing application using only unmarked storage needs no migration to contin
 working. Older binaries and arbitrary filesystem readers do not obey this protocol;
 activation alone cannot prove a mixed-version cache safe for collection.
 
+## Current and previous generations
+
+The candidate publishes the current snapshot ID and its immediate prior distinct
+published ID together. Publishing the same ID again preserves both references and
+the exact head bytes. Publishing a new ID rotates the old current to previous.
+Snapshot files remain immutable. Legacy heads stay readable; their first distinct
+advance starts tracking a predecessor, without guessing older history from dates.
+
+Custom integrations can inspect both IDs within a protected operation:
+
+```ts
+await withSnapshotAccess(snapshotRoot, async store => {
+  const head = await store.readHeadState('default');
+  if (head?.previousSnapshotId) {
+    const previous = await store.read(head.previousSnapshotId);
+    // Use this historical evidence inside the callback.
+  }
+});
+```
+
+The predecessor is a previously published snapshot, not proof of current-diff or
+business acceptance. Retention reviews protect it for active scopes; explicit
+manual rollback declarations and pins can protect additional generations. Old
+writers in unmarked caches can erase predecessor metadata. Upgrade all clients
+and follow the managed-root activation procedure before relying on coordinated
+retention. See [ADR 058](../ADR-058-atomic-head-generations.md).
+
 ## Retention is still separate
 
 [Inventory](CACHE-INSPECTION.md) and [retention reviews](CACHE-RETENTION.md) remain
 observations, including when scanning a parent containing multiple managed roots.
-They are not collection locks or permission to delete. Automatic current/previous
-bookkeeping and coordinated removal/recovery are the next steps. Configurable
+They are not collection locks or permission to delete. Current/previous
+bookkeeping is implemented in this candidate; coordinated removal/recovery is next. Configurable
 history targets and explicit indefinite retention follow them; necessary graphs
 will not be cut down to meet the proposed 10 GiB history target.

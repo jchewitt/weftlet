@@ -101,13 +101,15 @@ process tests exercise these boundaries; no collector or automatic recovery exis
 
 Complete R3b through independently reviewed increments:
 
-- **R3b2a — Lifecycle adoption (candidate):** [ADR 057](ADR-057-managed-cache-lifecycles.md)
+- **R3b2a — Lifecycle adoption (merged PR 103):** [ADR 057](ADR-057-managed-cache-lifecycles.md)
   binds explicit managed roots and complete hydration/query/comparison/delivery,
   shared-artifact and viewer operations. Ordered admission, tracked children and
   a quiesced legacy-client migration preserve unmarked-cache compatibility.
-- **R3b2b — Current/previous references (next):** atomically publish both pointers
-  under existing head CAS locks, preserve previous on unchanged-head publication,
-  and qualify concurrent publication and failure recovery. No removal yet.
+- **R3b2b — Current/previous references (candidate):** [ADR 058](ADR-058-atomic-head-generations.md)
+  atomically publishes both pointers under existing head CAS locks, preserves
+  previous on unchanged publication, and adds inventory/retention protection for
+  both references. Concurrent publication and failure recovery are qualified with
+  public regressions. No removal yet.
 - **R3b3 — Reviewed removal and recovery:** revalidate plans under exclusive
   coordination, retire heads before dependent snapshots, preserve unknown data,
   and add bounded, explicit interrupted-operation recovery. No PID/age-based

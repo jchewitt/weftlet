@@ -47,7 +47,7 @@ it('publishes full-length snapshot/artifact/head identities atomically and prese
   const head = 'h'.repeat(256);
   await Promise.all(Array.from({ length: 5 }, () => store.updateHead(head, id)));
   expect(await store.readHead(head)).toEqual(saved);
-  expect(JSON.parse(await readFile(join(directory, 'heads', `${physicalArtifactKey(head)}.json`), 'utf8'))).toEqual({ snapshotId: id });
+  expect(JSON.parse(await readFile(join(directory, 'heads', `${physicalArtifactKey(head)}.json`), 'utf8'))).toEqual({ schemaVersion: 1, snapshotId: id });
   const artifacts = new SemanticArtifactStore(directory);
   const value = artifact('k'.repeat(256));
   await artifacts.write(value);

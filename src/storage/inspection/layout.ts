@@ -31,7 +31,7 @@ export interface CacheObject {
   revision: string;
   linkCount: number;
   inspection: 'not-inspected' | 'metadata-only' | 'json-complete' | 'bytes-hashed' | 'invalid' | 'limited' | 'changed' | 'unreadable';
-  metadata?: { repositoryId?: string; snapshotId?: string; commitSha?: string; configurationDigest?: string };
+  metadata?: { repositoryId?: string; snapshotId?: string; previousSnapshotId?: string; commitSha?: string; configurationDigest?: string };
   sha256?: string;
   headReferences: string[];
   protection: string[];

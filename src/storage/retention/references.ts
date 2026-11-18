@@ -39,6 +39,9 @@ export function resolveRetentionReferences(policy: RetentionPolicy, objects: Cac
   for (const scope of policy.activeScopes) {
     const current = head(scope.profile, scope.head);
     if (current) protect(snapshot(scope.profile, current.metadata!.snapshotId!), `active-scope:${scope.head}`);
+    if (current?.metadata?.previousSnapshotId) {
+      protect(snapshot(scope.profile, current.metadata.previousSnapshotId), `tracked-previous-generation:${scope.head}`);
+    }
     if (scope.previousSnapshotId) {
       if (current?.metadata?.snapshotId === scope.previousSnapshotId) issues.push({ code: 'previous-must-differ-from-current', path: current.path });
       protect(snapshot(scope.profile, scope.previousSnapshotId), `previous-generation:${scope.head}`);
@@ -48,6 +51,7 @@ export function resolveRetentionReferences(policy: RetentionPolicy, objects: Cac
     const current = head(release.profile, release.head);
     if (!current) continue;
     if (current.metadata!.snapshotId !== release.snapshotId) { issues.push({ code: 'released-head-advanced', path: current.path }); continue; }
+    if (current.metadata!.previousSnapshotId && !snapshot(release.profile, current.metadata!.previousSnapshotId)) continue;
     if (current.linkCount !== 1) { issues.push({ code: 'released-head-is-shared', path: current.path }); continue; }
     if (snapshot(release.profile, release.snapshotId)) releasedHeads.add(current.path);
   }
