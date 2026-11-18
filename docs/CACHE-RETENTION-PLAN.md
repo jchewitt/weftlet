@@ -99,20 +99,24 @@ draining participants, bounded/cancellable waiting, owned-marker cleanup and a
 scoped snapshot facade. Interrupted owners remain visible blockers. Independent
 process tests exercise these boundaries; no collector or automatic recovery exists.
 
-Complete R3b in two further reviewable steps:
+Complete R3b through independently reviewed increments:
 
-- **R3b2 — Lifecycle adoption:** bind managed cache roots, integrate complete
-  hydration/query/comparison/delivery and shared-artifact lifecycles, coordinate
-  multiple roots in a fixed order, and publish current/previous references
-  transactionally. Establish an explicit legacy-client migration boundary.
+- **R3b2a — Lifecycle adoption (candidate):** [ADR 057](ADR-057-managed-cache-lifecycles.md)
+  binds explicit managed roots and complete hydration/query/comparison/delivery,
+  shared-artifact and viewer operations. Ordered admission, tracked children and
+  a quiesced legacy-client migration preserve unmarked-cache compatibility.
+- **R3b2b — Current/previous references (next):** atomically publish both pointers
+  under existing head CAS locks, preserve previous on unchanged-head publication,
+  and qualify concurrent publication and failure recovery. No removal yet.
 - **R3b3 — Reviewed removal and recovery:** revalidate plans under exclusive
   coordination, retire heads before dependent snapshots, preserve unknown data,
   and add bounded, explicit interrupted-operation recovery. No PID/age-based
   stealing; no applying R3a plans without the new coordinated contract.
 
-R3b1 is not wired into normal CLI/MCP operations yet; existing saved-evidence
-reads remain unchanged. This split keeps compatibility and removal independently
-reviewable before R4 retention policy and R5 compact storage.
+Lifecycle activation does not enable collection. Parent-wide inventory and
+retention reports remain observational until R3b3. R4 retention policy and R5
+compact storage follow these safety boundaries; necessary graph/build size is
+not capped by the proposed history-retention target.
 
 ## Bounded tasks
 

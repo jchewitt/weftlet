@@ -53,3 +53,8 @@ export { createMappingProvider, mappingProviderIdentity } from './extraction/map
 export { parseMappingRequest } from './extraction/mapping-request.js';
 export { validateMappingOutput } from './extraction/mapping-output.js';
 export { FileMappingProposalStore } from './storage/mapping-proposals.js';
+
+export { withManagedCacheAccess } from './storage/coordination/managed-access.js';
+export { withSnapshotAccess, type SnapshotAccess } from './storage/coordination/snapshot-access.js';
+export { enableCacheCoordination, managedRootForPath } from './storage/coordination/managed-root.js';
+export type { CacheAccessOptions } from './storage/coordination/access.js';

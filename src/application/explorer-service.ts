@@ -1,3 +1,4 @@
+import { coordinateMethods, withManagedCacheAccess } from '../storage/coordination/managed-access.js';
 import { loadConfig } from '../configuration/config.js';
 import { resolveStorageRoot } from '../configuration/cache.js';
 import { FileSnapshotStore } from '../storage/storage.js';
@@ -17,8 +18,9 @@ import { graphPredicates } from '@weftlet/core';
 /** Read-only construction deliberately does not load an adapter, model, indexer or compiler. */
 export async function createExplorerService(configPath: string, snapshotId: string) {
   const { config, repositoryRoot } = await loadConfig(configPath);
-  const store = new FileSnapshotStore(resolveStorageRoot(repositoryRoot, config));
-  const indexes = new SnapshotIndexReader(store), index = await indexes.read(snapshotId);
+  const roots = [resolveStorageRoot(repositoryRoot, config)];
+  const store = new FileSnapshotStore(roots[0]!);
+  const indexes = new SnapshotIndexReader(store), index = await withManagedCacheAccess(roots, () => indexes.read(snapshotId));
   const repository = new GitRepository(repositoryRoot);
   const discovery = new SnapshotGraphDiscoveryService(store, indexes);
   const exploration = new SnapshotGraphExplorationService(store, indexes);
@@ -28,7 +30,11 @@ export async function createExplorerService(configPath: string, snapshotId: stri
     if (current.digest !== index.digest) throw new Error('Saved evidence changed after the explorer started; restart the explorer');
     return current;
   };
-  return { index, discovery, exploration, paths, pinned,
+  return coordinateMethods({ index,
+    withOperation: <T>(run: () => Promise<T>, additionalPaths: readonly string[] = []) => withManagedCacheAccess([...roots, ...additionalPaths], run),
+    discovery: coordinateMethods(discovery, roots, ['catalog', 'fact']),
+    exploration: coordinateMethods(exploration, roots, ['neighbors']),
+    paths: coordinateMethods(paths, roots, ['paths']), pinned,
     async metadata(): Promise<ExplorerMetadata> {
       await pinned();
       const snapshot = snapshotContext(index.snapshot.manifest);
@@ -38,6 +44,6 @@ export async function createExplorerService(configPath: string, snapshotId: stri
         evidenceDigest: index.digest, checkout: { checkedAt: new Date().toISOString(), state },
         diagnostics: selectDiagnostics(index.snapshot, {}, [], [], []), capabilities: { paths: true, search: true }, predicates: graphPredicates };
     },
-  };
+  }, roots, ['pinned', 'metadata']);
 }
 export type ExplorerService = Awaited<ReturnType<typeof createExplorerService>>;

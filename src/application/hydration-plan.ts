@@ -1,3 +1,5 @@
+import { withManagedCacheAccess } from '../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from './cache-operation.js';
 import type { ImpactScanRequest, SemanticSource } from '@weftlet/core';
 import { loadConfig, type ContextGraphConfig } from '../configuration/config.js';
 import { GitRepository } from '../repository/git.js';
@@ -78,7 +80,12 @@ async function describeDocument(source: SemanticSource, selections: readonly Sem
 
 /** Inspect only committed source objects, config and existing artifacts; never initialize a provider or adapter. */
 export async function planHydration(configPath: string, options: HydrationPlanOptions = {}): Promise<HydrationPlan> {
-  const { config, repositoryRoot } = await loadConfig(configPath);
+  const loaded = await loadConfig(configPath);
+  const { config, repositoryRoot } = loaded;
+  return withManagedCacheAccess(cacheOperationPaths(repositoryRoot, config), () => planHydrationLoaded(loaded, options));
+}
+async function planHydrationLoaded(loaded: Awaited<ReturnType<typeof loadConfig>>, options: HydrationPlanOptions): Promise<HydrationPlan> {
+  const { config, repositoryRoot } = loaded;
   const repository = new GitRepository(repositoryRoot);
   const ref = options.ref ?? 'HEAD';
   const commitSha = await repository.resolveRef(ref);

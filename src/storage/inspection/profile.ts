@@ -1,3 +1,4 @@
+import { withManagedCacheAccess } from '../coordination/managed-access.js';
 import { inspectJson, InspectionError, type JsonInspectionOptions } from './read.js';
 import { RepetitionCounter, countStrings } from './repetition.js';
 
@@ -8,6 +9,9 @@ export interface ProfileOptions extends Omit<JsonInspectionOptions, 'onRecord' |
 
 /** Byte attribution is compact JSON encoding; physical file size is measured separately. */
 export async function profileSnapshot(path: string, options: ProfileOptions = {}) {
+  return withManagedCacheAccess([path], () => profileSnapshotOwned(path, options), { signal: options.signal });
+}
+async function profileSnapshotOwned(path: string, options: ProfileOptions) {
   const maxDistinct = options.maxDistinct ?? 100_000;
   if (!Number.isSafeInteger(maxDistinct) || maxDistinct < 1 || maxDistinct > 1_000_000) throw Error('maxDistinct must be between 1 and 1000000');
   const entities = new RepetitionCounter(maxDistinct), provenance = new RepetitionCounter(maxDistinct);

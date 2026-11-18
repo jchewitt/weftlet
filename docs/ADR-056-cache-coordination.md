@@ -1,7 +1,8 @@
 # ADR 056: Operation-scoped cache coordination
 
 Status: R3b1 implemented for review, November 17, 2026 (Central). This is an
-internal foundation; production lifecycle adoption and removal remain R3b2/R3b3.
+internal foundation. [ADR 057](ADR-057-managed-cache-lifecycles.md) adds the R3b2a
+lifecycle candidate; head tracking and removal remain R3b2b/R3b3.
 
 ## Problem
 

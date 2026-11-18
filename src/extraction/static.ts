@@ -1,3 +1,4 @@
+import { coordinateMethods } from '../storage/coordination/managed-access.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { copyFile, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
@@ -28,7 +29,7 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
   constructor(
     private readonly config: ContextGraphConfig['scip'],
     private readonly storageRoot: string,
-  ) {}
+  ) { return coordinateMethods(this, [storageRoot], ['index'], ['index']); }
 
   async index(context: ExtractionContext): Promise<ScipIndexResult> {
     if (this.config.sourceProject !== undefined) {

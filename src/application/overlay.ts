@@ -1,3 +1,5 @@
+import { withManagedCacheAccess } from '../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from './cache-operation.js';
 import { execFile } from 'node:child_process';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -44,6 +46,14 @@ export async function buildWorkingOverlay(
   baseSnapshotId: string,
   agent = 'default',
   options: { readonly validationDetails?: boolean } = {},
+): Promise<GraphSnapshot> {
+  return withManagedCacheAccess([...cacheOperationPaths(repository.root, config), storageRoot],
+    () => buildWorkingOverlayOwned(repository, config, store, storageRoot, baseSnapshotId, agent, options));
+}
+async function buildWorkingOverlayOwned(
+  repository: GitRepository, config: ContextGraphConfig, store: FileSnapshotStore,
+  storageRoot: string, baseSnapshotId: string, agent: string,
+  options: { readonly validationDetails?: boolean },
 ): Promise<GraphSnapshot> {
   const base = await store.read(baseSnapshotId);
   if (!base || base.manifest.overlayDigest) throw new Error('Overlay requires a committed base snapshot');

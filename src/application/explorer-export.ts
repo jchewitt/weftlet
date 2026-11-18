@@ -59,6 +59,9 @@ async function absent(path: string) {
 
 /** Export complete neighborhoods of selected nodes. Frontier endpoints are explicitly not queryable. */
 export async function exportExplorerReport(service: ExplorerService, options: ExplorerExportOptions) {
+  return service.withOperation(() => exportExplorerReportOwned(service, options), [options.output]);
+}
+async function exportExplorerReportOwned(service: ExplorerService, options: ExplorerExportOptions) {
   const maxBytes = bound(options.maxBytes, 64 * 1024 * 1024, 256 * 1024 * 1024, 'maxBytes');
   const metadata = await service.metadata(), selection = selectScope(service, options);
   if (options.sourceUrlTemplate) sourceLink({ path: 'README.md', startLine: 1, endLine: 1, digest: '', commitSha: metadata.snapshot.commitSha }, options.sourceUrlTemplate);

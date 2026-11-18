@@ -1,3 +1,6 @@
+import { coordinateMethods } from '../storage/coordination/managed-access.js';
+import { cacheOperationPaths } from './cache-operation.js';
+import { settleAll } from '../infrastructure/settle-all.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { scipSourcePatterns } from '../configuration/scip-project.js';
 import { buildCodeInventory } from '../extraction/code-inventory.js';
@@ -33,7 +36,11 @@ import type { HydrationOptions, HydrationResult, HydratorDependencies, RuntimeEv
 export type * from './hydration-contract.js';
 
 export class ContextGraphHydrator {
-  constructor(private readonly dependencies: HydratorDependencies) {}
+  constructor(private readonly dependencies: HydratorDependencies) {
+    return coordinateMethods(this, [...cacheOperationPaths(dependencies.repository.root, dependencies.config),
+      ...(dependencies.cleanComparison ? [dependencies.cleanComparison.storageRoot] : [])], ['hydrate', 'compareClean', 'collectRuntimeEvidence'], [],
+      (method, args) => ({ signal: method === 'collectRuntimeEvidence' ? undefined : (args[0] as HydrationOptions).signal }));
+  }
 
   async collectRuntimeEvidence(commitSha: string): Promise<RuntimeEvidenceRevision> {
     const { config, repository } = this.dependencies;
@@ -218,8 +225,8 @@ export class ContextGraphHydrator {
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
     const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const invariants = (
-      await Promise.all(
-        this.dependencies.invariantEvaluators.map((evaluator) =>
+      await settleAll(
+        this.dependencies.invariantEvaluators.map(async (evaluator) =>
           evaluator.evaluate(snapshotId, facts),
         ),
       )

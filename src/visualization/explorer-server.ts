@@ -35,10 +35,12 @@ async function query(service: ExplorerService, value: unknown): Promise<unknown>
   if (typeof envelope.method !== 'string' || !Object.hasOwn(methods, envelope.method)) throw new Error('Unsupported read query');
   const params = envelope.params as { snapshotId?: unknown } | undefined;
   if (!params || params.snapshotId !== service.index.snapshot.manifest.snapshotId) throw new Error('Query must use the pinned snapshot');
-  await service.pinned();
-  const result = await methods[envelope.method as keyof typeof methods](params);
-  await service.pinned();
-  return result;
+  return service.withOperation(async () => {
+    await service.pinned();
+    const result = await methods[envelope.method as keyof typeof methods](params);
+    await service.pinned();
+    return result;
+  });
 }
 
 /** Local-only server. Hosting/authentication is a separate deployment milestone. */

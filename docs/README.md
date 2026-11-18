@@ -13,6 +13,7 @@ Start with the path that matches your task:
 | Install managed GitHub workflows | [CI setup](guides/CI-SETUP.md) |
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | Transfer a verified saved snapshot to a local project | [Snapshot delivery](guides/SNAPSHOT-DELIVERY.md) |
+| Coordinate cache readers and builds (candidate) | [Cache coordination](guides/CACHE-COORDINATION.md) |
 | Review active scopes, pins and retention candidates | [Retention reviews](guides/CACHE-RETENTION.md) |
 | Measure local graph/cache storage | [Cache inspection](guides/CACHE-INSPECTION.md) |
 | See what changed between releases | [Release overview](RELEASES.md), [toolkit changelog](../CHANGELOG.md), [core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) |
@@ -23,7 +24,7 @@ Start with the path that matches your task:
 | Assess a real-project trial | [Consumer trial](CONSUMER-TRIAL.md), [validation evidence](VALIDATION.md) |
 | Contribute or understand upcoming work | [Roadmap](ROADMAP.md), [0.10 plan](RELEASE-09-10-PLAN.md), [2.0 plan](WEFTLET-2.0-PLAN.md) |
 
-The guides describe the **0.10.0 release scope**. Check the [release overview](RELEASES.md)
+The guides describe the **0.10.0 release scope** unless explicitly marked as a later candidate. Check the [release overview](RELEASES.md)
 and installed package changelog for availability; a guide is not proof of npm
 publication. Manual setup paths remain documented for 0.9 installations.
 Client examples do not establish live authentication or agent behavior. Storage
