@@ -1,6 +1,6 @@
 # Weftlet — Context Graph Toolkit
 
-**[Documentation](docs/README.md) · [Guide](docs/guides/PROJECT-GUIDE.md) · [Tutorial](docs/tutorials/DOCUMENT-SEARCH.md) · [Changelog](CHANGELOG.md)**
+**[Documentation website](https://weftlet.crowdpigeon.org/) · [Get started](https://weftlet.crowdpigeon.org/get-started/quickstart/) · [Tutorial](https://weftlet.crowdpigeon.org/tutorial/) · [API reference](https://weftlet.crowdpigeon.org/api/) · [Changelog](CHANGELOG.md)**
 
 Weftlet is an open-source context-graph toolkit that helps AI development agents understand
 how a local change affects the broader product. It connects approved product intent, shared

@@ -1,5 +1,23 @@
 # Validation evidence
 
+## Documentation website navigation, November 18, 2026 (UTC)
+
+The root README now links directly to the published documentation website,
+getting-started guide, order-store tutorial and API reference. Existing repository
+guides and release-version blocks remain available and unchanged.
+
+All four website destinations returned HTTP 200. The release-documentation check
+and whitespace check passed. This is a navigation-only edit; runtime, packaging
+and provider checks were not rerun, and no package release was triggered.
+
+The earlier docs-receiver failure recorded below was subsequently recovered in
+the separately maintained docs repository. [Receiver run 44231549121](https://github.com/jchewitt/weftlet-docs/actions/runs/44231549121)
+validated and published 0.10.0 and committed its verified completion record.
+The [public release marker](https://weftlet.crowdpigeon.org/weftlet-release.json)
+identifies source commit `402c9f898330fff79f7ca8fad2f1bae1dcbd4ec0` and both
+0.10.0 packages. The receiver uses the existing ChatGPT-authenticated Codex CLI
+on the private Fedora runner; its initial API-key failure is historical.
+
 ## 0.10.0 integration and release qualification, November 17, 2026 (Central)
 
 PRs [87–98](https://github.com/jchewitt/weftlet/pulls?q=is%3Apr+is%3Amerged)
