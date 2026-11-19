@@ -1,0 +1,19 @@
+{
+  "modules": 16,
+  "functions": 80,
+  "facts": 15860,
+  "pageFacts": 60,
+  "node": "v24.19.0",
+  "platform": "linux",
+  "json": {
+    "bytes": 29216773,
+    "manifestMs": 1293,
+    "scanMs": 1991
+  },
+  "compact": {
+    "bytes": 2114835,
+    "manifestMs": 1655,
+    "scanMs": 2452
+  },
+  "identicalImpactPage": true
+}

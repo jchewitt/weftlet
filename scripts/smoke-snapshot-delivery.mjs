@@ -26,4 +26,17 @@ export async function smokeSnapshotDelivery(consumer, installedRoot, producingCo
   if (!pack.facts.length) throw Error('Installed transferred evidence is not queryable');
   const repeated = cli('snapshot', 'import', '--config', 'delivery.config.json', '--input', input, '--expect-digest', exported.manifestSha256);
   if (repeated.persistedGraphDigest !== exported.persistedGraphDigest || repeated.contentDigest !== exported.contentDigest) throw Error('Installed repeated transfer changed identity');
+  const compactConfig = { ...receivingConfig, storagePath: '.context-graph/compact-smoke' };
+  await writeFile(join(consumer, 'compact.config.json'), JSON.stringify(compactConfig));
+  execFileSync(process.execPath, [join(installedRoot, 'dist/cli.js'), 'snapshot', 'import', '--config', 'compact.config.json',
+    '--input', input, '--expect-digest', exported.manifestSha256], {
+    cwd: consumer, env: { ...process.env, WEFTLET_SNAPSHOT_FORMAT: 'brotli-v1' }, timeout: 60_000,
+  });
+  const compactStore = new FileSnapshotStore(join(consumer, compactConfig.storagePath));
+  const compactPath = await compactStore.file(snapshotId);
+  if ((await readFile(compactPath)).subarray(0, 8).toString() !== 'WEFTBR1\n') throw Error('Expected packed CLI to store compact evidence');
+  const rollback = join(consumer, 'compact-rollback');
+  cli('snapshot', 'export', '--config', 'compact.config.json', '--snapshot', snapshotId, '--output', rollback);
+  if (!(await readFile(join(rollback, 'snapshot.json'))).equals(await readFile(join(input, 'snapshot.json')))) throw Error('Compact CLI export changed JSON bytes');
+  console.log('Packed CLI compact import and byte-exact JSON rollback passed.');
 }

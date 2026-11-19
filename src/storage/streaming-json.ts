@@ -1,20 +1,21 @@
 import { createReadStream, createWriteStream } from 'node:fs';
+import { storedSnapshotChunks } from './compact-snapshot.js';
 import { pipeline } from 'node:stream/promises';
 import { stringifyChunked } from '@discoveryjs/json-ext';
 import { JSONParser, TokenizerError, TokenParserError } from '@streamparser/json';
 
 /** Ordinary JSON bytes, incrementally encoded/decoded; legacy files need no migration. */
-export async function readJsonFile<T>(path: string): Promise<T> {
-  return parseJsonFile<T>(path, '$');
+export async function readJsonFile<T>(path: string, snapshot = false): Promise<T> {
+  return parseJsonChunks<T>(snapshot ? storedSnapshotChunks(path) : createReadStream(path), '$');
 }
 
 /** Validate the complete document while retaining only a selected root property. */
-export async function readJsonProperty<T>(path: string, property: string): Promise<T | undefined> {
+export async function readJsonProperty<T>(path: string, property: string, snapshot = false): Promise<T | undefined> {
   if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(property)) throw Error('Invalid JSON property selector');
-  return parseJsonFile<T | undefined>(path, `$.${property}`);
+  return parseJsonChunks<T | undefined>(snapshot ? storedSnapshotChunks(path) : createReadStream(path), `$.${property}`);
 }
 
-async function parseJsonFile<T>(path: string, selector: string): Promise<T> {
+async function parseJsonChunks<T>(chunks: AsyncIterable<Buffer>, selector: string): Promise<T> {
   let value: T | undefined;
   const parser = new JSONParser({ paths: [selector], keepStack: selector === '$' });
   let complete = false;
@@ -31,7 +32,7 @@ async function parseJsonFile<T>(path: string, selector: string): Promise<T> {
     }
     throw error;
   };
-  for await (const chunk of createReadStream(path)) {
+  for await (const chunk of chunks) {
     if (!hasInput) hasInput = (chunk as Buffer).some(byte => ![9, 10, 13, 32].includes(byte));
     parser.write(chunk);
   }

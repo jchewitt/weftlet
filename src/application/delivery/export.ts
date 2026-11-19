@@ -1,3 +1,4 @@
+import { storedJsonDigest } from './stored-json.js';
 import { withManagedCacheAccess } from '../../storage/coordination/managed-access.js';
 import { cacheOperationPaths } from '../cache-operation.js';
 import { randomUUID } from 'node:crypto';
@@ -30,14 +31,12 @@ async function exportSnapshotOwned(context: Awaited<ReturnType<typeof deliveryCo
     await requireAbsent(output);
     const source = await context.store.file(options.snapshotId);
     if (!source) throw Error('Selected snapshot is absent');
-    const size = (await lstat(source)).size;
-    if (size > maxBytes) throw Error('Snapshot exceeds transfer byte limit');
-    await requireFreeSpace(parent, size + manifestByteLimit);
+    await requireFreeSpace(parent, manifestByteLimit);
     const stage = join(parent, `.weftlet-transfer-${randomUUID()}`);
     await mkdir(stage, { mode: 0o700 });
     try {
       checkpoint(options, 'copy-snapshot');
-      const copied = await copyTransferFile(source, join(stage, 'snapshot.json'), maxBytes, options.signal);
+      const copied = await storedJsonDigest(source, maxBytes, join(stage, 'snapshot.json'), options.signal);
       const validated = await validateTransferredSnapshot(join(stage, 'snapshot.json'), options);
       if (validated.snapshot.manifest.snapshotId !== options.snapshotId) throw Error('Stored snapshot ID mismatch');
       const evidenceState = await deliveryState(context, validated.snapshot);

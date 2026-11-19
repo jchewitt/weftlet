@@ -3,7 +3,7 @@ import { cp, link, mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, wri
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { persistedJsonDigest, sha256, stableJsonDigest } from '@weftlet/core';
 import type { GraphSnapshot } from '@weftlet/core';
 import { createContextGraphApplication } from '../src/application/application.js';
@@ -91,6 +91,26 @@ describe('verified snapshot delivery', () => {
     expect(await readFile((await c.store.file(snapshot.manifest.snapshotId))!)).toEqual(await readFile(join(bundle, 'snapshot.json')));
     expect(await readdir(join(c.target, '.context-graph', 'transfers'))).toEqual([]);
   }, 60_000);
+
+  it('imports to compact storage, re-imports idempotently, and exports the original JSON bundle bytes', async () => {
+    const c = await consumer(), id = snapshot.manifest.snapshotId;
+    const opts = { input: bundle, expectDigest: exported.manifestSha256, activate: true, expectHead: null };
+    vi.stubEnv('WEFTLET_SNAPSHOT_FORMAT', 'brotli-v1');
+    try {
+      await importSnapshot(c.config, opts);
+      const path = (await c.store.file(id))!, bytes = await readFile(path);
+      expect(bytes.subarray(0, 8).toString()).toBe('WEFTBR1\n');
+      await importSnapshot(c.config, { ...opts, expectHead: id });
+      const output = join(root, 'export-from-compact');
+      await exportSnapshot(c.config, { snapshotId: id, output });
+      expect(await readFile(join(output, 'snapshot.json'))).toEqual(await readFile(join(bundle, 'snapshot.json')));
+      expect(await readFile(path)).toEqual(bytes);
+      vi.stubEnv('WEFTLET_SNAPSHOT_FORMAT', 'json');
+      const restored = await consumer();
+      await importSnapshot(restored.config, { input: output, expectDigest: sha256(await readFile(join(output, 'manifest.json'))) });
+      expect(await readFile((await restored.store.file(id))!)).toEqual(await readFile(join(bundle, 'snapshot.json')));
+    } finally { vi.unstubAllEnvs(); }
+  }, 60000);
 
   it('reports historical and mismatched evidence, defaults to ID-only import, and performs no module loading', async () => {
     const c = await consumer();

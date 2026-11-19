@@ -78,6 +78,7 @@ try {
         'dist/cli.js', 'dist/mcp.js',
         'dist/storage/coordination/managed-access.js', 'dist/storage/coordination/managed-root.js',
         'dist/storage/coordination/snapshot-access.js', 'docs/guides/CACHE-COORDINATION.md', 'docs/guides/CACHE-REMOVAL.md',
+        'docs/guides/COMPACT-SNAPSHOTS.md', 'dist/storage/compact-snapshot.js',
         'docs/guides/CACHE-MAINTENANCE.md', 'dist/storage/retention/maintenance.js', 'dist/storage/retention/owned-removal.js',
         'docs/guides/CACHE-HISTORY.md', 'dist/storage/retention/history-selection.js', 'dist/storage/retention/history-policy.js',
         'docs/guides/CACHE-RECOVERY.md', 'dist/storage/recovery/apply.js', 'dist/storage/recovery/plan.js',

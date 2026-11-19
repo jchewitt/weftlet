@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "c9931d8825c5bbb3edd4bc29d03f32e9f9e1c9c5a32da9222468c26b2a412f29"
+      "destinationSha256": "de0dc17a08fed018c9eafb24b3f75109508b03bf878807054ee8c3b170268a44"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "be854756d406770dc9938907fff98a1811b55ee3dead065d5105aa8198a57d0f"
+      "destinationSha256": "6c63057830bcc29111392f166be71816687f3ed3254e30b2435fe06b7f778b6f"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/atomic-head-generations.md",
     ".changeset/cache-coordination-foundation.md",
+    ".changeset/compact-snapshot-format.md",
     ".changeset/config.json",
     ".changeset/configurable-history-retention.md",
     ".changeset/coordinated-retention-removal.md",
@@ -695,6 +696,7 @@
     "docs/WEFTLET-2.0-PLAN.md",
     "docs/architecture-baseline.json",
     "docs/architecture-policy.md",
+    "docs/assessments/compact-query-r5.json",
     "docs/assessments/consumer-pm-0.8.1-2026-11-08.json",
     "docs/assessments/pre-1.0-2026-10-28.json",
     "docs/assessments/snapshot-codecs-r5.json",
@@ -721,6 +723,7 @@
     "docs/guides/CACHE-RETENTION.md",
     "docs/guides/CI-SETUP.md",
     "docs/guides/CI.md",
+    "docs/guides/COMPACT-SNAPSHOTS.md",
     "docs/guides/EVIDENCE-DECISIONS.md",
     "docs/guides/MCP-SETUP.md",
     "docs/guides/PROJECT-GUIDE.md",
@@ -1009,7 +1012,9 @@
     "scripts/smoke-traversal.mjs",
     "scripts/storage-study/codec.ts",
     "scripts/storage-study/profile.ts",
+    "scripts/storage-study/run-query.ts",
     "scripts/storage-study/run.ts",
+    "scripts/storage-study/saved-query.ts",
     "scripts/test-explorer-browser.ts",
     "scripts/update-inventory.mjs",
     "scripts/validation-benchmark/execution.mjs",
@@ -1031,6 +1036,7 @@
     "src/application/delivery/export.ts",
     "src/application/delivery/import.ts",
     "src/application/delivery/semantic.ts",
+    "src/application/delivery/stored-json.ts",
     "src/application/delivery/validation.ts",
     "src/application/document-classification.test.ts",
     "src/application/document-code-bindings.ts",
@@ -1271,6 +1277,7 @@
     "src/storage/artifact-paths.test.ts",
     "src/storage/atomic-rename.test.ts",
     "src/storage/atomic-rename.ts",
+    "src/storage/compact-snapshot.ts",
     "src/storage/comparison-workspace.test.ts",
     "src/storage/comparison-workspace.ts",
     "src/storage/coordination/access.ts",
@@ -1351,6 +1358,7 @@
     "tests/clean-comparison.test.ts",
     "tests/code-evidence-rdf.test.ts",
     "tests/code-evidence.test.ts",
+    "tests/compact-snapshot.test.ts",
     "tests/contract-compatibility.test.ts",
     "tests/contract-obligations.test.ts",
     "tests/coordinated-snapshot-access.test.ts",

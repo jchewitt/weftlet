@@ -7,6 +7,7 @@ import { JSONParser } from '@streamparser/json';
 import { parseUniqueJson } from '../../infrastructure/unique-json.js';
 import { safeTransferPath } from '../transfer-files.js';
 
+import { snapshotChunks } from '../compact-snapshot.js';
 import { InspectionError } from './errors.js';
 import { JsonBoundary, arraySections } from './json-boundary.js';
 export { InspectionError } from './errors.js';
@@ -74,6 +75,7 @@ export interface JsonInspectionOptions {
   maxBytes?: number;
   maxRecordBytes?: number;
   manifestOnly?: boolean;
+  snapshotEncoding?: boolean;
   signal?: AbortSignal;
   onRecord?: (section: string, value: unknown) => void;
   onProgress?: (bytes: number, total: number) => void;
@@ -104,19 +106,25 @@ export async function inspectJson(path: string, options: JsonInspectionOptions =
     parser.onError = error => { if ((error as unknown) === stopManifest) throw stopManifest; throw error instanceof InspectionError ? error : new InspectionError('invalid-json', 'Invalid or incomplete JSON document'); };
     parser.onEnd = () => { complete = true; };
     try {
-      for await (const chunk of fileChunks(handle)) {
+      let physicalRead = 0;
+      const chunks = options.snapshotEncoding
+        ? snapshotChunks(handle, options.manifestOnly ? Number.MAX_SAFE_INTEGER : maxBytes, data => { hash.update(data); physicalRead += data.length; }, options.manifestOnly)
+        : fileChunks(handle);
+      for await (const chunk of chunks) {
         options.signal?.throwIfAborted();
         bytes += chunk.length;
         if (bytes > maxBytes && !options.manifestOnly) throw new InspectionError('limit', 'Inspection byte limit exceeded');
-        hash.update(chunk);
+        if (!options.snapshotEncoding) hash.update(chunk);
         parser.write(chunk);
         boundary.checkLength(bytes);
         if (options.manifestOnly && bytes > maxRecord) throw new InspectionError('limit', 'Manifest preview limit exceeded');
-        options.onProgress?.(bytes, Number(before.size));
+        options.onProgress?.(options.snapshotEncoding ? physicalRead : bytes, Number(before.size));
       }
       if (!parser.isEnded) parser.end();
       if (!complete) throw new InspectionError('invalid-json', 'Incomplete JSON document');
     } catch (error) {
+      if (error instanceof RangeError) throw new InspectionError('limit', 'Snapshot byte limit exceeded');
+      if (error instanceof SyntaxError) throw new InspectionError('invalid-json', 'Invalid snapshot encoding');
       if (error !== stopManifest) throw error;
     }
     return { manifest, sections: Object.fromEntries(boundary.sections), bytesRead: bytes, bytes: Number(before.size),
