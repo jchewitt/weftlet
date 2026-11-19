@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "runs": [
+    {
+      "environment": {
+        "node": "v24.19.0",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "corpus": {
+        "modules": 16,
+        "functionsPerModule": 80,
+        "documents": 18,
+        "selectedDocumentBytes": 2386,
+        "codeBytes": 152849,
+        "facts": 15860,
+        "semanticExtracted": 18
+      },
+      "codecs": {
+        "sourceBytes": 29216773,
+        "sourceSha256": "71e800647936684514adbcae080946e3cc0e192f65ac847965584ebd4272687f",
+        "results": [
+          {
+            "codec": "gzip-6",
+            "compressedBytes": 2784572,
+            "encodeMs": 419,
+            "decodeMs": 318,
+            "decodedBytes": 29216773,
+            "exactSha256Verified": true
+          },
+          {
+            "codec": "brotli-4",
+            "compressedBytes": 1759680,
+            "encodeMs": 312,
+            "decodeMs": 173,
+            "decodedBytes": 29216773,
+            "exactSha256Verified": true
+          }
+        ]
+      },
+      "checks": {
+        "realScip": true,
+        "strictHydrationPassed": true,
+        "savedSnapshotReadable": true,
+        "inventoryAndSnapshotPreserved": true,
+        "externalModelCalls": 0
+      }
+    },
+    {
+      "environment": {
+        "node": "v24.19.0",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "corpus": {
+        "modules": 64,
+        "functionsPerModule": 160,
+        "documents": 18,
+        "selectedDocumentBytes": 2390,
+        "codeBytes": 1214081,
+        "facts": 124532,
+        "semanticExtracted": 18
+      },
+      "codecs": {
+        "sourceBytes": 231213517,
+        "sourceSha256": "93d5f386c7d5f4ca7accab2321c2f1d5f0621693a9515e97db132e3d6a81b8a9",
+        "results": [
+          {
+            "codec": "gzip-6",
+            "compressedBytes": 22765249,
+            "encodeMs": 2566,
+            "decodeMs": 1492,
+            "decodedBytes": 231213517,
+            "exactSha256Verified": true
+          },
+          {
+            "codec": "brotli-4",
+            "compressedBytes": 17916773,
+            "encodeMs": 2398,
+            "decodeMs": 1273,
+            "decodedBytes": 231213517,
+            "exactSha256Verified": true
+          }
+        ]
+      },
+      "checks": {
+        "realScip": true,
+        "strictHydrationPassed": true,
+        "savedSnapshotReadable": true,
+        "inventoryAndSnapshotPreserved": true,
+        "externalModelCalls": 0
+      }
+    }
+  ]
+}
