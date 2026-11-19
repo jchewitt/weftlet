@@ -3,26 +3,24 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.10.0",
-      "previousVersion": "0.9.0"
+      "version": "0.11.0",
+      "previousVersion": "0.10.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.10.0",
-      "previousVersion": "0.9.0"
+      "version": "0.11.0",
+      "previousVersion": "0.10.0"
     }
   ],
   "changesets": [
-    "assisted-project-setup.md",
-    "automatic-project-skills.md",
-    "claude-extraction-choice.md",
-    "declared-retention-reviews.md",
-    "guided-project-documentation.md",
-    "onboarding-qualification.md",
-    "project-ci-scaffolding.md",
-    "project-mcp-registration.md",
-    "read-only-cache-profile.md",
-    "temporary-clean-comparison.md",
-    "verified-snapshot-delivery.md"
+    "atomic-head-generations.md",
+    "cache-coordination-foundation.md",
+    "compact-snapshot-format.md",
+    "configurable-history-retention.md",
+    "coordinated-retention-removal.md",
+    "explicit-cache-recovery.md",
+    "managed-cache-lifecycles.md",
+    "recurring-history-maintenance.md",
+    "verified-scip-retirement.md"
   ]
 }
