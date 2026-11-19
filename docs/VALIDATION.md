@@ -3879,3 +3879,13 @@ observed cache, staging and isolated process temporary files during all ten oper
 See the [measurements and candidate decision](assessments/scip-footprint-r5.md) and
 [full receipt](assessments/scip-footprint-r5.json). These runs used the fixture provider
 and the compact writer. Private-consumer disk use remains unmeasured by this benchmark.
+
+## Verified companion index retirement candidate
+
+Base `fffd579eae072bbf6d657b21cbaec9a1214ea4a2`. The public retention fixtures cover
+paired target accounting, manual and recurring cleanup, compact snapshots, current/previous
+heads and pins, identical contents at separate paths, old policies, legacy/ambiguous names,
+mismatched digests, stale plans and interrupted-removal reconciliation. The packed CLI smoke
+uses real public SCIP bytes. The [operator guide](guides/CACHE-REMOVAL.md#reclaim-companion-scip-indexes)
+and Changeset describe authorization, upgrade and recovery. The PR records qualification
+results. Private-cache replay and release publication are separate.

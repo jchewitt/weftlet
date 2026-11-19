@@ -114,10 +114,9 @@ Default limits match inventory: 100,000 entries and 8 GiB per inspected file.
 unless overridden. Policy input is limited to 2 MiB; saved review input to 64 MiB.
 
 Each object reports size, disposition, reasons, file revision/hash where available,
-required head-removal dependencies and recovery limitations. The first review can
-propose only ordinary, unshared, managed snapshots and explicitly released heads.
+required head-removal dependencies and recovery limitations. Review covers ordinary unshared managed snapshots, explicitly released heads and opted-in verified companion indexes.
 Current evidence, declared previous generations, active pins and retained heads
-protect snapshots. Semantic artifacts, indexes, receipts, unknown objects, links
+protect snapshots. An opted-in [verified companion index](CACHE-REMOVAL.md#reclaim-companion-scip-indexes) follows its selected snapshot. Semantic artifacts, other indexes, receipts, unknown objects, links
 and scratch work remain retained. Hard-linked objects are retained even if one
 name appears disposable.
 
@@ -144,11 +143,10 @@ observation, not a reader/writer lock or permission to delete concurrently.
 Reports contain local paths, repository IDs and declared owners/reasons. Keep them
 private unless reviewed. They do not include graph facts, prompts or source text.
 
-## Configurable history (post-0.10.0 candidate)
+## Configurable history in 0.11.0 and later
 
 [Coordinated prepare/apply](CACHE-REMOVAL.md) and [explicit recovery](CACHE-RECOVERY.md)
-are merged. The next candidate adds optional root/repository targets and indefinite
-retention. See the separate [history configuration guide](CACHE-HISTORY.md) for exact
+support root/repository targets and indefinite retention. See the separate [history configuration guide](CACHE-HISTORY.md) for exact
 JSON, CLI init flags, upgrading an already-oversized cache and interpreting overages.
 
 The optional `history` policy field changes which eligible history is selected; it does
@@ -158,9 +156,7 @@ accounts for persistent root data, preserves current/previous/pinned evidence ev
 target, and never limits a necessary graph or extraction coverage. Empty apply is a no-op
 with no removal journal. Regenerate prepared plans from earlier planner versions.
 
-R4a remains an explicitly reviewed operation. The [R4b recurring-maintenance candidate](CACHE-MAINTENANCE.md)
-authorizes future snapshot selection through fixed reviewed root/policy IDs. R5 compact storage
-follows separately; package installation/hydration does not run deletion.
+[Recurring maintenance](CACHE-MAINTENANCE.md) authorizes future snapshot selection through reviewed root and policy IDs. Writers can enable [compact snapshot storage](COMPACT-SNAPSHOTS.md) independently.
 
 ## Long-term history
 

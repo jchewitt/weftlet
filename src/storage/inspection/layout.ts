@@ -31,7 +31,7 @@ export interface CacheObject {
   revision: string;
   linkCount: number;
   inspection: 'not-inspected' | 'metadata-only' | 'json-complete' | 'bytes-hashed' | 'invalid' | 'limited' | 'changed' | 'unreadable';
-  metadata?: { repositoryId?: string; snapshotId?: string; previousSnapshotId?: string; commitSha?: string; configurationDigest?: string };
+  metadata?: { scipIndexDigest?: string; repositoryId?: string; snapshotId?: string; previousSnapshotId?: string; commitSha?: string; configurationDigest?: string };
   sha256?: string;
   headReferences: string[];
   protection: string[];
@@ -41,8 +41,10 @@ export interface CacheObject {
 }
 export const object = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
 export function snapshotMetadata(value: unknown) {
-  if (!object(value) || value.schemaVersion !== 1 || typeof value.snapshotId !== 'string' ||
+  if (!object(value) || !['schemaVersion', 'repositoryId', 'snapshotId', 'commitSha', 'contentDigest'].every(key => Object.hasOwn(value, key)) ||
+      value.schemaVersion !== 1 || typeof value.snapshotId !== 'string' ||
       typeof value.repositoryId !== 'string' || typeof value.commitSha !== 'string' || typeof value.contentDigest !== 'string') return;
   return { repositoryId: value.repositoryId, snapshotId: value.snapshotId, commitSha: value.commitSha,
+    ...(Object.hasOwn(value, 'scipIndexDigest') && typeof value.scipIndexDigest === 'string' && /^[a-f0-9]{64}$/.test(value.scipIndexDigest) ? { scipIndexDigest: value.scipIndexDigest } : {}),
     configurationDigest: typeof value.configurationDigest === 'string' ? value.configurationDigest : undefined };
 }

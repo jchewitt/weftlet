@@ -1,7 +1,7 @@
 import { smokeCacheRecovery } from './smoke-cache-recovery.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
+import { copyFile, mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -15,18 +15,23 @@ export async function smokeRetentionRemoval(project, installedRoot, snapshotId) 
     for (const id of ['kept', 'disposable']) await store.write({ ...saved, manifest: { ...saved.manifest, snapshotId: id } });
     await store.updateHead('default', 'kept');
   });
+  const scip = join(root, 'scip');
+  await mkdir(scip);
+  for (const id of ['kept', 'disposable', 'second-disposable']) {
+    await copyFile(join(project, '.context-graph', 'scip', snapshotId + '.scip'), join(scip, id + '.scip'));
+  }
   const run = async (...args) => JSON.parse((await promisify(execFile)(process.execPath,
     [join(installedRoot, 'dist/cli.js'), 'cache', ...args], { cwd: project, timeout: 60_000, maxBuffer: 4 * 1024 ** 2 })).stdout);
   await run('coordination', 'enable', '--root', root, '--acknowledge-quiescence');
   const policyPath = join(project, 'retention-policy.json'), planPath = join(project, 'retention-prepared.json');
-  await writeFile(policyPath, JSON.stringify({ schemaVersion: 1, history: { mode: 'target', maxBytes: 0 },
+  await writeFile(policyPath, JSON.stringify({ schemaVersion: 1, retireCompanionIndexes: true, history: { mode: 'target', maxBytes: 0 },
     profiles: [{ path: '.', repositoryId: saved.manifest.repositoryId, owner: 'public-fixture', reason: 'Package smoke' }],
     activeScopes: [{ profile: '.', head: 'default', owner: 'public-fixture', reason: 'Current evidence' }], releasedHeads: [], pins: [] }));
   const plan = await run('retention', 'prepare', '--root', root, '--policy', policyPath, '--json', '--quiet');
-  if (!plan.canApply || plan.totals.candidateFiles !== 1 || plan.history.root.protectedOverageBytes <= 0) throw Error('Installed retention preparation failed');
+  if (!plan.canApply || plan.totals.candidateFiles !== 2 || plan.history.root.protectedOverageBytes <= 0) throw Error('Installed retention preparation failed');
   await writeFile(planPath, JSON.stringify(plan));
   const result = await run('retention', 'apply', '--root', root, '--policy', policyPath, '--plan', planPath, '--expect-plan', plan.planId, '--json', '--quiet');
-  if (result.status !== 'complete' || result.deleted.length !== 1) throw Error('Installed retention removal failed');
+  if (result.status !== 'complete' || JSON.stringify(result.deleted) !== JSON.stringify(['snapshots/disposable.json', 'scip/disposable.scip'])) throw Error('Installed retention removal failed');
   await withSnapshotAccess(root, async store => {
     if (await store.read('disposable') !== undefined || (await store.readHead('default'))?.manifest.contentDigest !== saved.manifest.contentDigest) throw Error('Installed removal did not preserve current evidence');
   });
@@ -37,8 +42,8 @@ export async function smokeRetentionRemoval(project, installedRoot, snapshotId) 
   const maintain = (...extra) => run('retention', 'maintain', '--root', root, '--policy', policyPath,
     '--expect-root', plan.rootId, '--expect-policy', plan.policyDigest, '--json', '--quiet', ...extra);
   const recurring = await maintain();
-  if (recurring.status !== 'complete' || recurring.removal.deleted.length !== 1 ||
-      !recurring.removal.deleted[0].endsWith('/second-disposable.json')) throw Error('Installed recurring retention did not select fresh history');
+  if (recurring.status !== 'complete' || JSON.stringify(recurring.removal.deleted) !== JSON.stringify(['snapshots/second-disposable.json', 'scip/second-disposable.scip']) ||
+      JSON.stringify(await readdir(scip)) !== JSON.stringify(['kept.scip'])) throw Error('Installed recurring retention did not select fresh history');
   const repeated = await maintain();
   if (repeated.removal.journalPath !== null || repeated.removal.deleted.length) throw Error('Installed recurring repeat must be a no-op');
   await withSnapshotAccess(root, async store => {

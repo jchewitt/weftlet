@@ -1,6 +1,6 @@
 # Run recurring history maintenance
 
-**Candidate after 0.10.0; not yet published.** Once you have reviewed a
+**Requires Weftlet 0.11.0 or later.** Once you have reviewed a
 [history policy](CACHE-HISTORY.md), `cache retention maintain` can apply it to
 eligible snapshot history on each invocation. Run it manually, from a trusted CI
 job with a persistent cache, or through your operating system's task scheduler.
@@ -61,6 +61,8 @@ A later target, repository, scope or pin change requires a fresh policy review a
 updated `--expect-policy`. A replaced or reactivated cache with a different root
 identity also needs review. Retention settings remain outside extraction identity
 and never require a model call.
+
+To include a verified SCIP index with a selected superseded snapshot, set the top-level retention policy property `"retireCompanionIndexes": true`, prepare again, review the paired paths and use the new policy digest. Existing scheduled policies keep their index files. [Companion retirement details](CACHE-REMOVAL.md#reclaim-companion-scip-indexes).
 
 ## Scheduling and stopping
 

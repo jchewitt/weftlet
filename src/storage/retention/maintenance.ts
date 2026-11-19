@@ -21,7 +21,7 @@ export async function maintainRetention(options: RecurringRetentionOptions) {
     const policy = await readPolicy(), bounded = { ...options, policy, readPolicy };
     const current = await prepareRetentionOwned(bounded, root, rootId);
     if (!current.canApply) throw Error('Recurring retention is blocked; prepare --json to inspect current inventory and declarations');
-    if (current.objects.some(o => o.disposition === 'candidate' && (o.category !== 'snapshot' || o.removeBefore.length))) throw Error('Recurring retention cannot retire heads');
+    if (current.objects.some(o => o.disposition === 'candidate' && o.category !== 'snapshot' && !(policy.retireCompanionIndexes && o.category === 'scip-index'))) throw Error('Recurring retention cannot retire heads');
     const removal = await executeRetentionOwned(current, bounded, scope);
     return { schemaVersion: 1, kind: 'retention-maintenance-result' as const, rootId, policyDigest: current.policyDigest,
       status: removal.status, history: current.history, removal };

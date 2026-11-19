@@ -1,6 +1,6 @@
 # Coordinate cache operations
 
-**Candidate after 0.10.0; not yet published.** This opt-in feature keeps cooperating
+**Requires Weftlet 0.11.0 or later.** This opt-in feature keeps cooperating
 Weftlet builds and readers registered for their complete operation. It prepares
 safe retention work; enabling it does not delete data or enforce a size target.
 
@@ -9,7 +9,7 @@ safe retention work; enabling it does not delete data or enforce a size target.
 First stop every process using that cache: CLI jobs, MCP servers, viewer requests,
 older Weftlet versions and custom integrations. Upgrade those clients together.
 Run activations one at a time; do not change root ownership during active work.
-Then, using the candidate CLI:
+Run this command with the upgraded CLI.
 
 ```sh
 npx weftlet cache coordination status --root /path/to/cache
@@ -88,7 +88,7 @@ activation alone cannot prove a mixed-version cache safe for collection.
 
 ## Current and previous generations
 
-The candidate publishes the current snapshot ID and its immediate prior distinct
+The store publishes the current snapshot ID and its immediate prior distinct
 published ID together. Publishing the same ID again preserves both references and
 the exact head bytes. Publishing a new ID rotates the old current to previous.
 Snapshot files remain immutable. Legacy heads stay readable; their first distinct
@@ -117,11 +117,7 @@ retention. See [ADR 058](../ADR-058-atomic-head-generations.md).
 
 [Inventory](CACHE-INSPECTION.md) and [retention reviews](CACHE-RETENTION.md) remain
 observations, including when scanning a parent containing multiple managed roots.
-They are not collection locks or permission to delete. Current/previous
-bookkeeping is implemented. The candidate adds separate [reviewed removal](CACHE-REMOVAL.md);
-[explicit interrupted-operation recovery](CACHE-RECOVERY.md) is also available in this candidate. [Configurable history targets and indefinite retention](CACHE-HISTORY.md) now have an
-explicit prepare/apply candidate. Recurring maintenance follows separately; necessary
-graphs are never cut down to meet a history target.
+They are not collection locks or permission to delete. Use [reviewed removal](CACHE-REMOVAL.md) to apply a [history retention policy](CACHE-HISTORY.md) once. Use [recurring maintenance](CACHE-MAINTENANCE.md) to authorize selection for future generations.
 
 For interrupted owners, see [explicit offline recovery](CACHE-RECOVERY.md). Stop all clients,
 review the exact saved plan and preserve control records; PID/age alone never authorizes recovery.

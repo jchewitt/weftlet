@@ -1,10 +1,10 @@
 # Configure retained history
 
-**Candidate after 0.10.0; not yet published.** Configure local history in a separate
+**Requires Weftlet 0.11.0 or later.** Configure local history in a separate
 retention policy JSON file, then use coordinated `prepare/apply` to reconcile existing
 history. This first R4 slice selects history by policy; it does not install a background
 collector or run deletion during package installation, hydration or ordinary queries.
-Opt-in [recurring maintenance](CACHE-MAINTENANCE.md) is available in the next candidate slice, with explicit root/policy review and external scheduling.
+Opt-in [recurring maintenance](CACHE-MAINTENANCE.md) uses explicit root/policy review and external scheduling.
 
 ## Choose a target or indefinite retention
 
@@ -104,8 +104,7 @@ Both observational `plan` and coordinated `prepare` include a `history` report:
 Per-object reasons explain current/previous/head/pin protection, indefinite retention,
 unsupported/unknown/shared data and history selected or retained within the target.
 Attribution of an unknown file to a declared profile does **not** authorize its removal.
-Semantic artifacts, SCIP indexes, unknown files and scratch data remain protected in
-this slice; their bytes still count. Root-wide persistent audit/control bytes count too.
+Semantic artifacts, unknown files and scratch data remain protected and count toward observed use. SCIP indexes remain protected by default. With [companion retirement](CACHE-REMOVAL.md#reclaim-companion-scip-indexes) enabled, a verified index contributes its bytes to the same selection group as its superseded snapshot. Root-wide persistent audit/control bytes count too.
 Transient admission and participant markers are excluded to keep coordinated decisions
 stable while the operation holds its own gate.
 

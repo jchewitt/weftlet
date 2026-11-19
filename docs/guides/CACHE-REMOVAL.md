@@ -1,8 +1,8 @@
 # Remove reviewed local history
 
-**Candidate after 0.10.0; not yet published.** This manual workflow removes only
+**Requires Weftlet 0.11.0 or later.** This manual workflow removes only
 eligible snapshot/history files from an explicitly coordinated cache. Configurable
-history targets and indefinite retention are available in the [history policy candidate](CACHE-HISTORY.md); no 10 GiB build cap applies. After one-time migration, use
+history targets and indefinite retention are available in the [history policy](CACHE-HISTORY.md); no 10 GiB build cap applies. After one-time migration, use
 [recurring maintenance](CACHE-MAINTENANCE.md) when you want to authorize future snapshot
 selection under the same reviewed policy.
 
@@ -51,11 +51,15 @@ requires new preparation/review. Scan-limit overrides are rejected on apply; cha
 them during a new preparation. No model call, scope reduction or automatic archive
 occurs. At most 10,000 eligible files are accepted per prepared batch.
 
-Approved retired heads are removed first, then eligible snapshots. Semantic artifacts,
-indexes, receipts, unknown files, shared files and protected snapshots remain. This
-increment therefore reclaims eligible full graph history, not every cache data class.
-A necessary current graph may exceed your eventual retention target and stays protected.
-Queries for a removed historical ID report absence; they do not substitute current data.
+Approved retired heads are removed first. Each selected snapshot is then removed, followed immediately by its verified companion index if enabled. The remaining head and pin protections apply at every retention target. Queries for a removed historical ID report absence.
+
+### Reclaim companion SCIP indexes
+
+In the retention policy JSON, add the top-level property `"retireCompanionIndexes": true`. Omitting it or setting it to `false` keeps existing index files. Upgrade the clients sharing the cache and generate a fresh prepared plan. For scheduled maintenance, review the changed policy digest and update `--expect-policy`.
+
+A candidate index appears in `objects` with the reason `verified-scip-companion`, its SHA-256 and logical byte count, and its snapshot path in `removeBefore`. The full manifest must name that digest. The index must be an unshared regular file at the unique matching current or legacy path in the same declared profile. Index bytes count toward the target together with the snapshot, which can spare a newer generation. Two generations can have identical index bytes and still own separate files.
+
+Indexes belonging to retained snapshots, unmatched or ambiguous files, digest mismatches and hard links stay in place. A snapshot without a usable index or manifest index digest follows the ordinary snapshot policy. Semantic extraction artifacts remain reusable. After upgrading, repeat preparation even for a previously saved exact plan.
 
 The result lists deleted files, logical bytes, remaining candidates and `journalPath`.
 A no-op returns `journalPath: null` and `operationId: null` without writing a journal.
@@ -76,7 +80,7 @@ gate/activity marker. Further maintenance is blocked rather than guessing comple
 
 Preserve these records and quiesce cache users. Follow [explicit recovery](CACHE-RECOVERY.md)
 to inspect and clear supported exact-state blockers. Unknown/damaged records remain blocked;
-recovery never replays deletion. Do not remove markers merely because their PID is absent
+recovery never replays deletion. If removal stopped after the snapshot unlink, a surviving index has lost its manifest binding. Recovery reports its matching bytes and leaves it on disk. A subsequent prepare treats it as unattributed. Do not remove markers merely because their PID is absent
 or their date is old.
 The supported boundary is a cooperating local filesystem with upgraded clients;
 shared/distributed filesystem and power-loss recovery are not qualified here.

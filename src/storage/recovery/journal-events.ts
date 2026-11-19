@@ -15,7 +15,8 @@ export function removalCandidates(input: unknown) {
 }
 function candidatePath(path: unknown): path is string {
   return typeof path === 'string' && path === posix.normalize(path) && !path.startsWith('../') && !path.startsWith('/') &&
-    !path.split('/').includes(controlName) && /^(?:[A-Za-z0-9._-]+\/)*(?:heads|snapshots)\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/.test(path);
+    !path.split('/').some(part => part.toLowerCase() === controlName) &&
+    /^(?:[A-Za-z0-9._-]+\/)*(?:(?:heads|snapshots)\/(?:[A-Za-z0-9][A-Za-z0-9._-]{0,255}|~[a-f0-9]{64})\.json|scip\/(?:[A-Za-z0-9][A-Za-z0-9._-]{0,255}|~[a-f0-9]{64})\.scip)$/.test(path);
 }
 interface JournalIdentity { operationId: string; planId: string; journalPath: string }
 function terminalHeader(result: unknown, identity: JournalIdentity): asserts result is Record<string, unknown> {

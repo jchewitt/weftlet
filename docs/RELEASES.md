@@ -24,6 +24,15 @@ npm registry or a substitute for detailed upgrade notes.
 | [0.3.0–0.5.0](../CHANGELOG.md#050) | No-model hydration preview, validation improvements, artifact reuse, timeout diagnostics, canonical file helpers and ten-minute timeout support. |
 | [0.1.2–0.2.1](../CHANGELOG.md#021) | Release automation, committed TypeScript selection, document links, Windows launchers and document identity repair. |
 
+## 0.11.0 storage candidate for 1.0 evaluation
+
+Upgrade every process sharing a cache before enabling [coordination](guides/CACHE-COORDINATION.md)
+or [compact writes](guides/COMPACT-SNAPSHOTS.md). To adopt a history target in an existing
+cache, start with the [migration procedure](guides/CACHE-HISTORY.md#upgrade-a-cache-that-is-already-over-target).
+Review one plan before scheduling cleanup, and enable companion-index retirement explicitly
+if you want to reclaim a superseded generation’s verified SCIP file. Keep the first consumer
+measurement read-only until the operator reviews the policy and selected bytes.
+
 ## 0.10.0 release scope
 
 The integrated release includes:

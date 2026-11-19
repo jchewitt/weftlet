@@ -11,7 +11,7 @@ type RemovalObject = PreparedRetentionPlan['objects'][number];
 async function verifyCandidate(root: string, entry: RemovalObject, maxBytes: number, signal?: AbortSignal) {
   const path = join(root, entry.path), local = relative(root, path);
   if (isAbsolute(entry.path) || !local || local === '..' || local.startsWith(`..${sep}`) ||
-    entry.path.includes('\\') || !['head', 'snapshot'].includes(entry.category) || !entry.sha256) throw Error('Unsafe removal candidate');
+    entry.path.includes('\\') || !['head', 'snapshot', 'scip-index'].includes(entry.category) || !entry.sha256) throw Error('Unsafe removal candidate');
   await safeTransferPath(path);
   const revision = async () => {
     const s = await lstat(path, { bigint: true });
@@ -32,8 +32,19 @@ async function verifyPolicy(current: PreparedRetentionPlan, options: PreparedRet
 /** Internal executor: caller must own exclusive maintenance and supply its freshly authorized canonical plan. */
 export async function executeRetentionOwned(current: PreparedRetentionPlan, options: PreparedRetentionOptions, scope: CacheMaintenanceScope) {
   const root = current.root;
-  const candidates = current.objects.filter(o => o.disposition === 'candidate')
-    .sort((a, b) => Number(a.category !== 'head') - Number(b.category !== 'head') || a.path.localeCompare(b.path, 'en'));
+  const selected = current.objects.filter(o => o.disposition === 'candidate');
+  const indexes = selected.filter(o => o.category === 'scip-index');
+  const companions = new Map(indexes.map(index => [index.removeBefore[0], index]));
+  // Release heads first. Finish each snapshot and its companion together, with a durable intent per file.
+  const candidates = selected.filter(o => o.category !== 'scip-index')
+    .sort((a, b) => Number(a.category !== 'head') - Number(b.category !== 'head') || a.path.localeCompare(b.path, 'en'))
+    .flatMap(o => {
+      const index = companions.get(o.path);
+      return index && o.category === 'snapshot' ? [o, index] : [o];
+    });
+  if (candidates.length !== selected.length || (indexes.length && !current.policy.retireCompanionIndexes)) {
+    throw Error('Invalid companion index selection');
+  }
   options.signal?.throwIfAborted(); await scope.verify();
   await verifyPolicy(current, options);
   if (candidates.length === 0) return { schemaVersion: 1, kind: 'retention-removal-result', planId: current.planId,
@@ -45,7 +56,7 @@ export async function executeRetentionOwned(current: PreparedRetentionPlan, opti
   try {
     for (const entry of candidates) {
       options.signal?.throwIfAborted(); await scope.verify();
-      if (entry.removeBefore.some(head => !deleted.includes(head))) throw Error('Head retirement prerequisite was not completed');
+      if (entry.removeBefore.some(head => !deleted.includes(head))) throw Error('Removal prerequisite was not completed');
       const candidate = await verifyCandidate(root, entry, current.limits.maxBytes, options.signal);
       await journal.append({ event: 'unlink-intent', path: entry.path, sha256: entry.sha256 });
       options.signal?.throwIfAborted(); await scope.verify();
