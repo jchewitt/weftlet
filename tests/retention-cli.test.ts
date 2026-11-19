@@ -53,8 +53,8 @@ it('runs the installed-style CLI from a directory with no Git, config or provide
   expect(JSON.parse(error.stdout)).toMatchObject({ unchanged: false, canApply: false });
   expect(await readFile(join(f.cache, 'new-unknown.txt'), 'utf8')).toBe('Kept');
 }, 120_000);
-it('rejects apply/delete, missing arguments and unknown or duplicate switches before any operation', async () => {
-  for (const args of [ ['apply', '--root', 'cache'], ['plan', '--policy', 'policy'], ['init', '--file', 'file', '--file', 'other'], ['plan', '--root', 'cache', '--policy', 'policy', '--force'] ]) {
+it('rejects incomplete apply, missing arguments and unknown or duplicate switches before any operation', async () => {
+  for (const args of [ ['apply', '--root', 'cache'], ['apply', '--root', 'cache', '--policy', 'policy', '--plan', 'plan', '--expect-plan', 'id', '--max-bytes', '1'], ['plan', '--policy', 'policy'], ['init', '--file', 'file', '--file', 'other'], ['plan', '--root', 'cache', '--policy', 'policy', '--force'] ]) {
     await expect(runCacheRetention(['cache', 'retention', ...args])).rejects.toThrow();
   }
   expect(await runCacheRetention(['cache', 'usage'])).toBe(false);

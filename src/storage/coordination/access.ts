@@ -55,8 +55,9 @@ export async function withCacheAccess<T>(root: string, run: () => Promise<T>, op
   return withCleanup(async () => { wait.check(); await layout.verify(); return run(); }, () => participant!.release());
 }
 
-/** Internal maintenance boundary, not a collector or a deletion authorization. */
-export async function withCacheMaintenance<T>(root: string, run: () => Promise<T>, options: CacheAccessOptions = {}): Promise<T> {
+export interface CacheMaintenanceScope { verify(): Promise<void> }
+/** Exclusive boundary; the caller supplies any separately reviewed mutation authorization. */
+export async function withCacheMaintenance<T>(root: string, run: (scope: CacheMaintenanceScope) => Promise<T>, options: CacheAccessOptions = {}): Promise<T> {
   const wait = waiter(options); wait.check();
   const layout = await coordinationLayout(resolve(root));
   const gate = await acquireGate(layout, wait, 'maintenance');
@@ -67,6 +68,6 @@ export async function withCacheMaintenance<T>(root: string, run: () => Promise<T
       // Keep admission closed while existing users drain; new users cannot starve maintenance.
       await wait.pause('drain');
     }
-    wait.check(); return run();
+    wait.check(); return run({ verify: () => layout.verify() });
   }, () => gate.release());
 }

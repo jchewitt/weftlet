@@ -118,6 +118,7 @@ retention. See [ADR 058](../ADR-058-atomic-head-generations.md).
 [Inventory](CACHE-INSPECTION.md) and [retention reviews](CACHE-RETENTION.md) remain
 observations, including when scanning a parent containing multiple managed roots.
 They are not collection locks or permission to delete. Current/previous
-bookkeeping is implemented in this candidate; coordinated removal/recovery is next. Configurable
+bookkeeping is implemented. The candidate adds separate [reviewed removal](CACHE-REMOVAL.md);
+explicit interrupted-operation recovery follows. Configurable
 history targets and explicit indefinite retention follow them; necessary graphs
 will not be cut down to meet the proposed 10 GiB history target.

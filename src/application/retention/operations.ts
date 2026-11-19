@@ -1,5 +1,7 @@
-import { dirname, resolve } from 'node:path';
-import { writeFile } from 'node:fs/promises';
+import { applyRetention } from '../../storage/retention/apply.js';
+import { prepareRetention } from '../../storage/retention/prepared.js';
+import { dirname, resolve, relative, isAbsolute, sep } from 'node:path';
+import { writeFile, realpath } from 'node:fs/promises';
 import { transferDirectory, safeTransferPath } from '../../storage/transfer-files.js';
 import { inspectSmallJson } from '../../storage/inspection/read.js';
 import { emptyRetentionPolicy, readRetentionPolicy } from '../../storage/retention/policy.js';
@@ -25,4 +27,23 @@ export async function retentionOperation(operation: 'plan' | 'check', options: {
   const limits = saved && typeof saved === 'object' && 'limits' in saved ? saved.limits as { maxEntries?: number; maxBytes?: number } : {};
   return checkRetentionPlan(saved, { ...common, maxEntries: options.maxEntries ?? limits?.maxEntries,
     maxBytes: options.maxBytes ?? limits?.maxBytes });
+}
+
+/** These operations require an explicitly activated root and external policy/plan files. */
+export async function coordinatedRetentionOperation(operation: 'prepare' | 'apply', options: {
+  root: string; policyPath: string; planPath?: string; expectedPlan?: string; maxEntries?: number; maxBytes?: number; timeoutMs?: number;
+  signal?: AbortSignal; onProgress?: (done: number, total: number) => void;
+}) {
+  await safeTransferPath(resolve(options.root), true);
+  const root = await realpath(options.root);
+  for (const input of [options.policyPath, options.planPath].filter((path): path is string => !!path)) {
+    const local = relative(root, await realpath(input));
+    if (!local || (!isAbsolute(local) && local !== '..' && !local.startsWith(`..${sep}`))) throw Error('Keep retention policy and plan files outside the managed cache');
+  }
+  const readPolicy = () => readRetentionPolicy(options.policyPath), policy = await readPolicy();
+  const common = { ...options, root, policy, readPolicy };
+  if (operation === 'prepare') return prepareRetention(common);
+  if (!options.planPath || !options.expectedPlan) throw Error('Removal requires --plan and --expect-plan');
+  const saved = await inspectSmallJson(options.planPath, 64 * 1024 ** 2, true);
+  return applyRetention(saved, options.expectedPlan, common);
 }

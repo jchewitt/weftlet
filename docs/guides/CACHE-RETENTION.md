@@ -5,8 +5,9 @@ These review commands turn the
 [cache inventory](CACHE-INSPECTION.md) into an explicit retention review. It names
 managed profiles, active heads, previous generations and exceptional historical
 pins. Planning and checking read saved data without Git, providers or hydration.
-Removal remains a separate coordinated operation in R3b; every R3a report has
-`canApply: false`.
+Every observational R3a report has `canApply: false`. The post-0.10.0 candidate
+adds separate [coordinated preparation/removal](CACHE-REMOVAL.md); old reports
+remain ineligible for apply.
 
 ## Create a policy
 
@@ -146,10 +147,9 @@ private unless reviewed. They do not include graph facts, prompts or source text
 ## What comes next
 
 [R3b1 coordination](../ADR-056-cache-coordination.md) is merged. The
-[R3b2a lifecycle candidate](CACHE-COORDINATION.md) adds explicit managed-root
-activation and complete operation scopes. R3b2b adds transactional current/previous
-references; R3b3 adds revalidation under exclusive coordination and explicit crash
-recovery before enabling reviewed removal. R4 adds
+[R3b2a lifecycle work](CACHE-COORDINATION.md) and R3b2b atomic generations are merged.
+The R3b3a candidate adds separate [coordinated prepare/apply](CACHE-REMOVAL.md);
+R3b3b will add explicit interrupted-operation recovery. R4 adds
 configurable history-retention targets and an explicit keep-indefinitely mode.
 These targets will not cap necessary graphs or reduce extraction coverage. Protected
 current/previous/pinned evidence can exceed a target, with an overage report; real

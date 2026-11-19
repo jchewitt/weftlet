@@ -1,5 +1,51 @@
 # Validation evidence
 
+## Coordinated retention removal candidate, November 19, 2026
+
+R3b3a begins at merged PR 104 commit `f7796194a69dad3b1e17ade1938571b9638f0480`.
+It separates prepared removal plans from observational reports, revalidates under
+exclusive maintenance, retires heads before snapshots and syncs intents/results.
+No private cache, provider, automatic retention or npm publication is involved.
+Explicit interrupted-owner/journal recovery is R3b3b, not claimed by this slice.
+Configurable history targets/indefinite retention remain R4 without a graph-size cap.
+
+Initial 28 focused Linux tests passed (12 removal, 8 coordination,
+5 observational planning, 3 CLI). They include actual separate-process admission,
+retained evidence bytes/query identity, stale/old plans, policy/expiry changes,
+partial failure/cancellation, uncertain journal completion and the source CLI.
+The expanded suite passes 39 tests including 14 removal regressions, hashed long
+identities, root ownership/directory replacement and unchanged head generation tests.
+Build passes after correcting TypeScript narrowing in the new CLI formatter.
+Final full/publication/Windows results are recorded with the implementation PR after
+execution. Mocked disk failures check
+ordering and honest outcomes, not real power-loss recovery.
+
+Review identified apply limit overrides that were silently ignored and CLI alias
+normalization before the root guard. Apply now rejects scan overrides (prepared
+limits bind), and CLI/API both reject linked roots before canonicalization.
+Independent final review approved the implementation and docs, independently
+running 39 focused tests plus the final 17 CLI/removal checks. CLI operation flags
+now use a shared required/optional table; governance passes with the same 23 advisory
+findings as the base. No policies, baseline exceptions or strict graph checks were
+weakened. Documentation/version checks, relative links and extraction inventory pass.
+
+Docs add ADR 059 and a removal guide; update the coordination/retention guides,
+index, storage plan and queue. README remains a concise entrypoint to detailed
+Markdown/site docs. Provider/client setup, authority, examples and version blocks
+are unchanged. A changeset records candidate behavior; no manual version bump.
+
+### Prior atomic-generation qualification
+
+PR 104 merged after independent review at `f7796194a69dad3b1e17ade1938571b9638f0480`.
+Reviewed head `6def81bde0d8f2c576ccf77773acfcd036e5d2a2` passed full local publication
+and hosted runs [44390926705](https://github.com/jchewitt/weftlet/actions/runs/44390926705)
+and [44390915810](https://github.com/jchewitt/weftlet/actions/runs/44390915810): 1,198 toolkit
++38 core tests, three optional skips, packing/tutorial/browser, Windows storage,
+retrieval and onboarding (34 coordination plus 27 comparison/inspection tests).
+Governance passed with 23 advisory findings; the additional reference-resolver
+complexity signal was independently reviewed without a policy/baseline change.
+Not yet published.
+
 ## Atomic head generations candidate, November 18, 2026
 
 R3b2b starts from merged lifecycle commit `1ca2d5981e3cded57a3917bd7c80700e839532f1`.
