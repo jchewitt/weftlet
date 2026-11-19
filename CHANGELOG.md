@@ -1,5 +1,27 @@
 # @weftlet/toolkit
 
+## 0.11.0
+
+### Minor Changes
+
+- 20d5953: Track the current and previous distinct published snapshot together in one atomic head record. Repeating publication of the same snapshot preserves its rollback reference and head bytes. Legacy heads remain readable; inventory and retention reviews account for both generations, with additional manual rollback declarations and pins retained. Scoped library consumers can inspect `readHeadState` through `withSnapshotAccess`. Upgrade all writers before relying on current and previous head protection.
+- aa958ed: Set `WEFTLET_SNAPSHOT_FORMAT=brotli-v1` on a writer to store new snapshots in compressed blocks. Readers open mixed JSON and compact caches. Snapshot delivery exports the original JSON bytes, and retention counts the physical file size. Upgrade every reader before enabling compact writes.
+- b122d25: Configure a root-wide history-retention target, repository overrides or indefinite retention in the standalone retention policy. Coordinated preparation selects only eligible older history, including existing oversized caches, and reports protected overages without limiting necessary graphs. Empty application now returns a journal-free no-op. Cleanup remains an explicitly reviewed prepare/apply operation; regenerate older prepared plans.
+- d7f1a61: Add explicit `cache retention prepare` and `apply --expect-plan` for upgraded managed cache roots. Preparation and apply use exclusive coordination and the same head/pin rules; apply refuses stale policies/evidence, retires approved heads before dependent snapshots, and syncs per-file removal intents and outcomes. Current, previous and pinned snapshots stay protected. Existing policies retain SCIP indexes. After a partial failure, use the explicit recovery workflow for pending journals or interrupted owners.
+- a744095: Add explicit offline cache recovery planning and application for supported interrupted coordination owners and removal journals. Recovery preserves evidence and original control records, requires quiescence and an exact reviewed plan, and never resumes a deletion. The guide covers interrupted recovery, conservative refusal cases and fresh retention planning afterward.
+- d71e845: Add opt-in managed-cache coordination across hydration, saved queries, independent comparisons, transfers and viewer operations. Activate a dedicated cache root after quiescing older clients with `cache coordination enable --root <directory> --acknowledge-quiescence`; unmarked caches retain existing behavior. Custom integrations can declare complete operation roots through `withManagedCacheAccess` and consume snapshot files through `withSnapshotAccess`. Started extractor, invariant and guarded storage work finishes before protection is released, including on failure. Retention requires separate operator authorization.
+- 8465e3a: Run recurring snapshot cleanup with `cache retention maintain`, bound to a reviewed managed-root ID and history-policy digest. Each invocation recomputes eligible history under exclusive coordination while preserving current/previous/pinned evidence and reporting protected overages. One-time head retirement stays in reviewed prepare/apply; scheduling is external and no automatic install/hydration cleanup is enabled.
+- cb9499d: Set `retireCompanionIndexes: true` in a reviewed retention policy to reclaim a verified SCIP file with its superseded snapshot. The plan includes both files and their byte counts. Existing policies keep their index files. Regenerate prepared plans after upgrading, and review the new policy digest before enabling this option for recurring maintenance.
+
+### Patch Changes
+
+- ec6af00: Add an internal, cross-process cache coordination foundation and operation-scoped
+  snapshot access, with interrupted-owner and immutable-byte regressions. Retention
+  inspection recognizes its activity markers. Production lifecycle adoption,
+  coordinated removal and retention-policy application remain separate work; this change does
+  not enable pruning or alter existing application access.
+- @weftlet/core@0.11.0
+
 ## 0.10.0
 
 ### Minor Changes
