@@ -3806,3 +3806,38 @@ and tutorial behavior is unchanged. R4b recurring maintenance/adoption ergonomic
 storage remain separate; no automatic-on-upgrade/hydration cleanup is claimed. The installed
 smoke now covers protected-overage target selection and an indefinite no-op. No private consumer
 cache, paid/live provider call, deployment or npm publication was performed.
+
+
+## R4b recurring history maintenance — November 19, 2026 candidate
+
+Base: `88899bf944e5063560d9cea9cee5dcb7035c4e8d` (merged PR 107). R4a head
+`b122d25f26f27a6a8c407f1c0ca8279b1e79f53d` passed full local publication qualification,
+1,239 toolkit + 38 core tests (three optional skips), installed retention/recovery and
+tutorial smoke, and all eight hosted checks in runs `44552856216` / `44552783743`.
+One duplicate Windows storage job hit its 15-minute workflow limit; its isolated retry
+passed in 14m9s without code/test/timeout changes. Windows onboarding included 75
+coordination/removal/recovery/history and 27 comparison/inspection tests. Browser
+interaction passed. No npm publication followed that merge.
+
+R4b adds `cache retention maintain`, explicitly bound to reviewed root and policy IDs.
+It recomputes current eligible snapshots under one exclusive scope and uses the same
+internal removal executor as reviewed apply. Manual history and pending head retirement
+are refused; existing head-retirement/migration remains an explicit one-time operation.
+No daemon, automatic installation/hydration hook or public unchecked executor is added.
+
+Independent code/docs review approved with 55 passing tests (11 new maintenance, 10
+history, 14 removal, 17 recovery, three CLI). Tests include actual public temporary
+caches and CLI invocation outside a repository, advancing/undeclared heads, exact retained
+bytes, explicit pin expiry, wrong/replaced root, changed policy during inventory and after
+durable unlink intent, concurrent readers/maintenance, partial I/O failure, cancellation,
+pending-journal refusal and journal-free indefinite/under-target repeats. The CLI's
+observational-review exit behavior was caught and preserved during implementation.
+Architecture passed with the existing 23 advisory findings and no new exception/baseline.
+Final full publication and hosted qualification results are recorded in the PR when complete.
+
+Docs: ADR 062, separate recurring-maintenance guide, history/declaration/removal guidance,
+docs index, queue/storage plan and minor changeset. The packed smoke adds repeated policy
+maintenance after new publication while retaining current/previous evidence; Windows CI
+includes the new suite. README stays concise and source-authority/provider/client/tutorial
+contracts do not change. No private consumer cache, paid/live provider, deployment or npm
+publication was performed. Compact storage remains R5; archive/restore stays optional R6/2.0.

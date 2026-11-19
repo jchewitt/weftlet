@@ -14,6 +14,7 @@ Start with the path that matches your task:
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | Transfer a verified saved snapshot to a local project | [Snapshot delivery](guides/SNAPSHOT-DELIVERY.md) |
 | Configure history targets/indefinite retention (candidate) | [History policy](guides/CACHE-HISTORY.md) |
+| Schedule reviewed history cleanup across new generations | [Recurring history maintenance](guides/CACHE-MAINTENANCE.md) |
 | Remove reviewed history (candidate) | [Coordinated removal](guides/CACHE-REMOVAL.md) |
 | Recover interrupted cache operations (candidate) | [Offline recovery](guides/CACHE-RECOVERY.md) |
 | Coordinate cache readers and builds (candidate) | [Cache coordination](guides/CACHE-COORDINATION.md) |

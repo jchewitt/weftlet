@@ -30,6 +30,21 @@ export async function smokeRetentionRemoval(project, installedRoot, snapshotId) 
   await withSnapshotAccess(root, async store => {
     if (await store.read('disposable') !== undefined || (await store.readHead('default'))?.manifest.contentDigest !== saved.manifest.contentDigest) throw Error('Installed removal did not preserve current evidence');
   });
+  await withSnapshotAccess(root, async store => {
+    for (const id of ['next', 'second-disposable']) await store.write({ ...saved, manifest: { ...saved.manifest, snapshotId: id } });
+    await store.updateHead('default', 'next');
+  });
+  const maintain = (...extra) => run('retention', 'maintain', '--root', root, '--policy', policyPath,
+    '--expect-root', plan.rootId, '--expect-policy', plan.policyDigest, '--json', '--quiet', ...extra);
+  const recurring = await maintain();
+  if (recurring.status !== 'complete' || recurring.removal.deleted.length !== 1 ||
+      !recurring.removal.deleted[0].endsWith('/second-disposable.json')) throw Error('Installed recurring retention did not select fresh history');
+  const repeated = await maintain();
+  if (repeated.removal.journalPath !== null || repeated.removal.deleted.length) throw Error('Installed recurring repeat must be a no-op');
+  await withSnapshotAccess(root, async store => {
+    if ((await store.readHead('default'))?.manifest.snapshotId !== 'next' || !(await store.read('kept'))) throw Error('Installed recurring retention lost current/previous evidence');
+  });
+  console.log('Installed recurring policy maintenance handles new generations and unchanged repeats.');
   const policy = JSON.parse(await readFile(policyPath, 'utf8')); policy.history = { mode: 'indefinite' };
   await writeFile(policyPath, JSON.stringify(policy));
   const noOp = await run('retention', 'prepare', '--root', root, '--policy', policyPath, '--json', '--quiet');

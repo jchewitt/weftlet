@@ -4,7 +4,7 @@
 retention policy JSON file, then use coordinated `prepare/apply` to reconcile existing
 history. This first R4 slice selects history by policy; it does not install a background
 collector or run deletion during package installation, hydration or ordinary queries.
-Recurring maintenance integration is the next slice.
+Opt-in [recurring maintenance](CACHE-MAINTENANCE.md) is available in the next candidate slice, with explicit root/policy review and external scheduling.
 
 ## Choose a target or indefinite retention
 
@@ -82,8 +82,7 @@ quiescence and explicit ownership planning, not automatic relabeling or deletion
 
 After an operation retires a head, remove only that confirmed retirement declaration
 before preparing again. The old declaration deliberately blocks when its exact head is
-missing. This slice does not silently acknowledge retired heads for repeated unattended
-policy application. If nothing is selected, apply returns a complete no-op with
+missing. Recurring maintenance requires completed one-time migration and an empty `releasedHeads` array; it never silently acknowledges a missing head. If nothing is selected, apply returns a complete no-op with
 `journalPath: null`, `operationId: null` and no new removal journal. Repeated no-op runs
 therefore do not accumulate journals.
 

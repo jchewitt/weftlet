@@ -1,6 +1,7 @@
+import { recurringRetentionOperation } from '../application/retention/maintenance.js';
 import { initializeRetentionPolicy, retentionOperation, coordinatedRetentionOperation } from '../application/retention/operations.js';
 
-const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json]. Apply permanently removes reviewed history.';
+const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json] | maintain --root <managed-cache> --policy <file> --expect-root <id> --expect-policy <digest> [--json]. Apply removes reviewed history; maintain permanently removes history under the reviewed policy on each invocation.';
 const scanFlags = ['--max-entries', '--max-bytes'];
 const rootPolicy = ['--root', '--policy'];
 const operationFlags = {
@@ -8,6 +9,7 @@ const operationFlags = {
   plan: { required: rootPolicy, optional: scanFlags },
   check: { required: [...rootPolicy, '--plan'], optional: scanFlags },
   prepare: { required: rootPolicy, optional: [...scanFlags, '--wait-ms'] },
+  maintain: { required: [...rootPolicy, '--expect-root', '--expect-policy'], optional: [...scanFlags, '--wait-ms'] },
   apply: { required: [...rootPolicy, '--plan', '--expect-plan'], optional: ['--wait-ms'] },
 };
 function argumentsFor(args: readonly string[]) {
@@ -44,13 +46,15 @@ export async function runCacheRetention(args: readonly string[]) {
       onProgress(done: number, total: number) { if (!quiet && Date.now() - lastProgress >= 5000) { lastProgress = Date.now(); process.stderr.write(`[weftlet] retention inventory ${done}/${total} entries\n`); } },
     };
     const result = operation === 'init' ? await initializeRetentionPolicy(values.get('--file')!, { targetBytes: integer('--target-bytes'), keepIndefinitely }) :
+      operation === 'maintain' ? await recurringRetentionOperation({ ...options, expectedRoot: values.get('--expect-root')!, expectedPolicy: values.get('--expect-policy')! }) :
       operation === 'prepare' || operation === 'apply' ? await coordinatedRetentionOperation(operation, options) : await retentionOperation(operation, options);
     process.stdout.write(json ? JSON.stringify(result, null, 2) + '\n' : format(result));
-    if ('status' in result && result.status !== 'complete' || 'rootId' in result && !result.canApply || 'readyForReview' in result && !result.readyForReview || 'unchanged' in result && !result.unchanged) process.exitCode = 1;
+    if ('status' in result && result.status !== 'complete' || 'rootId' in result && 'canApply' in result && !result.canApply || 'readyForReview' in result && !result.readyForReview || 'unchanged' in result && !result.unchanged) process.exitCode = 1;
   } finally { process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); }
   return true;
 }
-function format(result: Awaited<ReturnType<typeof initializeRetentionPolicy>> | Awaited<ReturnType<typeof retentionOperation>> | Awaited<ReturnType<typeof coordinatedRetentionOperation>>) {
+function format(result: Awaited<ReturnType<typeof initializeRetentionPolicy>> | Awaited<ReturnType<typeof retentionOperation>> | Awaited<ReturnType<typeof coordinatedRetentionOperation>> | Awaited<ReturnType<typeof recurringRetentionOperation>>) {
+  if ('removal' in result) return `Recurring retention ${result.status}: ${result.removal.deleted.length} snapshots, ${result.removal.deletedLogicalBytes} logical bytes removed.\n${historySummary(result.history)}${result.removal.journalPath ? `Journal: ${result.removal.journalPath}` : 'No-op: no removal journal created.'}\nProjected bytes exclude new journal overhead; use cache usage for a fresh observation.\n`;
   if ('status' in result) return `Retention removal ${result.status}: ${result.deleted.length} files, ${result.deletedLogicalBytes} logical bytes removed.\n${result.journalPath ? `Journal: ${result.journalPath}` : 'No-op: no removal journal created.'}\n`;
   if ('rootId' in result) return `Coordinated retention ${result.canApply ? 'prepared' : 'blocked'}: ${result.totals.candidateFiles} candidate files, ${result.totals.candidateLogicalBytes} logical bytes.\nPlan: ${result.planId}\n${historySummary(result.history)}Review --json before explicit apply; preparation removes no evidence.\n`;
   if ('policyPath' in result) return `Created ${result.policyPath}\n${result.next}\n`;

@@ -1,7 +1,8 @@
 import { applyRetention } from '../../storage/retention/apply.js';
 import { prepareRetention } from '../../storage/retention/prepared.js';
-import { dirname, resolve, relative, isAbsolute, sep } from 'node:path';
-import { writeFile, realpath } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { retentionInputs } from './inputs.js';
+import { writeFile } from 'node:fs/promises';
 import { transferDirectory, safeTransferPath } from '../../storage/transfer-files.js';
 import { inspectSmallJson } from '../../storage/inspection/read.js';
 import { emptyRetentionPolicy, readRetentionPolicy, parseRetentionPolicy } from '../../storage/retention/policy.js';
@@ -39,12 +40,7 @@ export async function coordinatedRetentionOperation(operation: 'prepare' | 'appl
   root: string; policyPath: string; planPath?: string; expectedPlan?: string; maxEntries?: number; maxBytes?: number; timeoutMs?: number;
   signal?: AbortSignal; onProgress?: (done: number, total: number) => void;
 }) {
-  await safeTransferPath(resolve(options.root), true);
-  const root = await realpath(options.root);
-  for (const input of [options.policyPath, options.planPath].filter((path): path is string => !!path)) {
-    const local = relative(root, await realpath(input));
-    if (!local || (!isAbsolute(local) && local !== '..' && !local.startsWith(`..${sep}`))) throw Error('Keep retention policy and plan files outside the managed cache');
-  }
+  const root = await retentionInputs(options.root, [options.policyPath, options.planPath].filter((path): path is string => !!path));
   const readPolicy = () => readRetentionPolicy(options.policyPath), policy = await readPolicy();
   const common = { ...options, root, policy, readPolicy };
   if (operation === 'prepare') return prepareRetention(common);
