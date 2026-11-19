@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { readdir } from 'node:fs/promises';
+import { lstat, readdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -24,10 +24,21 @@ function waiter(options: CacheAccessOptions) {
     await delay(Math.min(25, remaining), undefined, { signal: options.signal });
   } };
 }
+async function recoveryBlocked(layout: CoordinationLayout) {
+  const path = join(layout.control, 'recovery.block');
+  try { await lstat(path); }
+  catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return false; throw error; }
+  await safeTransferPath(path); return true;
+}
 async function acquireGate(layout: CoordinationLayout, wait: ReturnType<typeof waiter>, mode: string) {
   for (;;) {
     wait.check();
-    try { return await createMarker(layout, layout.gate, mode); }
+    if (await recoveryBlocked(layout)) { await wait.pause('admission'); continue; }
+    try {
+      const gate = await createMarker(layout, layout.gate, mode);
+      if (!await recoveryBlocked(layout)) return gate;
+      await gate.release(); await wait.pause('admission');
+    }
     catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
       // Reject links/nonordinary objects; a valid but stale marker still blocks.

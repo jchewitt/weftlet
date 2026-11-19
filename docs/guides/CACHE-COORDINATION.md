@@ -43,8 +43,8 @@ not release protection while its work is still active.
 A blocked operation reports a coordination error. An interrupted process can leave
 an activity marker or gate. An activity marker prevents exclusive maintenance;
 a gate prevents new admission. Weftlet does not steal either based on age or PID.
-Keep the record, stop the relevant clients and investigate; automated recovery is
-a later milestone. Removing a marker while a client still uses files defeats the
+Keep the record, stop all clients and use [explicit offline recovery](CACHE-RECOVERY.md)
+to inspect supported interrupted state. Recovery is never automatic. Removing a marker while a client still uses files defeats the
 protocol. Unsupported descriptors fail closed rather than silently running without
 protection. This implementation requires a cooperative local filesystem; shared
 network/distributed filesystems have not been qualified.
@@ -119,6 +119,9 @@ retention. See [ADR 058](../ADR-058-atomic-head-generations.md).
 observations, including when scanning a parent containing multiple managed roots.
 They are not collection locks or permission to delete. Current/previous
 bookkeeping is implemented. The candidate adds separate [reviewed removal](CACHE-REMOVAL.md);
-explicit interrupted-operation recovery follows. Configurable
+[explicit interrupted-operation recovery](CACHE-RECOVERY.md) is also available in this candidate. Configurable
 history targets and explicit indefinite retention follow them; necessary graphs
 will not be cut down to meet the proposed 10 GiB history target.
+
+For interrupted owners, see [explicit offline recovery](CACHE-RECOVERY.md). Stop all clients,
+review the exact saved plan and preserve control records; PID/age alone never authorizes recovery.

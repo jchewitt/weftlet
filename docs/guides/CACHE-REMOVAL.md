@@ -69,9 +69,10 @@ paths, not model prompts or graph payloads. Each unlink is preceded by a synced 
 An uncertain journal write leaves a `.pending` marker; process death can also leave a
 gate/activity marker. Further maintenance is blocked rather than guessing completion.
 
-Preserve these records and quiesce cache users for investigation. Explicit reviewed
-recovery is the next R3b3b slice; this candidate has no force-unlock or journal replay
-command. Do not remove markers merely because their PID is absent or their date is old.
+Preserve these records and quiesce cache users. Follow [explicit recovery](CACHE-RECOVERY.md)
+to inspect and clear supported exact-state blockers. Unknown/damaged records remain blocked;
+recovery never replays deletion. Do not remove markers merely because their PID is absent
+or their date is old.
 The supported boundary is a cooperating local filesystem with upgraded clients;
 shared/distributed filesystem and power-loss recovery are not qualified here.
 

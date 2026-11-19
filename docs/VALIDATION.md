@@ -3736,3 +3736,41 @@ YAML/schema checks and extraction inventory checks are recorded with the impleme
 No live repository dispatch, token creation/access, paid model call, npm release, merge, hosting,
 DNS or downstream deployment was performed. End-to-end activation remains dependent on scoped
 cross-repository authorization and the separately staged docs receiver/default-branch workflow.
+
+## R3b3b explicit cache recovery — November 19, 2026 candidate
+
+Base: `0f3125d167944d05396d863e5e1e0d6a65d14a68` (merged PR 105). The preceding
+R3b3a final head `d52ad8a47b7f197cc07b20829f6f090d91255e72` passed all eight hosted
+checks in runs `44432392941` and `44432386735`: Linux publication/browser qualification,
+Windows onboarding/storage/startup/retrieval, 1,212 toolkit + 38 core tests with three
+optional skips, and fresh installed prepare/apply smoke. Independent review approved it;
+main's merge tree matches that reviewed head. No npm publication followed that merge.
+
+R3b3b adds read-only exact-state recovery plans and explicit quiesced application.
+Original control bytes are archived before clearing supported blockers; graph/index/
+semantic bytes and original removal journals are retained. Terminal journal results,
+current head references and receipt/claim linkage are checked. Unknown/damaged records
+stay blocked rather than being silently repaired. Full control bookkeeping capacity is
+preflighted before creation; it is not a graph or retention-size limit.
+
+Focused local qualification: 17 new recovery regressions passed, including actual killed
+reader/recovery processes, same/different-plan competing processes, live-owner vetoes,
+unchanged evidence, stale/edited plans, complete journal reconciliation, dangling/changed/
+truncated cases, links, sync failures, cancellation, strict record schemas, final-receipt
+failure after admission reopens, aggregate bytes/entry preflight, and an actual near-limit
+control-directory rejection with no new recovery artifacts. Governance passes with 23
+advisory findings, unchanged from the base; no policy or baseline exception was added. Earlier independent
+review reran 35 recovery/coordination/removal tests; review fixes added strict completion
+receipt linkage, terminal result reconciliation, bounded archive preflight and owner schema
+checks. Final independent read-only review approved the code, tests, docs and installed
+smoke wiring, with no remaining blockers; it independently reran the 16-test recovery
+suite and reviewed the added near-capacity regression. Full gate, installed smoke and
+hosted platform results are recorded in the candidate PR when completed; they are not
+implied by focused tests.
+
+Docs reviewed: ADR 060, separate recovery guide, coordination/removal guides, docs index,
+1.0 queue and storage roadmap. README remains concise and links the guide index; provider,
+agent, tutorial and evidence-authority behavior is unchanged. A changeset records consumer
+behavior without manually changing versions. R4 explicitly includes already-oversized caches,
+configurable/indefinite retention and protected overages without capping necessary graphs.
+No private cache, model/provider, source application or deployment action was performed.

@@ -1,3 +1,4 @@
+import { smokeCacheRecovery } from './smoke-cache-recovery.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -29,5 +30,6 @@ export async function smokeRetentionRemoval(project, installedRoot, snapshotId) 
   await withSnapshotAccess(root, async store => {
     if (await store.read('disposable') !== undefined || (await store.readHead('default'))?.manifest.contentDigest !== saved.manifest.contentDigest) throw Error('Installed removal did not preserve current evidence');
   });
+  await smokeCacheRecovery(project, installedRoot, root, saved.manifest.contentDigest);
   console.log('Installed retention prepare/apply removes only reviewed public-fixture history.');
 }
