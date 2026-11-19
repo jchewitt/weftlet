@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "090325d99064467599dd7f4834e04847799ad6fddfefe3f98d1bb44504bce5a5"
+      "destinationSha256": "c9931d8825c5bbb3edd4bc29d03f32e9f9e1c9c5a32da9222468c26b2a412f29"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "bbf157152f86901bd2ed552c705e635dc654c70bc506f0aedd2eb341b2ea9d92"
+      "destinationSha256": "ee570d5fcb79e6699e01d8797445e58d24e0dabd9e0bee71f2eeeb154f0432db"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -586,6 +586,7 @@
     ".changeset/coordinated-retention-removal.md",
     ".changeset/explicit-cache-recovery.md",
     ".changeset/managed-cache-lifecycles.md",
+    ".changeset/recurring-history-maintenance.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -664,6 +665,7 @@
     "docs/ADR-059-coordinated-retention-removal.md",
     "docs/ADR-060-explicit-cache-recovery.md",
     "docs/ADR-061-configurable-history-selection.md",
+    "docs/ADR-062-recurring-history-maintenance.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -711,6 +713,7 @@
     "docs/guides/CACHE-COORDINATION.md",
     "docs/guides/CACHE-HISTORY.md",
     "docs/guides/CACHE-INSPECTION.md",
+    "docs/guides/CACHE-MAINTENANCE.md",
     "docs/guides/CACHE-RECOVERY.md",
     "docs/guides/CACHE-REMOVAL.md",
     "docs/guides/CACHE-RETENTION.md",
@@ -1045,6 +1048,8 @@
     "src/application/overlay.test.ts",
     "src/application/overlay.ts",
     "src/application/recovery/operations.ts",
+    "src/application/retention/inputs.ts",
+    "src/application/retention/maintenance.ts",
     "src/application/retention/operations.ts",
     "src/application/saved-code-coverage.ts",
     "src/application/saved-compatibility.ts",
@@ -1299,6 +1304,8 @@
     "src/storage/retention/history-policy.ts",
     "src/storage/retention/history-selection.ts",
     "src/storage/retention/journal.ts",
+    "src/storage/retention/maintenance.ts",
+    "src/storage/retention/owned-removal.ts",
     "src/storage/retention/plan.ts",
     "src/storage/retention/policy.ts",
     "src/storage/retention/prepared.ts",
@@ -1393,6 +1400,7 @@
     "tests/rdf.test.ts",
     "tests/relationship-retrieval.test.ts",
     "tests/retention-cli.test.ts",
+    "tests/retention-maintenance.test.ts",
     "tests/retention-plan.test.ts",
     "tests/retention-removal.test.ts",
     "tests/routing.test.ts",

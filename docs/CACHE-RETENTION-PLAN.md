@@ -33,7 +33,7 @@ remain operational constraints, distinct from retention policy. Estimates and
 transient peak reporting help operators plan capacity; they are not an implicit
 10 GiB build quota. The R4a candidate implements the optional standalone `history` policy described in
 [ADR 061](ADR-061-configurable-history-selection.md); no default collector is activated.
-Recurring maintenance remains R4b work. These options are not in published 0.10.0.
+Opt-in recurring maintenance is now the R4b candidate, described in [its guide](guides/CACHE-MAINTENANCE.md). These options are not in published 0.10.0.
 
 Consumer observations on installed 0.9.0 (not independently measured upstream):
 
@@ -136,8 +136,8 @@ protected overages are reported without blocking necessary graphs. Existing over
 are covered by public migration tests. See the [guide](guides/CACHE-HISTORY.md).
 
 This slice uses explicit coordinated prepare/apply, with journal-free no-ops. It does not
-start automatic collection on update/hydration. R4b will qualify opt-in recurring maintenance
-and adoption ergonomics, including the exact-retirement-declaration boundary. One exact
+start automatic collection on update/hydration. The R4b candidate adds opt-in recurring maintenance after one-time migration;
+exact head retirement stays in reviewed prepare/apply. One exact
 managed root spanning user-cache profiles supports a shared target; independently activated
 roots do not silently become one coordinated budget. R5 compact representation is separate.
 
@@ -201,8 +201,9 @@ profiles/active scopes and declare additional historical pins. Produce a complet
 and migration preview; old head pointers and unknown files are not silently disposable.
 Once declarations and policy are reviewed, reconcile eligible superseded history toward
 the configured user-wide target (plus optional repository targets). Lowering a target
-later must follow the same rules. The exact configuration and automatic invocation points
-remain R4 work; merely upgrading the package must not initiate an unexplained sweep.
+later must follow the same rules. R4a defines the optional history policy and R4b adds explicit recurring invocation
+with fixed reviewed root/policy IDs. Scheduling is external; merely upgrading the package
+does not initiate a sweep.
 
 Test over-target migration, repeat idempotence, stale plans/concurrent publishers, multiple
 profiles, protected overage, unknown/legacy objects and an explicit indefinite-retention
@@ -245,3 +246,17 @@ historical IDs must report that state, never silently resolve to newer evidence.
 For every stage retain exact version/commit, deterministic test scope, byte
 accounting and limitations. Consumer acceptance and any private archival trial
 remain consumer-owned; no destination or service has been configured upstream.
+
+## R4b implementation update — November 19, 2026
+
+The candidate `cache retention maintain` command binds recurring authorization to a
+reviewed managed-root ID and policy digest. It selects fresh history under one exclusive
+scope and shares the canonical removal executor; current/previous/pin/unknown protections,
+strict inventory checks, failure journals and explicit recovery remain intact. External CI
+or task scheduling invokes it; no install/hydrate/query hook or automatic default is added.
+
+Complete one-time reviewed head retirement before scheduling; `releasedHeads` must be empty.
+The recurring command never guesses missing heads away or modifies the policy. Active heads
+track new generations without per-run edits. Policy/root changes need new review. See
+[ADR 062](ADR-062-recurring-history-maintenance.md) and the [guide](guides/CACHE-MAINTENANCE.md).
+R4a was reviewed and merged in PR 107; neither storage slice is yet published to npm.

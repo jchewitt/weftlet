@@ -158,8 +158,9 @@ accounts for persistent root data, preserves current/previous/pinned evidence ev
 target, and never limits a necessary graph or extraction coverage. Empty apply is a no-op
 with no removal journal. Regenerate prepared plans from earlier planner versions.
 
-R4a remains an explicitly reviewed operation. R4b recurring-maintenance integration and
-R5 compact storage follow separately; package installation/hydration does not run deletion.
+R4a remains an explicitly reviewed operation. The [R4b recurring-maintenance candidate](CACHE-MAINTENANCE.md)
+authorizes future snapshot selection through fixed reviewed root/policy IDs. R5 compact storage
+follows separately; package installation/hydration does not run deletion.
 
 ## Long-term history
 
