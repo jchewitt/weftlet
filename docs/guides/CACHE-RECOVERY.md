@@ -1,6 +1,6 @@
 # Recover interrupted cache coordination
 
-**Candidate after 0.10.0; not yet published.** Recovery clears reviewed coordination
+**Requires Weftlet 0.11.0 or later.** Recovery clears reviewed coordination
 blockers so saved evidence can be used again. It preserves graphs, semantic artifacts,
 indexes and original removal journals. It never resumes a deletion or starts a model.
 

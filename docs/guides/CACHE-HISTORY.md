@@ -1,10 +1,10 @@
 # Configure retained history
 
-**Candidate after 0.10.0; not yet published.** Configure local history in a separate
+**Requires Weftlet 0.11.0 or later.** Configure local history in a separate
 retention policy JSON file, then use coordinated `prepare/apply` to reconcile existing
 history. This first R4 slice selects history by policy; it does not install a background
 collector or run deletion during package installation, hydration or ordinary queries.
-Opt-in [recurring maintenance](CACHE-MAINTENANCE.md) is available in the next candidate slice, with explicit root/policy review and external scheduling.
+Opt-in [recurring maintenance](CACHE-MAINTENANCE.md) uses explicit root/policy review and external scheduling.
 
 ## Choose a target or indefinite retention
 

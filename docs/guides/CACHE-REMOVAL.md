@@ -1,8 +1,8 @@
 # Remove reviewed local history
 
-**Candidate after 0.10.0; not yet published.** This manual workflow removes only
+**Requires Weftlet 0.11.0 or later.** This manual workflow removes only
 eligible snapshot/history files from an explicitly coordinated cache. Configurable
-history targets and indefinite retention are available in the [history policy candidate](CACHE-HISTORY.md); no 10 GiB build cap applies. After one-time migration, use
+history targets and indefinite retention are available in the [history policy](CACHE-HISTORY.md); no 10 GiB build cap applies. After one-time migration, use
 [recurring maintenance](CACHE-MAINTENANCE.md) when you want to authorize future snapshot
 selection under the same reviewed policy.
 

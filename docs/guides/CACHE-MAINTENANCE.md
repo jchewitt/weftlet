@@ -1,6 +1,6 @@
 # Run recurring history maintenance
 
-**Candidate after 0.10.0; not yet published.** Once you have reviewed a
+**Requires Weftlet 0.11.0 or later.** Once you have reviewed a
 [history policy](CACHE-HISTORY.md), `cache retention maintain` can apply it to
 eligible snapshot history on each invocation. Run it manually, from a trusted CI
 job with a persistent cache, or through your operating system's task scheduler.

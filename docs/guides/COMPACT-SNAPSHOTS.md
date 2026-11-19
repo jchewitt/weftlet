@@ -1,6 +1,6 @@
 # Store new snapshots in compressed blocks
 
-**Candidate after 0.10.0.** Upgrade every Weftlet reader, writer, CI runner and local
+**Requires Weftlet 0.11.0 or later.** Upgrade every Weftlet reader, writer, CI runner and local
 tool sharing the cache before enabling the compact writer. Start with one writer.
 On Linux, macOS or WSL, run the following from an installed consumer project.
 
