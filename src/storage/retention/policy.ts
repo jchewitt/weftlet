@@ -1,3 +1,4 @@
+import { parseHistoryPolicy, type HistoryPolicy } from './history-policy.js';
 import { inspectSmallJson } from '../inspection/read.js';
 
 export interface ProfileDeclaration { path: string; repositoryId: string; owner: string; reason: string }
@@ -6,6 +7,7 @@ export interface ReleasedHead extends Omit<ScopeDeclaration, 'previousSnapshotId
 export interface SnapshotPin { profile: string; snapshotId: string; owner: string; reason: string; expiresAt?: string }
 export interface RetentionPolicy {
   schemaVersion: 1;
+  history?: HistoryPolicy;
   profiles: ProfileDeclaration[];
   activeScopes: ScopeDeclaration[];
   releasedHeads: ReleasedHead[];
@@ -23,7 +25,7 @@ function storageId(value: unknown): asserts value is string {
   if (typeof value !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/.test(value)) throw Error('Unsafe retention storage identifier');
 }
 function profile(value: unknown): asserts value is string {
-  if (typeof value !== 'string' || value.length > 1024 || (value !== '.' && (!/^[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*$/.test(value) || value.split('/').some(p => p === '.' || p === '..')))) throw Error('Retention profile must be a contained relative path');
+  if (typeof value !== 'string' || value.length > 1024 || value.toLowerCase().split('/').includes('.weftlet-coordination') || (value !== '.' && (!/^[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*$/.test(value) || value.split('/').some(p => p === '.' || p === '..')))) throw Error('Retention profile must be a contained relative path');
 }
 function declaration(value: unknown, allowed: string[]): asserts value is Record<string, unknown> {
   if (!object(value)) throw Error('Expected retention declaration object');
@@ -31,7 +33,7 @@ function declaration(value: unknown, allowed: string[]): asserts value is Record
 }
 export function parseRetentionPolicy(input: unknown): RetentionPolicy {
   if (!object(input) || input.schemaVersion !== 1) throw Error('Expected retention policy schemaVersion 1');
-  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins']);
+  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins', 'history']);
   for (const name of ['profiles', 'activeScopes', 'releasedHeads', 'pins']) {
     if (!Array.isArray(input[name]) || input[name].length > 5000) throw Error('Retention policy arrays must contain at most 5000 declarations');
   }
@@ -41,6 +43,7 @@ export function parseRetentionPolicy(input: unknown): RetentionPolicy {
     if (profileAliases.has(p.path.toLowerCase())) throw Error('Duplicate retention profile');
     profileAliases.add(p.path.toLowerCase()); profiles.add(p.path);
   }
+  if (input.history !== undefined) parseHistoryPolicy(input.history, new Set((input.profiles as ProfileDeclaration[]).map(p => p.repositoryId)));
   const heads = new Set<string>(), pins = new Set<string>();
   for (const name of ['activeScopes', 'releasedHeads', 'pins'] as const) {
     for (const item of input[name] as unknown[]) validateReference(name, item, profiles, heads, pins);

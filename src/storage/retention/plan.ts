@@ -14,14 +14,14 @@ export async function planRetention(options: RetentionPlanOptions) {
   const root = resolve(options.root);
   const inventory = await inventoryCache({ roots: [root], verify: true, maxEntries: options.maxEntries,
     maxBytes: options.maxBytes, signal: options.signal, onProgress: options.onProgress });
-  const { issues, pins, objects } = evaluateRetention(inventory, policy, now.getTime());
+  const { issues, pins, objects, history } = evaluateRetention(inventory, policy, now.getTime());
   const candidates = objects.filter(entry => entry.disposition === 'candidate');
-  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v2', root,
+  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v3', root,
     limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     policyDigest: persistedJsonDigest(policy), policy, inventoryDigest: persistedJsonDigest(inventory.objects),
     readyForReview: issues.length === 0, canApply: false,
     issues: issues.sort((a, b) => a.path.localeCompare(b.path, 'en') || a.code.localeCompare(b.code, 'en')),
-    pins, totals: { observedLogicalBytes: inventory.totals.logicalBytes,
+    pins, history, totals: { observedLogicalBytes: inventory.totals.logicalBytes,
       observedUniqueLogicalBytes: inventory.totals.uniqueLogicalBytes,
       candidateLogicalBytes: candidates.reduce((n, c) => n + c.logicalBytes, 0), candidateFiles: candidates.length,
       retainedLogicalBytes: objects.filter(o => o.disposition === 'retain').reduce((n, o) => n + o.logicalBytes, 0) },

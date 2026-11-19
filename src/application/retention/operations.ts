@@ -4,13 +4,18 @@ import { dirname, resolve, relative, isAbsolute, sep } from 'node:path';
 import { writeFile, realpath } from 'node:fs/promises';
 import { transferDirectory, safeTransferPath } from '../../storage/transfer-files.js';
 import { inspectSmallJson } from '../../storage/inspection/read.js';
-import { emptyRetentionPolicy, readRetentionPolicy } from '../../storage/retention/policy.js';
+import { emptyRetentionPolicy, readRetentionPolicy, parseRetentionPolicy } from '../../storage/retention/policy.js';
 import { checkRetentionPlan, planRetention } from '../../storage/retention/plan.js';
 
-export async function initializeRetentionPolicy(file: string) {
+export async function initializeRetentionPolicy(file: string, options: { targetBytes?: number; keepIndefinitely?: boolean } = {}) {
+  if (options.targetBytes !== undefined && options.keepIndefinitely) throw Error('Choose a history target or indefinite retention');
+  const policy = emptyRetentionPolicy();
+  if (options.targetBytes !== undefined) policy.history = { mode: 'target', maxBytes: options.targetBytes };
+  else if (options.keepIndefinitely) policy.history = { mode: 'indefinite' };
+  parseRetentionPolicy(policy);
   const path = resolve(file);
   await transferDirectory(dirname(path)); await safeTransferPath(path, false, true);
-  await writeFile(path, JSON.stringify(emptyRetentionPolicy(), null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+  await writeFile(path, JSON.stringify(policy, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
   return { schemaVersion: 1, policyPath: path, initialized: true,
     next: 'Declare managed profiles, active heads, previous generations and explicit pins before requesting a review plan. Existing heads remain protected by default.' };
 }

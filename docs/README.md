@@ -13,6 +13,7 @@ Start with the path that matches your task:
 | Install managed GitHub workflows | [CI setup](guides/CI-SETUP.md) |
 | Generate evidence in CI and deliver it to developers | [CI and evidence delivery](guides/CI.md) |
 | Transfer a verified saved snapshot to a local project | [Snapshot delivery](guides/SNAPSHOT-DELIVERY.md) |
+| Configure history targets/indefinite retention (candidate) | [History policy](guides/CACHE-HISTORY.md) |
 | Remove reviewed history (candidate) | [Coordinated removal](guides/CACHE-REMOVAL.md) |
 | Recover interrupted cache operations (candidate) | [Offline recovery](guides/CACHE-RECOVERY.md) |
 | Coordinate cache readers and builds (candidate) | [Cache coordination](guides/CACHE-COORDINATION.md) |

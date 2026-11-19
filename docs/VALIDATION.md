@@ -3774,3 +3774,35 @@ agent, tutorial and evidence-authority behavior is unchanged. A changeset record
 behavior without manually changing versions. R4 explicitly includes already-oversized caches,
 configurable/indefinite retention and protected overages without capping necessary graphs.
 No private cache, model/provider, source application or deployment action was performed.
+
+## R4a configurable history selection — November 19, 2026 candidate
+
+Base: `1a46f546e5df367135be7ccb6c538b1b1278a56d` (merged PR 106). The preceding
+recovery head `a7440956a4241bde75595ca1aef6c5289bc82cf5` passed all eight checks in
+hosted runs `44445525148` and `44445488377`, full local publication qualification,
+1,229 toolkit + 38 core tests with three optional skips, actual killed-owner installed
+recovery, Windows 65 coordination/removal/recovery tests and browser qualification.
+Independent review approved that bounded slice; no npm publication followed its merge.
+
+R4a adds optional standalone history targets, repository overrides and indefinite retention.
+It selects only canonically eligible snapshots and necessary head prerequisites under existing
+exclusive prepare/apply. It reports protected overage without graph/build caps. Empty application
+returns null operation/journal identifiers and does not write an empty journal. Prepared planner
+versions advance; semantic/snapshot/extractor identities do not change.
+
+Local focused qualification: 31 history/removal/review/CLI tests passed, followed by the 10-test
+history suite including the new actual CLI case. Independent review ran 48 focused tests including
+recovery, then 13 final history/CLI tests. Coverage includes an already-oversized multi-profile
+cache, shared head prerequisites, global/repository indefinite retention, necessary graphs above
+a zero target, nested unknown-file attribution, cross-profile repository aggregation, stale
+policy/pin/head/mtime detection, hard-linked/unknown/legacy protection and no-op stability.
+Review caught and resolved reserved control-profile attribution and a manual-mode retry identity
+regression; source config/providers are never initialized by these operations. Full packaging,
+hosted checks and final review results are recorded in the candidate PR when complete.
+
+Docs: ADR 061, a separate history guide, retention/removal/coordination guides, docs index,
+roadmap/1.0 queue and changeset. README stays concise; provider, source authority, agent setup
+and tutorial behavior is unchanged. R4b recurring maintenance/adoption ergonomics and R5 compact
+storage remain separate; no automatic-on-upgrade/hydration cleanup is claimed. The installed
+smoke now covers protected-overage target selection and an indefinite no-op. No private consumer
+cache, paid/live provider call, deployment or npm publication was performed.

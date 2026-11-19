@@ -2,7 +2,7 @@
 
 **Candidate after 0.10.0; not yet published.** This manual workflow removes only
 eligible snapshot/history files from an explicitly coordinated cache. Configurable
-history targets and indefinite retention are planned next; no 10 GiB build cap applies.
+history targets and indefinite retention are available in the [history policy candidate](CACHE-HISTORY.md); no 10 GiB build cap applies.
 
 ## Prepare the cache and policy
 
@@ -56,11 +56,14 @@ A necessary current graph may exceed your eventual retention target and stays pr
 Queries for a removed historical ID report absence; they do not substitute current data.
 
 The result lists deleted files, logical bytes, remaining candidates and `journalPath`.
-Successful runs report `status: complete`; cancellation or an ordinary I/O failure
+A no-op returns `journalPath: null` and `operationId: null` without writing a journal.
+Successful runs report `status: complete` (completion of reviewed actions, not a byte-target guarantee); cancellation or an ordinary I/O failure
 reports `partial` and exits nonzero. Completed removals are not rolled back. Keep the
 journal, inspect remaining files and reprepare. If a head was already retired, update
-only that confirmed retirement declaration before preparing again. A zero-deletion
-failure can retry the unchanged plan if all evidence/policy inputs still match.
+only that confirmed retirement declaration before preparing again. In legacy manual mode, a zero-deletion
+failure can retry the unchanged plan if all evidence/policy inputs still match. Configured
+history targets also account for persistent audit bytes, so a new failure journal requires
+fresh preparation even when evidence was unchanged.
 
 ## Interrupted operations
 

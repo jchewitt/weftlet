@@ -1,10 +1,11 @@
+import { selectHistory } from './history-selection.js';
 import type { inventoryCache } from '../inspection/inventory.js';
 import type { RetentionPolicy } from './policy.js';
 import { resolveRetentionReferences } from './references.js';
 import { retentionDecision } from './decisions.js';
 
 /** Shared decision rules for observational review and exclusively coordinated preparation. */
-export function evaluateRetention(inventory: Awaited<ReturnType<typeof inventoryCache>>, policy: RetentionPolicy, now: number) {
+export function evaluateRetention(inventory: Awaited<ReturnType<typeof inventoryCache>>, policy: RetentionPolicy, now: number, reservedControlBytes = 0) {
   const references = resolveRetentionReferences(policy, inventory.objects, now);
   const issues = [...references.issues, ...inventory.issues.map(i => ({ code: i.code, path: i.path }))];
   if (!inventory.complete || inventory.missingRoots.length) issues.push({ code: 'incomplete-inventory', path: '.' });
@@ -16,5 +17,6 @@ export function evaluateRetention(inventory: Awaited<ReturnType<typeof inventory
     }
   }
   for (const head of inventory.danglingHeads) issues.push({ code: 'dangling-head', path: head });
-  return { issues, pins: references.pins, objects: inventory.objects.map(entry => retentionDecision(entry, references)) };
+  const selected = selectHistory(inventory.objects, inventory.objects.map(entry => retentionDecision(entry, references)), policy, reservedControlBytes);
+  return { issues, pins: references.pins, ...selected };
 }
