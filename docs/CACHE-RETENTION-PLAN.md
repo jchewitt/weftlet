@@ -31,8 +31,9 @@ truncate facts, narrow scope or delete current evidence merely to meet this targ
 Actual disk exhaustion and an independently configured free-space safety floor
 remain operational constraints, distinct from retention policy. Estimates and
 transient peak reporting help operators plan capacity; they are not an implicit
-10 GiB build quota. The rollout/default and concrete config names remain R4 design
-work, not options already accepted by the toolkit.
+10 GiB build quota. The R4a candidate implements the optional standalone `history` policy described in
+[ADR 061](ADR-061-configurable-history-selection.md); no default collector is activated.
+Recurring maintenance remains R4b work. These options are not in published 0.10.0.
 
 Consumer observations on installed 0.9.0 (not independently measured upstream):
 
@@ -113,7 +114,7 @@ Complete R3b through independently reviewed increments:
 - **R3b3a — Reviewed removal (merged PR 105):** [ADR 059](ADR-059-coordinated-retention-removal.md)
   adds exclusively coordinated preparation and exact-plan application, head-first
   removal and synced per-file journals. Observational R3a plans remain ineligible.
-- **R3b3b — Explicit recovery (candidate):** [ADR 060](ADR-060-explicit-cache-recovery.md)
+- **R3b3b — Explicit recovery (merged PR 106):** [ADR 060](ADR-060-explicit-cache-recovery.md)
   adds exact-state offline review/application for supported interrupted owner/journal
   records. Quiescence, preserved control archives, live-owner vetoes and head/candidate
   reconciliation prevent automatic replay. Malformed/unknown records remain blockers;
@@ -124,6 +125,21 @@ Lifecycle activation does not enable collection. Parent-wide inventory and
 retention reports remain observational until R3b3. R4 retention policy and R5
 compact storage follow these safety boundaries; necessary graph/build size is
 not capped by the proposed history-retention target.
+
+## R4a implementation update — November 19, 2026
+
+[ADR 061](ADR-061-configurable-history-selection.md) adds optional root-wide/repository
+logical-byte targets and indefinite retention to the separate retention policy. Canonical
+eligibility still protects current/previous/pins, unknown data, indexes and reusable artifacts.
+Oldest eligible history and necessary released-head prerequisites are selected only as needed;
+protected overages are reported without blocking necessary graphs. Existing oversized caches
+are covered by public migration tests. See the [guide](guides/CACHE-HISTORY.md).
+
+This slice uses explicit coordinated prepare/apply, with journal-free no-ops. It does not
+start automatic collection on update/hydration. R4b will qualify opt-in recurring maintenance
+and adoption ergonomics, including the exact-retirement-declaration boundary. One exact
+managed root spanning user-cache profiles supports a shared target; independently activated
+roots do not silently become one coordinated budget. R5 compact representation is separate.
 
 ## Bounded tasks
 

@@ -144,25 +144,24 @@ observation, not a reader/writer lock or permission to delete concurrently.
 Reports contain local paths, repository IDs and declared owners/reasons. Keep them
 private unless reviewed. They do not include graph facts, prompts or source text.
 
-## What comes next
+## Configurable history (post-0.10.0 candidate)
 
-[R3b1 coordination](../ADR-056-cache-coordination.md) is merged. The
-[R3b2a lifecycle work](CACHE-COORDINATION.md) and R3b2b atomic generations are merged.
-The R3b3a candidate adds separate [coordinated prepare/apply](CACHE-REMOVAL.md);
-R3b3b will add explicit interrupted-operation recovery. R4 adds
-configurable history-retention targets and an explicit keep-indefinitely mode.
-These targets will not cap necessary graphs or reduce extraction coverage. Protected
-current/previous/pinned evidence can exceed a target, with an overage report; real
-disk capacity remains a separate constraint. R5 qualifies compact storage based on the
-[representation study](../assessments/storage-profile-r2.md). Until then, these
-commands help inspect and review retention without altering existing evidence.
+[Coordinated prepare/apply](CACHE-REMOVAL.md) and [explicit recovery](CACHE-RECOVERY.md)
+are merged. The next candidate adds optional root/repository targets and indefinite
+retention. See the separate [history configuration guide](CACHE-HISTORY.md) for exact
+JSON, CLI init flags, upgrading an already-oversized cache and interpreting overages.
 
-## Planning retention and long-term history
+The optional `history` policy field changes which eligible history is selected; it does
+not bypass any ownership, reference, review or coordination check. Without it, this
+manual policy continues to propose all otherwise eligible history. A configured target
+accounts for persistent root data, preserves current/previous/pinned evidence even above
+target, and never limits a necessary graph or extraction coverage. Empty apply is a no-op
+with no removal journal. Regenerate prepared plans from earlier planner versions.
 
-The proposed 10 GiB value concerns accumulated retained history, not an individual
-graph or build. R4 will make the target configurable, including indefinite retention.
-Those options are planned, not settings recognized by the current commands. A
-retention target is not permission to delete current or pinned evidence.
+R4a remains an explicitly reviewed operation. R4b recurring-maintenance integration and
+R5 compact storage follow separately; package installation/hydration does not run deletion.
+
+## Long-term history
 
 For backups or longer-lived historical evidence, preserve exact snapshot bytes and
 their source/configuration/tool manifests, checksums, required artifacts and

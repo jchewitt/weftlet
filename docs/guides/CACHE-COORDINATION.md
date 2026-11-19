@@ -119,9 +119,9 @@ retention. See [ADR 058](../ADR-058-atomic-head-generations.md).
 observations, including when scanning a parent containing multiple managed roots.
 They are not collection locks or permission to delete. Current/previous
 bookkeeping is implemented. The candidate adds separate [reviewed removal](CACHE-REMOVAL.md);
-[explicit interrupted-operation recovery](CACHE-RECOVERY.md) is also available in this candidate. Configurable
-history targets and explicit indefinite retention follow them; necessary graphs
-will not be cut down to meet the proposed 10 GiB history target.
+[explicit interrupted-operation recovery](CACHE-RECOVERY.md) is also available in this candidate. [Configurable history targets and indefinite retention](CACHE-HISTORY.md) now have an
+explicit prepare/apply candidate. Recurring maintenance follows separately; necessary
+graphs are never cut down to meet a history target.
 
 For interrupted owners, see [explicit offline recovery](CACHE-RECOVERY.md). Stop all clients,
 review the exact saved plan and preserve control records; PID/age alone never authorizes recovery.

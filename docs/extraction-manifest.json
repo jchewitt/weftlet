@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "0af4e1c9787f9b9ce1647ff12406daf2c1d5e85852517a4307b4603bebb5d6b8"
+      "destinationSha256": "090325d99064467599dd7f4834e04847799ad6fddfefe3f98d1bb44504bce5a5"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "4ca02c59a1cb5e2bf62a05a92c33bae62885900d1e6e8665e8f22ba63d3f161e"
+      "destinationSha256": "bbf157152f86901bd2ed552c705e635dc654c70bc506f0aedd2eb341b2ea9d92"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -582,6 +582,7 @@
     ".changeset/atomic-head-generations.md",
     ".changeset/cache-coordination-foundation.md",
     ".changeset/config.json",
+    ".changeset/configurable-history-retention.md",
     ".changeset/coordinated-retention-removal.md",
     ".changeset/explicit-cache-recovery.md",
     ".changeset/managed-cache-lifecycles.md",
@@ -662,6 +663,7 @@
     "docs/ADR-058-atomic-head-generations.md",
     "docs/ADR-059-coordinated-retention-removal.md",
     "docs/ADR-060-explicit-cache-recovery.md",
+    "docs/ADR-061-configurable-history-selection.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -707,6 +709,7 @@
     "docs/guides/AGENTS.md",
     "docs/guides/ASSISTED-SETUP.md",
     "docs/guides/CACHE-COORDINATION.md",
+    "docs/guides/CACHE-HISTORY.md",
     "docs/guides/CACHE-INSPECTION.md",
     "docs/guides/CACHE-RECOVERY.md",
     "docs/guides/CACHE-REMOVAL.md",
@@ -1292,6 +1295,9 @@
     "src/storage/retention/apply.ts",
     "src/storage/retention/decisions.ts",
     "src/storage/retention/evaluate.ts",
+    "src/storage/retention/history-accounting.ts",
+    "src/storage/retention/history-policy.ts",
+    "src/storage/retention/history-selection.ts",
     "src/storage/retention/journal.ts",
     "src/storage/retention/plan.ts",
     "src/storage/retention/policy.ts",
@@ -1362,6 +1368,7 @@
     "tests/fixtures/symbol-bindings.ts",
     "tests/fixtures/traversal.ts",
     "tests/head-generations.test.ts",
+    "tests/history-retention.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",

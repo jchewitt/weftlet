@@ -34,6 +34,9 @@ export async function applyRetention(saved: unknown, expected: string, options: 
     const candidates = current.objects.filter(o => o.disposition === 'candidate')
       .sort((a, b) => Number(a.category !== 'head') - Number(b.category !== 'head') || a.path.localeCompare(b.path, 'en'));
     options.signal?.throwIfAborted(); await scope.verify();
+    if (candidates.length === 0) return { schemaVersion: 1, kind: 'retention-removal-result', planId: current.planId,
+      operationId: null, journalPath: null, status: 'complete' as const, deleted: [] as string[], deletedLogicalBytes: 0,
+      candidateFiles: 0, remainingCandidates: 0 };
     const journal = await removalJournal(current, scope.verify);
     const deleted: string[] = []; let deletedLogicalBytes = 0;
     let status: 'complete' | 'partial' = 'complete', failure: string | undefined;
