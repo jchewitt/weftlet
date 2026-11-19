@@ -1,9 +1,8 @@
 import { resolve } from 'node:path';
 import { persistedJsonDigest } from '@weftlet/core';
 import { inventoryCache } from '../inspection/inventory.js';
-import { retentionDecision } from './decisions.js';
+import { evaluateRetention } from './evaluate.js';
 import { parseRetentionPolicy, type RetentionPolicy } from './policy.js';
-import { resolveRetentionReferences } from './references.js';
 
 export interface RetentionPlanOptions {
   root: string; policy: RetentionPolicy; maxEntries?: number; maxBytes?: number; now?: Date;
@@ -15,30 +14,19 @@ export async function planRetention(options: RetentionPlanOptions) {
   const root = resolve(options.root);
   const inventory = await inventoryCache({ roots: [root], verify: true, maxEntries: options.maxEntries,
     maxBytes: options.maxBytes, signal: options.signal, onProgress: options.onProgress });
-  const references = resolveRetentionReferences(policy, inventory.objects, now.getTime());
-  const issues = [...references.issues, ...inventory.issues.map(i => ({ code: i.code, path: i.path }))];
-  if (!inventory.complete || inventory.missingRoots.length) issues.push({ code: 'incomplete-inventory', path: '.' });
-  for (const entry of inventory.objects) {
-    if (entry.inspection === 'invalid') issues.push({ code: 'invalid-cache-object', path: entry.path });
-    if (entry.category === 'lease-marker' || entry.path.endsWith('.lock')) issues.push({ code: 'activity-requires-coordination', path: entry.path });
-    if (entry.category === 'snapshot' && references.profiles.has(entry.profile) && entry.metadata?.repositoryId !== references.profiles.get(entry.profile)!.repositoryId) {
-      issues.push({ code: 'profile-repository-mismatch', path: entry.path });
-    }
-  }
-  for (const head of inventory.danglingHeads) issues.push({ code: 'dangling-head', path: head });
-  const objects = inventory.objects.map(entry => retentionDecision(entry, references));
+  const { issues, pins, objects } = evaluateRetention(inventory, policy, now.getTime());
   const candidates = objects.filter(entry => entry.disposition === 'candidate');
   const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v2', root,
     limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     policyDigest: persistedJsonDigest(policy), policy, inventoryDigest: persistedJsonDigest(inventory.objects),
     readyForReview: issues.length === 0, canApply: false,
     issues: issues.sort((a, b) => a.path.localeCompare(b.path, 'en') || a.code.localeCompare(b.code, 'en')),
-    pins: references.pins, totals: { observedLogicalBytes: inventory.totals.logicalBytes,
+    pins, totals: { observedLogicalBytes: inventory.totals.logicalBytes,
       observedUniqueLogicalBytes: inventory.totals.uniqueLogicalBytes,
       candidateLogicalBytes: candidates.reduce((n, c) => n + c.logicalBytes, 0), candidateFiles: candidates.length,
       retainedLogicalBytes: objects.filter(o => o.disposition === 'retain').reduce((n, o) => n + o.logicalBytes, 0) },
     objects, limitations: [
-      'Review only. No deletion/apply command; coordinated read/write/GC leases and execution-time checks remain R3b.',
+      'Observational review only; this report cannot be applied. Removal requires a separate exclusively coordinated prepare/apply operation.',
       'The policy declares ownership/protection intent, not product authority. Legacy heads remain protected until explicitly released at their exact target ID.',
       'Active scopes protect current and atomically tracked previous generations, plus any additional manually declared rollback snapshot. Legacy heads have no inferred predecessor.',
       'Semantic artifacts, indexes, receipts, unknown data and temporary work remain retained; this increment proposes only unshared snapshots and explicitly released heads.',

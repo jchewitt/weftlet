@@ -105,15 +105,18 @@ Complete R3b through independently reviewed increments:
   binds explicit managed roots and complete hydration/query/comparison/delivery,
   shared-artifact and viewer operations. Ordered admission, tracked children and
   a quiesced legacy-client migration preserve unmarked-cache compatibility.
-- **R3b2b — Current/previous references (candidate):** [ADR 058](ADR-058-atomic-head-generations.md)
+- **R3b2b — Current/previous references (merged PR 104):** [ADR 058](ADR-058-atomic-head-generations.md)
   atomically publishes both pointers under existing head CAS locks, preserves
   previous on unchanged publication, and adds inventory/retention protection for
   both references. Concurrent publication and failure recovery are qualified with
   public regressions. No removal yet.
-- **R3b3 — Reviewed removal and recovery:** revalidate plans under exclusive
-  coordination, retire heads before dependent snapshots, preserve unknown data,
-  and add bounded, explicit interrupted-operation recovery. No PID/age-based
-  stealing; no applying R3a plans without the new coordinated contract.
+- **R3b3a — Reviewed removal (candidate):** [ADR 059](ADR-059-coordinated-retention-removal.md)
+  adds exclusively coordinated preparation and exact-plan application, head-first
+  removal and synced per-file journals. Observational R3a plans remain ineligible.
+- **R3b3b — Explicit recovery (next):** inspect and resolve exact interrupted
+  owner/journal state under a separately reviewed quiescence contract. No PID/age
+  stealing; incomplete operations remain visible blockers until this is qualified.
+
 
 Lifecycle activation does not enable collection. Parent-wide inventory and
 retention reports remain observational until R3b3. R4 retention policy and R5

@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "b4759598292fcc3b52b2ed0570f564354eda72c16fa07e89ffdb52250f7fea22"
+      "destinationSha256": "440a67ab20d570c2a7b0fb1595059850ab9ef84384d343ec0edc73bd8ca0ca4a"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "7c986b4ecd945e0d34fe44db877b7dfa716a858bcab6e6e0e61e901d967ff499"
+      "destinationSha256": "ebaba5f80c80d752269963f0778926102589bb5c580980412d46ff692fe91433"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -582,6 +582,7 @@
     ".changeset/atomic-head-generations.md",
     ".changeset/cache-coordination-foundation.md",
     ".changeset/config.json",
+    ".changeset/coordinated-retention-removal.md",
     ".changeset/managed-cache-lifecycles.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -658,6 +659,7 @@
     "docs/ADR-056-cache-coordination.md",
     "docs/ADR-057-managed-cache-lifecycles.md",
     "docs/ADR-058-atomic-head-generations.md",
+    "docs/ADR-059-coordinated-retention-removal.md",
     "docs/ARCHITECTURE-TOOLING-PLAN.md",
     "docs/CACHE-RETENTION-PLAN.md",
     "docs/CLOUD-ENVIRONMENT.md",
@@ -704,6 +706,7 @@
     "docs/guides/ASSISTED-SETUP.md",
     "docs/guides/CACHE-COORDINATION.md",
     "docs/guides/CACHE-INSPECTION.md",
+    "docs/guides/CACHE-REMOVAL.md",
     "docs/guides/CACHE-RETENTION.md",
     "docs/guides/CI-SETUP.md",
     "docs/guides/CI.md",
@@ -989,6 +992,7 @@
     "scripts/smoke-mapping-proposals.mjs",
     "scripts/smoke-onboarding.mjs",
     "scripts/smoke-project-setup.mjs",
+    "scripts/smoke-retention-removal.mjs",
     "scripts/smoke-snapshot-delivery.mjs",
     "scripts/smoke-traversal.mjs",
     "scripts/storage-study/profile.ts",
@@ -1270,9 +1274,13 @@
     "src/storage/inspection/walk.ts",
     "src/storage/mapping-proposals.test.ts",
     "src/storage/mapping-proposals.ts",
+    "src/storage/retention/apply.ts",
     "src/storage/retention/decisions.ts",
+    "src/storage/retention/evaluate.ts",
+    "src/storage/retention/journal.ts",
     "src/storage/retention/plan.ts",
     "src/storage/retention/policy.ts",
+    "src/storage/retention/prepared.ts",
     "src/storage/retention/references.ts",
     "src/storage/streaming-json.test.ts",
     "src/storage/streaming-json.ts",
@@ -1363,6 +1371,7 @@
     "tests/relationship-retrieval.test.ts",
     "tests/retention-cli.test.ts",
     "tests/retention-plan.test.ts",
+    "tests/retention-removal.test.ts",
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
     "tests/same-group-retrieval.test.ts",
