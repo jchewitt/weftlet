@@ -1,3 +1,6 @@
+import { createReadStream } from 'node:fs';
+import { compactWritesEnabled, writeCompactSnapshot } from '../../storage/compact-snapshot.js';
+import { storedJsonDigest } from './stored-json.js';
 import { withManagedCacheAccess } from '../../storage/coordination/managed-access.js';
 import { cacheOperationPaths } from '../cache-operation.js';
 import { randomUUID } from 'node:crypto';
@@ -87,10 +90,19 @@ async function importSnapshotOwned(context: Awaited<ReturnType<typeof deliveryCo
         checkpoint(options, 'install-verified-evidence');
         await transferDirectory(dirname(destination));
         if (await existingMatches(destination, entry)) continue;
-        try { await link(join(stage, entry.name), destination); }
+        let installFile = join(stage, entry.name);
+        if (entry.name === 'snapshot.json' && compactWritesEnabled()) {
+          const encoded = join(stage, 'compact');
+          await requireFreeSpace(stage, entry.bytes + Math.ceil(entry.bytes / 1024 ** 2) * 4096 + 80);
+          await writeCompactSnapshot(encoded, createReadStream(installFile, { signal: options.signal }));
+          await existingMatches(encoded, entry);
+          installFile = encoded;
+        }
+        options.signal?.throwIfAborted();
+        try { await link(installFile, destination); }
         catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
         // Remove our staging link before the regular-file boundary check (nlink === 1).
-        await rm(join(stage, entry.name));
+        await rm(installFile);
         if (!(await existingMatches(destination, entry))) throw Error('Imported evidence disappeared before publication');
       }
       checkpoint(options, 'activate-snapshot');
@@ -110,6 +122,11 @@ async function importSnapshotOwned(context: Awaited<ReturnType<typeof deliveryCo
 async function existingMatches(path: string, entry: TransferFile): Promise<boolean> {
   try {
     await safeTransferPath(path);
+    if (entry.name === 'snapshot.json') {
+      const actual = await storedJsonDigest(path, entry.bytes);
+      if (!sameValue(actual, { bytes: entry.bytes, sha256: entry.sha256 })) throw Error('Immutable evidence collision: existing bytes differ');
+      return true;
+    }
     if ((await lstat(path)).size !== entry.bytes) throw Error('Immutable evidence collision: existing byte length differs; nothing was overwritten');
     const actual = await fileDigest(path, entry.bytes);
     if (!sameValue(actual, { bytes: entry.bytes, sha256: entry.sha256 })) throw Error('Immutable evidence collision: existing bytes differ; nothing was overwritten');

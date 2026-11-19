@@ -19,6 +19,7 @@ Start with the path that matches your task:
 | Recover interrupted cache operations (candidate) | [Offline recovery](guides/CACHE-RECOVERY.md) |
 | Coordinate cache readers and builds (candidate) | [Cache coordination](guides/CACHE-COORDINATION.md) |
 | Review active scopes, pins and retention candidates | [Retention reviews](guides/CACHE-RETENTION.md) |
+| Enable compact snapshots or return to JSON (candidate) | [Compact snapshots](guides/COMPACT-SNAPSHOTS.md) |
 | Measure local graph/cache storage | [Cache inspection](guides/CACHE-INSPECTION.md) |
 | See what changed between releases | [Release overview](RELEASES.md), [toolkit changelog](../CHANGELOG.md), [core changelog](https://github.com/jchewitt/weftlet/blob/main/packages/core/CHANGELOG.md) |
 | Understand authority labels and resolve unapproved/conflicting evidence | [Evidence decisions](guides/EVIDENCE-DECISIONS.md) |

@@ -38,6 +38,6 @@ export async function withSnapshotAccess<T>(root: string, run: (store: SnapshotA
   });
 }
 export type SnapshotAccess = Pick<FileSnapshotStore, 'read' | 'readHead' | 'readHeadManifest' | 'headId' | 'readHeadState' | 'readRevision' | 'write' | 'updateHead'> & {
-  /** Consume the path within the callback; an escaped path is not protected after it settles. */
+  /** Physical JSON or compact bytes. The lease covers the callback lifetime. Use read() for decoded evidence. */
   withFile<T>(id: string, consume: (path: string | undefined) => Promise<T>): Promise<T>;
 };

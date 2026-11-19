@@ -8,6 +8,8 @@ import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'nod
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
 import { atomicRename } from './atomic-rename.js';
 import { physicalArtifactKey, temporaryArtifactPath } from '../infrastructure/artifact-paths.js';
+import { stringifyChunked } from '@discoveryjs/json-ext';
+import { compactWritesEnabled, writeCompactSnapshot } from './compact-snapshot.js';
 import { readJsonFile, readJsonProperty, writeJsonFile } from './streaming-json.js';
 import { parseSnapshotHead, type SnapshotHead } from './head-state.js';
 
@@ -86,7 +88,8 @@ export class FileSnapshotStore implements SnapshotStore {
     await mkdir(dirname(destination), { recursive: true });
     const temporary = temporaryArtifactPath(destination);
     try {
-      await writeJsonFile(temporary, snapshot);
+      if (compactWritesEnabled()) await writeCompactSnapshot(temporary, stringifyChunked(snapshot));
+      else await writeJsonFile(temporary, snapshot);
       // Linking a complete file publishes atomically without ever replacing a winner.
       await link(temporary, destination);
     } catch (error) {
@@ -105,7 +108,10 @@ export class FileSnapshotStore implements SnapshotStore {
   read(snapshotId: string): Promise<GraphSnapshot | undefined> {
     // Preserve synchronous identifier rejection before any asynchronous admission/I/O.
     const path = snapshotPath(this.root, snapshotId), legacy = snapshotPath(this.root, snapshotId, true);
-    return withManagedCacheAccess([this.root], () => readWithLegacyPath<GraphSnapshot>(path, legacy));
+    return withManagedCacheAccess([this.root], () => readWithLegacyPath(path, legacy, async file => {
+      try { return await readJsonFile<GraphSnapshot>(file, true); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined; throw error; }
+    }));
   }
 
   /** Cache invalidation for read-only query sessions; not a cryptographic integrity claim. */
@@ -124,7 +130,7 @@ export class FileSnapshotStore implements SnapshotStore {
   private readManifest(snapshotId: string): Promise<GraphSnapshot['manifest'] | undefined> {
     return readWithLegacyPath(snapshotPath(this.root, snapshotId), snapshotPath(this.root, snapshotId, true), async path => {
       try {
-        const manifest = await readJsonProperty<GraphSnapshot['manifest']>(path, 'manifest');
+        const manifest = await readJsonProperty<GraphSnapshot['manifest']>(path, 'manifest', true);
         if (!manifest || typeof manifest.contentDigest !== 'string') throw Error('Invalid snapshot manifest');
         return manifest;
       } catch (error) {
@@ -178,7 +184,7 @@ export class FileSnapshotStore implements SnapshotStore {
     });
   }
 
-  /** Locate committed bytes, retaining legacy filenames without migrating them. */
+  /** Physical stored bytes (JSON or WEFTBR1). Use read() or snapshot export for decoded evidence. */
   file(snapshotId: string): Promise<string | undefined> {
     const path = snapshotPath(this.root, snapshotId), legacy = snapshotPath(this.root, snapshotId, true);
     return withManagedCachePath([this.root], () => readWithLegacyPath(path, legacy, existingFile));

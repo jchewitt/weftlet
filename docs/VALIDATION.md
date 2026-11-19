@@ -3856,3 +3856,14 @@ Verification covers complete decoded byte counts, SHA-256 and before/after cache
 inventory. The deterministic corpus regression exercises both encoders. Implementation
 is confined to the development benchmark. Production compact reads/writes, query
 latency and migration qualification belong to the following R5 slice.
+
+## Opt-in compact snapshot storage candidate
+
+Base `08b4cb8463913a7c114581c307fce1d26d9701ff`. The [compact storage guide](guides/COMPACT-SNAPSHOTS.md)
+records the environment setting, mixed-cache behavior, verified JSON transfer, rollback and measured
+query latency. Public fixtures cover actual hydration/query equivalence, multi-block Unicode
+evidence, corrupt/truncated/trailing frames, full inventory, reviewed retention and import/export
+between both encodings. The changeset, guide, docs index and packed CLI smoke cover the new behavior.
+The scheduled retention policy, semantic provider contracts and onboarding defaults retain their
+existing interfaces. The candidate PR records independent review and final CI results. Private
+consumer replay and real disk-cache cold-start timings remain to be measured.

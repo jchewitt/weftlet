@@ -44,7 +44,7 @@ export function linkInventory(objects: CacheObject[]) {
 
 async function readMetadata(entry: CacheObject, path: string, verify: boolean, maxBytes: number, signal?: AbortSignal) {
   if (entry.category === 'snapshot') {
-    const result = await inspectJson(path, { manifestOnly: !verify, maxBytes, signal });
+    const result = await inspectJson(path, { snapshotEncoding: true, manifestOnly: !verify, maxBytes, signal });
     if (verify && result.sections.facts !== 'array') throw new InspectionError('invalid-json', 'Snapshot facts array missing');
     entry.metadata = snapshotMetadata(result.manifest);
     if (!entry.metadata) throw new InspectionError('invalid-json', 'Snapshot manifest missing or malformed');

@@ -19,7 +19,7 @@ async function profileSnapshotOwned(path: string, options: ProfileOptions) {
   const sections = new Map<string, { records: number; compactValueBytes: number }>();
   const fields = new Map<string, { occurrences: number; compactValueBytes: number; compactKeyAndValueBytes: number }>();
   let largestRecord = 0;
-  const result = await inspectJson(path, { ...options, onRecord(section, value) {
+  const result = await inspectJson(path, { ...options, snapshotEncoding: true, onRecord(section, value) {
     if (section === 'facts' && !object(value)) throw new InspectionError('invalid-json', 'Expected a fact object');
     const bytes = byteLength(value); largestRecord = Math.max(largestRecord, bytes);
     const total = sections.get(section) ?? { records: 0, compactValueBytes: 0 };
@@ -55,7 +55,7 @@ async function profileSnapshotOwned(path: string, options: ProfileOptions) {
   validation: 'JSON syntax and basic snapshot structure only; strict SHACL and producer content digest are not revalidated',
   measurement: 'UTF-8 compact JSON value bytes; key/colon and array punctuation included where stated. Not a compressed-size estimate.',
   sections: Object.fromEntries([...sections].sort()), factFields: Object.fromEntries([...fields].sort()),
-  compactKnownSectionBytes: compactKnown, physicalMinusCompactKnownBytes: result.bytes - compactKnown,
+  compactKnownSectionBytes: compactKnown, decodedJsonBytes: result.bytesRead, physicalMinusCompactKnownBytes: result.bytesRead === result.bytes ? result.bytes - compactKnown : null,
   unprofiledRootFields: Object.keys(result.sections).filter(key => !sections.has(key)).sort(), largestRecordBytes: largestRecord,
   repetition: { entities: entities.report(), provenance: provenance.report(), factStrings: strings.report(), diagnostics: diagnostics.report() },
   limitations: ['Repetition categories overlap; do not add their byte counts together or treat them as guaranteed savings.',
