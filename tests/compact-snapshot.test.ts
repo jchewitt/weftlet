@@ -83,7 +83,7 @@ it('publishes one complete immutable file when JSON and compact writer processes
   expect(await store.read('shared')).toEqual(original);
   vi.stubEnv('WEFTLET_SNAPSHOT_FORMAT', winner.subarray(0, 8).toString() === 'WEFTBR1\n' ? 'json' : 'brotli-v1');
   await store.write(original);
-  expect(await readFile(path)).toEqual(winner);
+  expect((await readFile(path)).equals(winner)).toBe(true);
 });
 
 it('rejects an unsupported writer setting while preserving the readable head', async () => {
