@@ -3867,3 +3867,15 @@ between both encodings. The changeset, guide, docs index and packed CLI smoke co
 The scheduled retention policy, semantic provider contracts and onboarding defaults retain their
 existing interfaces. The candidate PR records independent review and final CI results. Private
 consumer replay and real disk-cache cold-start timings remain to be measured.
+
+## SCIP retention and sampled temporary disk use
+
+At runtime source commit `e8e2c81dd27003649008b8032f7189e8c0d94681`, two Linux public
+TypeScript corpora completed initial, repeat, document-edit and code-edit hydration plus
+independent clean comparison. Every operation used real SCIP and strict validation.
+The study verified index byte counts and SHA-256, stable normal heads on repeat/comparison,
+semantic reuse, and removal of the independent workspace. A separate sampling worker
+observed cache, staging and isolated process temporary files during all ten operations.
+See the [measurements and candidate decision](assessments/scip-footprint-r5.md) and
+[full receipt](assessments/scip-footprint-r5.json). These runs used the fixture provider
+and the compact writer. Private-consumer disk use remains unmeasured by this benchmark.

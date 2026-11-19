@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 1,
+  "filesystem": "linux-overlay",
+  "runs": [
+    {
+      "checkout": "e8e2c81dd27003649008b8032f7189e8c0d94681",
+      "node": "v24.19.0",
+      "platform": "linux",
+      "modules": 16,
+      "functionsPerModule": 80,
+      "format": "brotli-v1",
+      "sampleIntervalMs": 20,
+      "documentEditIndexByteIdentical": true,
+      "phases": [
+        {
+          "phase": "initial",
+          "facts": 15860,
+          "semanticExtracted": 18,
+          "semanticReused": 0,
+          "retainedIndexes": 1,
+          "uniqueIndexes": 1,
+          "indexSha256": "a86354cb2f01a4d9a09b883a557a8bcdc05197f42d075c9aa20636fb5a1edc1c",
+          "indexBytes": 1232857,
+          "duplicateIndexBytes": 0,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 0,
+                "scip": 0,
+                "otherCache": 0,
+                "work": 0,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 0,
+              "total": 0,
+              "working": 0
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 2840,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 3432448,
+              "total": 3391167,
+              "working": 2840
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 2840,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 3432448,
+              "total": 3391167,
+              "working": 2840
+            },
+            "maxWorking": 2048795,
+            "maxScratch": 372051,
+            "maxAllocated": 3432448,
+            "samples": 2612
+          }
+        },
+        {
+          "phase": "unchanged",
+          "facts": 15860,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 1,
+          "uniqueIndexes": 1,
+          "indexSha256": "a86354cb2f01a4d9a09b883a557a8bcdc05197f42d075c9aa20636fb5a1edc1c",
+          "indexBytes": 1232857,
+          "duplicateIndexBytes": 0,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 2840,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 3432448,
+              "total": 3391167,
+              "working": 2840
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 2840,
+                "staging": 1232946,
+                "scratch": 372051
+              },
+              "allocatedBytes": 5251072,
+              "total": 4996164,
+              "working": 1607837
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 5680,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 3436544,
+              "total": 3394007,
+              "working": 5680
+            },
+            "maxWorking": 1607837,
+            "maxScratch": 372051,
+            "maxAllocated": 5251072,
+            "samples": 2670
+          }
+        },
+        {
+          "phase": "document-edit",
+          "facts": 15860,
+          "semanticExtracted": 1,
+          "semanticReused": 17,
+          "retainedIndexes": 2,
+          "uniqueIndexes": 1,
+          "indexSha256": "a86354cb2f01a4d9a09b883a557a8bcdc05197f42d075c9aa20636fb5a1edc1c",
+          "indexBytes": 2465714,
+          "duplicateIndexBytes": 1232857,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 2116371,
+                "scip": 1232857,
+                "otherCache": 39099,
+                "work": 5680,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 3436544,
+              "total": 3394007,
+              "working": 5680
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 4225269,
+                "scip": 2465714,
+                "otherCache": 41418,
+                "work": 8520,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 6787072,
+              "total": 6740921,
+              "working": 8520
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 4225269,
+                "scip": 2465714,
+                "otherCache": 41418,
+                "work": 8520,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 6787072,
+              "total": 6740921,
+              "working": 8520
+            },
+            "maxWorking": 2047075,
+            "maxScratch": 372081,
+            "maxAllocated": 6791168,
+            "samples": 2353
+          }
+        },
+        {
+          "phase": "code-edit",
+          "facts": 15865,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 3,
+          "uniqueIndexes": 2,
+          "indexSha256": "44389afd43b9b1338e79f9c548b35f31816a7ae78e130dbc9a1707493734ec58",
+          "indexBytes": 3699196,
+          "duplicateIndexBytes": 1232857,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 4225269,
+                "scip": 2465714,
+                "otherCache": 41418,
+                "work": 8520,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 6787072,
+              "total": 6740921,
+              "working": 8520
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 6344832,
+                "scip": 3699196,
+                "otherCache": 41418,
+                "work": 11360,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 10149888,
+              "total": 10096806,
+              "working": 11360
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 6344832,
+                "scip": 3699196,
+                "otherCache": 41418,
+                "work": 11360,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 10149888,
+              "total": 10096806,
+              "working": 11360
+            },
+            "maxWorking": 2060345,
+            "maxScratch": 372153,
+            "maxAllocated": 10149888,
+            "samples": 2008
+          }
+        },
+        {
+          "phase": "clean-comparison",
+          "facts": 15865,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 3,
+          "uniqueIndexes": 2,
+          "indexSha256": "44389afd43b9b1338e79f9c548b35f31816a7ae78e130dbc9a1707493734ec58",
+          "indexBytes": 3699196,
+          "duplicateIndexBytes": 1232857,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 6344832,
+                "scip": 3699196,
+                "otherCache": 41418,
+                "work": 11360,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 10149888,
+              "total": 10096806,
+              "working": 11360
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 6344832,
+                "scip": 3699196,
+                "otherCache": 41418,
+                "work": 3367953,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 13516800,
+              "total": 13453399,
+              "working": 3367953
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 6344832,
+                "scip": 3699196,
+                "otherCache": 44670,
+                "work": 11360,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 10153984,
+              "total": 10100058,
+              "working": 11360
+            },
+            "maxWorking": 3367953,
+            "maxScratch": 372153,
+            "maxAllocated": 13516800,
+            "samples": 2156
+          }
+        }
+      ]
+    },
+    {
+      "checkout": "e8e2c81dd27003649008b8032f7189e8c0d94681",
+      "node": "v24.19.0",
+      "platform": "linux",
+      "modules": 64,
+      "functionsPerModule": 160,
+      "format": "brotli-v1",
+      "sampleIntervalMs": 20,
+      "documentEditIndexByteIdentical": true,
+      "phases": [
+        {
+          "phase": "initial",
+          "facts": 124532,
+          "semanticExtracted": 18,
+          "semanticReused": 0,
+          "retainedIndexes": 1,
+          "uniqueIndexes": 1,
+          "indexSha256": "aa4d39bca086832ea5236f2af152548f966f6da3906a69a70078b52a7702c0a7",
+          "indexBytes": 9856753,
+          "duplicateIndexBytes": 0,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 0,
+                "scip": 0,
+                "otherCache": 0,
+                "work": 0,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 0,
+              "total": 0,
+              "working": 0
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 2842,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 28475392,
+              "total": 28429675,
+              "working": 2842
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 2842,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 28475392,
+              "total": 28429675,
+              "working": 2842
+            },
+            "maxWorking": 18533813,
+            "maxScratch": 2559687,
+            "maxAllocated": 28475392,
+            "samples": 16059
+          }
+        },
+        {
+          "phase": "unchanged",
+          "facts": 124532,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 1,
+          "uniqueIndexes": 1,
+          "indexSha256": "aa4d39bca086832ea5236f2af152548f966f6da3906a69a70078b52a7702c0a7",
+          "indexBytes": 9856753,
+          "duplicateIndexBytes": 0,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 2842,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 28475392,
+              "total": 28429675,
+              "working": 2842
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 2842,
+                "staging": 9856842,
+                "scratch": 2559687
+              },
+              "allocatedBytes": 41353216,
+              "total": 40846204,
+              "working": 12419371
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 5684,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 28479488,
+              "total": 28432517,
+              "working": 5684
+            },
+            "maxWorking": 12419371,
+            "maxScratch": 2559687,
+            "maxAllocated": 41353216,
+            "samples": 14372
+          }
+        },
+        {
+          "phase": "document-edit",
+          "facts": 124532,
+          "semanticExtracted": 1,
+          "semanticReused": 17,
+          "retainedIndexes": 2,
+          "uniqueIndexes": 1,
+          "indexSha256": "aa4d39bca086832ea5236f2af152548f966f6da3906a69a70078b52a7702c0a7",
+          "indexBytes": 19713506,
+          "duplicateIndexBytes": 9856753,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 18530971,
+                "scip": 9856753,
+                "otherCache": 39109,
+                "work": 5684,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 28479488,
+              "total": 28432517,
+              "working": 5684
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 37063814,
+                "scip": 19713506,
+                "otherCache": 41428,
+                "work": 8526,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 56881152,
+              "total": 56827274,
+              "working": 8526
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 37063814,
+                "scip": 19713506,
+                "otherCache": 41428,
+                "work": 8526,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 56881152,
+              "total": 56827274,
+              "working": 8526
+            },
+            "maxWorking": 18495397,
+            "maxScratch": 2559717,
+            "maxAllocated": 56881152,
+            "samples": 13953
+          }
+        },
+        {
+          "phase": "code-edit",
+          "facts": 124537,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 3,
+          "uniqueIndexes": 2,
+          "indexSha256": "87aa0fadbaddc51766855761af036fa258f6fec9fc64b42d65bcb127452c5460",
+          "indexBytes": 29570889,
+          "duplicateIndexBytes": 9856753,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 37063814,
+                "scip": 19713506,
+                "otherCache": 41428,
+                "work": 8526,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 56881152,
+              "total": 56827274,
+              "working": 8526
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 55621891,
+                "scip": 29570889,
+                "otherCache": 41428,
+                "work": 11368,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 85303296,
+              "total": 85245576,
+              "working": 11368
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 55621891,
+                "scip": 29570889,
+                "otherCache": 41428,
+                "work": 11368,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 85303296,
+              "total": 85245576,
+              "working": 11368
+            },
+            "maxWorking": 18522294,
+            "maxScratch": 2559789,
+            "maxAllocated": 85303296,
+            "samples": 13699
+          }
+        },
+        {
+          "phase": "clean-comparison",
+          "facts": 124537,
+          "semanticExtracted": 0,
+          "semanticReused": 18,
+          "retainedIndexes": 3,
+          "uniqueIndexes": 2,
+          "indexSha256": "87aa0fadbaddc51766855761af036fa258f6fec9fc64b42d65bcb127452c5460",
+          "indexBytes": 29570889,
+          "duplicateIndexBytes": 9856753,
+          "disk": {
+            "before": {
+              "bytes": {
+                "snapshots": 55621891,
+                "scip": 29570889,
+                "otherCache": 41428,
+                "work": 11368,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 85303296,
+              "total": 85245576,
+              "working": 11368
+            },
+            "peak": {
+              "bytes": {
+                "snapshots": 55621891,
+                "scip": 29570889,
+                "otherCache": 41428,
+                "work": 28458001,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 113758208,
+              "total": 113692209,
+              "working": 28458001
+            },
+            "after": {
+              "bytes": {
+                "snapshots": 55621891,
+                "scip": 29570889,
+                "otherCache": 44680,
+                "work": 11368,
+                "staging": 0,
+                "scratch": 0
+              },
+              "allocatedBytes": 85307392,
+              "total": 85248828,
+              "working": 11368
+            },
+            "maxWorking": 28458001,
+            "maxScratch": 2559789,
+            "maxAllocated": 113758208,
+            "samples": 13424
+          }
+        }
+      ]
+    }
+  ]
+}

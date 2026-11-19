@@ -141,6 +141,10 @@ exact head retirement stays in reviewed prepare/apply. One exact
 managed root spanning user-cache profiles supports a shared target; independently activated
 roots do not silently become one coordinated budget. R5 compact representation is separate.
 
+## R5 index retention decision — November 19, 2026
+
+The [public storage study](assessments/scip-footprint-r5.md) measures index duplication and sampled build space with compact snapshots. Prioritize retirement of a verified companion index when its superseded snapshot is selected for removal. The next candidate can qualify that change independently of a shared index store. Measure byte-identical indexes among retained consumer snapshots before choosing a new blob format.
+
 ## Bounded tasks
 
 | Task | Deliverable and acceptance |
