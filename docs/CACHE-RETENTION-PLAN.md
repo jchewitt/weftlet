@@ -110,12 +110,14 @@ Complete R3b through independently reviewed increments:
   previous on unchanged publication, and adds inventory/retention protection for
   both references. Concurrent publication and failure recovery are qualified with
   public regressions. No removal yet.
-- **R3b3a — Reviewed removal (candidate):** [ADR 059](ADR-059-coordinated-retention-removal.md)
+- **R3b3a — Reviewed removal (merged PR 105):** [ADR 059](ADR-059-coordinated-retention-removal.md)
   adds exclusively coordinated preparation and exact-plan application, head-first
   removal and synced per-file journals. Observational R3a plans remain ineligible.
-- **R3b3b — Explicit recovery (next):** inspect and resolve exact interrupted
-  owner/journal state under a separately reviewed quiescence contract. No PID/age
-  stealing; incomplete operations remain visible blockers until this is qualified.
+- **R3b3b — Explicit recovery (candidate):** [ADR 060](ADR-060-explicit-cache-recovery.md)
+  adds exact-state offline review/application for supported interrupted owner/journal
+  records. Quiescence, preserved control archives, live-owner vetoes and head/candidate
+  reconciliation prevent automatic replay. Malformed/unknown records remain blockers;
+  see the [recovery guide](guides/CACHE-RECOVERY.md).
 
 
 Lifecycle activation does not enable collection. Parent-wide inventory and
@@ -171,6 +173,28 @@ and retention-policy application. Do not collapse all six tasks into one release
 - `cache usage` and `cache profile` are implemented R2 candidate commands.
   `cache prune --dry-run`, `cache pin/unpin` and archive commands remain proposals.
   Do not document these future commands as available before implementation.
+
+## Existing-cache upgrades
+
+R4 acceptance must include a project adopting the update with history already above
+its configured target. The target applies to eligible existing history as well as future
+accumulation; it is not merely a limit on newly created snapshots.
+
+First explicitly adopt the cache under coordination, stop older clients, identify its
+profiles/active scopes and declare additional historical pins. Produce a complete usage
+and migration preview; old head pointers and unknown files are not silently disposable.
+Once declarations and policy are reviewed, reconcile eligible superseded history toward
+the configured user-wide target (plus optional repository targets). Lowering a target
+later must follow the same rules. The exact configuration and automatic invocation points
+remain R4 work; merely upgrading the package must not initiate an unexplained sweep.
+
+Test over-target migration, repeat idempotence, stale plans/concurrent publishers, multiple
+profiles, protected overage, unknown/legacy objects and an explicit indefinite-retention
+mode. Preserve the current and tracked previous graphs, pins and reusable semantic artifacts.
+If those protected bytes exceed the target, report the excess and reasons while keeping the
+necessary graph usable. Never truncate coverage, silently remove pins, force a model call,
+or reject a required graph merely to meet the history target. Necessary build space and
+actual disk exhaustion remain separate operational concerns.
 
 ## Long-term history and backup guidance
 
