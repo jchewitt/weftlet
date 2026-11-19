@@ -3841,3 +3841,18 @@ maintenance after new publication while retaining current/previous evidence; Win
 includes the new suite. README stays concise and source-authority/provider/client/tutorial
 contracts do not change. No private consumer cache, paid/live provider, deployment or npm
 publication was performed. Compact storage remains R5; archive/restore stays optional R6/2.0.
+
+## R5 snapshot encoding measurements
+
+The R5 storage study builds on `09cbfb6b451dcc8989f742e08307fdec9346f02c`,
+the merge of reviewed recurring maintenance in PR 108. Its local qualification
+passed 1,250 toolkit and 38 core tests with three optional skips. Both hosted runs
+(`44562828220` and `44562905856`) passed, including Windows packaged onboarding
+and 86 coordination, recovery and retention tests.
+
+The [encoding study](assessments/snapshot-codecs-r5.md) compares two temporary
+compressed representations of strictly validated, real-SCIP public snapshots.
+Verification covers complete decoded byte counts, SHA-256 and before/after cache
+inventory. The deterministic corpus regression exercises both encoders. Implementation
+is confined to the development benchmark. Production compact reads/writes, query
+latency and migration qualification belong to the following R5 slice.
