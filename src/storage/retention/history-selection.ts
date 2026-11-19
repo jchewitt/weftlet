@@ -1,10 +1,11 @@
+import { pairCompanionIndexes } from './companion-indexes.js';
 import type { HistoryPolicy } from './history-policy.js';
 import type { CacheObject } from '../inspection/layout.js';
 import type { RetentionPolicy } from './policy.js';
-import type { retentionDecision } from './decisions.js';
+import type { RetentionDecision } from './decisions.js';
 import { historyAccounting, sumBytes, isCoordinationObject } from './history-accounting.js';
 
-export type RetentionDecision = ReturnType<typeof retentionDecision>;
+export type { RetentionDecision } from './decisions.js';
 type Accounting = ReturnType<typeof historyAccounting>;
 function reportTarget(observedBytes: number, selectedBytes: number, eligibleBytes: number, maxBytes: number | null) {
   const projectedBytes = observedBytes - selectedBytes, retainedMinimumBytes = observedBytes - eligibleBytes;
@@ -30,12 +31,16 @@ export function selectHistory(objects: CacheObject[], decisions: RetentionDecisi
   const snapshots = decisions.filter(d => d.disposition === 'candidate' && d.category === 'snapshot' &&
     history?.mode !== 'indefinite' && overrides.get(account.repositoryFor(d.path) ?? '')?.mode !== 'indefinite')
     .sort((a, b) => source.get(a.path)!.modifiedAt.localeCompare(source.get(b.path)!.modifiedAt, 'en') || a.path.localeCompare(b.path, 'en'));
-  const group = (snapshot: RetentionDecision) => [snapshot.path, ...snapshot.removeBefore];
+  const companions = pairCompanionIndexes(objects, decisions, policy);
+  const group = (snapshot: RetentionDecision) => {
+    const index = companions.get(snapshot.path);
+    return index ? [...snapshot.removeBefore, snapshot.path, index] : [...snapshot.removeBefore, snapshot.path];
+  };
   for (const item of snapshots) for (const path of group(item)) eligible.add(path);
   const selection = new Selection(byPath, account, selected, causes);
   if (!history) { // Preserve existing explicit manual removal semantics when no history policy is configured.
     for (const d of decisions.filter(d => d.disposition === 'candidate')) { eligible.add(d.path); selection.add([d.path], 'manual-review'); }
-  } else if (history.mode === 'target') selectTargets(snapshots, history, account, selection);
+  } else if (history.mode === 'target') selectTargets(snapshots, history, account, selection, group);
   const available = totalsFor(eligible, byPath, account);
   const adjusted = decisions.map(d => adjustDecision(d, selected, causes, eligible, history?.mode === 'indefinite' || overrides.get(account.repositoryFor(d.path) ?? '')?.mode === 'indefinite'));
   return { objects: adjusted, history: {
@@ -54,9 +59,9 @@ export function selectHistory(objects: CacheObject[], decisions: RetentionDecisi
       'Transient admission/participant markers are excluded from target selection. New removal journal bytes are not included in projected totals.',
       'A root target covers only the explicitly selected root; use one non-overlapping user-wide managed root for a cross-profile target, not a separate allowance per profile.',
       'Modification time orders eligible history; it is not evidence age, last use or source authority. Targets never narrow graph coverage or prevent a necessary build.',
-      'An indefinite repository override protects its history from root-target selection. Only required released-head prerequisites accompany selected snapshots.'] } };
+      'An indefinite repository override protects its history from root-target selection. Selected snapshot groups include required head retirements and any opted-in verified companion index.'] } };
 }
-function selectTargets(snapshots: RetentionDecision[], history: Extract<HistoryPolicy, { mode: 'target' }>, account: Accounting, selection: Selection) {
+function selectTargets(snapshots: RetentionDecision[], history: Extract<HistoryPolicy, { mode: 'target' }>, account: Accounting, selection: Selection, group: (snapshot: RetentionDecision) => string[]) {
   const overrides = new Map(history.repositories?.map(r => [r.repositoryId, r] as const));
   const perRepository = new Map<string, RetentionDecision[]>();
   for (const item of snapshots) {
@@ -67,12 +72,12 @@ function selectTargets(snapshots: RetentionDecision[], history: Extract<HistoryP
     if (target.mode === 'indefinite') continue;
     for (const item of perRepository.get(repository) ?? []) {
       if (selection.repositoryRemaining(repository) <= target.maxBytes) break;
-      selection.add([item.path, ...item.removeBefore], 'repository-target');
+      selection.add(group(item), 'repository-target');
     }
   }
   for (const item of snapshots) {
     if (account.observedBytes - selection.bytes <= history.maxBytes) break;
-    selection.add([item.path, ...item.removeBefore], 'root-target');
+    selection.add(group(item), 'root-target');
   }
 }
 class Selection {
@@ -85,7 +90,7 @@ class Selection {
     for (const path of paths) {
       if (this.selected.has(path)) continue;
       const entry = this.byPath.get(path);
-      if (!entry || entry.disposition !== 'candidate') throw Error('History selection has an ineligible head prerequisite');
+      if (!entry || entry.disposition !== 'candidate') throw Error('History selection has an ineligible group member');
       this.selected.add(path); this.causes.set(path, cause); this.bytes = sumBytes([this.bytes, entry.logicalBytes]);
       const repository = this.account.repositoryFor(path);
       if (repository !== undefined) this.repositoryBytes.set(repository, sumBytes([this.repositoryBytes.get(repository) ?? 0, entry.logicalBytes]));

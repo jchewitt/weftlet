@@ -16,7 +16,7 @@ export async function planRetention(options: RetentionPlanOptions) {
     maxBytes: options.maxBytes, signal: options.signal, onProgress: options.onProgress });
   const { issues, pins, objects, history } = evaluateRetention(inventory, policy, now.getTime());
   const candidates = objects.filter(entry => entry.disposition === 'candidate');
-  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v3', root,
+  const body = { schemaVersion: 1, kind: 'retention-review-plan', plannerVersion: 'declared-retention-v4', root,
     limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     policyDigest: persistedJsonDigest(policy), policy, inventoryDigest: persistedJsonDigest(inventory.objects),
     readyForReview: issues.length === 0, canApply: false,
@@ -29,7 +29,7 @@ export async function planRetention(options: RetentionPlanOptions) {
       'Observational review only; this report cannot be applied. Removal requires a separate exclusively coordinated prepare/apply operation.',
       'The policy declares ownership/protection intent, not product authority. Legacy heads remain protected until explicitly released at their exact target ID.',
       'Active scopes protect current and atomically tracked previous generations, plus any additional manually declared rollback snapshot. Legacy heads have no inferred predecessor.',
-      'Semantic artifacts, indexes, receipts, unknown data and temporary work remain retained; this increment proposes only unshared snapshots and explicitly released heads.',
+      'Companion index retirement requires explicit policy opt-in and a verified pairing with a selected snapshot. Other indexes, semantic artifacts, receipts, unknown data and temporary work remain retained.',
       'Reclaim totals are logical bytes, not guaranteed free-disk recovery. Builds, shared extents, external citations and unregistered readers are not inferred.',
       'Full JSON/hash inspection does not rerun SHACL or prove semantic reuse. Inventory is observational; this plan cannot authorize concurrent deletion.',
     ] };

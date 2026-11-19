@@ -2,6 +2,8 @@ import { relative } from 'node:path';
 import type { CacheObject } from '../inspection/layout.js';
 import { valid, type resolveRetentionReferences } from './references.js';
 
+export type RetentionDecision = ReturnType<typeof retentionDecision>;
+
 type References = ReturnType<typeof resolveRetentionReferences>;
 export function retentionDecision(entry: CacheObject, references: References) {
   const base = { path: entry.path, category: entry.category, profile: entry.profile,

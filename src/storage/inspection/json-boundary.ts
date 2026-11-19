@@ -8,6 +8,8 @@ export class JsonBoundary {
   private depth = 0;
   private rootKey = '';
   private expectKey = true;
+  private readonly manifestKeys = new Set<string>();
+  private expectManifestKey = true;
   private valuePending = false;
   private recordDepth = 0;
   private recordStart: number | undefined;
@@ -20,6 +22,7 @@ export class JsonBoundary {
     if (typeof value === 'string' && Buffer.byteLength(value) > this.maxRecord) throw new InspectionError('limit', 'JSON record/token limit exceeded');
     if (this.depth === 0 && token !== TokenType.LEFT_BRACE && !complete) throw new InspectionError('invalid-json', 'Expected a JSON object');
     this.rootProperty(token, value);
+    if (this.depth === 2 && this.rootKey === 'manifest') this.manifestProperty(token, value);
     this.startRecord(token, offset);
     this.updateDepth(token);
   }
@@ -36,6 +39,14 @@ export class JsonBoundary {
       this.sections.set(this.rootKey, token === TokenType.LEFT_BRACKET ? 'array' : token === TokenType.LEFT_BRACE ? 'object' : 'scalar');
       this.valuePending = false;
     }
+  }
+  private manifestProperty(token: TokenType, value: unknown) {
+    if (token === TokenType.COMMA) this.expectManifestKey = true;
+    if (token !== TokenType.STRING || !this.expectManifestKey) return;
+    this.expectManifestKey = false;
+    const key = String(value);
+    if (this.manifestKeys.has(key)) throw new InspectionError('invalid-json', 'Duplicate manifest property');
+    this.manifestKeys.add(key);
   }
   private startRecord(token: TokenType, offset: number) {
     if (this.recordStart !== undefined || ![TokenType.LEFT_BRACE, TokenType.LEFT_BRACKET].includes(token)) return;

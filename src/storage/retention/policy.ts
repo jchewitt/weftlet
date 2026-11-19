@@ -8,6 +8,7 @@ export interface SnapshotPin { profile: string; snapshotId: string; owner: strin
 export interface RetentionPolicy {
   schemaVersion: 1;
   history?: HistoryPolicy;
+  retireCompanionIndexes?: boolean;
   profiles: ProfileDeclaration[];
   activeScopes: ScopeDeclaration[];
   releasedHeads: ReleasedHead[];
@@ -33,7 +34,8 @@ function declaration(value: unknown, allowed: string[]): asserts value is Record
 }
 export function parseRetentionPolicy(input: unknown): RetentionPolicy {
   if (!object(input) || input.schemaVersion !== 1) throw Error('Expected retention policy schemaVersion 1');
-  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins', 'history']);
+  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins', 'history', 'retireCompanionIndexes']);
+  if (input.retireCompanionIndexes !== undefined && typeof input.retireCompanionIndexes !== 'boolean') throw Error('retireCompanionIndexes must be boolean');
   for (const name of ['profiles', 'activeScopes', 'releasedHeads', 'pins']) {
     if (!Array.isArray(input[name]) || input[name].length > 5000) throw Error('Retention policy arrays must contain at most 5000 declarations');
   }

@@ -114,10 +114,9 @@ Default limits match inventory: 100,000 entries and 8 GiB per inspected file.
 unless overridden. Policy input is limited to 2 MiB; saved review input to 64 MiB.
 
 Each object reports size, disposition, reasons, file revision/hash where available,
-required head-removal dependencies and recovery limitations. The first review can
-propose only ordinary, unshared, managed snapshots and explicitly released heads.
+required head-removal dependencies and recovery limitations. Review covers ordinary unshared managed snapshots, explicitly released heads and opted-in verified companion indexes.
 Current evidence, declared previous generations, active pins and retained heads
-protect snapshots. Semantic artifacts, indexes, receipts, unknown objects, links
+protect snapshots. An opted-in [verified companion index](CACHE-REMOVAL.md#reclaim-companion-scip-indexes) follows its selected snapshot. Semantic artifacts, other indexes, receipts, unknown objects, links
 and scratch work remain retained. Hard-linked objects are retained even if one
 name appears disposable.
 

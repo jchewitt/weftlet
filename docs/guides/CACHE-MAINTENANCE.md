@@ -62,6 +62,8 @@ updated `--expect-policy`. A replaced or reactivated cache with a different root
 identity also needs review. Retention settings remain outside extraction identity
 and never require a model call.
 
+To include a verified SCIP index with a selected superseded snapshot, set the top-level retention policy property `"retireCompanionIndexes": true`, prepare again, review the paired paths and use the new policy digest. Existing scheduled policies keep their index files. [Companion retirement details](CACHE-REMOVAL.md#reclaim-companion-scip-indexes).
+
 ## Scheduling and stopping
 
 Use the same fixed command from a trusted job on the machine that owns the cache.
