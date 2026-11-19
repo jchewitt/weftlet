@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile, link, symlink, access, rename } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile, link, symlink, access, rename, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, parse } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -32,7 +32,7 @@ function snapshot(id: string): GraphSnapshot {
     semanticArtifactKeys: [], scipIndexDigest: '', rdfDigest: '' }, facts: [], invariants: [], runtimeEvidence: [], unresolved: [] };
 }
 async function fixture() {
-  const parent = await mkdtemp(join(tmpdir(), 'weftlet-remove-')); roots.push(parent);
+  const parent = await realpath(await mkdtemp(join(tmpdir(), 'weftlet-remove-'))); roots.push(parent);
   const root = join(parent, 'cache'); await mkdir(root);
   const store = new FileSnapshotStore(root);
   for (const id of ['current', 'previous', 'pinned', 'old0', 'old1', 'orphan']) await store.write(snapshot(id));
