@@ -1,5 +1,18 @@
 # Validation evidence
 
+## 0.11.0 published storage candidate, November 19, 2026
+
+The [release workflow](https://github.com/jchewitt/weftlet/actions/runs/44618981512) published both packages from `0ad6ae7bd2cbf350ea1329464188079ef0835597` after the [version PR](https://github.com/jchewitt/weftlet/pull/102). The [exact-head checks](https://github.com/jchewitt/weftlet/actions/runs/44616462770) covered Linux, the browser explorer, Windows storage, onboarding and relationship retrieval. The [companion-index change](https://github.com/jchewitt/weftlet/pull/112) and version PR each received independent review.
+
+| Package | npm tarball bytes | SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.11.0` | 22,582 | `sha512-Dk6dFrW7nrBUWkfWWDmlysLWGWjTLlBM9zrbnUSK2l5aT79qrGhYNpgI1AUaGtT1naU81vxVgNG2AFMPKrkIHg==` |
+| `@weftlet/toolkit@0.11.0` | 994,179 | `sha512-JO/0S3QXGr89aYUBS3Ee7Uw9craGq5lRTpoNjSuQ8E+LOpmldlIHVp+HcuqCEdHJAh/t2EF8lJuJ7fLCLQz+uQ==` |
+
+The downloaded npm archives matched the prepared GitHub artifact byte for byte. A fresh consumer installed the public toolkit and resolved its matching core dependency. Both package tags point to the release commit. Consumer cache measurements and the official 1.0 decision remain open.
+
+GitHub dispatched the documentation event. The [initial website run](https://github.com/jchewitt/weftlet-docs/actions/runs/44621776957) stopped when the toolkit tarball still returned HTTP 404 after its registry metadata became visible. Both archives downloaded and passed verification subsequently. The website team can replay the same release payload.
+
 ## Coordinated retention removal candidate, November 19, 2026
 
 R3b3a begins at merged PR 104 commit `f7796194a69dad3b1e17ade1938571b9638f0480`.

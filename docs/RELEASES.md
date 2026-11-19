@@ -12,6 +12,7 @@ npm registry or a substitute for detailed upgrade notes.
 
 | Release | Main changes |
 | --- | --- |
+| [0.11.0](../CHANGELOG.md#0110) | Configurable cache history, coordinated removal and recovery, optional compact snapshots, and verified SCIP index retirement. |
 | [0.10.0](../CHANGELOG.md#0100) | Independent Claude/OpenCode extraction, automatic skill/MCP/CI setup, assisted integration, verified snapshot delivery, temporary clean comparisons and read-only cache/retention reviews. |
 | [0.9.0](../CHANGELOG.md#090) | Reject inconsistent semantic physical-file kinds before reuse/assembly; version artifact acceptance while retaining old evidence. Preview extraction work before upgrading a graph. |
 | [0.8.1](../CHANGELOG.md#081) | Exact-owner intent priority and source-intent coverage accounting; saved graphs benefit without extraction. Restart pagination. |
@@ -24,7 +25,9 @@ npm registry or a substitute for detailed upgrade notes.
 | [0.3.0–0.5.0](../CHANGELOG.md#050) | No-model hydration preview, validation improvements, artifact reuse, timeout diagnostics, canonical file helpers and ten-minute timeout support. |
 | [0.1.2–0.2.1](../CHANGELOG.md#021) | Release automation, committed TypeScript selection, document links, Windows launchers and document identity repair. |
 
-## 0.11.0 storage candidate for 1.0 evaluation
+## 0.11.0 storage release for 1.0 evaluation
+
+Both packages were [published from the versioned commit](https://github.com/jchewitt/weftlet/actions/runs/44618981512).
 
 Upgrade every process sharing a cache before enabling [coordination](guides/CACHE-COORDINATION.md)
 or [compact writes](guides/COMPACT-SNAPSHOTS.md). To adopt a history target in an existing
