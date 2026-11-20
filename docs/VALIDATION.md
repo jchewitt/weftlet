@@ -1,5 +1,23 @@
 # Validation evidence
 
+## 0.11.0 consumer decision, November 20, 2026
+
+**Graph compatibility passed. Legacy-cache retention remains a 1.0 blocker.** TradePilot reported the following on Windows/NTFS, Node 24.2.0, with the official core and toolkit archives verified against their published SHA-512 values.
+
+| Check | Consumer result |
+| --- | --- |
+| Installation | Frozen install matched the release. Three service-image frozen-install checks passed. |
+| Exact-source graph comparison | With the same commit, scope and Docker/openCAESAR backend, 0.9.0 and 0.11.0 passed strict SHACL and produced the same digest for 587,034 facts and 181,557 nodes. All 19 semantic artifacts were reused. |
+| Independent clean comparison | Original snapshot, SCIP index and head hashes were preserved. The comparison added a receipt and zero permanent snapshots or indexes. |
+| Retrieval and invariants | All 30 ranked facts at depth three matched with citations, coverage and diagnostics. Four invariants passed and one remained inconclusive. A fresh MCP process exposed nine read-only tools and matched the CLI. |
+| Consumer suite | 64 tests passed with one pre-existing Windows skip. |
+
+Coordination activation succeeded on the existing approximately 181 GB cache. One 44-minute preparation for a **10,000,000,000-byte** target returned exit 1 and `canApply: false`. It listed 30 superseded snapshots and 30 companion indexes totaling 27,509,181,265 logical bytes. The projected remainder was 153.49 GB. Actual removal was zero. Recovery, archive restoration and scheduled maintenance were outside this run.
+
+All 1,824 issues had code `activity-requires-coordination`: four persistent Gradle lock filenames under each of 456 ontology scratch directories. The consumer reported unchanged revisions and no detected writer after the preview. Those observations alone do not establish OS lock ownership. In 0.11.0 the [evaluator](../src/storage/retention/evaluate.ts) treats every inventoried `.lock` suffix as activity, including retained temporary files.
+
+A separate Linux check used the 0.11.0 release checkout and a disposable managed root. The empty-work control produced an applicable preview. Adding four empty files at the reported Gradle paths under one synthetic ontology workspace changed it to exit 1 with exactly four activity issues. All four files were classified as retained temporary data. This isolates the filename trigger without running Gradle or applying a plan. The [work queue](1.0-WORK-QUEUE.md#storage-acceptance-after-the-0110-consumer-run) gives the retest and the two follow-ups.
+
 ## 0.11.0 published storage candidate, November 19, 2026
 
 The [release workflow](https://github.com/jchewitt/weftlet/actions/runs/44618981512) published both packages from `0ad6ae7bd2cbf350ea1329464188079ef0835597` after the [version PR](https://github.com/jchewitt/weftlet/pull/102). The [exact-head checks](https://github.com/jchewitt/weftlet/actions/runs/44616462770) covered Linux, the browser explorer, Windows storage, onboarding and relationship retrieval. The [companion-index change](https://github.com/jchewitt/weftlet/pull/112) and version PR each received independent review.
