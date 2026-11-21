@@ -10,6 +10,9 @@ import { enableCacheCoordination } from '../src/storage/coordination/managed-roo
 import { withManagedCacheAccess } from '../src/storage/coordination/managed-access.js';
 import { withCacheMaintenance } from '../src/storage/coordination/access.js';
 
+vi.mock('../src/infrastructure/compiler-docker.js', () => ({
+  compilerDockerQuery: vi.fn(async (args: string[]) => args[0] === 'info' ? 'public-daemon' : ''),
+}));
 vi.mock('../src/infrastructure/process.js', () => ({ runProcess: vi.fn() }));
 vi.mock('node:stream/promises', async importOriginal => ({ ...await importOriginal<typeof import('node:stream/promises')>(), pipeline: vi.fn() }));
 const roots: string[] = [];

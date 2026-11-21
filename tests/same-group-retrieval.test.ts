@@ -55,13 +55,6 @@ it.each(['specific', 'symmetric'] as const)('measures exact same-group relations
     expect(repeat.snapshot.manifest.contentDigest).toBe(snapshot.manifest.contentDigest);
     expect(repeat.semanticExtracted).toBe(0);
     const afterRepeat = await evidenceBytes(fixture.app.storageRoot);
-    for (const [path, digest] of Object.entries(before)) expect(afterRepeat[path]).toBe(digest);
-    // The unchanged RDF compiler creates a new work directory on each hydration.
-    // It must contain identical bytes; no snapshot/index/head/cache is added or rewritten.
-    const added = Object.keys(afterRepeat).filter(path => !(path in before));
-    expect(added).toHaveLength(1);
-    expect(added[0]).toMatch(/^work\/rdf-[a-f0-9-]+\/semantic\.nt$/);
-    const priorRdf = Object.keys(before).find(path => path.endsWith('/semantic.nt'))!;
-    expect(afterRepeat[added[0]!]).toBe(before[priorRdf]);
+    expect(afterRepeat).toEqual(before); // Includes compiler scratch and every persistent evidence file.
   } finally { await rm(fixture.root, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }
 }, 240_000);

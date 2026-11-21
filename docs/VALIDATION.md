@@ -1,5 +1,11 @@
 # Validation evidence
 
+## Compiler workspace lifecycle after 0.12.0
+
+Based on `e07d357`. Linux public fixtures exercised repeated strict hydration with the built-in RDF compiler and a mocked openCAESAR Docker command, downstream failure, cancellation, standalone RDF exports and an overlapping managed-cache operation. A separate child process exited with a registered workspace. Offline recovery and explicit reclamation removed it after matching ownership; a changed marker blocked deletion. A mocked disconnected client with a surviving container retained its workspace. The ordinary graph and semantic stores stayed queryable.
+
+The optional real Docker integration reached Gradle but Maven dependency resolution failed in this environment. Successful real-host compilation and NTFS consumer acceptance remain separate. The operator procedure is in the [cache guide](guides/CACHE-HISTORY.md#compiler-workspace-lifetime).
+
 ## Reviewed SCIP index migration after 0.12.0
 
 Implementation starts from `ec651ae`. On a disposable Linux cache the CLI migrated three verified legacy copies across two profiles, preserving current, previous and pinned graphs and their SCIP bytes. A unique index remained in place. The test ran prepare and apply with external policy and plan files, then confirmed a fresh prepare selected zero groups. Stale and edited plans, active readers, unresolved locks and insufficient recovery capacity have separate checks.

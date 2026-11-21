@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "fae9581ffac576f1a131d0486a865ca132806b3d201fed5537dd14756b296643"
+      "destinationSha256": "a679228d7c53b5a58938ac8ac7b296c839e8ca6d51b7a588c9131c4cd1d0a8a1"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -318,7 +318,7 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "0cbc1105eeedd8118007603bfcab49b881e805fbf1228969164ae055b30d1630"
+      "destinationSha256": "73e1fe593fb3f903b62cfee6c43041b8ea69d0e81d54e7f1dab566f2b109ceaa"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "aad5e50a9c0b38916ae08e82bfd80a95b70924bae52b0eab63cabeb67164db2b"
+      "destinationSha256": "9ffb4cdaccb272fd1c6166bb470d443caf306c19a2d8b0a05bfa1a9c5f715bff"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
+    ".changeset/compiler-workspace.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".changeset/reviewed-index-migration.md",
@@ -1111,6 +1112,7 @@
     "src/extraction/codex-command.test.ts",
     "src/extraction/codex-command.ts",
     "src/extraction/codex-request.ts",
+    "src/extraction/compiler-workspace.ts",
     "src/extraction/document-classification.test.ts",
     "src/extraction/document-classification.ts",
     "src/extraction/document-code-bindings.ts",
@@ -1229,6 +1231,7 @@
     "src/graph/snapshot-index.ts",
     "src/graph/validation-progress.ts",
     "src/infrastructure/artifact-paths.ts",
+    "src/infrastructure/compiler-docker.ts",
     "src/infrastructure/json-digest.ts",
     "src/infrastructure/module-resolution.ts",
     "src/infrastructure/package-identity.ts",
@@ -1282,6 +1285,7 @@
     "src/storage/compact-snapshot.ts",
     "src/storage/comparison-workspace.test.ts",
     "src/storage/comparison-workspace.ts",
+    "src/storage/compiler-scratch.ts",
     "src/storage/coordination/access.ts",
     "src/storage/coordination/managed-access.ts",
     "src/storage/coordination/managed-root.ts",
@@ -1370,6 +1374,7 @@
     "tests/code-evidence.test.ts",
     "tests/compact-snapshot.test.ts",
     "tests/companion-index-retention.test.ts",
+    "tests/compiler-scratch-recovery.test.ts",
     "tests/contract-compatibility.test.ts",
     "tests/contract-obligations.test.ts",
     "tests/coordinated-snapshot-access.test.ts",

@@ -224,7 +224,10 @@ export class ContextGraphHydrator {
     });
     checkpoint();
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
-    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
+    const compiler = this.dependencies.ontologyCompiler;
+    const rdfDigest = compiler.compileDigest ? await compiler.compileDigest(snapshotId, artifacts, context)
+      : (await compiler.compile(snapshotId, artifacts, context)).digest;
+    checkpoint();
     const invariants = (
       await settleAll(
         this.dependencies.invariantEvaluators.map(async (evaluator) =>
@@ -252,7 +255,7 @@ export class ContextGraphHydrator {
       ontologyVersion: config.semantic.ontologyVersion,
       semanticArtifactKeys: artifacts.map((artifact) => artifact.key).sort(),
       scipIndexDigest: scip.digest,
-      rdfDigest: ontology.digest,
+      rdfDigest,
       facts: facts.map(({ snapshotId: _snapshotId, ...fact }) => fact),
       invariants,
       runtimeEvidence,
@@ -303,7 +306,7 @@ export class ContextGraphHydrator {
         runtimeEvidenceDigest: runtimeRevision.digest,
         semanticArtifactKeys: artifacts.map((artifact) => artifact.key).sort(),
         scipIndexDigest: scip.digest,
-        rdfDigest: ontology.digest,
+        rdfDigest,
       },
       facts,
       invariants,

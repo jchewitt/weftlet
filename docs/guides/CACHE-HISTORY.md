@@ -200,3 +200,15 @@ pnpm exec weftlet cache retention apply-index-migration --root /path/to/cache --
 Apply waits for cooperating readers and writers to drain, then recomputes the plan. For each selected legacy copy it installs the SHA-256 payload and generation reference, records unlink intent, and verifies the graph, shared replacement and legacy file before removing the old copy. The result lists actual legacy removals and the journal path. Physical disk recovery also depends on allocation and filesystem behavior. Use a fresh usage report to measure it.
 
 If apply reports a stale plan or a partial result, inspect the result, prepare again and review the remaining copies. The last good graph and completed replacements remain available. If a process exits while it owns the cache, stop clients and follow the [offline recovery procedure](CACHE-RECOVERY.md). Recovery reconciles each unlink intent with the original file, saved graph and shared replacement. Missing or corrupt required evidence keeps recovery blocked. After recovery, prepare a fresh migration. An interrupted staging write can leave scratch bytes for inspection. Power-loss durability and collection of the final shared reference are separate milestones.
+
+## Compiler workspace lifetime
+
+Normal hydration releases the built-in RDF or openCAESAR workspace as soon as its digest is available. Strict graph validation and publication still run, and subsequent queries read the saved graph. To export the RDF files, use `weftlet ontology compile --output ./new-rdf-directory` from the configured clean checkout. Omitting the output directory places the export under `ontology-exports` in the selected storage profile. For local debugging, explicitly set `WEFTLET_KEEP_COMPILER_SCRATCH=1` to keep the operation directory.
+
+Managed compilers register each disposable operation under `compiler-operations-v1` in the activated root. After a process crash, stop cache clients and compiler containers and complete the [offline coordination recovery](CACHE-RECOVERY.md). Use the UUID from the matching registration to reclaim that one workspace:
+
+```sh
+weftlet cache coordination reclaim-compiler --root /path/to/managed-cache --operation UUID --acknowledge-quiescence
+```
+
+The command takes exclusive maintenance, checks the registration against the physical workspace, and checks the recorded Docker daemon and container when applicable. Debug workspaces and legacy Gradle directories retain their existing protection.

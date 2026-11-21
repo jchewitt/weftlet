@@ -37,7 +37,7 @@ jobs:
       - run: pnpm build
       - run: pnpm --filter @weftlet/core test
       - name: Optional compiler mount arguments and filesystem isolation
-        run: pnpm exec vitest run tests/ontology-compiler.test.ts src/extraction/ontology.test.ts
+        run: pnpm exec vitest run tests/ontology-compiler.test.ts tests/compiler-scratch-recovery.test.ts src/extraction/ontology.test.ts
       - name: Explorer HTTP service and shared discovery index
         run: pnpm exec vitest run tests/explorer-server.test.ts tests/explorer-export.test.ts src/graph/discovery.test.ts src/graph/snapshot-index.test.ts src/interfaces/graph-discovery.test.ts
       - name: Exact-owner intent retrieval, coverage and citation path portability
