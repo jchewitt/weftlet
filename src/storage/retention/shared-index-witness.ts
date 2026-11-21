@@ -135,7 +135,7 @@ export async function readWitness(root: string, rootId: string, path: string, jo
     w.reference.directory !== referenceDir(w.profile, w.snapshotId) ||
     w.reference.name !== 'reference.json' ||
     w.profile !== posix.dirname(posix.dirname(w.snapshot)) ||
-    ![posix.basename(snapshotPath('.', w.snapshotId)), w.snapshotId + '.json'].some(
+    ![basename(snapshotPath('.', w.snapshotId)), w.snapshotId + '.json'].some(
       (name) => posix.join(w.profile, 'snapshots', name) === w.snapshot,
     )
   )
