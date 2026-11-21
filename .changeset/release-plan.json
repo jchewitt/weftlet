@@ -3,24 +3,16 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.11.0",
-      "previousVersion": "0.10.0"
+      "version": "0.11.1",
+      "previousVersion": "0.11.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.11.0",
-      "previousVersion": "0.10.0"
+      "version": "0.11.1",
+      "previousVersion": "0.11.0"
     }
   ],
   "changesets": [
-    "atomic-head-generations.md",
-    "cache-coordination-foundation.md",
-    "compact-snapshot-format.md",
-    "configurable-history-retention.md",
-    "coordinated-retention-removal.md",
-    "explicit-cache-recovery.md",
-    "managed-cache-lifecycles.md",
-    "recurring-history-maintenance.md",
-    "verified-scip-retirement.md"
+    "probe-gradle-scratch.md"
   ]
 }
