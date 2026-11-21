@@ -86,7 +86,6 @@ export function traversalApplication(fixture: Awaited<ReturnType<typeof traversa
     calls.push(path);
     await writeFile(args[args.indexOf('--output-last-message') + 1]!,
       JSON.stringify(parsePublicProse(await fixture.repository.readFileAt(commit, path))));
-    return { stdout: '', stderr: '' };
   } }, async () => 'chatgpt');
   const createTools = (root: string) => ({
     staticIndexer: { async index(context: ExtractionContext) {
