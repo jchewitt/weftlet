@@ -7,7 +7,7 @@ import type { CacheObject } from '../inspection/layout.js';
 import { previewScipBlob, previewScipReference, sharedScipRoot } from '../shared-scip.js';
 import { matchCompanionIndexes } from './companion-indexes.js';
 import { sumBytes } from './history-accounting.js';
-import { parseRetentionPolicy } from './policy.js';
+import { parseRetentionPolicy, type RetentionPolicy } from './policy.js';
 import type { RetentionPlanOptions } from './plan.js';
 import { resolveRetentionReferences } from './references.js';
 
@@ -24,6 +24,48 @@ function generation(entry: CacheObject, contentDigest: string | undefined) {
   return { repositoryId, snapshotId, commitSha, scipIndexDigest, contentDigest };
 }
 
+function reviewOwnership(inventory: Awaited<ReturnType<typeof indexSharingInventory>>, policy: RetentionPolicy, now: number) {
+  const references = resolveRetentionReferences(policy, inventory.objects, now);
+  const issues = [...references.issues, ...inventory.issues.map(({ code, path }) => ({ code, path }))];
+  for (const path of inventory.danglingHeads) issues.push({ code: 'dangling-head', path });
+  for (const head of inventory.objects.filter(o => o.category === 'head' && references.profiles.has(o.profile) && o.inspection !== 'json-complete')) {
+    issues.push({ code: 'unverified-head', path: head.path });
+  }
+  if (!inventory.complete) issues.push({ code: 'incomplete-inventory', path: '.' });
+  const indexes = inventory.objects.filter(o => o.category === 'scip-index');
+  const excluded = new Map<string, string>(indexes.map(o => [o.path, !references.profiles.has(o.profile) ? 'undeclared-profile' :
+    o.kind !== 'file' || o.linkCount !== 1 || !o.physicalIdentity ? 'unsafe-index-file' :
+    o.inspection !== 'bytes-hashed' ? 'unverified-index' : 'no-snapshot-owner']));
+  const snapshots = inventory.objects.filter(o => o.category === 'snapshot' && references.profiles.has(o.profile));
+  const unsafeProfiles = new Set<string>();
+  for (const snapshot of snapshots) {
+    if (snapshot.inspection !== 'json-complete' || !snapshot.sha256 ||
+        snapshot.metadata?.repositoryId !== references.profiles.get(snapshot.profile)!.repositoryId) {
+      unsafeProfiles.add(snapshot.profile);
+      issues.push({ code: 'snapshot-ownership-or-integrity-unconfirmed', path: snapshot.path });
+    }
+  }
+  for (const index of indexes) {
+    if (unsafeProfiles.has(index.profile)) excluded.set(index.path, 'unverified-profile');
+  }
+  return { references, issues, snapshots, indexes, excluded, unsafeProfiles };
+}
+
+function* verifiedPairs(snapshots: CacheObject[], match: ReturnType<typeof matchCompanionIndexes>,
+  unsafeProfiles: Set<string>, excluded: Map<string, string>) {
+  for (const snapshot of snapshots) {
+    if (unsafeProfiles.has(snapshot.profile)) continue;
+    const { index, matches, reason } = match(snapshot);
+    if (!index) {
+      for (const entry of matches) if (excluded.has(entry.path)) excluded.set(entry.path, reason);
+    } else if (snapshot.linkCount !== 1 || !snapshot.physicalIdentity || snapshot.activity !== 'unknown') {
+      excluded.set(index.path, 'unsafe-snapshot-file');
+    } else {
+      yield { snapshot, index };
+    }
+  }
+}
+
 export async function previewIndexSharing(options: RetentionPlanOptions) {
   await safeTransferPath(resolve(options.root), true);
   const root = await realpath(options.root), policy = parseRetentionPolicy(options.policy);
@@ -33,44 +75,13 @@ export async function previewIndexSharing(options: RetentionPlanOptions) {
       if (await sharedScipRoot(join(root, profile.path)) !== root) throw Error('Different managed profile owner');
     }
     const inventory = await indexSharingInventory(root, { ...options, policy });
-    const references = resolveRetentionReferences(policy, inventory.objects, (options.now ?? new Date()).getTime());
-    const issues = [...references.issues, ...inventory.issues.map(({ code, path }) => ({ code, path }))];
-    for (const path of inventory.danglingHeads) issues.push({ code: 'dangling-head', path });
-    for (const head of inventory.objects.filter(o => o.category === 'head' && references.profiles.has(o.profile) && o.inspection !== 'json-complete')) {
-      issues.push({ code: 'unverified-head', path: head.path });
-    }
-    if (!inventory.complete) issues.push({ code: 'incomplete-inventory', path: '.' });
+    const { references, issues, snapshots, indexes, excluded, unsafeProfiles } =
+      reviewOwnership(inventory, policy, (options.now ?? new Date()).getTime());
     const match = matchCompanionIndexes(inventory.objects, policy);
-    const indexes = inventory.objects.filter(o => o.category === 'scip-index');
-    const excluded = new Map<string, string>(indexes.map(o => [o.path, !references.profiles.has(o.profile) ? 'undeclared-profile' :
-      o.kind !== 'file' || o.linkCount !== 1 || !o.physicalIdentity ? 'unsafe-index-file' :
-      o.inspection !== 'bytes-hashed' ? 'unverified-index' : 'no-snapshot-owner']));
     const groups = new Map<string, { digest: string; blobExists: boolean; members: Member[] }>();
     const blobs = new Map<string, boolean | null>();
-    const snapshots = inventory.objects.filter(o => o.category === 'snapshot' && references.profiles.has(o.profile));
-    const unsafeProfiles = new Set<string>();
-    for (const snapshot of snapshots) {
-      if (snapshot.inspection !== 'json-complete' || !snapshot.sha256 ||
-          snapshot.metadata?.repositoryId !== references.profiles.get(snapshot.profile)!.repositoryId) {
-        unsafeProfiles.add(snapshot.profile);
-        issues.push({ code: 'snapshot-ownership-or-integrity-unconfirmed', path: snapshot.path });
-      }
-    }
-    for (const index of indexes) {
-      if (unsafeProfiles.has(index.profile)) excluded.set(index.path, 'unverified-profile');
-    }
-    for (const snapshot of snapshots) {
+    for (const { snapshot, index } of verifiedPairs(snapshots, match, unsafeProfiles, excluded)) {
       options.signal?.throwIfAborted();
-      if (unsafeProfiles.has(snapshot.profile)) continue;
-      const { index, matches, reason } = match(snapshot);
-      if (!index) {
-        for (const entry of matches) if (excluded.has(entry.path)) excluded.set(entry.path, reason);
-        continue;
-      }
-      if (snapshot.linkCount !== 1 || !snapshot.physicalIdentity || snapshot.activity !== 'unknown') {
-        excluded.set(index.path, 'unsafe-snapshot-file');
-        continue;
-      }
       const digest = index.sha256!;
       const profile = join(root, snapshot.profile);
       if (!blobs.has(digest)) {
