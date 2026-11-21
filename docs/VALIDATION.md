@@ -6,13 +6,19 @@ The consumer verified both published archives and a frozen install. A fresh MCP 
 
 With the same conservative policy, coordinated prepare verified 772 idle scratch files, clearing 764 previously reported paths and recognizing eight new paths. The remaining 1,060 blockers were four lock files in each of 265 older compiler directories. The preview was inapplicable. It observed 183.437 GB, identified 30 snapshot/index pairs totaling 27.509 GB, and projected 155.927 GB retained. No cleanup ran. A consumer-specific viewer check expected a runtime suffix on static evidence; the consumer owns that check.
 
-Historical source at `479f3f5` allocated `ontology-<snapshotId>`. At `dc785d1` the compiler appended a UUIDv4. The current compiler uses a UUIDv4 alone. Private directory names and snapshot-to-workspace matches were not supplied. Consumer acceptance of the successor requires another same-policy prepare.
+Historical source at `479f3f5` allocated `ontology-<snapshotId>`. At `dc785d1` the compiler appended a UUIDv4. The current compiler uses a UUIDv4 alone. The consumer matched 194 of the 265 parent names to a verified snapshot in the same profile. Removing only `ontology-` matched 162. Removing one additional trailing UUIDv4 matched 32. The other 71 lacked this witness. Name matching supplies an ownership lead. Each file still requires revision, filesystem, activity and exclusive-read checks. Real-cache acceptance of the successor requires another same-policy prepare. Leave unmatched workspaces blocked unless independent build records establish ownership for the exact physical directory.
 
 The historical compiler regression in `tests/retention-removal.test.ts` covers both previous naming forms, an absolute lock path longer than 260 characters, a missing or ambiguous snapshot, an undeclared profile and retained lock bytes. The operator-declaration regression checks recognition after removing the original snapshot and rejects a different directory at the same path. Native handle exclusion is exercised only on Windows.
 
+## Consumer external-volume and cold recovery observation
+
+The consumer attributed 848 snapshot, index, reference and receipt paths. Its deduplicated compressed cold archive occupied 18.98 GB for 182.73 GB logical input. All 612 distinct payloads round-tripped, and a sample restore succeeded. The live cache remained intact. These figures describe the consumer’s external archive.
+
+Separately, an absolute workspace storage path on another NTFS volume accepted one fresh exact graph. The compact snapshot was approximately 123 MB. Existing semantic bytes were validated and reused without new extraction. This used a different local profile and says nothing about the footprint of older snapshots. The [storage operations and migration queue](CACHE-RETENTION-PLAN.md#storage-location-and-recovery) tracks the four operations separately.
+
 ## Owner completion candidate
 
-Public cache fixtures exercise partial and final owner completion, generation changes between prepare and apply, pinned snapshots, retained peer heads, active workspace leases, hard-linked heads, indefinite retention, the 100-owner boundary, invalid declarations and scheduled maintenance boundaries. TradePilot’s Gradle preview remains a separate consumer check against released 0.11.1.
+Public cache fixtures exercise partial and final owner completion, generation changes between prepare and apply, pinned snapshots, retained peer heads, active workspace leases, hard-linked heads, indefinite retention, the 100-owner boundary, invalid declarations and scheduled maintenance boundaries. The 0.11.1 Gradle replay and its outstanding historical-workspace blockers are recorded above.
 
 ## 0.11.1 release verification, November 20, 2026 (US Central)
 
