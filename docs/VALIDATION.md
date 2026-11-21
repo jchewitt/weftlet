@@ -1,5 +1,19 @@
 # Validation evidence
 
+## 0.12.0 first TradePilot NTFS retention replay
+
+**Historical workspace recognition passed.** TradePilot ran one coordinated prepare with core and toolkit 0.12.0 (both tags at `5377075`). The verified NTFS root, policy digest and scan limits matched the previous run. The policy contained no historical workspace declarations.
+
+| Historical directory group | Directories | All four locks verified idle | All four blocked |
+| --- | ---: | ---: | ---: |
+| Exact same-profile snapshot ID | 162 | 162 | 0 |
+| Same-profile snapshot ID with one trailing UUIDv4 | 32 | 32 | 0 |
+| No same-profile snapshot match | 71 | 0 | 71 |
+
+The whole-cache idle count rose from 772 to 1,548. All 284 remaining blockers came from the original activity paths. The reported lock reasons were `unresolved-profile-owner` (12) and `unverified-historical-workspace` (272). Every original lock-file revision was unchanged.
+
+**Cleanup remains blocked.** Prepare reported `canApply: false` and identified 60 candidate files totaling 27,509,181,265 logical bytes. Actual removals were zero. This run exercised prepare only. It included no apply, recurring maintenance or hydration.
+
 ## 0.12.0 release verification
 
 Both packages were published from `537707598b64c3ac07d10746b4dfa600b117c6f8`. Their package-specific Git tags resolve to that commit. Both registry downloads matched the SHA-512 values in the trusted workflow’s archive manifest and the independently prepared version-PR archives. [Release workflow](https://github.com/jchewitt/weftlet/actions/runs/44868869206)
@@ -11,7 +25,7 @@ Both packages were published from `537707598b64c3ac07d10746b4dfa600b117c6f8`. Th
 
 The release tree matched the independently reviewed tree `d71b269d895db4f190deb03b2b68f126b332f0f1`. Linux publication checks passed, including inventory, licensing and packed-consumer validation. Native Windows checks exercised legacy names, long paths, an actively held handle and an exact directory attestation after snapshot retirement. A pre-release run hit an intermittent `EPERM` in an independent head-writer contention test. Its rerun and all checks on the merged fix passed. [Native Windows qualification](https://github.com/jchewitt/weftlet/actions/runs/44867484914/job/136734301245)
 
-A fresh Linux consumer installed the two exact registry archives and ran the published CLI on a disposable coordinated cache. Partial completion preserved the bookmark, an advanced generation stayed protected, and final completion returned a retirement receipt while the explicit replay pin preserved its original snapshot. TradePilot’s next acceptance step is an unchanged-policy, prepare-only NTFS replay. The source workflow also triggered the [documentation deployment](https://github.com/jchewitt/weftlet-docs/actions/runs/44870591343).
+A fresh Linux consumer installed the two exact registry archives and ran the published CLI on a disposable coordinated cache. Partial completion preserved the bookmark, an advanced generation stayed protected, and final completion returned a retirement receipt while the explicit replay pin preserved its original snapshot. The source workflow also triggered the [documentation deployment](https://github.com/jchewitt/weftlet-docs/actions/runs/44870591343).
 
 ## 0.11.1 consumer prepare on Windows NTFS
 
@@ -19,7 +33,7 @@ The consumer verified both published archives and a frozen install. A fresh MCP 
 
 With the same conservative policy, coordinated prepare verified 772 idle scratch files, clearing 764 previously reported paths and recognizing eight new paths. The remaining 1,060 blockers were four lock files in each of 265 older compiler directories. The preview was inapplicable. It observed 183.437 GB, identified 30 snapshot/index pairs totaling 27.509 GB, and projected 155.927 GB retained. No cleanup ran. A consumer-specific viewer check expected a runtime suffix on static evidence; the consumer owns that check.
 
-Historical source at `479f3f5` allocated `ontology-<snapshotId>`. At `dc785d1` the compiler appended a UUIDv4. The current compiler uses a UUIDv4 alone. The consumer matched 194 of the 265 parent names to a verified snapshot in the same profile. Removing only `ontology-` matched 162. Removing one additional trailing UUIDv4 matched 32. The other 71 lacked this witness. Name matching supplies an ownership lead. Each file still requires revision, filesystem, activity and exclusive-read checks. Real-cache acceptance of the successor requires another same-policy prepare. Leave unmatched workspaces blocked unless independent build records establish ownership for the exact physical directory.
+Historical source at `479f3f5` allocated `ontology-<snapshotId>`. At `dc785d1` the compiler appended a UUIDv4. The current compiler uses a UUIDv4 alone. The consumer matched 194 of the 265 parent names to a verified snapshot in the same profile. Removing only `ontology-` matched 162. Removing one additional trailing UUIDv4 matched 32. The other 71 lacked this witness. Name matching supplies an ownership lead. Each file still requires revision, filesystem, activity and exclusive-read checks. The subsequent 0.12.0 replay is recorded above. Leave unmatched workspaces blocked unless independent build records establish ownership for the exact physical directory.
 
 The historical compiler regression in `tests/retention-removal.test.ts` covers both previous naming forms, an absolute lock path longer than 260 characters, a missing or ambiguous snapshot, an undeclared profile and retained lock bytes. The operator-declaration regression checks recognition after removing the original snapshot and rejects a different directory at the same path. Native handle exclusion is exercised only on Windows.
 
