@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { lstat, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { afterEach, expect, it } from 'vitest';
+import { physicalArtifactKey } from '../src/infrastructure/artifact-paths.js';
 import { bytes, scipMigrationFixture } from './fixtures/scip-migration.js';
 import { prepareRetention } from '../src/storage/retention/prepared.js';
 import { applyRetention } from '../src/storage/retention/apply.js';
@@ -188,4 +189,21 @@ it('requires offline recovery evidence when the process exits after unlinking th
   expect(approved.entries.map((e) => e.directory)).toEqual(['a/scip/refs-v1/first.ref']);
   await applySharedRetirement(approved, approved.planId, f);
   expect(await withSavedScipIndex(f.b.path, f.b.manifest, (h) => h.readFile())).toEqual(bytes);
+});
+
+it('replays the hashed physical snapshot filename for a long logical generation on native filesystems', async () => {
+  const f = await scipMigrationFixture(roots);
+  await f.add('b','second');
+  const snapshotId = 'generation-' + 'a'.repeat(140);
+  await f.add('a', snapshotId);
+  const migration = await prepareIndexMigration(f);
+  await applyIndexMigration(migration, migration.planId, f);
+  f.policy.retireCompanionIndexes = true;
+  const selected = await prepareRetention(f);
+  expect((await applyRetention(selected, selected.planId, f)).status).toBe('complete');
+  const retirement = await prepareSharedRetirement(f);
+  expect(retirement.issues).toEqual([]);
+  expect(retirement.entries.map(e=>e.directory)).toContain('a/scip/refs-v1/' + physicalArtifactKey(snapshotId) + '.ref');
+  await applySharedRetirement(retirement, retirement.planId, f);
+  expect(await readdir(join(f.root, 'scip-blobs-v1'))).toEqual([]);
 });
