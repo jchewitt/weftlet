@@ -20,7 +20,7 @@ async function readJournal(root: string, path: string, rootId: string) {
   validateStarted(first, operationId, marker.planId, rootId, marker.schemaVersion);
   return { journal, events, expected: removalCandidates(first.candidates, marker.schemaVersion === 2), identity: { operationId, planId: marker.planId, journalPath: join(root, journal) } };
 }
-function validateStarted(first: unknown, operationId: string, planId: string, rootId: string, version: number): asserts first is Record<string, unknown> {
+export function validateStarted(first: unknown, operationId: string, planId: string, rootId: string, version: number): asserts first is Record<string, unknown> {
   if (!record(first) || !exactKeys(first, ['schemaVersion', 'event', 'operationId', 'planId', 'rootId', 'policyDigest', 'startedAt', 'candidates']) ||
       first.schemaVersion !== version || first.event !== 'started' || first.operationId !== operationId || first.planId !== planId || first.rootId !== rootId ||
       typeof first.policyDigest !== 'string' || !digest.test(first.policyDigest) || !timestamp(first.startedAt)) throw Error('Unsupported removal journal');

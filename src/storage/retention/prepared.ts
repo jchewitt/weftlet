@@ -5,6 +5,7 @@ import { persistedJsonDigest } from '@weftlet/core';
 import { withCacheMaintenance, type CacheAccessOptions, type CacheMaintenanceScope } from '../coordination/access.js';
 import { managedRootForPath, type ManagedCacheRoot } from '../coordination/managed-root.js';
 import { safeTransferPath } from '../transfer-files.js';
+import type { CacheObject } from '../inspection/layout.js';
 import { inventoryCache } from '../inspection/inventory.js';
 import { inspectSmallJson } from '../inspection/read.js';
 import { parseRetentionPolicy, type RetentionPolicy } from './policy.js';
@@ -43,7 +44,7 @@ export async function assertNoPendingRemoval(root: string) {
 }
 
 /** Called only while owning exclusive maintenance. Pending journal state is never guessed away. */
-export async function prepareRetentionOwned(options: PreparedRetentionOptions, root: string, rootId: string) {
+export async function prepareRetentionOwned(options: PreparedRetentionOptions, root: string, rootId: string, inspect?: (objects: CacheObject[]) => void) {
   const policy = parseRetentionPolicy(structuredClone(await options.readPolicy?.() ?? options.policy));
   await assertNoPendingRemoval(root);
   const inventory = await inventoryCache({ ...options, roots: [root], verify: true });
@@ -53,6 +54,7 @@ export async function prepareRetentionOwned(options: PreparedRetentionOptions, r
   // Directory identity stays bound; entry enumeration catches additions/removals independently.
   inventory.objects = inventory.objects.filter(o => o.path !== '.weftlet-coordination' && !o.path.startsWith('.weftlet-coordination/'))
     .map(o => o.kind === 'directory' ? { ...o, revision: o.physicalIdentity ?? 'unknown', modifiedAt: '', allocatedBytes: null, linkCount: 0 } : o);
+  inspect?.(inventory.objects);
   const { idle, blockers } = await probeGradleScratch(inventory.objects, policy, rootId, options.signal);
   const review = evaluateRetention(inventory, policy, Date.now(), reservedControlBytes, idle);
   for (const object of review.objects) {
