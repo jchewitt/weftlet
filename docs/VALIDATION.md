@@ -1,5 +1,9 @@
 # Validation evidence
 
+## Owner completion candidate
+
+Public cache fixtures exercise partial and final owner completion, generation changes between prepare and apply, pinned snapshots, retained peer heads, active workspace leases, hard-linked heads, indefinite retention, the 100-owner boundary, invalid declarations and scheduled maintenance boundaries. TradePilot’s Gradle preview remains a separate consumer check against released 0.11.1.
+
 ## 0.11.1 release verification, November 20, 2026 (US Central)
 
 The [release workflow](https://github.com/jchewitt/weftlet/actions/runs/44850826227) published both packages from `af8164510df9c2441065a19a66c09d3db4f30e68`. Both GitHub tags point to that commit. The downloaded npm tarballs matched the prepared GitHub artifacts byte for byte.

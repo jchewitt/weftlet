@@ -19,6 +19,7 @@ export async function maintainRetention(options: RecurringRetentionOptions) {
       return policy;
     };
     const policy = await readPolicy(), bounded = { ...options, policy, readPolicy };
+    if (policy.activeScopes.some(s => s.completion)) throw Error('Scope completion requires a one-time reviewed preview and apply');
     const current = await prepareRetentionOwned(bounded, root, rootId);
     if (!current.canApply) throw Error('Recurring retention is blocked; prepare --json to inspect current inventory and declarations');
     if (current.objects.some(o => o.disposition === 'candidate' && o.category !== 'snapshot' && !(policy.retireCompanionIndexes && o.category === 'scip-index'))) throw Error('Recurring retention cannot retire heads');

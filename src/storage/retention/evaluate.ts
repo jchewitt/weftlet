@@ -1,3 +1,4 @@
+import { relative } from 'node:path';
 import { selectHistory } from './history-selection.js';
 import type { inventoryCache } from '../inspection/inventory.js';
 import type { RetentionPolicy } from './policy.js';
@@ -22,6 +23,23 @@ export function evaluateRetention(inventory: Awaited<ReturnType<typeof inventory
     if (idleScratch.has(entry.path)) decision.reasons.unshift('verified-idle-gradle-scratch');
     return decision;
   });
-  const selected = selectHistory(inventory.objects, decisions, policy, reservedControlBytes);
-  return { issues, pins: references.pins, ...selected };
+  const selected = selectHistory(inventory.objects, decisions, policy, reservedControlBytes, references.completedHeads);
+  const paths = new Set(references.completions.flatMap(c => c.snapshotPaths));
+  const snapshotHeads = new Map<string, string[]>();
+  if (paths.size) {
+    for (const entry of inventory.objects) if (paths.has(entry.path)) {
+      snapshotHeads.set(entry.path, entry.headReferences.map(h => relative(entry.root, h).replaceAll('\\', '/')));
+    }
+  }
+  const byPath = new Map(references.completions.length ? selected.objects.map(o => [o.path, o] as const) : []);
+  const completions = references.completions.map(({ snapshotPaths, ...record }) => {
+    const decision = record.path ? byPath.get(record.path) : undefined;
+    const snapshots = snapshotPaths.map(path => {
+      const snapshot = byPath.get(path)!;
+      const retainedHeads = snapshotHeads.get(path)!.filter(h => byPath.get(h)?.disposition === 'retain');
+      return { path, logicalBytes: snapshot.logicalBytes, disposition: snapshot.disposition, reasons: snapshot.reasons, retainedHeads };
+    });
+    return { ...record, disposition: decision?.disposition ?? 'retain', logicalHeadBytes: decision?.logicalBytes ?? 0, snapshots };
+  });
+  return { issues, pins: references.pins, completions, ...selected };
 }

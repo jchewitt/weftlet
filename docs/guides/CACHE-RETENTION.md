@@ -167,3 +167,27 @@ before approving local removal. See [snapshot delivery](SNAPSHOT-DELIVERY.md) fo
 the existing bounded export/import contract and
 [long-term guidance](../CACHE-RETENTION-PLAN.md#long-term-history-and-backup-guidance)
 for its distinction from planned R6/2.0 archival and remote storage.
+
+### Finish an owner’s work on a bookmark
+
+Available in the development version after 0.11.1. A scope's head is its bookmark. Record all owners who still need it in the external policy. When an owner confirms the work is finished, add their identifier to `completion.finishedOwners` and bind that decision to the observed snapshot ID. For example, this entry in `activeScopes` records that implementation is finished and validation is still using the bookmark.
+
+```json
+{
+  "profile": "api",
+  "head": "orders",
+  "owner": "implementation",
+  "additionalOwners": ["validation"],
+  "reason": "Orders workflow",
+  "completion": {
+    "snapshotId": "orders-42",
+    "finishedOwners": ["implementation"]
+  }
+}
+```
+
+Run the existing `cache retention prepare --root <cache> --policy <file> --json`. In `completions`, inspect the observed ID, remaining owners, head disposition and snapshot logical bytes, reasons and retained head paths. More than one bookmark can report the same snapshot. Count its path once when totaling bytes. The report reflects registered ownership; register external replay requirements as pins before preparing.
+
+After validation finishes at the same snapshot, include both owners in `finishedOwners` and prepare again. An advanced head, a remaining owner or a hard-linked head stays protected. Review an advanced generation with its owners before changing the expected ID. Indefinite retention protects the bookmark. In target mode the last owner's confirmed completion can retire the bookmark even below the target, while ordinary retention governs the snapshots. Use a separate pin for any rollback generation needed after closure.
+
+Review the entire plan before applying it, including unrelated eligible history. Save the apply command's JSON output outside the cache. Its `completionReceipt` binds the decision to the root, policy and plan and records whether each bookmark was actually removed. Keep the receipt with the task. Remove the scope declaration only after confirming retirement. A missing head blocks a fresh plan until reconciled. Recurring maintenance requires removing completion declarations after manual review. A merge or an old timestamp never marks an owner finished.
