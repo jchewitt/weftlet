@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "de0dc17a08fed018c9eafb24b3f75109508b03bf878807054ee8c3b170268a44"
+      "destinationSha256": "3bd6de5df2255a73118a23b5ee0d01c3b9704c5b6e37e679750bcf2b4f8f7958"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -234,14 +234,14 @@
       "destinationPath": "src/configuration/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
       "modified": true,
-      "destinationSha256": "913b63ca57b0ef581c54da231ab3354f26aa4a7349236cd6a61b1f4ec65d745d"
+      "destinationSha256": "a1e78431732b8580d60d4e5f354f323ae24b2473781aa2afe0fb4e4130c73d8e"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "a679228d7c53b5a58938ac8ac7b296c839e8ca6d51b7a588c9131c4cd1d0a8a1"
+      "destinationSha256": "d184ab1c83ae5283cc4c47ca7a6618a534fed5960bcd38f5a5afb9bdd65bc09d"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -582,6 +582,7 @@
     ".changeset/compiler-workspace.md",
     ".changeset/config.json",
     ".changeset/last-reference-retirement.md",
+    ".changeset/private-cache-transfer.md",
     ".changeset/release-plan.json",
     ".changeset/reviewed-index-migration.md",
     ".changeset/scip-migration-preview.md",
@@ -715,6 +716,7 @@
     "docs/extraction-manifest.json",
     "docs/guides/AGENTS.md",
     "docs/guides/ASSISTED-SETUP.md",
+    "docs/guides/CACHE-ARCHIVE.md",
     "docs/guides/CACHE-COORDINATION.md",
     "docs/guides/CACHE-HISTORY.md",
     "docs/guides/CACHE-INSPECTION.md",
@@ -1034,6 +1036,9 @@
     "src/application/cache-adoption.ts",
     "src/application/cache-inspection/context.ts",
     "src/application/cache-operation.ts",
+    "src/application/cache-relocation/exclusions.ts",
+    "src/application/cache-relocation/plan.ts",
+    "src/application/cache-relocation/transfer.ts",
     "src/application/clean-comparison.ts",
     "src/application/delivery/context.ts",
     "src/application/delivery/contract.ts",
@@ -1239,6 +1244,7 @@
     "src/infrastructure/settle-all.ts",
     "src/infrastructure/unique-json.ts",
     "src/interfaces/cache-adoption.test.ts",
+    "src/interfaces/cache-archive.ts",
     "src/interfaces/cache-coordination.ts",
     "src/interfaces/cache-inspection.ts",
     "src/interfaces/cache-recovery.ts",
@@ -1365,6 +1371,7 @@
     "tests/architecture.test.ts",
     "tests/business-context-acceptance.test.ts",
     "tests/cache-adoption.test.ts",
+    "tests/cache-archive.test.ts",
     "tests/cache-coordination.test.ts",
     "tests/cache-inspection-cli.test.ts",
     "tests/cache-inspection.test.ts",

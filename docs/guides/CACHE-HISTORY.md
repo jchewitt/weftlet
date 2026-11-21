@@ -138,8 +138,7 @@ readers/writers, partial I/O failure and interrupted journals use the existing
 
 For durable history, use an explicitly selected private destination, retain exact evidence
 and required artifacts/checksums, and verify restoration before separately approved local
-eviction. [Snapshot delivery](SNAPSHOT-DELIVERY.md) is available; managed archives/remote
-storage remain [R6/2.0 work](../CACHE-RETENTION-PLAN.md#long-term-history-and-backup-guidance).
+eviction. Use [snapshot delivery](SNAPSHOT-DELIVERY.md) for an individual graph or [archive and restore](CACHE-ARCHIVE.md) to recover a user cache.
 
 ## Share index bytes across new generations
 

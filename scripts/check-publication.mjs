@@ -80,6 +80,7 @@ try {
         'dist/storage/coordination/snapshot-access.js', 'docs/guides/CACHE-COORDINATION.md', 'docs/guides/CACHE-REMOVAL.md',
         'docs/guides/COMPACT-SNAPSHOTS.md', 'dist/storage/compact-snapshot.js',
         'docs/guides/CACHE-MAINTENANCE.md', 'dist/storage/retention/maintenance.js', 'dist/storage/retention/owned-removal.js',
+        'docs/guides/CACHE-ARCHIVE.md', 'dist/interfaces/cache-archive.js', 'dist/application/cache-relocation/transfer.js',
         'docs/guides/CACHE-HISTORY.md', 'dist/storage/retention/history-selection.js', 'dist/storage/retention/history-policy.js',
         'docs/guides/CACHE-RECOVERY.md', 'dist/storage/recovery/apply.js', 'dist/storage/recovery/plan.js',
         'dist/storage/retention/prepared.js', 'dist/storage/retention/apply.js', 'dist/storage/retention/journal.js',
