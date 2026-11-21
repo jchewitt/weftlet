@@ -8,6 +8,8 @@ With the same conservative policy, coordinated prepare verified 772 idle scratch
 
 Historical source at `479f3f5` allocated `ontology-<snapshotId>`. At `dc785d1` the compiler appended a UUIDv4. The current compiler uses a UUIDv4 alone. Private directory names and snapshot-to-workspace matches were not supplied. Consumer acceptance of the successor requires another same-policy prepare.
 
+The historical compiler regression in `tests/retention-removal.test.ts` covers both previous naming forms, an absolute lock path longer than 260 characters, a missing or ambiguous snapshot, an undeclared profile and retained lock bytes. The operator-declaration regression checks recognition after removing the original snapshot and rejects a different directory at the same path. Native handle exclusion is exercised only on Windows.
+
 ## Owner completion candidate
 
 Public cache fixtures exercise partial and final owner completion, generation changes between prepare and apply, pinned snapshots, retained peer heads, active workspace leases, hard-linked heads, indefinite retention, the 100-owner boundary, invalid declarations and scheduled maintenance boundaries. TradePilot’s Gradle preview remains a separate consumer check against released 0.11.1.
@@ -3949,5 +3951,3 @@ mismatched digests, stale plans and interrupted-removal reconciliation. The pack
 uses real public SCIP bytes. The [operator guide](guides/CACHE-REMOVAL.md#reclaim-companion-scip-indexes)
 and Changeset describe authorization, upgrade and recovery. The PR records qualification
 results. Private-cache replay and release publication are separate.
-
-The historical compiler regression in `tests/retention-removal.test.ts` covers both previous naming forms, an absolute lock path longer than 260 characters, a missing or ambiguous snapshot, an undeclared profile and retained lock bytes. The operator-declaration regression checks recognition after removing the original snapshot and rejects a different directory at the same path. Native handle exclusion is exercised only on Windows.
