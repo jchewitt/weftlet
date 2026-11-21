@@ -2,13 +2,14 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, expect, it, vi } from 'vitest';
+import { withHeadLock } from './head-lock.js';
 import { atomicRename } from './atomic-rename.js';
 import { FileSnapshotStore } from './storage.js';
 
-const mocks = vi.hoisted(() => ({ rename: vi.fn(), delay: vi.fn(), platform: 'win32' }));
+const mocks = vi.hoisted(() => ({ open: vi.fn(), rename: vi.fn(), delay: vi.fn(), platform: 'win32' }));
 vi.mock('node:fs/promises', async (original) => {
   const actual = await original<typeof import('node:fs/promises')>();
-  return { ...actual, rename: mocks.rename.mockImplementation(actual.rename) };
+  return { ...actual, open: mocks.open.mockImplementation(actual.open), rename: mocks.rename.mockImplementation(actual.rename) };
 });
 vi.mock('node:process', () => ({ get platform() { return mocks.platform; } }));
 vi.mock('node:timers/promises', () => ({ setTimeout: mocks.delay }));
@@ -16,6 +17,7 @@ vi.mock('node:timers/promises', () => ({ setTimeout: mocks.delay }));
 const roots: string[] = [];
 afterEach(async () => {
   const actual = await vi.importActual<typeof import('node:fs/promises')>('node:fs/promises');
+  mocks.open.mockReset().mockImplementation(actual.open);
   mocks.rename.mockReset().mockImplementation(actual.rename);
   mocks.delay.mockReset();
   mocks.platform = 'win32';
@@ -93,4 +95,28 @@ it('preserves a queryable head and cleans its temporary file when publication ca
   expect(await readFile(join(root, 'heads/default.json'))).toEqual(before);
   expect(await store.read('next')).toEqual(next);
   expect(await readdir(join(root, 'heads'))).toEqual(['default.json']);
+});
+
+
+it('retries exclusive creation after NTFS denies a contended head lock', async () => {
+  const {root} = await files();
+  const lock = join(root,'shared.lock');
+  mocks.open.mockRejectedValueOnce(Object.assign(Error('sharing violation'),{code:'EPERM'}));
+  const write = vi.fn(async () => 17);
+  await expect(withHeadLock(lock,write)).resolves.toBe(17);
+  expect(write).toHaveBeenCalledTimes(1);
+  expect(mocks.open.mock.calls).toEqual([[lock,'wx',0o600],[lock,'wx',0o600]]);
+});
+
+it('propagates persistent NTFS access denial without removing the existing lock', async () => {
+  const {root} = await files();
+  const lock=join(root,'shared.lock');
+  await writeFile(lock,'prior writer');
+  const error=Object.assign(Error('persistent denial'),{code:'EPERM'});
+  mocks.open.mockRejectedValue(error);
+  const write=vi.fn();
+  await expect(withHeadLock(lock,write)).rejects.toBe(error);
+  expect(write).not.toHaveBeenCalled();
+  expect(mocks.open).toHaveBeenCalledTimes(201);
+  expect(await readFile(lock,'utf8')).toBe('prior writer');
 });

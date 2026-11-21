@@ -6,6 +6,12 @@ Based on `e07d357`. Linux public fixtures exercised repeated strict hydration wi
 
 The optional real Docker integration reached Gradle but Maven dependency resolution failed in this environment. Successful real-host compilation and NTFS consumer acceptance remain separate. The operator procedure is in the [cache guide](guides/CACHE-HISTORY.md#compiler-workspace-lifetime).
 
+## Shared SCIP retirement and historical transfer
+
+On Linux, cross-profile retirement removed each generation reference and released the blob after the final owner. An initial native Windows qualification exposed POSIX basename handling for hashed physical names. Retirement now derives that basename with the host path API and tests long logical generation IDs. Tests cover raw/shared mixtures, indefinite retention, reuse of a logical ID, interrupted collection, offline recovery and publication during recovery. A separate native Windows contention run reported EPERM during exclusive head-lock creation. The acquisition now retries within the existing deadline and retains the original error for persistent denial. The snapshot delivery suite uses a real shared-backed producer, strictly validates the transferred graph, queries the restored evidence and reuses semantic artifacts.
+
+An independent public run at `e07d357` migrated two matching legacy indexes among three generations. Index allocation fell from 946,176 to 638,976 bytes on Linux overlayfs. Whole-cache regular-file allocation fell by 303,104 bytes including journal overhead. A compact receiver preserved the historical 60-fact page and reused all 18 semantic artifacts during independent hydration. These measurements cover the public fixture.
+
 ## Reviewed SCIP index migration after 0.12.0
 
 Implementation starts from `ec651ae`. On a disposable Linux cache the CLI migrated three verified legacy copies across two profiles, preserving current, previous and pinned graphs and their SCIP bytes. A unique index remained in place. The test ran prepare and apply with external policy and plan files, then confirmed a fresh prepare selected zero groups. Stale and edited plans, active readers, unresolved locks and insufficient recovery capacity have separate checks.

@@ -1,3 +1,4 @@
+import { maintainSharedRetirement } from './shared-index-retirement.js';
 import { persistedJsonDigest } from '@weftlet/core';
 import { parseRetentionPolicy } from './policy.js';
 import { prepareRetentionOwned, withRetentionMaintenance, type PreparedRetentionOptions } from './prepared.js';
@@ -24,7 +25,9 @@ export async function maintainRetention(options: RecurringRetentionOptions) {
     if (!current.canApply) throw Error('Recurring retention is blocked; prepare --json to inspect current inventory and declarations');
     if (current.objects.some(o => o.disposition === 'candidate' && o.category !== 'snapshot' && !(policy.retireCompanionIndexes && o.category === 'scip-index'))) throw Error('Recurring retention cannot retire heads');
     const removal = await executeRetentionOwned(current, bounded, scope);
-    return { schemaVersion: 1, kind: 'retention-maintenance-result' as const, rootId, policyDigest: current.policyDigest,
+    const sharedIndexes = policy.retireCompanionIndexes && policy.history?.mode !== 'indefinite' && removal.status === 'complete'
+      ? await maintainSharedRetirement(root,rootId,bounded,scope) : undefined;
+    return { ...(sharedIndexes ? {sharedIndexes} : {}),schemaVersion: 1, kind: 'retention-maintenance-result' as const, rootId, policyDigest: current.policyDigest,
       status: removal.status, history: current.history, removal };
   });
 }

@@ -1,3 +1,4 @@
+import { applySharedRetirement, prepareSharedRetirement } from '../../storage/retention/shared-index-retirement.js';
 import { applyIndexMigration, prepareIndexMigration } from '../../storage/retention/index-migration.js';
 import { applyRetention } from '../../storage/retention/apply.js';
 import { prepareRetention } from '../../storage/retention/prepared.js';
@@ -65,4 +66,11 @@ export async function indexMigrationOperation(operation: 'prepare-index-migratio
   if (operation === 'prepare-index-migration') return prepareIndexMigration(common);
   const { saved, expected } = await reviewedPlan(options);
   return applyIndexMigration(saved, expected, common);
+}
+
+export async function sharedRetirementOperation(operation: 'prepare-index-retirement' | 'apply-index-retirement', options: CoordinatedOptions) {
+  const common = await coordinatedInputs(options);
+  if (operation === 'prepare-index-retirement') return prepareSharedRetirement(common);
+  const {saved, expected} = await reviewedPlan(options);
+  return applySharedRetirement(saved,expected,common);
 }
