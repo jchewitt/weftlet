@@ -227,7 +227,7 @@
       "destinationPath": "src/application/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "61dee37aded8a0618c9870efa37ae917ab8a2dab5501ba126ba58a4be75abb58"
+      "destinationSha256": "0500c59c92eda3814ab916cd75608452bd33e1420f8e0a5ccdf78d15899836e5"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "c71789ced051a9b1c4a86d29bcc6149580608d894815c02b3efbe4a80ded17bc"
+      "destinationSha256": "0cbc1105eeedd8118007603bfcab49b881e805fbf1228969164ae055b30d1630"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "94241f73168b67cd55d17eb31933f79a013017dc1de88a7e08c86cb34722c475"
+      "destinationSha256": "22a7bf999a3591a82e262ddebc39436cf92f82f1d20953c60cda679a391d89ca"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -479,7 +479,7 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "7e52f72fc166132a5564ed174d69ca45e7b490bd74f1438980fc7e4f04306523"
+      "destinationSha256": "1a97de2becce1259d78e6e6c38c5f73553f4a6ee1eb6e1f88e8ad8031115b955"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/shared-scip-publication.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -1322,6 +1323,7 @@
     "src/storage/retention/policy.ts",
     "src/storage/retention/prepared.ts",
     "src/storage/retention/references.ts",
+    "src/storage/shared-scip.ts",
     "src/storage/streaming-json.test.ts",
     "src/storage/streaming-json.ts",
     "src/storage/transfer-files.ts",
@@ -1423,6 +1425,7 @@
     "tests/semantic-cache-reuse.test.ts",
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",
+    "tests/shared-scip.test.ts",
     "tests/snapshot-delivery.test.ts",
     "tests/snapshot-lifecycle.test.ts",
     "tests/static-calls.test.ts",

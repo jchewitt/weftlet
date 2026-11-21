@@ -140,3 +140,25 @@ For durable history, use an explicitly selected private destination, retain exac
 and required artifacts/checksums, and verify restoration before separately approved local
 eviction. [Snapshot delivery](SNAPSHOT-DELIVERY.md) is available; managed archives/remote
 storage remain [R6/2.0 work](../CACHE-RETENTION-PLAN.md#long-term-history-and-backup-guidance).
+
+## Share index bytes across new generations
+
+Available on the development branch after 0.12.0. Use this option when successive commits often produce identical TypeScript indexes. Activate a dedicated storage root following the [coordination guide](CACHE-COORDINATION.md), then set the environment variable for the process that performs ordinary hydration. From a configured repository on Linux or WSL, run:
+
+```sh
+WEFTLET_SCIP_STORAGE=shared-v1 pnpm exec weftlet hydrate --ref HEAD
+```
+
+In PowerShell, set `$env:WEFTLET_SCIP_STORAGE = 'shared-v1'` before the same hydration command. The default is `per-snapshot`. Restoring that setting writes future indexes in the original layout. Saved graph queries use the snapshot facts with either setting.
+
+The indexer still runs for the selected commit. Identical normalized bytes occupy one blob per coordinated root, even across profiles. Each generation keeps its own graph, citations, commit and index digest. After strict validation, Weftlet binds the blob to the generation before advancing its head. An independent clean comparison uses temporary index storage. The storage setting leaves snapshot identity and semantic cache keys intact.
+
+For an integration that needs raw SCIP, import `withSavedScipIndex` from `@weftlet/toolkit`. Pass the snapshot's storage profile directory and saved manifest. Consume the verified, read-only file handle inside the awaited callback:
+
+```js
+const bytes = await withSavedScipIndex(profileDirectory, snapshot.manifest, index => index.readFile());
+```
+
+The resolver verifies the reference and content digest. It also supports both previous per-snapshot filename forms. A damaged shared reference raises an error even when a legacy file remains. The resolver owns and closes the handle after the callback finishes. For streaming, consume the stream inside the callback with `autoClose: false`.
+
+This option saves space on new writes. Existing indexes stay in place. Cache inspection counts shared blobs and reference files toward root usage as unknown objects, and retention preserves them, including blobs left by failed builds. Reviewed migration, collection after the last reference, and measurement on existing consumer caches are subsequent milestones.

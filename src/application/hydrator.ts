@@ -85,6 +85,7 @@ export class ContextGraphHydrator {
         : selection.issues.map((issue) => issue.message).join('\n'));
     }
     const { sources } = selection;
+    await this.dependencies.staticIndexer.checkReady?.();
     await this.dependencies.ontologyCompiler.checkReady?.();
     const prior = snapshotStore.readHeadManifest ? await snapshotStore.readHeadManifest(options.headName)
       : (await snapshotStore.readHead(options.headName))?.manifest;
@@ -321,6 +322,7 @@ export class ContextGraphHydrator {
     checkpoint();
     options.onProgress?.({ phase: 'publish-snapshot' });
     await snapshotStore.write(snapshot);
+    await this.dependencies.staticIndexer.publishReference?.(snapshot.manifest);
     await snapshotStore.updateHead(options.headName, snapshotId);
     return { snapshot, semanticExtracted, semanticReused };
   }

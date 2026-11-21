@@ -133,13 +133,16 @@ export async function inspectJson(path: string, options: JsonInspectionOptions =
 }
 
 export async function inspectFileDigest(path: string, maxBytes: number, signal?: AbortSignal) {
-  return withInspectionFile(path, maxBytes, async handle => {
-    const hash = createHash('sha256'); let bytes = 0;
-    for await (const chunk of fileChunks(handle)) {
-      signal?.throwIfAborted(); bytes += chunk.length;
-      if (bytes > maxBytes) throw new InspectionError('limit', 'Inspection byte limit exceeded');
-      hash.update(chunk);
-    }
-    return { bytes, sha256: hash.digest('hex') };
-  });
+  return withInspectionFile(path, maxBytes, handle => digestOpenFile(handle, maxBytes, signal));
+}
+
+// Positional reads leave the handle at byte zero for a subsequent consumer.
+export async function digestOpenFile(handle: FileHandle, maxBytes: number, signal?: AbortSignal) {
+  const hash = createHash('sha256'); let bytes = 0;
+  for await (const chunk of fileChunks(handle)) {
+    signal?.throwIfAborted(); bytes += chunk.length;
+    if (bytes > maxBytes) throw new InspectionError('limit', 'Inspection byte limit exceeded');
+    hash.update(chunk);
+  }
+  return { bytes, sha256: hash.digest('hex') };
 }

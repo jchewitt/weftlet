@@ -85,7 +85,7 @@ export async function createContextGraphApplication(configPath: string) {
   const artifactStore = createSemanticArtifactStore(repositoryRoot, config);
   const semanticExtractor = createSemanticExtractor(config.semantic, repositoryRoot);
   const semanticHydrator = new SemanticHydrator(config.semantic, artifactStore, semanticExtractor);
-  const staticIndexer = new ScipTypeScriptIndexer(config.scip, storageRoot);
+  const staticIndexer = new ScipTypeScriptIndexer(config.scip, storageRoot, process.env.WEFTLET_SCIP_STORAGE);
   const ontologyCompiler = config.ontology.backend === 'opencaesar' ? new OpenCaesarOntologyCompiler(
     config.ontology,
     repositoryRoot,

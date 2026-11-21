@@ -1,5 +1,13 @@
 # Validation evidence
 
+## Shared index publication after 0.12.0
+
+The opt-in implementation starts from main `ab404dd`. On Linux the public TypeScript fixture ran real SCIP and strict graph validation. Three committed generations produced three references and two distinct index payloads. The unchanged repeat reused semantic extraction. A documentation-only edit shared the original index, and deleting a function changed the index while the first generation retained its definition, citations and snapshot bytes. Independent comparison removed its temporary output.
+
+Three child processes published identical bytes into two profiles under one coordinated root. Scoped reads verified both legacy filename forms and shared content. Corrupt references prevented head advancement under either writer setting. A corrupt blob and a dangling reference-directory link both failed closed. The test also checks that maintenance waits during an active index read. Run `pnpm exec vitest run tests/shared-scip.test.ts` for these public regressions.
+
+The [cache guide](guides/CACHE-HISTORY.md#share-index-bytes-across-new-generations) describes the operational setting. The [production milestones](assessments/shared-scip-indexes.md#production-implementation-order) track migration, retirement and consumer measurement. This fixture has no private cache or live provider dependency.
+
 ## 0.12.0 first TradePilot NTFS retention replay
 
 **Historical workspace recognition passed.** TradePilot ran one coordinated prepare with core and toolkit 0.12.0 (both tags at `5377075`). The verified NTFS root, policy digest and scan limits matched the previous run. The policy contained no historical workspace declarations.
