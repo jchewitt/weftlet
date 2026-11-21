@@ -1,5 +1,20 @@
 # Validation evidence
 
+## 0.13.0 release verification
+
+Both public npm packages carried the `latest` tag at verification. Their registry downloads matched the trusted workflow archives byte for byte. Both Git tags resolved to release commit `3742f4317ecde8834f2d4ce62ecd1b782ceb6254`. The fixed-pair release incorporated six changesets. [Version PR](https://github.com/jchewitt/weftlet/pull/125) · [Trusted publishing and documentation dispatch](https://github.com/jchewitt/weftlet/actions/runs/44956528303)
+
+| Package | Archive bytes | Verified SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.13.0` | 22,613 | `sha512-nuhh7UGNkwAz9UB+Qx6VvyHLrkEtkRY3lWv0ZoIyRbo49Wtr6fNWDQnC5uhWBeqcWM7RHH4XmiClSi1wQxEquw==` |
+| `@weftlet/toolkit@0.13.0` | 1,050,238 | `sha512-0C5rUj+BIfIk8QetbAiLcdjcIGqEtE8vTScQI1MrgRyTo8XzbbmS2u1XGyaetttu7saI75BThAo2+MkXlZwIvA==` |
+
+A fresh Linux npm consumer installed the exact registry pair and hydrated the public TypeScript pipeline using real SCIP, direct RDF, strict SHACL and an offline semantic provider. Its saved catalog contained 481 facts and 182 nodes. It archived 5 files, restored the compact graph and shared index, checked cutover and returned the identical catalog from a fresh CLI process on the new root. Repeating hydration preserved the snapshot identity and content digest and reused the semantic artifact with zero fresh extractions.
+
+The release workflow dispatched the [separate docs update](https://github.com/jchewitt/weftlet-docs/actions/runs/44957950011).
+
+Native NTFS and Ubuntu retention, real openCAESAR, low-disk recovery and migration measurements are in the [storage qualification](assessments/history-plateau.md#hosted-results). The private consumer replay and any decision to reclaim historical directories remain with the cache owner.
+
 ## Compiler workspace lifecycle after 0.12.0
 
 Based on `e07d357`. Linux public fixtures exercised repeated strict hydration with the built-in RDF compiler and a mocked openCAESAR Docker command, downstream failure, cancellation, standalone RDF exports and an overlapping managed-cache operation. A separate child process exited with a registered workspace. Offline recovery and explicit reclamation removed it after matching ownership; a changed marker blocked deletion. A mocked disconnected client with a surviving container retained its workspace. The ordinary graph and semantic stores stayed queryable.

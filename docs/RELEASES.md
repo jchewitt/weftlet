@@ -12,6 +12,7 @@ npm registry or a substitute for detailed upgrade notes.
 
 | Release | Main changes |
 | --- | --- |
+| [0.13.0](../CHANGELOG.md#0130) | Disposable compiler workspaces, shared SCIP indexes with reviewed migration and retirement, and verified user-cache archive, restore and cutover. |
 | [0.12.0](../CHANGELOG.md#0120) | Shared bookmark completion, exact-generation receipts and historical Gradle workspace verification on NTFS. |
 | [0.11.1](../CHANGELOG.md#0111) | Local NTFS retention can verify idle openCAESAR scratch locks and preserve them while preparing unrelated history for removal. |
 | [0.11.0](../CHANGELOG.md#0110) | Configurable cache history, coordinated removal and recovery, optional compact snapshots, and verified SCIP index retirement. |
