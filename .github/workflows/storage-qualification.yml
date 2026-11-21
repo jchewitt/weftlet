@@ -3,11 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main, 'study/**']
-    paths:
-      - '.github/workflows/storage-qualification.yml'
-      - 'scripts/storage-study/**'
-  pull_request:
-    paths:
+    paths: &qualification_paths
       - '.github/workflows/storage-qualification.yml'
       - 'scripts/storage-study/**'
       - 'tests/fixtures/traversal.ts'
@@ -22,6 +18,8 @@ on:
       - 'tests/fixtures/large-typescript-project.ts'
       - 'src/application/delivery/**'
       - 'pnpm-lock.yaml'
+  pull_request:
+    paths: *qualification_paths
 permissions:
   contents: read
 jobs:
