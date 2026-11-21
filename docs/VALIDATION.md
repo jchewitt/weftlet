@@ -4016,3 +4016,7 @@ mismatched digests, stale plans and interrupted-removal reconciliation. The pack
 uses real public SCIP bytes. The [operator guide](guides/CACHE-REMOVAL.md#reclaim-companion-scip-indexes)
 and Changeset describe authorization, upgrade and recovery. The PR records qualification
 results. Private-cache replay and release publication are separate.
+
+## Native retention and compiler qualification after 0.12.0
+
+At `26bec538752a31958cc7cf093064a415db610ee8`, real openCAESAR and direct RDF on hosted Ubuntu and direct RDF on hosted Windows NTFS passed the six-generation retention test. Both filesystems also passed legacy index migration and historical export/import. An isolated Linux filesystem reported actual ENOSPC while preserving the published graph and index. The [assessment](assessments/history-plateau.md#hosted-results) lists exact allocation measurements, the run artifacts and the remaining consumer replay.

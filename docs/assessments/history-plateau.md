@@ -31,3 +31,19 @@ node --import tsx scripts/storage-study/migration-delivery.ts migration-allocati
 ```
 
 On Windows set `$env:WEFTLET_SNAPSHOT_FORMAT='brotli-v1'` in PowerShell and run the Node command with `rdf`. The native allocation helper opens each regular file and reads `FILE_STANDARD_INFO.AllocationSize` on NTFS. Linux uses the file's allocated block count multiplied by 512. [Storage qualification workflow](../../.github/workflows/storage-qualification.yml)
+
+## Hosted results
+
+GitHub Actions ran commit `26bec538752a31958cc7cf093064a415db610ee8` on Node 24.22.3. Each job published six 552-fact graphs through strict validation. Each retained the pinned generation and its current/previous head, released per-run compiler work and operation registrations, and verified the previous evidence after a failed publication. The four observations after reaching the history window measured the following regular-file allocations. [Run and downloadable measurements](https://github.com/jchewitt/weftlet/actions/runs/44949416800)
+
+| Host and compiler | Retained snapshot/reference/index payload on each observation | Whole-cache allocation, first to last observation |
+| --- | ---: | ---: |
+| Ubuntu, direct RDF | 294,912 B | 327,680 → 339,968 B |
+| Ubuntu, real openCAESAR in Docker | 294,912 B | 327,680 → 339,968 B |
+| Windows NTFS, direct RDF | 284,040 B | 309,144 → 321,432 B |
+
+The migration workload measured 307,200 allocated index bytes saved on Linux and 314,512 on NTFS. Both verified strict historical import, 60 unchanged query facts and 18 reused artifacts with zero extractions. A separate Ubuntu volume reached zero available bytes after strict validation and preserved its prior 549-fact graph and index on publication failure. The reports record the files, digests and measurement methods.
+
+### Consumer replay
+
+Start with the exact published toolkit/core pair and a disposable coordinated cache. Use normal project settings for an exact-commit hydration and an independent comparison. Record the commit, package integrities, graph digest, semantic reuse counts and whether operation-owned scratch returned to baseline. Query the saved graph from a fresh process. For retained-history behavior, run beyond the chosen current/previous/pin window and record snapshot, index and journal bytes separately. The private cache owner controls pin retirement, migration, cutover and any permanent cleanup on the original volume. A successful public qualification does not confer that authorization.
