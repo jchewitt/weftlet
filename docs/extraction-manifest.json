@@ -1019,6 +1019,7 @@
     "scripts/storage-study/full-volume.ts",
     "scripts/storage-study/history-plateau.ts",
     "scripts/storage-study/index-sharing.ts",
+    "scripts/storage-study/migration-delivery.ts",
     "scripts/storage-study/native-allocation.ps1",
     "scripts/storage-study/native-allocation.ts",
     "scripts/storage-study/profile.ts",

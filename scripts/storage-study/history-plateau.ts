@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { cp, mkdir, mkdtemp, readFile, rm, statfs, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, statfs, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import fs from 'node:fs/promises';
@@ -39,6 +39,10 @@ try {
     join(f.root, 'ontology'), { recursive: true });
   const config = { ...f.config, ontology, storageScope: 'workspace' as const, storagePath: join(root, profile) };
   const app = traversalApplication(f, config, true);
+  async function checkCompilerCleanup() {
+    assert.deepEqual(await readdir(join(app.storage, 'work')), []);
+    assert.deepEqual(await readdir(join(root, 'compiler-operations-v1')), []);
+  }
   const fingerprint = (id: string) => withManagedCacheAccess([app.storage], async () => {
     const file = await app.store.file(id);
     return file && digest(await readFile(file));
@@ -60,6 +64,7 @@ try {
     const commit = await f.commit();
     const phases: string[] = [];
     const result = await hydrator.hydrate({ ref: commit, headName: 'default', onProgress: event => phases.push(event.phase) });
+    await checkCompilerCleanup();
     assert.ok(phases.includes('validate-shacl') && phases.includes('publish-snapshot'));
     assert.ok(result.snapshot.facts.length > 0 && result.snapshot.facts.some(fact => fact.provenance));
     const manifest = result.snapshot.manifest;
@@ -133,6 +138,7 @@ try {
   for (const graph of [generations[0]!, ...generations.slice(-2)]) {
     assert.equal(await fingerprint(graph.snapshotId), hashes.get(graph.snapshotId));
   }
+  await checkCompilerCleanup();
   const afterFailure = await measureFiles(root);
   assert.deepEqual(afterFailure.files, checkpoints.at(-1)!.files);
   await writeFile(resolve(output), JSON.stringify({ checkout, node: process.version, platform: process.platform,

@@ -12,6 +12,10 @@ on:
       - 'src/application/hydrator.ts'
       - 'src/extraction/ontology*.ts'
       - 'src/extraction/static.ts'
+      - 'src/extraction/compiler-workspace.ts'
+      - 'src/infrastructure/compiler-docker.ts'
+      - 'tests/fixtures/large-typescript-project.ts'
+      - 'src/application/delivery/**'
       - 'pnpm-lock.yaml'
 permissions:
   contents: read
@@ -45,6 +49,9 @@ jobs:
         env:
           WEFTLET_SNAPSHOT_FORMAT: brotli-v1
         run: node --import tsx scripts/storage-study/history-plateau.ts ${{ matrix.backend }} storage-qualification.json
+      - name: Measured legacy index migration and historical snapshot delivery
+        if: matrix.backend == 'rdf'
+        run: node --import tsx scripts/storage-study/migration-delivery.ts storage-migration.json
       - name: Native full-volume publication on a disposable Linux tmpfs
         if: matrix.os == 'ubuntu-latest' && matrix.backend == 'rdf'
         run: bash scripts/storage-study/full-volume.sh > storage-capacity.json
@@ -54,4 +61,5 @@ jobs:
           path: |
             storage-qualification.json
             storage-capacity.json
+            storage-migration.json
           if-no-files-found: error

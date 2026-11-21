@@ -191,7 +191,7 @@ it.each(['rdf', 'opencaesar'] as const)('releases %s hydration scratch after rep
   await mkdir(join(f.root, 'ontology'));
   await writeFile(join(f.root, 'ontology/build.gradle'), '// public fixture');
   await f.commit();
-  const app = traversalApplication(f);
+  const app = traversalApplication(f, { ...f.config, storageScope: 'workspace', storagePath: '.context-graph' });
   if (backend === 'opencaesar') {
     vi.spyOn(OpenCaesarOntologyCompiler.prototype, 'checkReady').mockResolvedValue();
     runDocker.mockImplementation(async (_command, args) => output(args));

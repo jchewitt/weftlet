@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { closeSync, openSync, statfsSync, writeSync } from 'node:fs';
-import { mkdir, readFile, realpath, rm } from 'node:fs/promises';
+import { mkdir, readFile, readdir, realpath, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ContextGraphHydrator } from '../../src/application/hydrator.js';
 import { ScipTypeScriptIndexer } from '../../src/extraction/static.js';
@@ -66,6 +66,8 @@ try {
     } }), {code:'ENOSPC'});
   assert.equal(availableAtPublish, 0);
   await rm(filler);
+  assert.deepEqual(await readdir(join(app.storage, 'work')), []);
+  assert.deepEqual(await readdir(join(root, 'compiler-operations-v1')), []);
   assert.equal((await app.store.readHeadManifest('default'))?.snapshotId, m.snapshotId);
   assert.equal(await snapshotSha(), before);
   assert.equal(await withSavedScipIndex(app.storage, m, async h => digest(await h.readFile())), m.scipIndexDigest);

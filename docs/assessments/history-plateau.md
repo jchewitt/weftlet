@@ -14,6 +14,12 @@ A separate Linux run on source `1caf5d1` exercised a real ENOSPC on a 16,777,216
 
 In the same cloud environment the actual pinned openCAESAR container reached Gradle, which could not fetch its dependencies from Maven Central. Hosted workflow jobs run the real compiler on Ubuntu and direct RDF on Ubuntu and Windows. Their artifacts record the tested checkout, backend, filesystem, measurements and per-file observations. A passing report from each job is needed for that platform/backend combination.
 
+## Migration and historical retrieval
+
+A second study creates three retained generations on a larger public TypeScript project. A document-only commit reproduces the original SCIP index bytes. Deleting an exported function in the third commit produces distinct bytes. The study runs the production migration for the first two copies and measures the logical and allocated size of every regular cache file before and after, including the distinct legacy index, shared references and removal journal.
+
+With the producer head at the third generation, the study exports the first snapshot and its semantic artifacts. A separate clone strictly validates the historical import, reads the same ordered 60 facts and citations, then checks out the producing commit and hydrates again. The repeat must reuse all 18 semantic artifacts and reproduce the original snapshot and SCIP digest, with identical compact snapshot bytes throughout. Ubuntu and Windows produce a separate `storage-migration.json` report.
+
 ## Reproduce
 
 From a built checkout with frozen dependencies, choose a fresh output filename. The report and temporary cache contain only the public fixture. The optional compiler also needs a Linux Docker engine with access to the pinned Gradle image and Maven dependencies.
@@ -21,6 +27,7 @@ From a built checkout with frozen dependencies, choose a fresh output filename. 
 ```sh
 WEFTLET_SNAPSHOT_FORMAT=brotli-v1 node --import tsx scripts/storage-study/history-plateau.ts rdf rdf-allocation.json
 WEFTLET_SNAPSHOT_FORMAT=brotli-v1 node --import tsx scripts/storage-study/history-plateau.ts opencaesar gradle-allocation.json
+node --import tsx scripts/storage-study/migration-delivery.ts migration-allocation.json
 ```
 
 On Windows set `$env:WEFTLET_SNAPSHOT_FORMAT='brotli-v1'` in PowerShell and run the Node command with `rdf`. The native allocation helper opens each regular file and reads `FILE_STANDARD_INFO.AllocationSize` on NTFS. Linux uses the file's allocated block count multiplied by 512. [Storage qualification workflow](../../.github/workflows/storage-qualification.yml)
