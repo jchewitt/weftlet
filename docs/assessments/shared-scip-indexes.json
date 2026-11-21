@@ -1,0 +1,51 @@
+{
+  "platform": "linux",
+  "node": "v24.19.0",
+  "filesystemType": "0x794c7630",
+  "modules": 8,
+  "functionsPerModule": 40,
+  "snapshots": 3,
+  "uniqueBlobs": 2,
+  "perVersion": {
+    "files": 3,
+    "logicalBytes": 939749,
+    "allocatedBytes": 946176
+  },
+  "shared": {
+    "files": 5,
+    "logicalBytes": 627400,
+    "allocatedBytes": 643072
+  },
+  "timings": [
+    {
+      "phase": "initial",
+      "facts": 4148,
+      "boundedPageFacts": 60,
+      "verifiedOriginalIndexMs": 2.48,
+      "verifiedSharedIndexMs": 1.93,
+      "originalScanMs": 721.8,
+      "replayScanMs": 691.53
+    },
+    {
+      "phase": "document-edit",
+      "facts": 4148,
+      "boundedPageFacts": 60,
+      "verifiedOriginalIndexMs": 0.8,
+      "verifiedSharedIndexMs": 1.39,
+      "originalScanMs": 753.82,
+      "replayScanMs": 679.33
+    },
+    {
+      "phase": "delete-function",
+      "facts": 4136,
+      "boundedPageFacts": 60,
+      "verifiedOriginalIndexMs": 0.83,
+      "verifiedSharedIndexMs": 0.8,
+      "originalScanMs": 713.68,
+      "replayScanMs": 597.16
+    }
+  ],
+  "historicalPagesEqual": true,
+  "survivingDefinitionAndCitationsPreserved": true,
+  "snapshotBytesUnchanged": true
+}
