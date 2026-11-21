@@ -3,10 +3,9 @@ import { createRequire } from 'node:module';
 import { promisify } from 'node:util';
 import { persistedJsonDigest } from '@weftlet/core';
 import { tmpdir } from 'node:os';
-import { fileURLToPath } from 'node:url';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { basename, join, relative } from 'node:path';
-import { mkdtemp, mkdir, rm, readFile, writeFile, lstat, readdir } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, readFile, writeFile, lstat, readdir, realpath } from 'node:fs/promises';
 import { afterEach, expect, it, vi } from 'vitest';
 import { traversalFixture, traversalApplication } from './fixtures/traversal.js';
 import { cacheInspectionRoots } from '../src/application/cache-inspection/context.js';
@@ -26,7 +25,7 @@ afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true, maxRetries: 5 })));
 });
 it('verifies an exact cold restore, original heads, reused semantics and raw shared index before user-wide cutover', async () => {
-  const parent = await mkdtemp(join(tmpdir(), 'weftlet-relocate-'));
+  const parent = await realpath(await mkdtemp(join(tmpdir(), 'weftlet-relocate-')));
   roots.push(parent);
   const source = join(parent, 'source'),
     destination = join(parent, 'restored'),
