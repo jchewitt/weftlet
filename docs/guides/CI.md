@@ -67,10 +67,7 @@ the model step, not dependency installation, planning or artifact upload.
 
 The example records a build receipt, producing config, installed package versions
 and checksums, plus snapshots/heads for querying. It deliberately excludes semantic
-raw-output caches, SCIP indexes, compiler scratch and credentials. This is a
-**query-only delivery**, not a complete exact-rehydration archive. Archive/restore
-and global cache retention remain separate planned capabilities. Short GitHub
-artifact retention does not implement a local cache cap.
+raw-output caches, SCIP indexes, compiler scratch and credentials. Use this delivery for saved queries. For longer-term recovery or a local history target, follow the [private archive](CACHE-ARCHIVE.md) and [retention](CACHE-HISTORY.md) guides. GitHub sets its own artifact expiry.
 
 Reuse of semantic artifacts can save future model work, but requires a separate
 private cache design keyed by source/model/extractor identity and validated on

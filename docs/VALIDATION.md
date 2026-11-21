@@ -12,6 +12,10 @@ On Linux, cross-profile retirement removed each generation reference and release
 
 An independent public run at `e07d357` migrated two matching legacy indexes among three generations. Index allocation fell from 946,176 to 638,976 bytes on Linux overlayfs. Whole-cache regular-file allocation fell by 303,104 bytes including journal overhead. A compact receiver preserved the historical 60-fact page and reused all 18 semantic artifacts during independent hydration. These measurements cover the public fixture.
 
+## User-cache relocation and recovery
+
+A deterministic Linux fixture restored two separately named compact snapshots from one commit, a shared TypeScript index, semantic artifacts, the current and previous head, a pin and an empty declared profile. A saved query preserved the historical identity, and the restored user cache supported a repeat with zero extractions. Corrupt payloads stopped restore before destination publication. A forced process exit left the final destination absent and preserved the transfer ownership record. Retrying into a fresh directory passed. A detached index reference stopped whole-cache cutover; an unrelated profile could not supply a missing semantic artifact. The check used a local private directory and a public source repository.
+
 ## Reviewed SCIP index migration after 0.12.0
 
 Implementation starts from `ec651ae`. On a disposable Linux cache the CLI migrated three verified legacy copies across two profiles, preserving current, previous and pinned graphs and their SCIP bytes. A unique index remained in place. The test ran prepare and apply with external policy and plan files, then confirmed a fresh prepare selected zero groups. Stale and edited plans, active readers, unresolved locks and insufficient recovery capacity have separate checks.
