@@ -580,6 +580,7 @@
     ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/owner-completion.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",

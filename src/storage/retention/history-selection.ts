@@ -22,7 +22,7 @@ function totalsFor(paths: ReadonlySet<string>, byPath: Map<string, RetentionDeci
   return { bytes: sumBytes([...paths].map(path => byPath.get(path)!.logicalBytes)), repositories };
 }
 /** Apply configured history targets only after canonical ownership/reference eligibility has been established. */
-export function selectHistory(objects: CacheObject[], decisions: RetentionDecision[], policy: RetentionPolicy, reservedControlBytes = 0) {
+export function selectHistory(objects: CacheObject[], decisions: RetentionDecision[], policy: RetentionPolicy, reservedControlBytes = 0, completedHeads: ReadonlySet<string> = new Set()) {
   const history = policy.history;
   const account = historyAccounting(history ? objects : objects.filter(o => !isCoordinationObject(o.path)), policy.profiles, history ? reservedControlBytes : 0);
   const byPath = new Map(decisions.map(d => [d.path, d])), source = new Map(objects.map(o => [o.path, o]));
@@ -40,7 +40,14 @@ export function selectHistory(objects: CacheObject[], decisions: RetentionDecisi
   const selection = new Selection(byPath, account, selected, causes);
   if (!history) { // Preserve existing explicit manual removal semantics when no history policy is configured.
     for (const d of decisions.filter(d => d.disposition === 'candidate')) { eligible.add(d.path); selection.add([d.path], 'manual-review'); }
-  } else if (history.mode === 'target') selectTargets(snapshots, history, account, selection, group);
+  } else if (history.mode === 'target') {
+    for (const path of completedHeads) {
+      if (overrides.get(account.repositoryFor(path) ?? '')?.mode === 'indefinite') continue;
+      eligible.add(path);
+      selection.add([path], 'owner-completion');
+    }
+    selectTargets(snapshots, history, account, selection, group);
+  }
   const available = totalsFor(eligible, byPath, account);
   const adjusted = decisions.map(d => adjustDecision(d, selected, causes, eligible, history?.mode === 'indefinite' || overrides.get(account.repositoryFor(d.path) ?? '')?.mode === 'indefinite'));
   return { objects: adjusted, history: {

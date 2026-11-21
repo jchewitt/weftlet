@@ -2,8 +2,12 @@ import { parseHistoryPolicy, type HistoryPolicy } from './history-policy.js';
 import { inspectSmallJson } from '../inspection/read.js';
 
 export interface ProfileDeclaration { path: string; repositoryId: string; owner: string; reason: string }
-export interface ScopeDeclaration { profile: string; head: string; owner: string; reason: string; previousSnapshotId?: string }
-export interface ReleasedHead extends Omit<ScopeDeclaration, 'previousSnapshotId'> { snapshotId: string }
+export interface ScopeDeclaration {
+  profile: string; head: string; owner: string; reason: string; previousSnapshotId?: string;
+  additionalOwners?: string[];
+  completion?: { snapshotId: string; finishedOwners: string[] };
+}
+export interface ReleasedHead extends Pick<ScopeDeclaration, 'profile' | 'head' | 'owner' | 'reason'> { snapshotId: string }
 export interface SnapshotPin { profile: string; snapshotId: string; owner: string; reason: string; expiresAt?: string }
 export interface RetentionPolicy {
   schemaVersion: 1;
@@ -52,9 +56,30 @@ export function parseRetentionPolicy(input: unknown): RetentionPolicy {
   }
   return input as unknown as RetentionPolicy;
 }
+function ownerList(value: unknown): string[] {
+  if (!Array.isArray(value) || !value.length || value.length > 100) throw Error('Expected 1–100 owner identifiers');
+  for (const owner of value) text(owner, 200);
+  if (new Set(value).size !== value.length) throw Error('Duplicate owner identifier');
+  return value;
+}
+
+function validateCompletion(item: Record<string, unknown>) {
+  const additional = item.additionalOwners === undefined ? [] : ownerList(item.additionalOwners);
+  const owners = new Set([item.owner, ...additional]);
+  if (owners.size > 100) throw Error('Expected at most 100 registered owners per scope');
+  if (owners.size !== additional.length + 1) throw Error('Duplicate scope owner');
+  if (item.completion === undefined) return;
+  if (!object(item.completion)) throw Error('Invalid scope completion');
+  keys(item.completion, ['snapshotId', 'finishedOwners']);
+  storageId(item.completion.snapshotId);
+  for (const owner of ownerList(item.completion.finishedOwners)) {
+    if (!owners.has(owner)) throw Error('Completion requires a registered scope owner');
+  }
+}
+
 function validateReference(name: 'activeScopes' | 'releasedHeads' | 'pins', item: unknown,
   profiles: Set<string>, heads: Set<string>, pins: Set<string>) {
-  const fields = name === 'activeScopes' ? ['head', 'previousSnapshotId'] : name === 'releasedHeads' ? ['head', 'snapshotId'] : ['snapshotId', 'expiresAt'];
+  const fields = name === 'activeScopes' ? ['head', 'previousSnapshotId', 'additionalOwners', 'completion'] : name === 'releasedHeads' ? ['head', 'snapshotId'] : ['snapshotId', 'expiresAt'];
   declaration(item, ['profile', 'owner', 'reason', ...fields]); profile(item.profile);
   if (!profiles.has(item.profile)) throw Error('Retention reference uses an undeclared profile');
   if (name === 'pins') {
@@ -66,6 +91,7 @@ function validateReference(name: 'activeScopes' | 'releasedHeads' | 'pins', item
     storageId(item.head);
     const key = `${item.profile}:${item.head}`.toLowerCase();
     if (heads.has(key)) throw Error('A head must have one active or released declaration'); heads.add(key);
+    if (name === 'activeScopes') validateCompletion(item);
     if (name === 'releasedHeads') storageId(item.snapshotId);
     if (item.previousSnapshotId !== undefined) storageId(item.previousSnapshotId);
   }

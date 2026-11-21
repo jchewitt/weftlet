@@ -8,6 +8,12 @@ export async function applyRetention(saved: unknown, expected: string, options: 
   return withRetentionMaintenance(bounded, async (root, rootId, scope) => {
     const current = await prepareRetentionOwned(bounded, root, rootId);
     if (!current.canApply || current.planId !== saved.planId) throw Error('Prepared retention plan is stale or blocked; prepare and review a new plan');
-    return executeRetentionOwned(current, bounded, scope);
+    const result = await executeRetentionOwned(current, bounded, scope);
+    if (!current.completions) return result;
+    const removed = new Set(result.deleted);
+    return { ...result, completionReceipt: { rootId, planId: current.planId, policyDigest: current.policyDigest,
+      bookmarks: current.completions.map(({ snapshots: _snapshots, ...bookmark }) => ({
+        ...bookmark, retired: bookmark.path !== null && removed.has(bookmark.path),
+      })) } };
   });
 }
