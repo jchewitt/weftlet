@@ -2,16 +2,24 @@ import { digest, controlName } from './state.js';
 import { record, exactKeys, timestamp } from './format.js';
 import { posix } from 'node:path';
 
-interface Candidate { sha256: string; bytes: number }
-export function removalCandidates(input: unknown) {
+interface Candidate { sha256: string; bytes: number; replacement?: { snapshotPath: string; snapshotSha256: string } }
+export function removalCandidates(input: unknown, migration = false) {
   if (!Array.isArray(input) || input.length > 10_000) throw Error('Invalid journal candidates');
   const expected = new Map<string, Candidate>();
   for (const item of input) {
-    if (!record(item) || !exactKeys(item, ['path', 'sha256', 'logicalBytes']) || !candidatePath(item.path) ||
+    if (!record(item) || !exactKeys(item, migration ? ['path', 'sha256', 'logicalBytes', 'replacement'] : ['path', 'sha256', 'logicalBytes']) || !candidatePath(item.path) ||
         typeof item.sha256 !== 'string' || !digest.test(item.sha256) || !Number.isSafeInteger(item.logicalBytes) || Number(item.logicalBytes) < 0 || expected.has(item.path)) throw Error('Invalid journal candidate');
-    expected.set(item.path, { sha256: item.sha256, bytes: Number(item.logicalBytes) });
+    const candidate: Candidate = { sha256: item.sha256, bytes: Number(item.logicalBytes) };
+    if (migration) candidate.replacement = migrationReplacement(item.replacement, item.path);
+    expected.set(item.path, candidate);
   }
   return expected;
+}
+function migrationReplacement(r: unknown, path: string) {
+  if (!record(r) || !exactKeys(r, ['snapshotPath', 'snapshotSha256']) || !candidatePath(r.snapshotPath) ||
+      !r.snapshotPath.endsWith('.json') || !path.endsWith('.scip') || typeof r.snapshotSha256 !== 'string' ||
+      !digest.test(r.snapshotSha256)) throw Error('Invalid replacement record');
+  return { snapshotPath: r.snapshotPath, snapshotSha256: r.snapshotSha256 };
 }
 function candidatePath(path: unknown): path is string {
   return typeof path === 'string' && path === posix.normalize(path) && !path.startsWith('../') && !path.startsWith('/') &&

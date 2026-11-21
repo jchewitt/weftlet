@@ -1,5 +1,11 @@
 # Validation evidence
 
+## Reviewed SCIP index migration after 0.12.0
+
+Implementation starts from `ec651ae`. On a disposable Linux cache the CLI migrated three verified legacy copies across two profiles, preserving current, previous and pinned graphs and their SCIP bytes. A unique index remained in place. The test ran prepare and apply with external policy and plan files, then confirmed a fresh prepare selected zero groups. Stale and edited plans, active readers, unresolved locks and insufficient recovery capacity have separate checks.
+
+Two child processes in separate fixtures exited at the first real unlink, just before or just after filesystem removal. Offline recovery reconciled the two outcomes, refused corrupted replacements, and allowed a freshly reviewed migration to finish. Run `pnpm exec vitest run tests/scip-index-migration.test.ts`. These checks use public fixtures and the actual filesystem. Consumer allocated-byte measurements, power-loss testing and last-reference collection remain open. [Operator procedure](guides/CACHE-HISTORY.md#apply-a-reviewed-index-migration)
+
 ## Legacy SCIP sharing preview after 0.12.0
 
 The candidate based on `2c713d3` adds the read-only `cache retention preview-index-sharing` command. A Linux fixture with three saved generations across two declared repositories verified both legacy filename forms, a pinned generation and an active head. The measured savings increased by exactly one index payload plus one reference file when those destinations already existed. A singleton group reported the cost of its new reference. The CLI and programmatic report agreed. The graph bytes, head and legacy indexes remained readable.

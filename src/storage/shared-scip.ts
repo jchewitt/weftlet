@@ -7,7 +7,7 @@ import { withManagedCacheAccess } from './coordination/managed-access.js';
 import { managedRootForPath } from './coordination/managed-root.js';
 import { digestOpenFile, inspectFileDigest, inspectSmallJson, withInspectionFile } from './inspection/read.js';
 import { snapshotPath } from './storage.js';
-import { safeTransferPath, transferDirectory } from './transfer-files.js';
+import { copyTransferFile, requireFreeSpace, safeTransferPath, transferDirectory } from './transfer-files.js';
 
 async function exists(path: string) {
   try { await lstat(path); return true; }
@@ -41,13 +41,13 @@ function reference(manifest: ScipGeneration) {
 
 // A same-parent directory rename makes a complete, nonempty entry visible in one step.
 // Concurrent writers cannot replace a nonempty winner on POSIX or Windows.
-async function install(directory: string, name: string, bytes: Uint8Array | string, verify: (path: string) => Promise<void>) {
+async function install(directory: string, name: string, write: (path: string) => Promise<void>, verify: (path: string) => Promise<void>) {
   await transferDirectory(dirname(directory));
   const path = join(directory, name);
   if (!await exists(directory)) {
     const staging = await mkdtemp(join(dirname(directory), '.stage-'));
     try {
-      await writeFile(join(staging, name), bytes, { flag: 'wx', mode: 0o600 });
+      await write(join(staging, name));
       await verify(join(staging, name));
       try {
         await rename(staging, directory);
@@ -74,14 +74,24 @@ async function verifyReference(path: string, manifest: ScipGeneration) {
 }
 
 export async function storeScipBlob(profile: string, digest: string, bytes: Uint8Array) {
-  return install(blobDirectory(await sharedScipRoot(profile), digest), 'index.scip', bytes,
+  return install(blobDirectory(await sharedScipRoot(profile), digest), 'index.scip',
+    path => writeFile(path, bytes, { flag: 'wx', mode: 0o600 }),
     path => verifyDigest(path, digest));
 }
 
-export async function publishScipReference(profile: string, manifest: SnapshotManifest) {
+/** Stream a legacy payload into the same verified, immutable layout as a fresh publication. */
+export async function installLegacyScipBlob(root: string, digest: string, source: string, size: number, signal?: AbortSignal) {
+  return install(blobDirectory(root, digest), 'index.scip', async path => {
+    await requireFreeSpace(dirname(path), size);
+    await copyTransferFile(source, path, size, signal);
+  }, path => verifyDigest(path, digest));
+}
+
+export async function publishScipReference(profile: string, manifest: ScipGeneration) {
   const blob = join(blobDirectory(await sharedScipRoot(profile), manifest.scipIndexDigest), 'index.scip');
   await verifyDigest(blob, manifest.scipIndexDigest);
-  await install(referenceDirectory(profile, manifest), 'reference.json', JSON.stringify(reference(manifest)),
+  await install(referenceDirectory(profile, manifest), 'reference.json',
+    path => writeFile(path, JSON.stringify(reference(manifest)), { flag: 'wx', mode: 0o600 }),
     path => verifyReference(path, manifest));
 }
 

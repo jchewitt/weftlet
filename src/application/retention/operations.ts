@@ -1,3 +1,4 @@
+import { applyIndexMigration, prepareIndexMigration } from '../../storage/retention/index-migration.js';
 import { applyRetention } from '../../storage/retention/apply.js';
 import { prepareRetention } from '../../storage/retention/prepared.js';
 import { dirname, resolve } from 'node:path';
@@ -47,4 +48,17 @@ export async function coordinatedRetentionOperation(operation: 'prepare' | 'appl
   if (!options.planPath || !options.expectedPlan) throw Error('Removal requires --plan and --expect-plan');
   const saved = await inspectSmallJson(options.planPath, 64 * 1024 ** 2, true);
   return applyRetention(saved, options.expectedPlan, common);
+}
+
+export async function indexMigrationOperation(operation: 'prepare-index-migration' | 'apply-index-migration', options: {
+  root: string; policyPath: string; planPath?: string; expectedPlan?: string; maxEntries?: number; maxBytes?: number;
+  timeoutMs?: number; signal?: AbortSignal; onProgress?: (done: number, total: number) => void;
+}) {
+  const root = await retentionInputs(options.root, [options.policyPath, options.planPath].filter((path): path is string => !!path));
+  const readPolicy = () => readRetentionPolicy(options.policyPath);
+  const common = { ...options, root, policy: await readPolicy(), readPolicy };
+  if (operation === 'prepare-index-migration') return prepareIndexMigration(common);
+  if (!options.planPath || !options.expectedPlan) throw Error('Index migration requires --plan and --expect-plan');
+  const saved = await inspectSmallJson(options.planPath, 64 * 1024 ** 2, true);
+  return applyIndexMigration(saved, options.expectedPlan, common);
 }

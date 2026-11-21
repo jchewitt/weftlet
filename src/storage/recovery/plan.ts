@@ -19,7 +19,7 @@ export async function planRecovery(options: RecoveryOptions, exclusions: Interna
     if (o.path.endsWith(`/${controlName}/root.json`)) issues.push({ path: o.path, code: 'nested-managed-root' });
   }
   for (const path of inventory.danglingHeads) issues.push({ path, code: 'dangling-head' });
-  const review = await reviewControls(root, rootId, evidence, exclusions); issues.push(...review.issues);
+  const review = await reviewControls(root, rootId, evidence, exclusions, inventory.maxInspectionBytesPerFile); issues.push(...review.issues);
   const { controls, actions, journals, interruptedClaims, directories } = review;
   await scope.verify();
   const body = { schemaVersion: 1, kind: 'cache-recovery-plan', recoveryVersion: 'offline-recovery-v1', root, rootId,

@@ -34,14 +34,18 @@ export async function withRetentionMaintenance<T>(options: PreparedRetentionOpti
   }, options);
 }
 
-/** Called only while owning exclusive maintenance. Pending journal state is never guessed away. */
-export async function prepareRetentionOwned(options: PreparedRetentionOptions, root: string, rootId: string) {
-  const policy = parseRetentionPolicy(structuredClone(await options.readPolicy?.() ?? options.policy));
+export async function assertNoPendingRemoval(root: string) {
   const journalRoot = join(root, '.weftlet-coordination/removals');
   await safeTransferPath(journalRoot, true, true);
   try {
     if ((await readdir(journalRoot)).some(name => name.endsWith('.pending'))) throw Error('An incomplete removal journal requires explicit recovery; no operation was resumed');
   } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+}
+
+/** Called only while owning exclusive maintenance. Pending journal state is never guessed away. */
+export async function prepareRetentionOwned(options: PreparedRetentionOptions, root: string, rootId: string) {
+  const policy = parseRetentionPolicy(structuredClone(await options.readPolicy?.() ?? options.policy));
+  await assertNoPendingRemoval(root);
   const inventory = await inventoryCache({ ...options, roots: [root], verify: true });
   const reservedControlBytes = sumBytes(inventory.objects.filter(o => isCoordinationObject(o.path) && !isTransientControl(o.path)).map(o => o.logicalBytes));
   const nestedOwners = inventory.objects.filter(o => o.path !== '.weftlet-coordination/root.json' && o.path.endsWith('/.weftlet-coordination/root.json'));

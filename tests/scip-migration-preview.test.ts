@@ -1,42 +1,17 @@
+import { bytes, scipMigrationFixture } from './fixtures/scip-migration.js';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { copyFile, link, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { copyFile, link, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { sha256, type GraphSnapshot } from '@weftlet/core';
+import { sha256 } from '@weftlet/core';
 import { afterEach, expect, it } from 'vitest';
-import { physicalArtifactKey } from '../src/infrastructure/artifact-paths.js';
-import { enableCacheCoordination } from '../src/storage/coordination/managed-root.js';
-import { FileSnapshotStore, snapshotPath } from '../src/storage/storage.js';
 import { publishScipReference, storeScipBlob } from '../src/storage/shared-scip.js';
-import { emptyRetentionPolicy } from '../src/storage/retention/policy.js';
 import { previewIndexSharing } from '../src/storage/retention/index-sharing-preview.js';
 
 const roots: string[] = [];
 afterEach(async () => { for (const root of roots.splice(0)) await rm(root, { recursive: true, force: true, maxRetries: 5 }); });
-const bytes = Buffer.alloc(16_384, 'x');
-async function fixture() {
-  const parent = await realpath(await mkdtemp(join(tmpdir(), 'weftlet-scip-preview-')));
-  roots.push(parent);
-  const root = join(parent, 'cache'), policy = emptyRetentionPolicy();
-  await mkdir(root);
-  await enableCacheCoordination(root, { acknowledgeQuiescence: true });
-  for (const profile of ['a', 'b']) policy.profiles.push({ path: profile, repositoryId: 'public/' + profile, owner: 'fixture', reason: 'study' });
-  async function add(profile: string, id: string, payload = bytes) {
-    const path = join(root, profile), store = new FileSnapshotStore(path);
-    const manifest = { schemaVersion: 1, repositoryId: 'public/' + profile, snapshotId: id,
-      contentDigest: sha256(profile + id), commitSha: 'a'.repeat(40), scipIndexDigest: sha256(payload) } as GraphSnapshot['manifest'];
-    await store.write({ manifest, facts: [], invariants: [], unresolved: [], runtimeEvidence: [] } as unknown as GraphSnapshot);
-    await mkdir(join(path, 'scip'), { recursive: true });
-    const index = join(path, 'scip', physicalArtifactKey(id) + '.scip');
-    await writeFile(index, payload);
-    return { manifest, index, store, path, graph: snapshotPath(path, id) };
-  }
-  return { parent, root, policy, add };
-}
-
 it('measures all retained legacy generations across profiles, preserves pins, and prices reuse of actual shared destinations', async () => {
-  const f = await fixture();
+  const f = await scipMigrationFixture(roots);
   const first = await f.add('a', 'one'), second = await f.add('a', 'two'), third = await f.add('b', 'long'.repeat(34));
   await rename(third.index, join(third.path, 'scip', third.manifest.snapshotId + '.scip'));
   await first.store.updateHead('active', first.manifest.snapshotId);
@@ -73,7 +48,7 @@ it('measures all retained legacy generations across profiles, preserves pins, an
 });
 
 it('keeps ambiguous, corrupt, undeclared, orphaned and hard-linked inputs out of savings', async () => {
-  const f = await fixture();
+  const f = await scipMigrationFixture(roots);
   const ambiguous = await f.add('a', 'id'.repeat(68));
   await copyFile(ambiguous.index, join(ambiguous.path, 'scip', ambiguous.manifest.snapshotId + '.scip'));
   const altered = await f.add('a', 'altered');
@@ -101,7 +76,7 @@ it('keeps ambiguous, corrupt, undeclared, orphaned and hard-linked inputs out of
 });
 
 it('requires the selected coordinated owner and a fully identified generation', async () => {
-  const f = await fixture();
+  const f = await scipMigrationFixture(roots);
   await mkdir(join(f.root, 'a'));
   await mkdir(join(f.root, 'b'));
   const abort = new AbortController();
