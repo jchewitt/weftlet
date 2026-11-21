@@ -5,9 +5,10 @@ import { inspectFileDigest } from '../inspection/read.js';
 import { safeTransferPath } from '../transfer-files.js';
 import type { PreparedRetentionOptions, PreparedRetentionPlan } from './prepared.js';
 import type { CacheMaintenanceScope } from '../coordination/access.js';
-import { removalJournal } from './journal.js';
+import { openRemovalJournal, type JournalCandidate } from './journal.js';
 
-type RemovalObject = PreparedRetentionPlan['objects'][number];
+type RemovalObject = JournalCandidate & Pick<PreparedRetentionPlan['objects'][number], 'path' | 'category' | 'sha256' | 'revision' | 'logicalBytes' | 'removeBefore'>;
+type RemovalAuthority = Pick<PreparedRetentionPlan, 'root' | 'rootId' | 'planId' | 'policyDigest' | 'limits'>;
 async function verifyCandidate(root: string, entry: RemovalObject, maxBytes: number, signal?: AbortSignal) {
   const path = join(root, entry.path), local = relative(root, path);
   if (isAbsolute(entry.path) || !local || local === '..' || local.startsWith(`..${sep}`) ||
@@ -26,12 +27,11 @@ async function verifyCandidate(root: string, entry: RemovalObject, maxBytes: num
     if (await revision() !== entry.revision) throw Error('Removal candidate changed after intent');
   } };
 }
-async function verifyPolicy(current: PreparedRetentionPlan, options: PreparedRetentionOptions) {
+async function verifyPolicy(current: RemovalAuthority, options: PreparedRetentionOptions) {
   if (persistedJsonDigest(await options.readPolicy?.() ?? options.policy) !== current.policyDigest) throw Error('Retention policy changed during removal');
 }
 /** Internal executor: caller must own exclusive maintenance and supply its freshly authorized canonical plan. */
 export async function executeRetentionOwned(current: PreparedRetentionPlan, options: PreparedRetentionOptions, scope: CacheMaintenanceScope) {
-  const root = current.root;
   const selected = current.objects.filter(o => o.disposition === 'candidate');
   const indexes = selected.filter(o => o.category === 'scip-index');
   const companions = new Map(indexes.map(index => [index.removeBefore[0], index]));
@@ -45,12 +45,19 @@ export async function executeRetentionOwned(current: PreparedRetentionPlan, opti
   if (candidates.length !== selected.length || (indexes.length && !current.policy.retireCompanionIndexes)) {
     throw Error('Invalid companion index selection');
   }
+  return executeJournaledRemoval(current, candidates, options, scope);
+}
+
+/** The caller recomputes authorization under this exclusive scope. A migration verifies its replacement before unlink. */
+export async function executeJournaledRemoval(current: RemovalAuthority, candidates: RemovalObject[], options: PreparedRetentionOptions,
+  scope: CacheMaintenanceScope, installReplacement?: (entry: RemovalObject) => Promise<() => Promise<void>>) {
+  const root = current.root;
   options.signal?.throwIfAborted(); await scope.verify();
   await verifyPolicy(current, options);
   if (candidates.length === 0) return { schemaVersion: 1, kind: 'retention-removal-result', planId: current.planId,
     operationId: null, journalPath: null, status: 'complete' as const, deleted: [] as string[], deletedLogicalBytes: 0,
     candidateFiles: 0, remainingCandidates: 0 };
-  const journal = await removalJournal(current, scope.verify);
+  const journal = await openRemovalJournal(current, candidates, scope.verify);
   const deleted: string[] = []; let deletedLogicalBytes = 0;
   let status: 'complete' | 'partial' = 'complete', failure: string | undefined;
   try {
@@ -58,9 +65,12 @@ export async function executeRetentionOwned(current: PreparedRetentionPlan, opti
       options.signal?.throwIfAborted(); await scope.verify();
       if (entry.removeBefore.some(head => !deleted.includes(head))) throw Error('Removal prerequisite was not completed');
       const candidate = await verifyCandidate(root, entry, current.limits.maxBytes, options.signal);
+      const verifyReplacement = await installReplacement?.(entry);
       await journal.append({ event: 'unlink-intent', path: entry.path, sha256: entry.sha256 });
       options.signal?.throwIfAborted(); await scope.verify();
       await verifyPolicy(current, options);
+      await verifyReplacement?.();
+      options.signal?.throwIfAborted(); await scope.verify();
       await candidate.verifyRevision();
       await unlink(candidate.path);
       deleted.push(entry.path); deletedLogicalBytes += entry.logicalBytes;

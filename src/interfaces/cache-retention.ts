@@ -1,13 +1,15 @@
 import { previewIndexSharing } from '../storage/retention/index-sharing-preview.js';
 import { readRetentionPolicy } from '../storage/retention/policy.js';
 import { recurringRetentionOperation } from '../application/retention/maintenance.js';
-import { initializeRetentionPolicy, retentionOperation, coordinatedRetentionOperation } from '../application/retention/operations.js';
+import { indexMigrationOperation, initializeRetentionPolicy, retentionOperation, coordinatedRetentionOperation } from '../application/retention/operations.js';
 
-const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | preview-index-sharing --root <managed-cache> --policy <file> [--json] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json] | maintain --root <managed-cache> --policy <file> --expect-root <id> --expect-policy <digest> [--json]. Apply removes reviewed history; maintain permanently removes history under the reviewed policy on each invocation.';
+const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | prepare-index-migration --root <cache> --policy <file> | apply-index-migration --root <cache> --policy <file> --plan <file> --expect-plan <id> | preview-index-sharing --root <managed-cache> --policy <file> [--json] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json] | maintain --root <managed-cache> --policy <file> --expect-root <id> --expect-policy <digest> [--json]. Apply removes reviewed history; maintain permanently removes history under the reviewed policy on each invocation.';
 const scanFlags = ['--max-entries', '--max-bytes'];
 const rootPolicy = ['--root', '--policy'];
 const operationFlags = {
   init: { required: ['--file'], optional: ['--target-bytes'] },
+  'prepare-index-migration': { required: rootPolicy, optional: [...scanFlags, '--wait-ms'] },
+  'apply-index-migration': { required: [...rootPolicy, '--plan', '--expect-plan'], optional: ['--wait-ms'] },
   'preview-index-sharing': { required: rootPolicy, optional: scanFlags },
   plan: { required: rootPolicy, optional: scanFlags },
   check: { required: [...rootPolicy, '--plan'], optional: scanFlags },
@@ -48,6 +50,10 @@ export async function runCacheRetention(args: readonly string[]) {
       maxEntries: integer('--max-entries'), maxBytes: integer('--max-bytes'), timeoutMs: integer('--wait-ms'), signal: controller.signal,
       onProgress(done: number, total: number) { if (!quiet && Date.now() - lastProgress >= 5000) { lastProgress = Date.now(); process.stderr.write(`[weftlet] retention inventory ${done}/${total} entries\n`); } },
     };
+    if (operation === 'prepare-index-migration' || operation === 'apply-index-migration') {
+      printMigration(await indexMigrationOperation(operation, options), json);
+      return true;
+    }
     if (operation === 'preview-index-sharing') {
       const report = await previewIndexSharing({ ...options, policy: await readRetentionPolicy(options.policyPath) });
       process.stdout.write(json ? JSON.stringify(report, null, 2) + '\n' :
@@ -64,6 +70,12 @@ export async function runCacheRetention(args: readonly string[]) {
     if ('status' in result && result.status !== 'complete' || 'rootId' in result && 'canApply' in result && !result.canApply || 'readyForReview' in result && !result.readyForReview || 'unchanged' in result && !result.unchanged) process.exitCode = 1;
   } finally { process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); }
   return true;
+}
+function printMigration(result: Awaited<ReturnType<typeof indexMigrationOperation>>, json: boolean) {
+  const summary = 'canApply' in result ? `Migration ${result.canApply ? 'prepared' : 'blocked'}: ${result.groups.length} groups. Plan: ${result.planId}` :
+    `Migration ${result.status}: removed ${result.legacyCopiesRemoved} verified legacy copies. Journal: ${result.removal.journalPath ?? 'none'}`;
+  process.stdout.write((json ? JSON.stringify(result, null, 2) : summary) + '\n');
+  if ('canApply' in result ? !result.canApply : result.status !== 'complete') process.exitCode = 1;
 }
 function format(result: Awaited<ReturnType<typeof initializeRetentionPolicy>> | Awaited<ReturnType<typeof retentionOperation>> | Awaited<ReturnType<typeof coordinatedRetentionOperation>> | Awaited<ReturnType<typeof recurringRetentionOperation>>) {
   if ('removal' in result) return `Recurring retention ${result.status}: ${result.removal.deleted.length} snapshots, ${result.removal.deletedLogicalBytes} logical bytes removed.\n${historySummary(result.history)}${result.removal.journalPath ? `Journal: ${result.removal.journalPath}` : 'No-op: no removal journal created.'}\nProjected bytes exclude new journal overhead; use cache usage for a fresh observation.\n`;

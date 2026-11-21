@@ -1,3 +1,4 @@
+import { applyIndexMigration, prepareIndexMigration } from '../../storage/retention/index-migration.js';
 import { applyRetention } from '../../storage/retention/apply.js';
 import { prepareRetention } from '../../storage/retention/prepared.js';
 import { dirname, resolve } from 'node:path';
@@ -35,16 +36,33 @@ export async function retentionOperation(operation: 'plan' | 'check', options: {
     maxBytes: options.maxBytes ?? limits?.maxBytes });
 }
 
-/** These operations require an explicitly activated root and external policy/plan files. */
-export async function coordinatedRetentionOperation(operation: 'prepare' | 'apply', options: {
-  root: string; policyPath: string; planPath?: string; expectedPlan?: string; maxEntries?: number; maxBytes?: number; timeoutMs?: number;
-  signal?: AbortSignal; onProgress?: (done: number, total: number) => void;
-}) {
+interface CoordinatedOptions {
+  root: string; policyPath: string; planPath?: string; expectedPlan?: string; maxEntries?: number; maxBytes?: number;
+  timeoutMs?: number; signal?: AbortSignal; onProgress?: (done: number, total: number) => void;
+}
+
+async function coordinatedInputs(options: CoordinatedOptions) {
   const root = await retentionInputs(options.root, [options.policyPath, options.planPath].filter((path): path is string => !!path));
-  const readPolicy = () => readRetentionPolicy(options.policyPath), policy = await readPolicy();
-  const common = { ...options, root, policy, readPolicy };
-  if (operation === 'prepare') return prepareRetention(common);
+  const readPolicy = () => readRetentionPolicy(options.policyPath);
+  return { ...options, root, policy: await readPolicy(), readPolicy };
+}
+
+async function reviewedPlan(options: CoordinatedOptions) {
   if (!options.planPath || !options.expectedPlan) throw Error('Removal requires --plan and --expect-plan');
-  const saved = await inspectSmallJson(options.planPath, 64 * 1024 ** 2, true);
-  return applyRetention(saved, options.expectedPlan, common);
+  return { saved: await inspectSmallJson(options.planPath, 64 * 1024 ** 2, true), expected: options.expectedPlan };
+}
+
+/** These operations require an explicitly activated root and external policy/plan files. */
+export async function coordinatedRetentionOperation(operation: 'prepare' | 'apply', options: CoordinatedOptions) {
+  const common = await coordinatedInputs(options);
+  if (operation === 'prepare') return prepareRetention(common);
+  const { saved, expected } = await reviewedPlan(options);
+  return applyRetention(saved, expected, common);
+}
+
+export async function indexMigrationOperation(operation: 'prepare-index-migration' | 'apply-index-migration', options: CoordinatedOptions) {
+  const common = await coordinatedInputs(options);
+  if (operation === 'prepare-index-migration') return prepareIndexMigration(common);
+  const { saved, expected } = await reviewedPlan(options);
+  return applyIndexMigration(saved, expected, common);
 }

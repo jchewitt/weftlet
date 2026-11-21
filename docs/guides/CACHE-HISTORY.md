@@ -177,4 +177,26 @@ Each group has one SHA-256 digest. `legacyBytes` counts its verified old copies.
 
 `positiveGroupLogicalSavings` adds the groups that would actually shrink. A value of `null` means an incomplete scan or unresolved inventory issue prevented an overall estimate. Inspect `excluded` for specific paths with ambiguous ownership, digest mismatches or unsafe files. The report includes local paths, repository IDs, head references and protection reasons. Treat it as local operational data.
 
-This estimate assumes the listed generations remain available. Adding it to a history-deletion estimate can count the same bytes twice. Allocated disk space, temporary migration space, and bytes actually recovered require separate measurements. The preview takes a normal coordination read lease and returns `canApply: false`. It writes zero graph, index or reference files. Reviewed migration, recovery and last-reference retirement are the next storage milestones.
+This estimate assumes the listed generations remain available. Adding it to a history-deletion estimate can count the same bytes twice. Allocated disk space, temporary migration space, and bytes actually recovered require separate measurements. The preview takes a normal coordination read lease and returns `canApply: false`. It writes zero graph, index or reference files. Continue with the reviewed migration below when you are ready to move existing copies.
+
+## Apply a reviewed index migration
+
+Available on the development branch after 0.12.0. Upgrade all readers of raw SCIP to a version that resolves shared indexes. Set `WEFTLET_SCIP_STORAGE=shared-v1` on your hydration jobs to keep future writes in the shared layout. The default writer can create a new legacy copy when rebuilding an existing generation.
+
+Prepare a plan on the exact coordinated root. Keep the policy, saved plan and result outside the cache.
+
+```sh
+pnpm exec weftlet cache retention prepare-index-migration --root /path/to/cache --policy ./retention.json --json > migration.json
+```
+
+Review `canApply`, `issues`, `excluded`, the member paths in each group, and `projectedLogicalSavings`. Selection preserves every snapshot, including active and pinned generations. It includes only groups whose legacy bytes exceed the cost of any missing blob and references. Unresolved activity, including unverified historical Gradle locks, blocks apply. A group may be excluded because its ownership or destination could not be verified.
+
+Use the exact `planId` from the reviewed file:
+
+```sh
+pnpm exec weftlet cache retention apply-index-migration --root /path/to/cache --policy ./retention.json --plan ./migration.json --expect-plan PLAN_ID --json > migration-result.json
+```
+
+Apply waits for cooperating readers and writers to drain, then recomputes the plan. For each selected legacy copy it installs the SHA-256 payload and generation reference, records unlink intent, and verifies the graph, shared replacement and legacy file before removing the old copy. The result lists actual legacy removals and the journal path. Physical disk recovery also depends on allocation and filesystem behavior. Use a fresh usage report to measure it.
+
+If apply reports a stale plan or a partial result, inspect the result, prepare again and review the remaining copies. The last good graph and completed replacements remain available. If a process exits while it owns the cache, stop clients and follow the [offline recovery procedure](CACHE-RECOVERY.md). Recovery reconciles each unlink intent with the original file, saved graph and shared replacement. Missing or corrupt required evidence keeps recovery blocked. After recovery, prepare a fresh migration. An interrupted staging write can leave scratch bytes for inspection. Power-loss durability and collection of the final shared reference are separate milestones.
