@@ -1,4 +1,4 @@
-import { lstat, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { readdir, mkdtemp, readFile, rm } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -42,9 +42,8 @@ it.runIf(process.env.WEFTLET_SELINUX_INTEGRATION === '1')(
       const result = await compiler.compile('public-enforcing-selinux', []);
       expect(result.rdfFiles.length).toBeGreaterThan(0);
       expect(result.digest).toMatch(/^[a-f0-9]{64}$/);
-      const work = dirname(dirname(result.root));
-      expect(dirname(work)).toBe(join(storage, 'work'));
-      expect((await lstat(work)).isDirectory()).toBe(true);
+      expect(dirname(result.root)).toBe(join(storage, 'ontology-exports'));
+      expect(await readdir(join(storage, 'work'))).toEqual([]);
       expect((await enforcing()).trim()).toBe('1');
       expect(JSON.parse(await docker(['info', '--format', '{{json .SecurityOptions}}']))).toContain('name=selinux');
       expect(await Promise.all(sourceFiles.map(path => readFile(join(repository, path))))).toEqual(before);

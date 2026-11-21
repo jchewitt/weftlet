@@ -359,6 +359,7 @@ async function main(): Promise<void> {
         application.repository,
         application.ontologyCompiler,
         valueAfter(args, '--ref') ?? 'HEAD',
+        valueAfter(args, '--output'),
       );
       process.stdout.write(
         `${JSON.stringify({ digest: result.digest, files: result.rdfFiles }, null, 2)}\n`,
