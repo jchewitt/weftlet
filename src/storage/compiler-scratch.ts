@@ -59,7 +59,7 @@ export async function createCompilerScratch(storage: string, backend: Backend) {
 
 async function confirmCompilerStopped(root: string, operationId: string, daemon: string) {
   if (await compilerDockerQuery(['info', '--format', '{{.ID}}'], root) !== daemon) throw Error('Compiler Docker daemon changed');
-  if (await compilerDockerQuery(['ps', '-a', '--filter', 'name=^/weftlet-' + operationId + '$', '--format', '{{.ID}}'], root))
+  if (await compilerDockerQuery(['ps', '-a', '--filter', 'label=org.weftlet.compiler-operation=' + operationId, '--format', '{{.ID}}'], root))
     throw Error('Compiler container still exists; retaining workspace');
 }
 

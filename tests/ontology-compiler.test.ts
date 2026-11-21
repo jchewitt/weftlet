@@ -111,7 +111,7 @@ describe('isolated openCAESAR compiler workspace', () => {
       expect(dirname(dirname(work))).toBe(join(f.storage, 'work').replace(/\\/g, '/'));
       expect(work).not.toBe(f.source.replace(/\\/g, '/'));
       expect(mountFrom(args)).toBe(`${work}:/workspace${os === 'linux' ? ':Z' : ''}`);
-      expect(args).toEqual(['run', '--rm', '--name', expect.stringMatching(/^weftlet-[a-f0-9-]{36}$/), ...(os === 'win32' ? [] : [
+      expect(args).toEqual(['run', '--rm', '--label', expect.stringMatching(/^org\.weftlet\.compiler-operation=[a-f0-9-]{36}$/), ...(os === 'win32' ? [] : [
         '--user', '1234:5678', '--env', 'GRADLE_USER_HOME=/workspace/.gradle',
       ]), '-v', mountFrom(args), '-w', '/workspace', image, 'gradle', '--no-daemon', 'clean', 'oml2owl']);
       expect(await readFile(join(work, 'build.gradle'))).toEqual(await readFile(join(f.source, 'build.gradle')));

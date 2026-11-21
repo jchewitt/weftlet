@@ -367,7 +367,7 @@
       "destinationPath": "src/extraction/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
       "modified": true,
-      "destinationSha256": "b5d6c8952b05e111594b5d6c3298f083e82432e97dae889ae576653d7a77ae0e"
+      "destinationSha256": "9ffb4cdaccb272fd1c6166bb470d443caf306c19a2d8b0a05bfa1a9c5f715bff"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",

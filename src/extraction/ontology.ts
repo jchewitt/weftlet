@@ -180,7 +180,7 @@ export class OpenCaesarOntologyCompiler extends WorkspaceCompiler implements Ont
       [
         'run',
         '--rm',
-        '--name', 'weftlet-' + basename(dirname(work)).slice('compiler-'.length),
+        '--label', 'org.weftlet.compiler-operation=' + basename(dirname(work)).slice('compiler-'.length),
         ...dockerHostUserArguments(),
         '-v',
         workspaceMount,
