@@ -1,5 +1,18 @@
 # Validation evidence
 
+## 0.12.0 release verification
+
+Both packages were published from `537707598b64c3ac07d10746b4dfa600b117c6f8`. Their package-specific Git tags resolve to that commit. Both registry downloads matched the SHA-512 values in the trusted workflow’s archive manifest and the independently prepared version-PR archives. [Release workflow](https://github.com/jchewitt/weftlet/actions/runs/44868869206)
+
+| Package | Download bytes | SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.12.0` | 22,609 | `sha512-c0VJL5+R7vdloha44g6uZ40nt5c2UGp89P0eZljaLQs0UVgy3svasvrscmXZLgWkTNkNbkQ+f/ND5M9x8+t2aA==` |
+| `@weftlet/toolkit@0.12.0` | 1,008,008 | `sha512-Pm7JYrl37oxIakpCZUek/P4xBN5tUQgn6wlLrNKbgO7P0reJXza06FmNxbgjSYO+MvjYF8YVRxBH4Jq5yT/Ugw==` |
+
+The release tree matched the independently reviewed tree `d71b269d895db4f190deb03b2b68f126b332f0f1`. Linux publication checks passed, including inventory, licensing and packed-consumer validation. Native Windows checks exercised legacy names, long paths, an actively held handle and an exact directory attestation after snapshot retirement. A pre-release run hit an intermittent `EPERM` in an independent head-writer contention test. Its rerun and all checks on the merged fix passed. [Native Windows qualification](https://github.com/jchewitt/weftlet/actions/runs/44867484914/job/136734301245)
+
+A fresh Linux consumer installed the two exact registry archives and ran the published CLI on a disposable coordinated cache. Partial completion preserved the bookmark, an advanced generation stayed protected, and final completion returned a retirement receipt while the explicit replay pin preserved its original snapshot. TradePilot’s next acceptance step is an unchanged-policy, prepare-only NTFS replay. The source workflow also triggered the [documentation deployment](https://github.com/jchewitt/weftlet-docs/actions/runs/44870591343).
+
 ## 0.11.1 consumer prepare on Windows NTFS
 
 The consumer verified both published archives and a frozen install. A fresh MCP client returned the same 30 saved facts and citations. Two strict exact-commit validations and two independent rebuilds passed with matching digests within each pair. Both comparison workspaces were removed. Normal task and feature publication retained 2.435 GB of snapshot and companion-index files for this case.
@@ -16,7 +29,7 @@ The consumer attributed 848 snapshot, index, reference and receipt paths. Its de
 
 Separately, an absolute workspace storage path on another NTFS volume accepted one fresh exact graph. The compact snapshot was approximately 123 MB. Existing semantic bytes were validated and reused without new extraction. This used a different local profile and says nothing about the footprint of older snapshots. The [storage operations and migration queue](CACHE-RETENTION-PLAN.md#storage-location-and-recovery) tracks the four operations separately.
 
-## Owner completion candidate
+## Owner completion qualification
 
 Public cache fixtures exercise partial and final owner completion, generation changes between prepare and apply, pinned snapshots, retained peer heads, active workspace leases, hard-linked heads, indefinite retention, the 100-owner boundary, invalid declarations and scheduled maintenance boundaries. The 0.11.1 Gradle replay and its outstanding historical-workspace blockers are recorded above.
 

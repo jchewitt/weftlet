@@ -12,6 +12,7 @@ npm registry or a substitute for detailed upgrade notes.
 
 | Release | Main changes |
 | --- | --- |
+| [0.12.0](../CHANGELOG.md#0120) | Shared bookmark completion, exact-generation receipts and historical Gradle workspace verification on NTFS. |
 | [0.11.1](../CHANGELOG.md#0111) | Local NTFS retention can verify idle openCAESAR scratch locks and preserve them while preparing unrelated history for removal. |
 | [0.11.0](../CHANGELOG.md#0110) | Configurable cache history, coordinated removal and recovery, optional compact snapshots, and verified SCIP index retirement. |
 | [0.10.0](../CHANGELOG.md#0100) | Independent Claude/OpenCode extraction, automatic skill/MCP/CI setup, assisted integration, verified snapshot delivery, temporary clean comparisons and read-only cache/retention reviews. |

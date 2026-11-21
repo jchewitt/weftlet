@@ -221,7 +221,7 @@ actual disk exhaustion remain separate operational concerns.
 
 | Operation | Supported use and next work |
 | --- | --- |
-| Choose workspace storage | With `storageScope: "workspace"`, `storagePath` resolves against the repository root. An absolute path selects another local volume. Hydration writes under the configured profile. Existing generations keep their original location and format. |
+| Choose workspace storage | With `storageScope: "workspace"`, `storagePath` resolves against the repository root. An absolute path selects another local volume. Hydration writes directly under that resolved directory. Existing generations keep their original location and format. |
 | Relocate the user cache | The default user-cache base is `~/.cache/context-graph`. Its profile key depends on the configuration and checkout path. Plan a root override shared by CLI, MCP and other clients that keeps those identity inputs stable. An explicit `--root` on a retention command selects an inspection or maintenance target only. |
 | Move cold generations | R6 will need a dry run that lists the exact generations, hashes, required semantic artifacts, index and references. Stage a copy on the destination, verify complete bytes, exercise a restore and query by historical ID, and require an explicit cutover. Keep the source usable if verification fails or a client still holds a lease. Release local bytes only after a separately reviewed eviction. |
 | End a finished task’s ownership | Follow the [bookmark completion procedure](guides/CACHE-RETENTION.md#finish-an-owners-work-on-a-bookmark). Retiring a bookmark depends on its exact generation and remaining owners. A replay pin or another head can still protect its snapshot. |
