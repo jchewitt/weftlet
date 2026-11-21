@@ -96,7 +96,7 @@ The check covers the checksums, execution history, file hashes and build-output 
 
 ### Diagnose historical compiler workspaces
 
-The successor to 0.11.1 also recognizes the two historical compiler names, `work/ontology-<snapshotId>` and `work/ontology-<snapshotId>-<operation UUIDv4>`. The parent must match a unique fully inspected snapshot in the same profile with a consistent repository and commit. A commit prefix by itself is insufficient. The existing four Gradle locations, coordinated admission, local NTFS exclusive read, file revisions, and link checks apply. Keep the existing policy for the migration preview.
+Starting with 0.12.0, coordinated preparation also recognizes the two historical compiler names, `work/ontology-<snapshotId>` and `work/ontology-<snapshotId>-<operation UUIDv4>`. The parent must match a unique fully inspected snapshot in the same profile with a consistent repository and commit. A commit prefix by itself is insufficient. The existing four Gradle locations, coordinated admission, local NTFS exclusive read, file revisions, and link checks apply. Keep the existing policy for the migration preview.
 
 Read the `objects[].reasons` at the path of each `activity-requires-coordination` issue in prepared JSON. An unknown layout, absent historical snapshot, ambiguous profile or overlapping snapshot names remains blocked. `lock-held` means Windows returned a sharing or lock violation on the exclusive open. `exclusive-probe-inconclusive` covers permissions, volume and other probe failures. A changed or inaccessible revision stays blocked. Resolve reported ownership or activity before preparing again. Keep the original lock files and snapshots available for review.
 
