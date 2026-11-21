@@ -258,6 +258,8 @@ semantic reuse without hidden paid recovery; explicit archive failure/restore
 identity; and Windows reparse-point/long-path containment. Missing or archived
 historical IDs must report that state, never silently resolve to newer evidence.
 
+The [multi-generation qualification](assessments/history-plateau.md) measures retained graph and index allocation on a fixed-size public workload, reports journal growth, and exercises full-volume publication failure.
+
 For every stage retain exact version/commit, deterministic test scope, byte
 accounting and limitations. Consumer acceptance and any private archival trial
 remain consumer-owned; no destination or service has been configured upstream.
