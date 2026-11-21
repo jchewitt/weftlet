@@ -1,7 +1,10 @@
 import { execFile } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { promisify } from 'node:util';
 import { persistedJsonDigest } from '@weftlet/core';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { basename, join, relative } from 'node:path';
 import { mkdtemp, mkdir, rm, readFile, writeFile, lstat, readdir } from 'node:fs/promises';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -75,6 +78,30 @@ it('verifies an exact cold restore, original heads, reused semantics and raw sha
   await expect(planArchive(options)).rejects.toThrow('omit required semantic artifacts');
   await writeFile(requiredFile, semanticBytes);
   await rm(join(source, 'semantic-artifacts-v1', 'unrelated-partition'), { recursive: true });
+  const policyPath = join(parent, 'operator-policy.json');
+  await writeFile(policyPath, JSON.stringify(policy));
+  const entry = fileURLToPath(new URL('../src/cli.ts', import.meta.url));
+  const tsx = createRequire(import.meta.url).resolve('tsx');
+  const cli = await promisify(execFile)(
+    process.execPath,
+    [
+      '--import',
+      pathToFileURL(tsx).href,
+      entry,
+      'cache',
+      'archive',
+      'plan',
+      '--root',
+      source,
+      '--policy',
+      policyPath,
+      '--config',
+      f.configPath,
+      '--include-cold-semantic',
+    ],
+    { cwd: f.root },
+  );
+  expect(JSON.parse(cli.stdout).planId).toBe(plan.planId);
   expect(plan.generations).toHaveLength(2);
   expect(plan.generations.every((g) => g.index === 'shared')).toBe(true);
   await createArchive(options, archive, plan.planId);
@@ -110,6 +137,16 @@ it('verifies an exact cold restore, original heads, reused semantics and raw sha
   await expect(restoreArchive(archive, interrupted, plan.planId)).rejects.toThrow('Another transfer owns');
   const copied = await restoreArchive(archive, destination, plan.planId);
   expect(copied.restoredSnapshots).toBe(2);
+  let reads = 0;
+  const changed = { ...policy, pins: [] };
+  await expect(
+    checkCutover(
+      { ...options, readPolicy: async () => (++reads === 1 ? policy : changed) },
+      destination,
+      plan.planId,
+      true,
+    ),
+  ).rejects.toThrow('diverges');
   const cutover = await checkCutover(options, destination, plan.planId, true);
   expect(cutover.environment.WEFTLET_USER_CACHE_ROOT).toBe(destination);
   // Archived evidence is scoped. A detached shared reference still matters for whole-root routing.

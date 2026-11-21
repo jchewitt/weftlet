@@ -233,6 +233,10 @@ export async function checkCutover(options: ArchiveOptions, destination: string,
       if (id === toId) throw Error('Restored cache must have an independent coordination identity');
       const restored = await archivePlanOwned(to, toId, options);
       if (
+        persistedJsonDigest(original.policy) !== persistedJsonDigest(restored.policy) ||
+        persistedJsonDigest(original.userProfiles) !== persistedJsonDigest(restored.userProfiles) ||
+        persistedJsonDigest(original.policy) !==
+          persistedJsonDigest(parseRetentionPolicy((await options.readPolicy?.()) ?? options.policy)) ||
         persistedJsonDigest(original.files) !== persistedJsonDigest(restored.files) ||
         persistedJsonDigest(original.generations) !== persistedJsonDigest(restored.generations) ||
         restored.excluded.some((e) => e.category !== 'source-audit-history')

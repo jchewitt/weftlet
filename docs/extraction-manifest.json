@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "de0dc17a08fed018c9eafb24b3f75109508b03bf878807054ee8c3b170268a44"
+      "destinationSha256": "3bd6de5df2255a73118a23b5ee0d01c3b9704c5b6e37e679750bcf2b4f8f7958"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -1036,6 +1036,7 @@
     "src/application/cache-adoption.ts",
     "src/application/cache-inspection/context.ts",
     "src/application/cache-operation.ts",
+    "src/application/cache-relocation/exclusions.ts",
     "src/application/cache-relocation/plan.ts",
     "src/application/cache-relocation/transfer.ts",
     "src/application/clean-comparison.ts",
