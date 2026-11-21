@@ -1,5 +1,16 @@
 # @weftlet/toolkit
 
+## 0.12.0
+
+### Minor Changes
+
+- ced94e1: Declare shared owners and explicit completion at an exact snapshot in a retention policy. Preview remaining owners, retained heads, pins and snapshot bytes. After the last owner finishes, a reviewed apply can retire the bookmark and return a compact receipt while preserving other references.
+
+### Patch Changes
+
+- fae1e7d: Recognize historical compiler workspaces during coordinated Windows NTFS cache preparation by matching the exact saved snapshot in its profile. Prepared reports explain unresolved lock ownership, active handles and inconclusive probes. The four supported Gradle scratch locks stay on disk.
+- @weftlet/core@0.12.0
+
 ## 0.11.1
 
 ### Patch Changes
