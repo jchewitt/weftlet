@@ -8,6 +8,7 @@ import { safeTransferPath } from '../transfer-files.js';
 import { inventoryCache } from '../inspection/inventory.js';
 import { inspectSmallJson } from '../inspection/read.js';
 import { parseRetentionPolicy, type RetentionPolicy } from './policy.js';
+import { probeGradleScratch } from './gradle-scratch.js';
 import { evaluateRetention } from './evaluate.js';
 
 export interface PreparedRetentionOptions extends CacheAccessOptions {
@@ -48,16 +49,17 @@ export async function prepareRetentionOwned(options: PreparedRetentionOptions, r
   // Directory identity stays bound; entry enumeration catches additions/removals independently.
   inventory.objects = inventory.objects.filter(o => o.path !== '.weftlet-coordination' && !o.path.startsWith('.weftlet-coordination/'))
     .map(o => o.kind === 'directory' ? { ...o, revision: o.physicalIdentity ?? 'unknown', modifiedAt: '', allocatedBytes: null, linkCount: 0 } : o);
-  const review = evaluateRetention(inventory, policy, Date.now(), reservedControlBytes);
+  const idleScratch = await probeGradleScratch(inventory.objects, policy, options.signal);
+  const review = evaluateRetention(inventory, policy, Date.now(), reservedControlBytes, idleScratch);
   for (const owner of nestedOwners) review.issues.push({ code: 'nested-managed-owner', path: owner.path });
   for (const dir of inventory.objects.filter(o => o.kind === 'directory' && !o.physicalIdentity)) review.issues.push({ code: 'unknown-directory-identity', path: dir.path });
   const candidates = review.objects.filter(o => o.disposition === 'candidate');
   if (candidates.length > 10_000) review.issues.push({ code: 'removal-batch-exceeds-10000-files', path: '.' });
-  const body = { schemaVersion: 1, kind: 'coordinated-retention-plan', plannerVersion: 'coordinated-removal-v3', root, rootId,
+  const body = { schemaVersion: 1, kind: 'coordinated-retention-plan', plannerVersion: 'coordinated-removal-v4', root, rootId,
     policy, policyDigest: persistedJsonDigest(policy), limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     stateDigest: persistedJsonDigest(inventory.objects), canApply: review.issues.length === 0,
     issues: review.issues.sort((a, b) => a.path.localeCompare(b.path, 'en') || a.code.localeCompare(b.code, 'en')),
-    pins: review.pins, objects: review.objects, history: review.history,
+    verifiedIdleGradleLocks: idleScratch.size, pins: review.pins, objects: review.objects, history: review.history,
     totals: { candidateFiles: candidates.length, candidateLogicalBytes: candidates.reduce((n, c) => n + c.logicalBytes, 0) },
     limitations: ['Apply rechecks this exact plan, policy and evidence under exclusive coordination; this is not automatic retention.',
       'Eligible files are reviewed unshared snapshots, explicitly retired heads and opted-in verified companion indexes. Unattributed indexes, semantic artifacts and receipts remain.',
@@ -73,6 +75,6 @@ export function prepareRetention(options: PreparedRetentionOptions) {
 export function assertPreparedPlan(saved: unknown, expected: string): asserts saved is PreparedRetentionPlan {
   if (!saved || typeof saved !== 'object' || Array.isArray(saved)) throw Error('Expected a coordinated retention plan');
   const { preparedAt: _time, planId, ...body } = saved as Record<string, unknown>;
-  if (body.schemaVersion !== 1 || body.kind !== 'coordinated-retention-plan' || body.plannerVersion !== 'coordinated-removal-v3' ||
+  if (body.schemaVersion !== 1 || body.kind !== 'coordinated-retention-plan' || body.plannerVersion !== 'coordinated-removal-v4' ||
     typeof planId !== 'string' || planId !== expected || persistedJsonDigest(body) !== planId) throw Error('Prepared retention plan is unsupported, edited or does not match --expect-plan');
 }

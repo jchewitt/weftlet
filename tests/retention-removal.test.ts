@@ -1,8 +1,8 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile, link, symlink, access, rename, realpath } from 'node:fs/promises';
+import { open, mkdir, mkdtemp, readFile, readdir, rm, writeFile, link, symlink, access, rename, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, parse } from 'node:path';
+import { dirname, join, parse } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { afterEach, expect, it, vi } from 'vitest';
 import { sha256, type GraphSnapshot } from '@weftlet/core';
@@ -78,6 +78,67 @@ it('prepares stable plans and permanently removes only reviewed heads/history wi
   expect((await readdir(join(f.root, '.weftlet-coordination/removals'))).some(p => p.endsWith('.pending'))).toBe(false);
   await expect(applyRetention(plan, plan.planId, f)).rejects.toThrow('stale');
 });
+const compilerWorkspace = 'work/ontology-8c622c42-2c7c-43d2-acce-dab66402f17b/.gradle';
+const gradleLocks = ['8.10.2/checksums/checksums.lock', '8.10.2/executionHistory/executionHistory.lock',
+  '8.10.2/fileHashes/fileHashes.lock', 'buildOutputCleanup/buildOutputCleanup.lock']
+  .map(name => compilerWorkspace + '/' + name);
+
+async function scratchFile(root: string, name: string) {
+  const path = join(root, name);
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, 'preserved lock bytes');
+  return path;
+}
+
+it('keeps the observational planner conservative and blocks unknown scratch and unresolved ownership', async () => {
+  const f = await fixture();
+  const paths = [gradleLocks[0]!, 'unknown-profile/' + gradleLocks[0], compilerWorkspace + '/other.LOCK',
+    'work/ontology-unrecognized/.gradle/buildOutputCleanup/buildOutputCleanup.lock'];
+  for (const path of paths) await scratchFile(f.root, path);
+  const shared = await scratchFile(f.root, gradleLocks[1]!);
+  await link(shared, join(f.root, 'additional-hardlink'));
+  if (process.platform === 'win32') {
+    // An undeclared historical profile may be identified through its verified snapshots.
+    const history = new FileSnapshotStore(join(f.root, 'history'));
+    await history.write(snapshot('one'));
+    await scratchFile(f.root, 'history/' + gradleLocks[0]);
+    const conflicting = snapshot('two');
+    conflicting.manifest.repositoryId = 'public/other';
+    await history.write(conflicting);
+    paths.push('history/' + gradleLocks[0]);
+  }
+  paths.push(gradleLocks[1]!);
+  const review = await planRetention(f);
+  expect(review.issues.filter(i => i.code === 'activity-requires-coordination').map(i => i.path))
+    .toEqual(expect.arrayContaining(paths));
+  const held = await prepareRetention(f);
+  expect(held.canApply).toBe(false);
+  const blockers = held.issues.filter(i => i.code === 'activity-requires-coordination').map(i => i.path);
+  expect(blockers.sort()).toEqual(paths.slice(process.platform === 'win32' ? 1 : 0).sort());
+}, 30_000);
+
+it.runIf(process.platform === 'win32')('probes idle Gradle scratch on NTFS and rechecks a real open writer before removal', async () => {
+  const f = await fixture();
+  const control = await prepareRetention(f);
+  for (const path of gradleLocks) await scratchFile(f.root, path);
+  const plan = await prepareRetention(f);
+  expect(plan).toMatchObject({ canApply: true, verifiedIdleGradleLocks: 4, totals: control.totals });
+  for (const path of gradleLocks) expect(plan.objects.find(o => o.path === path)).toMatchObject({
+    disposition: 'retain', reasons: expect.arrayContaining(['verified-idle-gradle-scratch']),
+  });
+  const before = await evidenceBytes(f.root);
+  const writer = await open(join(f.root, gradleLocks[0]!), 'r+');
+  try {
+    const active = await prepareRetention(f);
+    expect(active).toMatchObject({ canApply: false, verifiedIdleGradleLocks: 3,
+      issues: [{ code: 'activity-requires-coordination', path: gradleLocks[0] }] });
+    await expect(applyRetention(plan, plan.planId, f)).rejects.toThrow('stale or blocked');
+  } finally { await writer.close(); }
+  expect(await evidenceBytes(f.root)).toEqual(before);
+  expect((await applyRetention(plan, plan.planId, f)).status).toBe('complete');
+  for (const path of gradleLocks) expect(await readFile(join(f.root, path), 'utf8')).toBe('preserved lock bytes');
+}, 60_000);
+
 it('refuses old reports, wrong acknowledgement, changed policy, altered bytes and new references before deletion', async () => {
   const f = await fixture(), before = await evidenceBytes(f.root), old = await planRetention(f), plan = await prepareRetention(f);
   await expect(applyRetention(old, old.planId, f)).rejects.toThrow('unsupported');

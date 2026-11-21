@@ -1,5 +1,9 @@
 # Validation evidence
 
+## 0.11.1 Gradle scratch qualification
+
+The patch candidate starts at `2a4d1ab`. The Windows regression uses four ordinary Gradle files, holds a real write-capable handle open during a second preview and apply attempt, then checks retention of the scratch bytes after the handle closes. Separate controls cover the observational planner, unknown ownership, hard links and unrecognized names. The private 181 GB cache still requires a preview using the published patch and its existing policy.
+
 ## 0.11.0 consumer decision, November 20, 2026
 
 **Graph compatibility passed. Legacy-cache retention remains a 1.0 blocker.** TradePilot reported the following on Windows/NTFS, Node 24.2.0, with the official core and toolkit archives verified against their published SHA-512 values.
