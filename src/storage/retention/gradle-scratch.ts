@@ -21,8 +21,9 @@ function recognized(entry: CacheObject, owners: ReadonlyMap<string, string | nul
 // stdin carries UTF-8 JSON paths as data. stdout has one 0/1 character per request.
 const windowsProbe = `
 $ErrorActionPreference = 'Stop'
-[Console]::InputEncoding = [Text.UTF8Encoding]::new($false)
-foreach ($path in (ConvertFrom-Json -InputObject ([Console]::In.ReadToEnd()))) {
+$reader = [IO.StreamReader]::new([Console]::OpenStandardInput(), [Text.UTF8Encoding]::new($false, $true))
+try { $paths = ConvertFrom-Json -InputObject ($reader.ReadToEnd()) } finally { $reader.Dispose() }
+foreach ($path in $paths) {
   $idle = '0'
   try {
     $drive = [IO.DriveInfo]::new([IO.Path]::GetPathRoot($path))
