@@ -1,5 +1,22 @@
 # @weftlet/toolkit
 
+## 0.13.0
+
+### Minor Changes
+
+- 78b61e8: Reclaim verified shared index references after their graphs retire and release each shared blob after its last protected generation. Opted-in scheduled retention includes this check. Operators can also prepare and apply a reviewed shared retirement separately.
+  
+  Concurrent Windows snapshot writers retry transient NTFS sharing errors while acquiring the head lock.
+- 8d7f08c: Choose the user-wide cache location with WEFTLET_USER_CACHE_ROOT. Preview and create a private archive, restore verified graph and artifact bytes, then check a quiescent cutover before restarting clients on the new volume.
+- ac4748c: Move verified legacy SCIP indexes into shared storage with `cache retention prepare-index-migration` and `apply-index-migration`. Each generation keeps its graph and gains a verified reference before its legacy index is removed. Recovery checks the replacement for an interrupted unlink.
+- ec1ee6f: Measure how many logical bytes existing SCIP indexes could save through sharing. Run `weftlet cache retention preview-index-sharing --root <managed-cache> --policy <file> --json` to see verified generation pairs, net savings by digest, and excluded files while preserving all stored evidence.
+- 765dbdf: Opt in to sharing identical TypeScript index bytes across new snapshot generations in a coordinated cache with `WEFTLET_SCIP_STORAGE=shared-v1`. Read an exact generation's index from either layout using the verified `withSavedScipIndex` callback.
+
+### Patch Changes
+
+- ffc27fc: Release operation-owned compiler scratch during hydration on both backends. Standalone ontology compilation exports the RDF files into a new directory. Managed caches can reclaim verified abandoned compiler workspaces under exclusive maintenance.
+- @weftlet/core@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes
