@@ -45,6 +45,7 @@ function terminalDeletions(result: Record<string, unknown>, expected: Map<string
 }
 /** Terminal deleted includes an unlink whose per-file completion append failed. */
 export function removalEvents(events: unknown[], expected: Map<string, Candidate>, identity: JournalIdentity) {
+  const witnesses = new Map<string,string>();
   const intents = new Set<string>(), removed = new Set<string>(); let finished = false;
   for (const event of events) {
     if (!record(event) || finished) throw Error('Invalid journal event sequence');
@@ -54,10 +55,15 @@ export function removalEvents(events: unknown[], expected: Map<string, Candidate
     }
     if (typeof event.path !== 'string' || !expected.has(event.path)) throw Error('Unknown journal target');
     if (event.event === 'unlink-intent') {
-      if (!exactKeys(event, ['event', 'path', 'sha256']) || event.sha256 !== expected.get(event.path)!.sha256 || intents.has(event.path)) throw Error('Invalid unlink intent');
+      const fields = ['event', 'path', 'sha256'];
+      if (event.witness !== undefined) {
+        if (typeof event.witness !== 'string' || !digest.test(event.witness) || !/(^|\/)snapshots\//.test(event.path)) throw Error('Invalid snapshot witness');
+        fields.push('witness'); witnesses.set(event.path,event.witness);
+      }
+      if (!exactKeys(event, fields) || event.sha256 !== expected.get(event.path)!.sha256 || intents.has(event.path)) throw Error('Invalid unlink intent');
       intents.add(event.path);
     } else if (event.event === 'unlinked' && exactKeys(event, ['event', 'path']) && intents.has(event.path) && !removed.has(event.path)) removed.add(event.path);
     else throw Error('Invalid journal event');
   }
-  return { intents, removed };
+  return { intents, removed, witnesses };
 }

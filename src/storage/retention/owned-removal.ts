@@ -1,3 +1,4 @@
+import { witnessRemoval, type SharedEntry } from './shared-index-witness.js';
 import { persistedJsonDigest } from '@weftlet/core';
 import { lstat, unlink } from 'node:fs/promises';
 import { isAbsolute, join, relative, sep } from 'node:path';
@@ -45,18 +46,19 @@ export async function executeRetentionOwned(current: PreparedRetentionPlan, opti
   if (candidates.length !== selected.length || (indexes.length && !current.policy.retireCompanionIndexes)) {
     throw Error('Invalid companion index selection');
   }
-  return executeJournaledRemoval(current, candidates, options, scope);
+  return executeJournaledRemoval(current, candidates, options, scope, undefined, current.policy.retireCompanionIndexes);
 }
 
 /** The caller recomputes authorization under this exclusive scope. A migration verifies its replacement before unlink. */
 export async function executeJournaledRemoval(current: RemovalAuthority, candidates: RemovalObject[], options: PreparedRetentionOptions,
-  scope: CacheMaintenanceScope, installReplacement?: (entry: RemovalObject) => Promise<() => Promise<void>>) {
+  scope: CacheMaintenanceScope, installReplacement?: (entry: RemovalObject) => Promise<() => Promise<void>>, captureShared = false) {
   const root = current.root;
   options.signal?.throwIfAborted(); await scope.verify();
   await verifyPolicy(current, options);
   if (candidates.length === 0) return { schemaVersion: 1, kind: 'retention-removal-result', planId: current.planId,
     operationId: null, journalPath: null, status: 'complete' as const, deleted: [] as string[], deletedLogicalBytes: 0,
     candidateFiles: 0, remainingCandidates: 0 };
+  const verifiedBlobs = new Map<string,SharedEntry>();
   const journal = await openRemovalJournal(current, candidates, scope.verify);
   const deleted: string[] = []; let deletedLogicalBytes = 0;
   let status: 'complete' | 'partial' = 'complete', failure: string | undefined;
@@ -66,7 +68,9 @@ export async function executeJournaledRemoval(current: RemovalAuthority, candida
       if (entry.removeBefore.some(head => !deleted.includes(head))) throw Error('Removal prerequisite was not completed');
       const candidate = await verifyCandidate(root, entry, current.limits.maxBytes, options.signal);
       const verifyReplacement = await installReplacement?.(entry);
-      await journal.append({ event: 'unlink-intent', path: entry.path, sha256: entry.sha256 });
+      const witness = captureShared && entry.category === 'snapshot'
+        ? await witnessRemoval(root, current.rootId, journal.operationId, entry.path, entry.sha256!, current.limits.maxBytes,verifiedBlobs) : undefined;
+      await journal.append({ event: 'unlink-intent', path: entry.path, sha256: entry.sha256, ...(witness ? {witness} : {}) });
       options.signal?.throwIfAborted(); await scope.verify();
       await verifyPolicy(current, options);
       await verifyReplacement?.();

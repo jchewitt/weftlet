@@ -199,7 +199,7 @@ pnpm exec weftlet cache retention apply-index-migration --root /path/to/cache --
 
 Apply waits for cooperating readers and writers to drain, then recomputes the plan. For each selected legacy copy it installs the SHA-256 payload and generation reference, records unlink intent, and verifies the graph, shared replacement and legacy file before removing the old copy. The result lists actual legacy removals and the journal path. Physical disk recovery also depends on allocation and filesystem behavior. Use a fresh usage report to measure it.
 
-If apply reports a stale plan or a partial result, inspect the result, prepare again and review the remaining copies. The last good graph and completed replacements remain available. If a process exits while it owns the cache, stop clients and follow the [offline recovery procedure](CACHE-RECOVERY.md). Recovery reconciles each unlink intent with the original file, saved graph and shared replacement. Missing or corrupt required evidence keeps recovery blocked. After recovery, prepare a fresh migration. An interrupted staging write can leave scratch bytes for inspection. Power-loss durability and collection of the final shared reference are separate milestones.
+If apply reports a stale plan or a partial result, inspect the result, prepare again and review the remaining copies. The last good graph and completed replacements remain available. If a process exits while it owns the cache, stop clients and follow the [offline recovery procedure](CACHE-RECOVERY.md). Recovery reconciles each unlink intent with the original file, saved graph and shared replacement. Missing or corrupt required evidence keeps recovery blocked. After recovery, prepare a fresh migration. An interrupted staging write can leave scratch bytes for inspection. Process-crash recovery was tested. Power-loss durability remains unverified.
 
 ## Compiler workspace lifetime
 
@@ -212,3 +212,16 @@ weftlet cache coordination reclaim-compiler --root /path/to/managed-cache --oper
 ```
 
 The command takes exclusive maintenance, checks the registration against the physical workspace, and checks the recorded Docker daemon and container when applicable. Debug workspaces and legacy Gradle directories retain their existing protection.
+
+## Retire shared indexes
+
+Opting into `retireCompanionIndexes` records the physical shared reference and blob for each superseded graph before the reviewed graph removal. Once the graph is gone, preview the exact shared entries that have lost their last owner:
+
+```sh
+weftlet cache retention prepare-index-retirement --root /path/to/cache --policy ./retention.json --json > shared-retirement.json
+weftlet cache retention apply-index-retirement --root /path/to/cache --policy ./retention.json --plan ./shared-retirement.json --expect-plan PLAN_ID
+```
+
+The collector checks the saved removal journal, graph generations and references across the entire cache. A surviving raw-index generation can protect a digest too. New or replaced entries, pins and indefinite-history policies retain their protection. Unattributed orphan blobs have no removal authority. The report lists each selected physical entry and counts each selected blob once. Scheduled `maintain` also performs this pass for opted-in target policies. It can report protected overages when the target cannot be reached.
+
+An interrupted collector may leave an operation-specific directory beginning with `.retiring-`. Complete offline cache recovery, then prepare and review again. A later publication can create a new canonical entry using the same logical ID while the previous physical entry awaits cleanup.

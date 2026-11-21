@@ -1,3 +1,5 @@
+import { enableCacheCoordination } from '../src/storage/coordination/managed-root.js';
+import { withSavedScipIndex } from '../src/storage/shared-scip.js';
 import { execFile } from 'node:child_process';
 import { cp, link, mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -56,9 +58,18 @@ beforeAll(async () => {
       citation:{startLine:1,endLine:1},confidence:1 }],oml:'' },rawModelOutput:'{}'}) });`);
   await git(producer, 'init', '--quiet'); await git(producer, 'add', '.');
   await git(producer, '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', 'commit', '--quiet', '-m', 'public fixture');
-  const app = await createContextGraphApplication(configPath);
-  const hydrated = await app.hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+  const storage = join(producer,'.context-graph');
+  await mkdir(storage,{recursive:true});
+  await enableCacheCoordination(storage,{acknowledgeQuiescence:true});
+  vi.stubEnv('WEFTLET_SCIP_STORAGE','shared-v1');
+  const hydrated = await (async () => {
+    try {
+      const app = await createContextGraphApplication(configPath);
+      return await app.hydrator.hydrate({ref:'HEAD',headName:'default'});
+    } finally { vi.unstubAllEnvs(); }
+  })();
   snapshot = hydrated.snapshot;
+  expect((await withSavedScipIndex(storage,snapshot.manifest,h=>h.readFile())).length).toBeGreaterThan(0);
   expect(hydrated.semanticExtracted).toBe(1);
   expect(snapshot.facts.some(f => f.extractor.id === 'scip-symbol-extractor')).toBe(true);
   exported = await exportSnapshot(configPath, { snapshotId: snapshot.manifest.snapshotId, output: bundle, includeSemantic: true });
