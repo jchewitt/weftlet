@@ -132,11 +132,70 @@ it.runIf(process.platform === 'win32')('probes idle Gradle scratch on NTFS and r
     const active = await prepareRetention(f);
     expect(active).toMatchObject({ canApply: false, verifiedIdleGradleLocks: 3,
       issues: [{ code: 'activity-requires-coordination', path: gradleLocks[0] }] });
+    expect(active.objects.find(o => o.path === gradleLocks[0])?.reasons).toContain('lock-held');
     await expect(applyRetention(plan, plan.planId, f)).rejects.toThrow('stale or blocked');
   } finally { await writer.close(); }
   expect(await evidenceBytes(f.root)).toEqual(before);
   expect((await applyRetention(plan, plan.planId, f)).status).toBe('complete');
   for (const path of gradleLocks) expect(await readFile(join(f.root, path), 'utf8')).toBe('preserved lock bytes');
+}, 60_000);
+
+it('binds historical compiler parents to unique verified snapshots in their own profile', async () => {
+  const f = await fixture();
+  const store = new FileSnapshotStore(f.root);
+  const commit = 'a'.repeat(40), id = commit + '-graph-v2-' + 'p'.repeat(156), op = '8c622c42-2c7c-43d2-acce-dab66402f17b';
+  await store.write(snapshot(commit));
+  await store.write(snapshot(id));
+  const lockPath = (parent: string) => 'work/ontology-' + parent + '/.gradle/' + '8.10.2/checksums/checksums.lock';
+  const known = [lockPath(commit), lockPath(id + '-' + op)];
+  const missing = lockPath(commit + '-unknown');
+  const wrongProfile = 'missing-owner/' + lockPath(id);
+  for (const path of [...known, missing, wrongProfile]) await scratchFile(f.root, path);
+  const plan = await prepareRetention(f);
+  const reasons = (path: string) => plan.objects.find(o => o.path === path)?.reasons;
+  for (const path of known) {
+    expect(reasons(path)).toContain(process.platform === 'win32' ? 'verified-idle-gradle-scratch' : 'exclusive-probe-unavailable');
+    expect(await readFile(join(f.root, path), 'utf8')).toBe('preserved lock bytes');
+  }
+  expect(join(f.root, known[1]!).length).toBeGreaterThan(260);
+  expect(reasons(missing)).toContain('unverified-historical-workspace');
+  expect(reasons(wrongProfile)).toContain('unresolved-profile-owner');
+  expect(plan.canApply).toBe(false);
+  await store.write(snapshot(id + '-' + op));
+  const ambiguous = await prepareRetention(f);
+  expect(ambiguous.objects.find(o => o.path === known[1])?.reasons).toContain('ambiguous-historical-workspace');
+}, 60_000);
+
+it('keeps an explicitly attested legacy workspace recognizable when its snapshot is retired', async () => {
+  const f = await fixture(), id = 'a'.repeat(40) + '-profile';
+  await f.store.write(snapshot(id));
+  const directory = 'ontology-' + id;
+  const path = 'work/' + directory;
+  const lock = path + '/.gradle/buildOutputCleanup/buildOutputCleanup.lock';
+  await scratchFile(f.root, lock);
+  const initial = await prepareRetention(f);
+  const physicalIdentity = initial.objects.find(o => o.path === path)!.revision;
+  f.policy.historicalCompilerWorkspaces = [{ profile: '.', rootId: initial.rootId, physicalIdentity, directory,
+    owner: 'build-team', reason: 'Independently reviewed compiler history' }];
+  const modern = structuredClone(f.policy);
+  modern.historicalCompilerWorkspaces![0]!.directory = 'ontology-8c622c42-2c7c-43d2-acce-dab66402f17b';
+  await expect(prepareRetention({ ...f, policy: modern })).rejects.toThrow('only for commit-derived');
+  const approved = await prepareRetention(f);
+  if (process.platform === 'win32') {
+    expect(approved.canApply).toBe(true);
+    const result = await applyRetention(approved, approved.planId, f);
+    expect(result.deleted).toContain('snapshots/' + id + '.json');
+  } else {
+    await rm(join(f.root, 'snapshots', id + '.json'));
+  }
+  const after = await prepareRetention(f);
+  expect(after.objects.find(o => o.path === lock)?.reasons)
+    .toContain(process.platform === 'win32' ? 'verified-idle-gradle-scratch' : 'exclusive-probe-unavailable');
+  expect(await readFile(join(f.root, lock), 'utf8')).toBe('preserved lock bytes');
+  await rename(join(f.root, path), join(f.root, path + '-original'));
+  await scratchFile(f.root, lock);
+  const replaced = await prepareRetention(f);
+  expect(replaced.objects.find(o => o.path === lock)?.reasons).toContain('historical-workspace-identity-changed');
 }, 60_000);
 
 it('refuses old reports, wrong acknowledgement, changed policy, altered bytes and new references before deletion', async () => {

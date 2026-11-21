@@ -170,7 +170,7 @@ for its distinction from planned R6/2.0 archival and remote storage.
 
 ### Finish an owner’s work on a bookmark
 
-Available in the development version after 0.11.1. A scope's head is its bookmark. Record all owners who still need it in the external policy. When an owner confirms the work is finished, add their identifier to `completion.finishedOwners` and bind that decision to the observed snapshot ID. For example, this entry in `activeScopes` records that implementation is finished and validation is still using the bookmark.
+Available starting with 0.12.0. A scope's head is its bookmark. Record all owners who still need it in the external policy. When an owner confirms the work is finished, add their identifier to `completion.finishedOwners` and bind that decision to the observed snapshot ID. For example, this entry in `activeScopes` records that implementation is finished and validation is still using the bookmark.
 
 ```json
 {

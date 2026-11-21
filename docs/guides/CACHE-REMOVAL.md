@@ -93,3 +93,24 @@ the [configurable retention direction](../CACHE-RETENTION-PLAN.md#outcome-and-ev
 Starting with 0.11.1, run the same coordinated `cache retention prepare` with the existing policy on a local NTFS volume. Stop older clients and external Gradle or Docker builds before migration. Weftlet drains cooperating clients, then uses Windows PowerShell to open each recognized existing scratch file read-only with exclusive sharing and close it. A missing shell, access failure or incompatible open handle leaves the lock blocking. Prepare and apply each perform the check. The result is a point-in-time check under the cooperative maintenance gate.
 
 The check covers the checksums, execution history, file hashes and build-output cleanup locks of Gradle 8.10.2 under a compiler-created `work/ontology-<UUID>` workspace. It requires an ordinary unshared file in a profile whose repository can be identified from its declaration or verified snapshots. Conflicting repository identities leave the lock unresolved. Inspect `verifiedIdleGradleLocks`, the retained objects marked `verified-idle-gradle-scratch`, and any remaining `activity-requires-coordination` issues. Other platforms, unknown lock layouts and uncoordinated reviews retain the conservative lock check. Leave the scratch files in place. For consumer acceptance, stop after preparing the preview and review eligible bytes and protected overage.
+
+### Diagnose historical compiler workspaces
+
+Starting with 0.12.0, coordinated preparation also recognizes the two historical compiler names, `work/ontology-<snapshotId>` and `work/ontology-<snapshotId>-<operation UUIDv4>`. The parent must match a unique fully inspected snapshot in the same profile with a consistent repository and commit. A commit prefix by itself is insufficient. The existing four Gradle locations, coordinated admission, local NTFS exclusive read, file revisions, and link checks apply. Keep the existing policy for the migration preview.
+
+Read the `objects[].reasons` at the path of each `activity-requires-coordination` issue in prepared JSON. An unknown layout, absent historical snapshot, ambiguous profile or overlapping snapshot names remains blocked. `lock-held` means Windows returned a sharing or lock violation on the exclusive open. `exclusive-probe-inconclusive` covers permissions, volume and other probe failures. A changed or inaccessible revision stays blocked. Resolve reported ownership or activity before preparing again. Keep the original lock files and snapshots available for review.
+
+If an old snapshot is already absent, or the plan selects the last snapshot that proves a workspace’s ownership, an operator can preserve that knowledge in the external retention policy. Verify the compiler run and its repository using independent build records. Copy the exact `rootId` and workspace directory’s `revision` from the prepared plan. The optional `historicalCompilerWorkspaces` array accepts entries of this form:
+
+```json
+{
+  "profile": "api",
+  "directory": "ontology-a1b2c3d4-profile",
+  "rootId": "43cd2f60-2134-477a-9def-3d90c36aaf81",
+  "physicalIdentity": "12:345",
+  "owner": "build-team",
+  "reason": "Compiler run verified against the archived build record"
+}
+```
+
+Use actual identifiers and a declared profile. Keep this record if retiring the last matching snapshot. Prepare again after any reviewed policy change. The declaration is specific to one directory on one managed root. A replacement directory or conflicting snapshot ownership stays blocked. The exclusive read runs on every coordinated prepare and apply. Leave workspaces with unknown origins undeclared.
