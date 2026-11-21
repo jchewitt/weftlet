@@ -4,9 +4,15 @@ import type { CacheObject } from '../inspection/layout.js';
 import type { RetentionPolicy } from './policy.js';
 
 export interface RetentionIssue { code: string; path: string }
+interface CompletionReview {
+  profile: string; head: string; snapshotId: string; observedSnapshotId: string | null;
+  path: string | null; snapshotPaths: string[]; finishedOwners: string[]; remainingOwners: string[];
+  status: 'missing-or-invalid' | 'advanced' | 'still-owned' | 'shared-file' | 'leased' | 'eligible';
+}
 export function resolveRetentionReferences(policy: RetentionPolicy, objects: CacheObject[], now: number) {
   const issues: RetentionIssue[] = [], protectedSnapshots = new Map<string, string[]>();
   const releasedHeads = new Set<string>(), declaredHeads = new Set<string>();
+  const completions: CompletionReview[] = [], completedHeads = new Set<string>();
   const profiles = new Map(policy.profiles.map(p => [p.path, p]));
   const byPath = new Map(objects.map(o => [o.path, o]));
   const snapshots = new Map<string, CacheObject[]>();
@@ -38,9 +44,30 @@ export function resolveRetentionReferences(policy: RetentionPolicy, objects: Cac
   }
   for (const scope of policy.activeScopes) {
     const current = head(scope.profile, scope.head);
-    if (current) protect(snapshot(scope.profile, current.metadata!.snapshotId!), `active-scope:${scope.head}`);
-    if (current?.metadata?.previousSnapshotId) {
-      protect(snapshot(scope.profile, current.metadata.previousSnapshotId), `tracked-previous-generation:${scope.head}`);
+    const observed = current?.metadata?.snapshotId;
+    const target = observed ? snapshot(scope.profile, observed) : undefined;
+    const predecessor = current?.metadata?.previousSnapshotId;
+    const previous = predecessor ? snapshot(scope.profile, predecessor) : undefined;
+    if (scope.completion) {
+      const { snapshotId, finishedOwners } = scope.completion;
+      const remainingOwners = [scope.owner, ...(scope.additionalOwners ?? [])].filter(owner => !finishedOwners.includes(owner));
+      let status: CompletionReview['status'] = 'eligible';
+      if (!current || !target || (predecessor && !previous)) status = 'missing-or-invalid';
+      else if (snapshotId !== observed) status = 'advanced';
+      else if (remainingOwners.length) status = 'still-owned';
+      else if (current.linkCount !== 1) status = 'shared-file';
+      else if (current.activity !== 'unknown') status = 'leased';
+      completions.push({ profile: scope.profile, head: scope.head, snapshotId, observedSnapshotId: observed ?? null,
+        path: current?.path ?? null, snapshotPaths: [target, previous].flatMap(entry => entry ? [entry.path] : []),
+        finishedOwners, remainingOwners, status });
+      if (status === 'eligible' && current) {
+        completedHeads.add(current.path);
+        releasedHeads.add(current.path);
+      }
+    }
+    if (current && !completedHeads.has(current.path)) protect(target, `active-scope:${scope.head}`);
+    if (current && previous && !completedHeads.has(current.path)) {
+      protect(previous, `tracked-previous-generation:${scope.head}`);
     }
     if (scope.previousSnapshotId) {
       if (current?.metadata?.snapshotId === scope.previousSnapshotId) issues.push({ code: 'previous-must-differ-from-current', path: current.path });
@@ -60,6 +87,6 @@ export function resolveRetentionReferences(policy: RetentionPolicy, objects: Cac
     if (!expired) protect(snapshot(pin.profile, pin.snapshotId), `explicit-pin:${pin.owner}`);
     return { ...pin, state: expired ? 'expired' : 'protected' };
   });
-  return { issues, profiles, protectedSnapshots, releasedHeads, declaredHeads, pins };
+  return { issues, profiles, protectedSnapshots, releasedHeads, declaredHeads, pins, completedHeads, completions };
 }
 export const valid = (entry: CacheObject) => entry.kind === 'file' && entry.inspection === 'json-complete';

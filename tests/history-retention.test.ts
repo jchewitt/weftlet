@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile, utimes } from 'node:fs/promises';
+import { link, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile, utimes } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, expect, it } from 'vitest';
@@ -9,6 +9,7 @@ import { emptyRetentionPolicy, parseRetentionPolicy } from '../src/storage/reten
 import { planRetention } from '../src/storage/retention/plan.js';
 import { prepareRetention } from '../src/storage/retention/prepared.js';
 import { applyRetention } from '../src/storage/retention/apply.js';
+import { maintainRetention } from '../src/storage/retention/maintenance.js';
 import { initializeRetentionPolicy } from '../src/application/retention/operations.js';
 
 const roots: string[] = [];
@@ -195,3 +196,84 @@ it('runs target/indefinite setup through the actual CLI and reports a protected-
   const indefinite = join(f.parent, 'cli-indefinite.json'); await run('init', '--file', indefinite, '--keep-indefinitely');
   expect(JSON.parse(await readFile(indefinite, 'utf8')).history).toEqual({ mode: 'indefinite' });
 }, 120000);
+
+it('releases the exact bookmark only when the last registered owner finishes, independently of graph retention', async () => {
+  const f = await fixture(), scope = f.policy.activeScopes[0]!, store = f.stores.get('alpha')!;
+  f.policy.history = { mode: 'target', maxBytes: Number.MAX_SAFE_INTEGER };
+  f.policy.pins.push({ profile: 'alpha', snapshotId: 'current', owner: 'archive', reason: 'Replay' });
+  await store.updateHead('peer', 'current');
+  scope.additionalOwners = ['validation'];
+  scope.completion = { snapshotId: 'current', finishedOwners: ['team'] };
+  const shared = await prepareRetention(f);
+  expect(shared.completions).toMatchObject([{ status: 'still-owned', remainingOwners: ['validation'], disposition: 'retain' }]);
+  expect((await applyRetention(shared, shared.planId, f)).deleted).toEqual([]);
+
+  scope.completion.finishedOwners.push('validation');
+  const ready = await prepareRetention(f);
+  expect(ready.canApply).toBe(true);
+  expect(ready.completions).toMatchObject([{ status: 'eligible', disposition: 'candidate', remainingOwners: [],
+    snapshots: expect.arrayContaining([expect.objectContaining({ path: 'alpha/snapshots/current.json', disposition: 'retain',
+      retainedHeads: ['alpha/heads/peer.json'], reasons: expect.arrayContaining(['explicit-pin:archive']) })]) }]);
+  expect(selected(ready)).toEqual(['alpha/heads/default.json']);
+  const result = await applyRetention(ready, ready.planId, f);
+  expect(result).toMatchObject({ completionReceipt: { planId: ready.planId, bookmarks: [{ snapshotId: 'current', retired: true }] } });
+  expect(await store.headId('default')).toBeUndefined();
+  expect(await store.headId('peer')).toBe('current');
+  expect(await store.read('current')).toBeDefined();
+  expect(await store.read('previous')).toBeDefined();
+  expect((await prepareRetention(f)).canApply).toBe(false);
+});
+
+it('keeps advanced, physically shared and indefinite bookmarks and refuses stale completion plans', async () => {
+  const f = await fixture(), scope = f.policy.activeScopes[0]!, store = f.stores.get('alpha')!;
+  scope.completion = { snapshotId: 'current', finishedOwners: ['team'] };
+  f.policy.history = { mode: 'indefinite' };
+  expect((await prepareRetention(f)).completions).toMatchObject([{ disposition: 'retain' }]);
+  f.policy.history = { mode: 'target', maxBytes: 0, repositories: [{ repositoryId: 'public/alpha', mode: 'indefinite' }] };
+  expect((await prepareRetention(f)).completions).toMatchObject([{ disposition: 'retain' }]);
+  f.policy.history = { mode: 'target', maxBytes: 0 };
+  const ready = await prepareRetention(f);
+  await store.updateHead('default', 'orphan');
+  await expect(applyRetention(ready, ready.planId, f)).rejects.toThrow('stale');
+  const advanced = await prepareRetention(f);
+  expect(advanced.completions).toMatchObject([{ status: 'advanced', observedSnapshotId: 'orphan', disposition: 'retain' }]);
+  expect(selected(advanced)).not.toContain('alpha/snapshots/orphan.json');
+  scope.completion.snapshotId = 'orphan';
+  await link(join(f.root, 'alpha/heads/default.json'), join(f.root, 'alias.json'));
+  expect((await prepareRetention(f)).completions).toMatchObject([{ status: 'shared-file', disposition: 'retain' }]);
+});
+
+it('rejects unregistered or duplicate completion owners and excludes completion from recurring authority', async () => {
+  const f = await fixture(), scope = f.policy.activeScopes[0]!;
+  f.policy.history = { mode: 'target', maxBytes: 0 }; f.policy.releasedHeads = [];
+  scope.completion = { snapshotId: 'current', finishedOwners: ['unregistered'] };
+  expect(() => parseRetentionPolicy(f.policy)).toThrow('registered');
+  scope.completion.finishedOwners = ['team', 'team'];
+  expect(() => parseRetentionPolicy(f.policy)).toThrow('Duplicate');
+  scope.additionalOwners = Array.from({ length: 100 }, (_, i) => 'owner-' + i);
+  expect(() => parseRetentionPolicy(f.policy)).toThrow('100 registered owners');
+  scope.additionalOwners.pop();
+  scope.completion.finishedOwners = ['team', ...scope.additionalOwners];
+  expect(() => parseRetentionPolicy(f.policy)).not.toThrow();
+  const ready = await prepareRetention(f);
+  expect(ready.completions).toMatchObject([{ status: 'eligible', remainingOwners: [] }]);
+  await expect(maintainRetention({ ...f, expectedRoot: ready.rootId, expectedPolicy: ready.policyDigest })).rejects.toThrow('one-time');
+});
+
+it('keeps a completed bookmark in an active comparison workspace and reports the blocking lease', async () => {
+  const f = await fixture();
+  const profile = 'alpha/work/compare-live', repositoryId = 'public/active';
+  const store = new FileSnapshotStore(join(f.root, profile));
+  await store.write(snapshot('leased', repositoryId));
+  await store.updateHead('active', 'leased');
+  await writeFile(join(f.root, profile, 'lease.json'), '{"pid":123,"startedAt":"2000-01-01"}');
+  f.policy.profiles.push({ path: profile, repositoryId, owner: 'team', reason: 'Active comparison' });
+  f.policy.activeScopes.push({ profile, head: 'active', owner: 'team', reason: 'Public fixture',
+    completion: { snapshotId: 'leased', finishedOwners: ['team'] } });
+  f.policy.history = { mode: 'target', maxBytes: 0 };
+  const report = await planRetention(f);
+  expect(report.readyForReview).toBe(false);
+  expect(report.completions).toMatchObject([{ status: 'leased', disposition: 'retain' }]);
+  expect(report.issues).toContainEqual({ code: 'activity-requires-coordination', path: profile + '/lease.json' });
+  expect(await store.headId('active')).toBe('leased');
+});

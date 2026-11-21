@@ -59,7 +59,7 @@ export async function prepareRetentionOwned(options: PreparedRetentionOptions, r
     policy, policyDigest: persistedJsonDigest(policy), limits: { maxEntries: inventory.maxEntries, maxBytes: inventory.maxInspectionBytesPerFile },
     stateDigest: persistedJsonDigest(inventory.objects), canApply: review.issues.length === 0,
     issues: review.issues.sort((a, b) => a.path.localeCompare(b.path, 'en') || a.code.localeCompare(b.code, 'en')),
-    verifiedIdleGradleLocks: idleScratch.size, pins: review.pins, objects: review.objects, history: review.history,
+    verifiedIdleGradleLocks: idleScratch.size, ...(review.completions.length ? { completions: review.completions } : {}), pins: review.pins, objects: review.objects, history: review.history,
     totals: { candidateFiles: candidates.length, candidateLogicalBytes: candidates.reduce((n, c) => n + c.logicalBytes, 0) },
     limitations: ['Apply rechecks this exact plan, policy and evidence under exclusive coordination; this is not automatic retention.',
       'Eligible files are reviewed unshared snapshots, explicitly retired heads and opted-in verified companion indexes. Unattributed indexes, semantic artifacts and receipts remain.',
