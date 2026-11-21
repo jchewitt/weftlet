@@ -32,6 +32,12 @@ The consumer reported 14.58 GB of duplicate logical index data among indexes its
 3. **Migrate and retire safely.** Preview which authenticated legacy pairs can share bytes and which remain unattributed. Coordinate imports, active reads, builds and collection under the managed root. Verify each new reference before retiring its old copy in a reviewed operation. Derive reachability from durable references or a recoverable index. Exercise a crash after payload installation, after reference publication and during last-reference removal. Count the blob once and report per-version reference overhead. Compare allocated bytes before and after on Windows and Linux.
 4. **Qualify delivery and rollback.** Today's snapshot export copies the graph and optionally semantic artifacts; saved impact queries use hydrated facts. Test that existing bundles still round-trip without a raw SCIP index. If a future exact-replay bundle includes indexes, verify their hashes and references on import. Keep a path back to legacy files for clients that need the old layout and test historical queries with the latest head moved. Select a production default only after these checks and a same-cache measurement.
 
+## Opt-in publication implementation
+
+The first two steps now have a production writer and resolver. Each ordinary hydration on a coordinated cache can install a verified SHA-256 blob and bind it to the validated graph before advancing the head. Existing per-generation files remain readable. The new resolver holds the same read-only file handle through verification and consumption. Clean comparisons use independent, operation-owned files. [Configuration and usage](../guides/CACHE-HISTORY.md#share-index-bytes-across-new-generations)
+
+The next step is recoverable migration and retirement. Inventory currently counts shared files toward root usage and retains them as unknown objects. The consumer's duplicate-byte estimate describes an opportunity for migration. Actual reclaimed bytes require measuring a reviewed migration on that cache.
+
 ## Reproduce
 
 Run the study from a built checkout with frozen dependencies. Set `TMPDIR` to select the filesystem for both layouts.

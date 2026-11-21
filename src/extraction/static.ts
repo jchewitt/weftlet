@@ -1,5 +1,7 @@
+import { safeTransferPath, transferDirectory } from '../storage/transfer-files.js';
 import { coordinateMethods } from '../storage/coordination/managed-access.js';
 // Modified for standalone extraction; see docs/extraction-manifest.json.
+import { publishScipReference, sharedScipRoot, storeScipBlob, verifyExistingScipReference } from '../storage/shared-scip.js';
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { copyFile, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -7,7 +9,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
-import { repositoryFileNode, type ExtractionContext, type FactExtractor, type GraphFact, type GraphNode } from "@weftlet/core";
+import { repositoryFileNode, type SnapshotManifest, type ExtractionContext, type FactExtractor, type GraphFact, type GraphNode } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { assertScipSourceProject, assertSourceProjectInvocation } from '../configuration/scip-project.js';
 import { prepareScipSourceProject } from './scip-project.js';
@@ -23,22 +25,42 @@ export type { ScipIndexResult } from './scip-runtime.js';
 
 export interface StaticIndexer {
   index(context: ExtractionContext): Promise<ScipIndexResult>;
+  checkReady?(): Promise<void>;
+  publishReference?(manifest: SnapshotManifest): Promise<void>;
 }
 
 export class ScipTypeScriptIndexer implements StaticIndexer {
   constructor(
     private readonly config: ContextGraphConfig['scip'],
     private readonly storageRoot: string,
-  ) { return coordinateMethods(this, [storageRoot], ['index'], ['index']); }
+    private readonly storageLayout = 'per-snapshot',
+  ) { return coordinateMethods(this, [storageRoot], ['index', 'publishReference'], ['index', 'publishReference']); }
+
+  async checkReady() {
+    if (this.storageLayout === 'shared-v1') {
+      const owner = await sharedScipRoot(this.storageRoot);
+      await safeTransferPath(join(owner, 'scip-blobs-v1'), true, true);
+      await safeTransferPath(join(this.storageRoot, 'scip', 'refs-v1'), true, true);
+    }
+    else if (this.storageLayout !== 'per-snapshot') throw Error('WEFTLET_SCIP_STORAGE must be per-snapshot or shared-v1');
+  }
+
+  async publishReference(manifest: SnapshotManifest) {
+    if (this.storageLayout === 'shared-v1') await publishScipReference(this.storageRoot, manifest);
+    else await verifyExistingScipReference(this.storageRoot, manifest);
+  }
 
   async index(context: ExtractionContext): Promise<ScipIndexResult> {
+    await this.checkReady();
     if (this.config.sourceProject !== undefined) {
       assertScipSourceProject(this.config.sourceProject);
       assertSourceProjectInvocation(this.config.command, this.config.args);
     }
     const require = createRequire(import.meta.url);
     const destination = join(this.storageRoot, 'scip', `${physicalArtifactKey(context.snapshotId)}.scip`);
-    await mkdir(join(this.storageRoot, 'scip'), { recursive: true });
+    const scipDirectory = join(this.storageRoot, 'scip');
+    if (this.storageLayout === 'shared-v1') await transferDirectory(scipDirectory);
+    else await mkdir(scipDirectory, { recursive: true });
     const temporary = temporaryArtifactPath(destination);
     const command =
       this.config.command === 'bundled-scip-typescript' ? process.execPath : this.config.command;
@@ -51,6 +73,7 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
             temporary,
           ]
         : this.config.args;
+    let bytes: Buffer, digest: string, path: string;
     try {
       await withCommittedTree(context.repositoryRoot, context.commitSha, async (worktreeRoot) => {
         const project = this.config.sourceProject ? await prepareScipSourceProject(worktreeRoot, this.config.sourceProject,
@@ -69,16 +92,21 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
         // Store the normalized artifact itself so its digest still authenticates its bytes.
         await writeFile(temporary, normalizeScipCheckout(await readFile(temporary), worktreeRoot));
       });
-      await rename(temporary, destination);
+      bytes = await readFile(temporary);
+      digest = sha256(bytes);
+      if (this.storageLayout === 'shared-v1') path = await storeScipBlob(this.storageRoot, digest, bytes);
+      else {
+        await rename(temporary, destination);
+        path = destination;
+      }
     } finally {
       await rm(temporary, { force: true });
     }
-    const bytes = await readFile(destination);
     const indexedPaths = [...new Set(loadScipRuntime().scip.Index.deserializeBinary(bytes).documents
       .map(document => document.relative_path.replaceAll('\\', '/')))].sort();
     return {
-      path: destination,
-      digest: sha256(bytes),
+      path,
+      digest,
       mode: 'full',
       version: this.config.version,
       indexedPaths,
