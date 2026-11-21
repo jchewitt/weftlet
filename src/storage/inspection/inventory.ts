@@ -28,10 +28,14 @@ function group(entries: CacheObject[], key: (entry: CacheObject) => string) {
   for (const entry of entries) { const name = key(entry); const items = groups.get(name) ?? []; items.push(entry); groups.set(name, items); }
   return Object.fromEntries([...groups].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([name, items]) => [name, total(items)]));
 }
-export async function inventoryCache(options: InventoryOptions) {
+export function inventoryLimits(options: Pick<InventoryOptions, 'maxEntries' | 'maxBytes'>) {
   const maxEntries = options.maxEntries ?? 100_000, maxBytes = options.maxBytes ?? 8 * 1024 ** 3;
   if (!Number.isSafeInteger(maxEntries) || maxEntries < 1 || maxEntries > 1_000_000) throw Error('maxEntries must be between 1 and 1000000');
   if (!Number.isSafeInteger(maxBytes) || maxBytes < 1) throw Error('maxBytes must be a positive safe integer');
+  return { maxEntries, maxBytes };
+}
+export async function inventoryCache(options: InventoryOptions) {
+  const { maxEntries, maxBytes } = inventoryLimits(options);
   if (!options.roots.length || options.roots.length > 16) throw Error('Choose between 1 and 16 cache roots');
   const roots = inventoryRoots(options.roots), startedAt = new Date().toISOString();
   const walked = await walkCache(roots, maxEntries, options.signal);

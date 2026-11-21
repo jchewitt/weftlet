@@ -26,13 +26,15 @@ function blobDirectory(owner: string, digest: string) {
   return join(owner, 'scip-blobs-v1', digest);
 }
 
-function referenceDirectory(profile: string, manifest: SnapshotManifest) {
+type ScipGeneration = Pick<SnapshotManifest, 'repositoryId' | 'snapshotId' | 'commitSha' | 'contentDigest' | 'scipIndexDigest'>;
+
+function referenceDirectory(profile: string, manifest: ScipGeneration) {
   // Apply the same logical-ID bounds and containment rules as the snapshot store.
   const key = basename(snapshotPath(profile, manifest.snapshotId), '.json');
   return join(profile, 'scip', 'refs-v1', key + '.ref');
 }
 
-function reference(manifest: SnapshotManifest) {
+function reference(manifest: ScipGeneration) {
   const { repositoryId, snapshotId, commitSha, contentDigest, scipIndexDigest } = manifest;
   return { schemaVersion: 1, repositoryId, snapshotId, commitSha, contentDigest, scipIndexDigest };
 }
@@ -64,7 +66,7 @@ async function verifyDigest(path: string, digest: string) {
   if (result.sha256 !== digest) throw Error('SCIP index integrity mismatch');
 }
 
-async function verifyReference(path: string, manifest: SnapshotManifest) {
+async function verifyReference(path: string, manifest: ScipGeneration) {
   await safeTransferPath(path);
   if (!isDeepStrictEqual(await inspectSmallJson(path, 64 * 1024, true), reference(manifest))) {
     throw Error('Shared SCIP reference disagrees with the snapshot manifest');
@@ -81,6 +83,25 @@ export async function publishScipReference(profile: string, manifest: SnapshotMa
   await verifyDigest(blob, manifest.scipIndexDigest);
   await install(referenceDirectory(profile, manifest), 'reference.json', JSON.stringify(reference(manifest)),
     path => verifyReference(path, manifest));
+}
+
+/** Inspect immutable destinations using the exact layout and encoding that publication uses. */
+export async function previewScipReference(profile: string, generation: ScipGeneration) {
+  const directory = referenceDirectory(profile, generation);
+  await safeTransferPath(directory, true, true);
+  if (!await exists(directory)) return { exists: false, additionalBytes: Buffer.byteLength(JSON.stringify(reference(generation))) };
+  await verifyReference(join(directory, 'reference.json'), generation);
+  return { exists: true, additionalBytes: 0 };
+}
+
+export async function previewScipBlob(root: string, digest: string, maxBytes: number, signal?: AbortSignal) {
+  const directory = blobDirectory(root, digest);
+  await safeTransferPath(directory, true, true);
+  if (!await exists(directory)) return false;
+  const path = join(directory, 'index.scip');
+  await safeTransferPath(path);
+  if ((await inspectFileDigest(path, maxBytes, signal)).sha256 !== digest) throw Error('SCIP index integrity mismatch');
+  return true;
 }
 
 async function referencedScipPath(profile: string, manifest: SnapshotManifest) {

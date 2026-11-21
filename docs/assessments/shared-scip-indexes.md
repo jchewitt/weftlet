@@ -36,7 +36,7 @@ The consumer reported 14.58 GB of duplicate logical index data among indexes its
 
 The first two steps now have a production writer and resolver. Each ordinary hydration on a coordinated cache can install a verified SHA-256 blob and bind it to the validated graph before advancing the head. Existing per-generation files remain readable. The new resolver holds the same read-only file handle through verification and consumption. Clean comparisons use independent, operation-owned files. [Configuration and usage](../guides/CACHE-HISTORY.md#share-index-bytes-across-new-generations)
 
-The next step is recoverable migration and retirement. Inventory currently counts shared files toward root usage and retains them as unknown objects. The consumer's duplicate-byte estimate describes an opportunity for migration. Actual reclaimed bytes require measuring a reviewed migration on that cache.
+The [legacy index preview](../guides/CACHE-HISTORY.md#preview-sharing-for-existing-indexes) now measures verified groups and exact reference overhead on a coordinated cache. Recoverable migration and last-reference retirement follow. Inventory currently counts shared files toward root usage and retains them as unknown objects. The consumer's duplicate-byte estimate describes an opportunity for migration. Actual reclaimed bytes require measuring a reviewed migration on that cache.
 
 ## Reproduce
 

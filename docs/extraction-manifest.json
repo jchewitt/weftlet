@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "ee570d5fcb79e6699e01d8797445e58d24e0dabd9e0bee71f2eeeb154f0432db"
+      "destinationSha256": "dcfe4243d43315371297f2e880e4ff21d90d33d3e6ed3d130068ee1cd43ed010"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/scip-migration-preview.md",
     ".changeset/shared-scip-publication.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
@@ -1316,6 +1317,8 @@
     "src/storage/retention/history-accounting.ts",
     "src/storage/retention/history-policy.ts",
     "src/storage/retention/history-selection.ts",
+    "src/storage/retention/index-sharing-inventory.ts",
+    "src/storage/retention/index-sharing-preview.ts",
     "src/storage/retention/journal.ts",
     "src/storage/retention/maintenance.ts",
     "src/storage/retention/owned-removal.ts",
@@ -1422,6 +1425,7 @@
     "tests/routing.test.ts",
     "tests/runtime.test.ts",
     "tests/same-group-retrieval.test.ts",
+    "tests/scip-migration-preview.test.ts",
     "tests/semantic-cache-reuse.test.ts",
     "tests/semantic-identity.test.ts",
     "tests/shacl-validation.test.ts",

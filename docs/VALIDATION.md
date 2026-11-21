@@ -1,5 +1,11 @@
 # Validation evidence
 
+## Legacy SCIP sharing preview after 0.12.0
+
+The candidate based on `2c713d3` adds the read-only `cache retention preview-index-sharing` command. A Linux fixture with three saved generations across two declared repositories verified both legacy filename forms, a pinned generation and an active head. The measured savings increased by exactly one index payload plus one reference file when those destinations already existed. A singleton group reported the cost of its new reference. The CLI and programmatic report agreed. The graph bytes, head and legacy indexes remained readable.
+
+Focused checks exercised ambiguous names, a mismatched index, hard links, undeclared profiles, an orphan, invalid shared destinations, incomplete scans and nested ownership. Run `pnpm exec vitest run tests/scip-migration-preview.test.ts tests/companion-index-retention.test.ts tests/cache-inspection.test.ts`. These fixtures exercise file identity and accounting with public bytes. Measuring authenticated generations and allocated space on the consumer cache remains open. [Operator guide](guides/CACHE-HISTORY.md#preview-sharing-for-existing-indexes)
+
 ## Shared index publication after 0.12.0
 
 The opt-in implementation starts from main `ab404dd`. On Linux the public TypeScript fixture ran real SCIP and strict graph validation. Three committed generations produced three references and two distinct index payloads. The unchanged repeat reused semantic extraction. A documentation-only edit shared the original index, and deleting a function changed the index while the first generation retained its definition, citations and snapshot bytes. Independent comparison removed its temporary output.
