@@ -13,6 +13,7 @@ import {
   referenceDir,
   witnessDirectory,
   type SharedEntry,
+  type WitnessJournalCache,
 } from './shared-index-witness.js';
 import { prepareRetentionOwned, withRetentionMaintenance, type PreparedRetentionOptions } from './prepared.js';
 
@@ -63,7 +64,7 @@ async function prepare(options: PreparedRetentionOptions, root: string, rootId: 
   const actualRefs = new Map<string, string>();
   if (!base.policy.retireCompanionIndexes) issues.push({ path: '.', code: 'companion-policy-required' });
   const limit = base.limits.maxBytes,
-    journals = new Map();
+    journals: WitnessJournalCache = new Map();
   for (const o of inventory) {
     if (
       o.path
@@ -224,7 +225,7 @@ async function finish(
   options: PreparedRetentionOptions,
   scope: CacheMaintenanceScope,
 ) {
-  const journals = new Map();
+  const journals: WitnessJournalCache = new Map();
   for (const entry of current.entries) {
     options.signal?.throwIfAborted();
     if (persistedJsonDigest((await options.readPolicy?.()) ?? options.policy) !== current.policyDigest)

@@ -119,8 +119,8 @@ export async function witnessRemoval(
 }
 
 /** A certificate only authorizes later review after its original snapshot has an actual journaled removal intent. */
-type Journal = Awaited<ReturnType<typeof readSnapshotIntents>>;
-export async function readWitness(root: string, rootId: string, path: string, journals = new Map<string, Journal>()) {
+export type WitnessJournalCache = Map<string, { candidates: Map<string, { sha256: string }>; witnesses: Map<string, string> }>;
+export async function readWitness(root: string, rootId: string, path: string, journals: WitnessJournalCache = new Map()) {
   const w = (await inspectSmallJson(join(root, path), 16_384, true)) as RetirementWitness;
   if (
     !w ||
