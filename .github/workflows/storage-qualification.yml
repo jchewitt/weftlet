@@ -1,6 +1,11 @@
 name: Storage qualification
 on:
   workflow_dispatch:
+  push:
+    branches: [main, 'study/**']
+    paths:
+      - '.github/workflows/storage-qualification.yml'
+      - 'scripts/storage-study/**'
   pull_request:
     paths:
       - '.github/workflows/storage-qualification.yml'
