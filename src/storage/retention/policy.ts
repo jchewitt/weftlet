@@ -13,6 +13,8 @@ export interface RetentionPolicy {
   schemaVersion: 1;
   history?: HistoryPolicy;
   retireCompanionIndexes?: boolean;
+  historicalCompilerWorkspaces?: { profile: string; directory: string; rootId: string; physicalIdentity: string;
+    owner: string; reason: string }[];
   profiles: ProfileDeclaration[];
   activeScopes: ScopeDeclaration[];
   releasedHeads: ReleasedHead[];
@@ -38,7 +40,7 @@ function declaration(value: unknown, allowed: string[]): asserts value is Record
 }
 export function parseRetentionPolicy(input: unknown): RetentionPolicy {
   if (!object(input) || input.schemaVersion !== 1) throw Error('Expected retention policy schemaVersion 1');
-  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins', 'history', 'retireCompanionIndexes']);
+  keys(input, ['schemaVersion', 'profiles', 'activeScopes', 'releasedHeads', 'pins', 'history', 'retireCompanionIndexes', 'historicalCompilerWorkspaces']);
   if (input.retireCompanionIndexes !== undefined && typeof input.retireCompanionIndexes !== 'boolean') throw Error('retireCompanionIndexes must be boolean');
   for (const name of ['profiles', 'activeScopes', 'releasedHeads', 'pins']) {
     if (!Array.isArray(input[name]) || input[name].length > 5000) throw Error('Retention policy arrays must contain at most 5000 declarations');
@@ -49,6 +51,7 @@ export function parseRetentionPolicy(input: unknown): RetentionPolicy {
     if (profileAliases.has(p.path.toLowerCase())) throw Error('Duplicate retention profile');
     profileAliases.add(p.path.toLowerCase()); profiles.add(p.path);
   }
+  if (input.historicalCompilerWorkspaces !== undefined) validateWorkspaces(input.historicalCompilerWorkspaces, profiles);
   if (input.history !== undefined) parseHistoryPolicy(input.history, new Set((input.profiles as ProfileDeclaration[]).map(p => p.repositoryId)));
   const heads = new Set<string>(), pins = new Set<string>();
   for (const name of ['activeScopes', 'releasedHeads', 'pins'] as const) {
@@ -56,6 +59,26 @@ export function parseRetentionPolicy(input: unknown): RetentionPolicy {
   }
   return input as unknown as RetentionPolicy;
 }
+function validateWorkspaces(value: unknown, profiles: Set<string>) {
+  if (!Array.isArray(value) || value.length > 5000) throw Error('Expected at most 5000 historical compiler workspaces');
+  const names = new Set<string>();
+  for (const item of value) {
+    declaration(item, ['profile', 'directory', 'rootId', 'physicalIdentity', 'owner', 'reason']);
+    profile(item.profile);
+    if (!profiles.has(item.profile)) throw Error('Historical compiler workspace requires a declared profile');
+    if (typeof item.directory !== 'string' || item.directory.length > 255 ||
+        !/^ontology-[0-9a-f]{7,64}(?:-[A-Za-z0-9._-]+)?$/.test(item.directory)) throw Error('Expected an exact historical compiler directory name');
+    if (/^ontology-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(item.directory)) {
+      throw Error('Use historical declarations only for commit-derived directories');
+    }
+    if (typeof item.rootId !== 'string' || !/^[a-f0-9-]{36}$/.test(item.rootId) ||
+        typeof item.physicalIdentity !== 'string' || !/^\d+:\d+$/.test(item.physicalIdentity)) throw Error('Expected a managed root and physical directory identity');
+    const name = item.profile + '/' + item.directory.toLowerCase();
+    if (names.has(name)) throw Error('Duplicate historical compiler directory');
+    names.add(name);
+  }
+}
+
 function ownerList(value: unknown): string[] {
   if (!Array.isArray(value) || !value.length || value.length > 100) throw Error('Expected 1–100 owner identifiers');
   for (const owner of value) text(owner, 200);
