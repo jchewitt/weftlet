@@ -1,4 +1,4 @@
-import { lstat, mkdir, readFile, readdir, rm, unlink, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, readdir, realpath, rm, unlink, writeFile } from 'node:fs/promises';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
@@ -31,7 +31,7 @@ export async function createCompilerScratch(storage: string, backend: Backend) {
   const identity = await directoryIdentity(root);
   const debug = process.env.WEFTLET_KEEP_COMPILER_SCRATCH === '1';
   const owner = { version: 1, operationId, backend, directoryIdentity: identity, rootId: managedOwner?.rootId ?? null, daemon, debug,
-    path: managed ? relative(managed, root).split(sep).join('/') : null };
+    path: managed ? relative(managed, await realpath(root)).split(sep).join('/') : null };
   const bytes = JSON.stringify(owner);
   const registration = managed && join(managed, registry, operationId + '.json');
   let registered = false;
