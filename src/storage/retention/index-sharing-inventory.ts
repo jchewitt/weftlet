@@ -20,6 +20,7 @@ export async function indexSharingInventory(root: string, options: RetentionPlan
     }
     options.onProgress?.(i + 1, objects.length);
   }
+  options.signal?.throwIfAborted();
   const danglingHeads = linkInventory(objects);
   const complete = !limited && !issues.length && !missingRoots.length &&
     !objects.some(o => ['limited', 'unreadable', 'changed'].includes(o.inspection));

@@ -102,6 +102,12 @@ it('keeps ambiguous, corrupt, undeclared, orphaned and hard-linked inputs out of
 
 it('requires the selected coordinated owner and a fully identified generation', async () => {
   const f = await fixture();
+  await mkdir(join(f.root, 'a'));
+  await mkdir(join(f.root, 'b'));
+  const abort = new AbortController();
+  await expect(previewIndexSharing({ ...f, signal: abort.signal, onProgress: (done, total) => {
+    if (done === total) abort.abort();
+  } })).rejects.toMatchObject({ name: 'AbortError' });
   const a = await f.add('a', 'has-invalid-commit');
   await f.add('b', 'good');
   const graph = JSON.parse(await readFile(a.graph, 'utf8'));
