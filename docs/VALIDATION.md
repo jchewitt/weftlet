@@ -1,5 +1,18 @@
 # Validation evidence
 
+## 0.11.1 release verification, November 20, 2026
+
+The [release workflow](https://github.com/jchewitt/weftlet/actions/runs/44850826227) published both packages from `af8164510df9c2441065a19a66c09d3db4f30e68`. Both GitHub tags point to that commit. The downloaded npm tarballs matched the prepared GitHub artifacts byte for byte.
+
+| Package | Download bytes | SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.11.1` | 22,603 | `sha512-WXjcjC3LNSUmjVzuWt9b6+1+BbsBW+tgDy/WbS7OaEd5ZmL1kC68nT/6TJG3yHc9qpftaFXktYd16ijQuZqp2A==` |
+| `@weftlet/toolkit@0.11.1` | 999,173 | `sha512-PnyUPjRlhKmNvOuXfFocOlyhHhRiaKXPyVQyqb+qgxcEILfDed/xIsNUn5T8wn33V97UvVWaFnTxE6GvNJ14Ww==` |
+
+The [native Windows regression](https://github.com/jchewitt/weftlet/actions/runs/44847404224/job/136670408688) passed on local NTFS. Four idle Gradle scratch files stayed retained. A real write-capable handle blocked both a new preview and application of the previous plan. Closing the handle allowed the original plan to run on the disposable fixture and preserved the scratch contents. A separate fresh Linux consumer installed both published versions and prepared an empty-cache preview with planner v4.
+
+The source workflow dispatched the [0.11.1 documentation update](https://github.com/jchewitt/weftlet-docs/actions/runs/44852354283). The private legacy-cache acceptance step remains a preview on the same Windows cache with the existing policy. No consumer removal is required.
+
 ## 0.11.1 Gradle scratch qualification
 
 The patch candidate starts at `2a4d1ab`. The Windows regression uses four ordinary Gradle files, holds a real write-capable handle open during a second preview and apply attempt, then checks retention of the scratch bytes after the handle closes. Separate controls cover the observational planner, unknown ownership, hard links and unrecognized names. The private 181 GB cache still requires a preview using the published patch and its existing policy.
