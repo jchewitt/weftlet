@@ -191,7 +191,7 @@ and retention-policy application. Do not collapse all six tasks into one release
 - Git can reconstruct source, but not necessarily identical model artifacts or an
   available old tool/model environment. Exact-evidence archives are opt-in.
 - `cache usage` and `cache profile` are implemented R2 candidate commands.
-  `cache prune --dry-run`, `cache pin/unpin` and archive commands remain proposals.
+  `cache prune --dry-run`, `cache pin/unpin` remain proposals. Directory archive and restore commands are documented in the [archive guide](guides/CACHE-ARCHIVE.md).
   Do not document these future commands as available before implementation.
 
 ## Existing-cache upgrades
@@ -222,8 +222,8 @@ actual disk exhaustion remain separate operational concerns.
 | Operation | Supported use and next work |
 | --- | --- |
 | Choose workspace storage | With `storageScope: "workspace"`, `storagePath` resolves against the repository root. An absolute path selects another local volume. Hydration writes directly under that resolved directory. Existing generations keep their original location and format. |
-| Relocate the user cache | The default user-cache base is `~/.cache/context-graph`. Its profile key depends on the configuration and checkout path. Plan a root override shared by CLI, MCP and other clients that keeps those identity inputs stable. An explicit `--root` on a retention command selects an inspection or maintenance target only. |
-| Move cold generations | R6 will need a dry run that lists the exact generations, hashes, required semantic artifacts, index and references. Stage a copy on the destination, verify complete bytes, exercise a restore and query by historical ID, and require an explicit cutover. Keep the source usable if verification fails or a client still holds a lease. Release local bytes only after a separately reviewed eviction. |
+| Relocate the user cache | The default user-cache base is `~/.cache/context-graph`. Its profile key depends on the configuration and checkout path. Set the absolute WEFTLET_USER_CACHE_ROOT environment variable for each client to retain these identity inputs. An explicit `--root` on a retention command selects an inspection or maintenance target only. |
+| Move cold generations | The [private archive procedure](guides/CACHE-ARCHIVE.md) lists the exact generations, hashes, required semantic artifacts, index and references. Stage a copy on the destination, verify complete bytes, exercise a restore and query by historical ID, and require an explicit cutover. Keep the source usable if verification fails or a client still holds a lease. Release local bytes only after a separately reviewed eviction. |
 | End a finished task’s ownership | Follow the [bookmark completion procedure](guides/CACHE-RETENTION.md#finish-an-owners-work-on-a-bookmark). Retiring a bookmark depends on its exact generation and remaining owners. A replay pin or another head can still protect its snapshot. |
 
 The [consumer’s external-volume recovery](VALIDATION.md#consumer-external-volume-and-cold-recovery-observation) supplies field evidence for R6. Private archive compression and deduplication ratios apply to the measured corpus. Production index sharing has its own [allocation and query study](assessments/shared-scip-indexes.md).
@@ -240,9 +240,7 @@ identical historical model outputs. Restored evidence remains historical.
 
 The existing S6 export/import is a verified snapshot-transfer mechanism, not an
 automated backup service or a promise of complete semantic-artifact coverage.
-Follow its manifest and explicit artifact-selection limits. R6 archive/restore
-and the 2.0 remote/database storage work can supply managed long-term retention
-later; a remote query backend alone is not a backup or an archival durability
+Follow its manifest and explicit artifact-selection limits. Directory archives support explicit verified recovery today. The 2.0 remote/database storage work can supply managed long-term retention later; a remote query backend alone is not a backup or an archival durability
 contract. No cloud destination, upload or archival automation is enabled here.
 
 ## Regression matrix
