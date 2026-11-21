@@ -14,7 +14,7 @@ export async function inspectCacheObject(entry: CacheObject, verify: boolean, ma
     if ([now.dev, now.ino, now.size, now.mtimeNs, now.ctimeNs, now.nlink].join(':') !== entry.revision) {
       throw new InspectionError('changed', 'File changed since enumeration');
     }
-    await readMetadata(entry, path, verify, maxBytes, signal);
+    return await readMetadata(entry, path, verify, maxBytes, signal);
   } catch (error) {
     signal?.throwIfAborted();
     entry.inspection = error instanceof InspectionError ? ({ changed: 'changed', limit: 'limited', 'invalid-json': 'invalid', unsafe: 'unreadable' } as const)[error.code] : 'unreadable';
@@ -53,6 +53,7 @@ async function readMetadata(entry: CacheObject, path: string, verify: boolean, m
       throw new InspectionError('invalid-json', 'Snapshot filename and manifest identity disagree');
     }
     entry.inspection = result.jsonComplete ? 'json-complete' : 'metadata-only'; entry.sha256 = result.sha256;
+    if (result.jsonComplete && typeof result.manifest?.contentDigest === 'string') return result.manifest.contentDigest;
   } else if (['head', 'comparison-receipt', 'lease-marker'].includes(entry.category)) {
     const { value, sha256 } = await inspectSmallJsonRecord(path, Math.min(maxBytes, 1024 * 1024), true);
     if (!object(value)) throw new InspectionError('invalid-json', 'Expected metadata object');

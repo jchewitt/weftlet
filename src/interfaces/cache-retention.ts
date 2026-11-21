@@ -1,11 +1,14 @@
+import { previewIndexSharing } from '../storage/retention/index-sharing-preview.js';
+import { readRetentionPolicy } from '../storage/retention/policy.js';
 import { recurringRetentionOperation } from '../application/retention/maintenance.js';
 import { initializeRetentionPolicy, retentionOperation, coordinatedRetentionOperation } from '../application/retention/operations.js';
 
-const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json] | maintain --root <managed-cache> --policy <file> --expect-root <id> --expect-policy <digest> [--json]. Apply removes reviewed history; maintain permanently removes history under the reviewed policy on each invocation.';
+const usage = 'cache retention init --file <policy.json> [--target-bytes <n>|--keep-indefinitely] | preview-index-sharing --root <managed-cache> --policy <file> [--json] | plan --root <cache> --policy <policy.json> [--json] | check --root <cache> --policy <policy.json> --plan <saved-plan.json> [--json] | prepare --root <managed-cache> --policy <file> [--json] | apply --root <managed-cache> --policy <file> --plan <prepared.json> --expect-plan <id> [--json] | maintain --root <managed-cache> --policy <file> --expect-root <id> --expect-policy <digest> [--json]. Apply removes reviewed history; maintain permanently removes history under the reviewed policy on each invocation.';
 const scanFlags = ['--max-entries', '--max-bytes'];
 const rootPolicy = ['--root', '--policy'];
 const operationFlags = {
   init: { required: ['--file'], optional: ['--target-bytes'] },
+  'preview-index-sharing': { required: rootPolicy, optional: scanFlags },
   plan: { required: rootPolicy, optional: scanFlags },
   check: { required: [...rootPolicy, '--plan'], optional: scanFlags },
   prepare: { required: rootPolicy, optional: [...scanFlags, '--wait-ms'] },
@@ -45,6 +48,15 @@ export async function runCacheRetention(args: readonly string[]) {
       maxEntries: integer('--max-entries'), maxBytes: integer('--max-bytes'), timeoutMs: integer('--wait-ms'), signal: controller.signal,
       onProgress(done: number, total: number) { if (!quiet && Date.now() - lastProgress >= 5000) { lastProgress = Date.now(); process.stderr.write(`[weftlet] retention inventory ${done}/${total} entries\n`); } },
     };
+    if (operation === 'preview-index-sharing') {
+      const report = await previewIndexSharing({ ...options, policy: await readRetentionPolicy(options.policyPath) });
+      process.stdout.write(json ? JSON.stringify(report, null, 2) + '\n' :
+        `Verified ${report.verifiedGenerations} of ${report.observedLegacyIndexes} legacy indexes. ` +
+        `Projected savings across positive groups: ${report.positiveGroupLogicalSavings ?? 'unknown'} logical bytes.\n` +
+        'Use --json for groups, exclusions, head references and pins. This preview preserves cache evidence.\n');
+      if (!report.complete) process.exitCode = 1;
+      return true;
+    }
     const result = operation === 'init' ? await initializeRetentionPolicy(values.get('--file')!, { targetBytes: integer('--target-bytes'), keepIndefinitely }) :
       operation === 'maintain' ? await recurringRetentionOperation({ ...options, expectedRoot: values.get('--expect-root')!, expectedPolicy: values.get('--expect-policy')! }) :
       operation === 'prepare' || operation === 'apply' ? await coordinatedRetentionOperation(operation, options) : await retentionOperation(operation, options);

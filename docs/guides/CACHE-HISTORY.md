@@ -161,4 +161,20 @@ const bytes = await withSavedScipIndex(profileDirectory, snapshot.manifest, inde
 
 The resolver verifies the reference and content digest. It also supports both previous per-snapshot filename forms. A damaged shared reference raises an error even when a legacy file remains. The resolver owns and closes the handle after the callback finishes. For streaming, consume the stream inside the callback with `autoClose: false`.
 
-This option saves space on new writes. Existing indexes stay in place. Cache inspection counts shared blobs and reference files toward root usage as unknown objects, and retention preserves them, including blobs left by failed builds. Reviewed migration, collection after the last reference, and measurement on existing consumer caches are subsequent milestones.
+This option saves space on new writes. Existing indexes stay in place. Cache inspection counts shared blobs and reference files toward root usage as unknown objects, and retention preserves them, including blobs left by failed builds. You can preview the opportunity on an existing cache as described below.
+
+## Preview sharing for existing indexes
+
+Available on the development branch after 0.12.0. Select the exact coordinated root and the retention policy that declares its profiles and repository IDs. Run this with the candidate CLI. Save the report outside the cache.
+
+```sh
+pnpm exec weftlet cache retention preview-index-sharing --root /path/to/cache --policy ./retention.json --json > index-sharing.json
+```
+
+The preview keeps all listed graph generations, including current, previous and pinned ones. It reads complete saved snapshots in declared profiles, hashes legacy index files, and accepts a pair when exactly one same-profile snapshot names that index and authenticates its bytes. On a large cache, allow time for a full sequential read. Use `--max-entries` or `--max-bytes` to bound the entry count or per-file inspection. Progress goes to stderr.
+
+Each group has one SHA-256 digest. `legacyBytes` counts its verified old copies. `newBlobBytes` charges one copy when the shared blob is absent. `newReferenceBytes` charges each missing generation reference at its actual serialized size. The preview verifies existing shared destinations before pricing reuse. For example, three 10 MiB legacy indexes with the same digest could replace 30 MiB with one 10 MiB blob and three small references. A unique index can cost more after adding its reference.
+
+`positiveGroupLogicalSavings` adds the groups that would actually shrink. A value of `null` means an incomplete scan or unresolved inventory issue prevented an overall estimate. Inspect `excluded` for specific paths with ambiguous ownership, digest mismatches or unsafe files. The report includes local paths, repository IDs, head references and protection reasons. Treat it as local operational data.
+
+This estimate assumes the listed generations remain available. Adding it to a history-deletion estimate can count the same bytes twice. Allocated disk space, temporary migration space, and bytes actually recovered require separate measurements. The preview takes a normal coordination read lease and returns `canApply: false`. It writes zero graph, index or reference files. Reviewed migration, recovery and last-reference retirement are the next storage milestones.
