@@ -1,4 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
+import { describeImpactHandoffs, impactHandoffs } from './impact-handoffs.js';
 import { unexpandedCodeDescription } from './code-description.js';
 import { factEvidenceDescription } from './evidence-description.js';
 import { sourceLocation } from '@weftlet/core';
@@ -102,6 +103,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
         ...(pack.exploration.continuation ? [`Continuation: ${pack.exploration.continuation}`] : []),
       ] : []),
       ...ownerIntentDescription(pack.exploration),
+      ...describeImpactHandoffs(pack),
       ...(pack.evidenceState ? [
         `Stale relative to checkout: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
         `Extraction compatibility: ${pack.evidenceState.extractionCompatible === undefined ? 'not assessed' : pack.evidenceState.extractionCompatible ? 'current' : `refresh required (${pack.evidenceState.incompatibleExtractors?.join(', ') || 'unknown versions'})`}`,
@@ -183,7 +185,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     }
     const anchorTerms = [
       request.ownerDocument === undefined ? undefined : normalizeOwnerDocument(request.ownerDocument),
-      ...(request.changedFiles ?? []),
+      ...(request.changedFiles ?? []).map(normalizeOwnerDocument),
       ...(request.symbols ?? []),
     ]
       .filter((term): term is string => Boolean(term))
@@ -236,7 +238,12 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
     ]);
     const ownerSelection = prioritizeOwnerIntent(balanced, request.ownerDocument);
-    const allBalanced = ownerSelection.facts;
+    const handoffs = impactHandoffs(balanced, request, snapshot.manifest.snapshotId);
+    const leading = new Set(ownerSelection.facts.slice(0, ownerSelection.priorityCount).map(f => f.id));
+    for (const path of handoffs) for (const step of path.steps) leading.add(step.factId);
+    const allBalanced = handoffs.length
+      ? [...Array.from(leading, id => ranked.get(id)!), ...ownerSelection.facts.filter(f => !leading.has(f.id))]
+      : ownerSelection.facts;
     const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
     const queryDigest = sha256(stableJson({ ranking: IMPACT_RANKING_VERSION, codeTraversal: 'indexed-symbols-v1', query }));
     let offset = 0;
@@ -255,6 +262,8 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       offset = token.offset;
     }
     const facts = allBalanced.slice(offset, offset + maxFacts);
+    const pageIds = new Set(facts.map(f => f.id));
+    const shownHandoffs = handoffs.filter(path => path.steps.every(step => pageIds.has(step.factId)));
     const coverage = coverageForFacts(facts, snapshot);
     const nextOffset = offset + facts.length;
     const continuation = nextOffset < allBalanced.length ? Buffer.from(JSON.stringify({
@@ -354,6 +363,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       exploration: {
         rankingVersion: IMPACT_RANKING_VERSION,
         codeTraversalVersion: 'indexed-symbols-v1',
+        ...(handoffs.length ? { selectedHandoffCount: handoffs.length, handoffs: shownHandoffs } : {}),
         unexpandedCodeTargets: [...unexpandedCodeTargets].sort().slice(0, 100),
         unexpandedCodeTargetCount: unexpandedCodeTargets.size,
         unexpandedCodeTargetsTruncated: unexpandedCodeTargets.size > 100,

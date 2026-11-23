@@ -20,6 +20,11 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
    assertions from generated document links. Up to four owner facts receive early
    priority; this does not establish relevance to every checklist item or complete
    owner coverage. Inspect the exact cited assertions and follow up as needed.
+   When `exploration.handoffs` is present, inspect the cited path before changing the
+   producer. Each step refers to an exact fact on this page. Check its direction,
+   source authority and review state. Use its `graph.neighbors` follow-up on the
+   same snapshot to inspect the consumer's rules. An empty result leaves other
+   dependencies open. Include changed file paths or an exact owner when planning.
 3. Inspect product intent, contracts/invariants, implementation/consumers, validation evidence,
    runtime evidence, confidence, unknowns, and source locations. Intent-source
    contracts can count as both intent and contracts; counts do not grant approval.

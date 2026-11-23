@@ -437,3 +437,11 @@ for another checkout; activate a compatible local head explicitly and reconnect
 the receiving agent. Continue with [CI scenarios and snapshot delivery](CI.md). For a trial, retain
 bounded query receipts, exact versions, citations, limitations and human findings
 using the [consumer evaluation guide](../CONSUMER-TRIAL.md).
+
+## Inspect downstream handoffs from an upstream change
+
+Run `impact scan` with the upstream changed file and task, or supply the governing owner document during planning. Starting with 0.15.0, the CLI and MCP can put up to two downstream implementations on the first page. For each path, read the saved assertions in `facts` using the ordered IDs in `exploration.handoffs[].steps`. Direction describes how the path follows the assertion. The supplied `followUp` opens the consumer with `graph.neighbors` on the same snapshot.
+
+The selector recognizes directed `routesThrough` handoffs and exact `emits` or `persistsTo` joins to a product area's `consumes` relationship. For explicit Markdown obligations, it can also connect a producer file’s guarantee to a consumer file’s requirement on the same exact transport. The requirement names a file to inspect; its fulfillment is a separate question. Elsewhere the selector follows explicit `implementedBy` facts to repository files or indexed code definitions. Use a changed repository path, exact symbol ID, exact product ID via `--capability`, or owner document as the anchor. Task text informs ordinary ranking. A text match alone cannot establish a handoff or identify an executed call.
+
+A recommendation is a question to investigate. Check citations and authority on each step. Exact-owner evidence keeps its leading slots; a path is displayed only when its supporting facts fit together on the returned page. `selectedHandoffCount` reports the bounded selection even when its citations span pages. Scan bounds and continuation still apply, including when there is no recommendation. Restart old impact cursors after upgrading. Saved graphs can be queried without hydration.

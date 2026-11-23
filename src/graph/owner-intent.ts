@@ -27,7 +27,7 @@ export function ownerIntentDescription(exploration: ContextPack['exploration']):
  * evidence. Preserve every other fact's baseline order. Source approval never
  * changes assertion authority. This is a bounded overview, not full owner recall. */
 export function prioritizeOwnerIntent(ranked: readonly GraphFact[], owner: string | undefined) {
-  if (owner === undefined) return { facts: ranked, report: (_page: readonly GraphFact[]) => undefined };
+  if (owner === undefined) return { priorityCount: 0, facts: ranked, report: (_page: readonly GraphFact[]) => undefined };
   const cited = ranked.filter(fact => citesOwner(fact, owner));
   const intent = cited.filter(isProductIntentEvidence);
   const assertions = intent.filter(isAssertion);
@@ -46,6 +46,7 @@ export function prioritizeOwnerIntent(ranked: readonly GraphFact[], owner: strin
   const selected = new Set(priority.map(fact => fact.id));
   const ids = new Set(intent.map(fact => fact.id)), assertionIds = new Set(assertions.map(fact => fact.id));
   return {
+    priorityCount: priority.length,
     facts: [...priority, ...ranked.filter(fact => !selected.has(fact.id))],
     report(page: readonly GraphFact[]): NonNullable<ContextPack['exploration']>['ownerIntent'] {
       return { policy: 'exact-owner-intent-v1', scope: 'reachable-evidence',

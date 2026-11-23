@@ -44,6 +44,19 @@ describe('cited obligations through real committed extraction and shared queries
   beforeAll(async () => { f = await fixture(); snapshot = (await f.app.hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).snapshot; }, 90_000);
   afterAll(async () => { if (f) await rm(f.root, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 }); });
 
+  it('surfaces exact declared queue and stored-data consumers from upstream paths, including Windows spelling', async () => {
+    for (const [input, output] of [[producer.endpoint, consumer.endpoint], ['services/scheduler.ts', 'services/worker.ts']]) {
+      const request = { snapshotId: snapshot.manifest.snapshotId, changedFiles: [input!.replaceAll('/', '\\')], maxFacts: 2, maxDepth: 3 };
+      const pack = await f.app.queryService.scan(request);
+      expect(pack.exploration?.handoffs).toHaveLength(1);
+      expect(pack.exploration?.handoffs?.[0]).toMatchObject({ endpointBasis: 'declared-requirement',
+        producerId: `component:file:${input}`, consumerId: `component:file:${output}`, endpointId: `component:file:${output}`,
+        steps: pack.facts.map((fact, i) => ({ factId: fact.id, direction: i ? 'reverse' : 'forward' })) });
+      expect(pack.facts.map(fact => fact.contractObligation?.declaration.role)).toEqual(['guarantee', 'requirement']);
+      expect(pack.facts[0]!.object.id).toBe(pack.facts[1]!.object.id);
+    }
+  });
+
   it('retains both stages, units, revisions, unknowns and source authority without a business verdict', async () => {
     expect(obligations(snapshot)).toHaveLength(7);
     const fact = obligations(snapshot).find(fact => fact.provenance.path === 'docs/collection.md')!;
