@@ -2,7 +2,7 @@
 # `@weftlet/core`
 
 <!-- weftlet:release:start -->
-Package version in this checkout/archive: `@weftlet/core@0.13.0`. The matching toolkit is `@weftlet/toolkit@0.13.0`.
+Package version in this checkout/archive: `@weftlet/core@0.14.0`. The matching toolkit is `@weftlet/toolkit@0.14.0`.
 <!-- weftlet:release:end -->
 
 Graph records, provider and adapter contracts, and deterministic keying utilities for

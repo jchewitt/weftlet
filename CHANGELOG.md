@@ -1,5 +1,15 @@
 # @weftlet/toolkit
 
+## 0.14.0
+
+### Minor Changes
+
+- 48f79ac: Show which profiles have snapshots or SCIP indexes outside the retention policy and how many logical bytes they account for. Review the largest profiles in the CLI or use the complete JSON list to preview enrollment with a copy of your policy.
+
+### Patch Changes
+
+- @weftlet/core@0.14.0
+
 ## 0.13.0
 
 ### Minor Changes
