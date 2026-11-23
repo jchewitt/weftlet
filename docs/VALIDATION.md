@@ -4,6 +4,28 @@
 
 The local HTTP regression compares catalog, exact fact, neighborhood and path responses with the underlying snapshot readers, including a second neighborhood page. It checks rejected snapshot IDs, digest mismatches, invalid bounds and the original HTTP route. Client tests cover a URL deployment prefix, a mismatched response identity and a non-JSON HTTP error. The installed-package smoke imports the public client from an independent consumer. Self-hosted deployment, PostgreSQL and remote MCP qualification have their own [acceptance cases](SELF-HOSTED-GRAPH-PLAN.md).
 
+## 0.16.0 release verification
+
+Both npm archives matched the trusted workflow downloads byte for byte. Both Git tags resolved to release commit `adf5199ffb4a77073574ca316343803dbaa44d48`. [Viewer PR](https://github.com/jchewitt/weftlet/pull/138) · [Version PR](https://github.com/jchewitt/weftlet/pull/139) · [Publication and docs dispatch](https://github.com/jchewitt/weftlet/actions/runs/45269301426)
+
+| Package | Archive bytes | Verified SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.16.0` | 23,009 | `sha512-P0bKgUKuT1WWMB7GttFmajpQvHoA2Ras83u9VcNl0C8jH99Gz4Qg8hG6gKeO4VXHd1QHG+1n04lZiRVlYO/+oQ==` |
+| `@weftlet/toolkit@0.16.0` | 1,061,876 | `sha512-1PHkN14BLnbpcrINS7gwhxkzcCtZ1D7nvy6fhOhiTylJsOeYzSxdojUnY9GVI3NFWqaF0FnxpoUnCzV+Pj2Stg==` |
+
+A fresh npm consumer installed the exact 0.16.0 pair. Its CLI exported a focused public report from a saved snapshot. In sandboxed Chromium 154 the report opened the shipping rule, its implementation and an incoming caller with the saved `src/worker.ts:4` citation. This exercises the registry-distributed assets. Consumer-specific evidence selection remains a separate field check.
+
+## 0.15.0 release verification
+
+The trusted workflow published both packages from commit `5290b50c2e0f646b5f0050a93f99bac1886e3286`. Both registry downloads matched the reviewed workflow archives and the independent release rehearsal byte for byte. Both package tags resolved to that commit. [Feature PR](https://github.com/jchewitt/weftlet/pull/136) · [Version PR](https://github.com/jchewitt/weftlet/pull/137) · [Publication and docs dispatch](https://github.com/jchewitt/weftlet/actions/runs/45234243645)
+
+| Package | Archive bytes | Verified SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.15.0` | 23,005 | `sha512-3sOrAxIN/NTVaJyQ/CAIaVq5V/xox2J394150l3doTnot5NuXw4cWPaKqFRdRmRSc7//polfD01Q5f9+DBvt5w==` |
+| `@weftlet/toolkit@0.15.0` | 1,059,247 | `sha512-C+DaShIpMN8ezM9kbgH60A7ELPir6q3q76C9K7LMbag1LfHe3GLrm2T+2sWZA2puxE9k0G+t3rIYwlUuXjpKiA==` |
+
+A fresh Linux npm consumer opened two previously hydrated public snapshots. Given only the upstream file at a three-fact budget, the installed CLI returned the three cited steps to the execution workflow where the handoff existed. Removing the documented handoff eliminated the suggestion. The follow-up neighborhood opened on the same snapshot, and both stored snapshot fingerprints survived the reads. The feature publication check passed 1,304 toolkit and 38 core tests, with four optional or platform-specific skips, and a packed-consumer smoke. Private adoption of the new ranking remains a separate replay.
+
 ## Focused viewer navigation candidate
 
 Sandboxed Chromium 154 exercised the public reservation fixture in the local explorer and a focused export served from a static subdirectory. Searching for “after reservation” opened the rule by label. Its implementation filter led to `dispatchShipment`, where the incoming `calls` filter returned `consumeReservation` with its saved line citation. The named breadcrumb restored the rule and implementation filter. The test also checks drag/pan/zoom and layout restoration, authority filters, empty results, and a portable frontier that identifies the missing neighborhood while keeping the selected worker visible. The fixture supplies saved facts for browser interaction. A second test hydrates the cross-service business fixture with real TypeScript indexing and an offline semantic provider. It takes the three steps returned by impact.scan and follows each in its recorded direction in the local and portable neighborhood services. All three facts, including their citations, match the agent response.

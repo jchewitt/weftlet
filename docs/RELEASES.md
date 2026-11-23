@@ -12,6 +12,8 @@ npm registry or a substitute for detailed upgrade notes.
 
 | Release | Main changes |
 | --- | --- |
+| [0.16.0](../CHANGELOG.md#0160) | Search by a partial name or source path, then follow a rule to its implementing method, callers and citations. Both local and focused portable viewers restore a previous scope from a named breadcrumb. |
+| [0.15.0](../CHANGELOG.md#0150) | A changed upstream file can surface a cited path to a downstream consumer on the first impact page, with an exact follow-up query. |
 | [0.14.0](../CHANGELOG.md#0140) | Retention summaries identify uncovered profiles and their snapshot and SCIP index bytes. The guide walks through verifying the owner and previewing a candidate enrollment policy. |
 | [0.13.0](../CHANGELOG.md#0130) | Disposable compiler workspaces, shared SCIP indexes with reviewed migration and retirement, and verified user-cache archive, restore and cutover. |
 | [0.12.0](../CHANGELOG.md#0120) | Shared bookmark completion, exact-generation receipts and historical Gradle workspace verification on NTFS. |
