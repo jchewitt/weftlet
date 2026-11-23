@@ -1,5 +1,7 @@
 # Delivery roadmap
 
+**November 23 scope decision.** The [self-hosted 1.0 plan](SELF-HOSTED-GRAPH-PLAN.md) moves deployable graph reads, optional PostgreSQL storage, a Sigma overview and the vocabulary viewer into open-source 1.0. It supersedes earlier hosting deferrals below. The managed commercial product remains in 2.0.
+
 November 10 maintainer decision: accept S1–S7 onboarding tasks and hold npm
 publication during the separate website review/release-update integration. The
 [current 1.0 execution queue](1.0-WORK-QUEUE.md) consolidates next steps, provider

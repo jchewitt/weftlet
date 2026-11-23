@@ -1,5 +1,9 @@
 # Validation evidence
 
+## Versioned graph read client candidate
+
+The local HTTP regression compares catalog, exact fact, neighborhood and path responses with the underlying snapshot readers, including a second neighborhood page. It checks rejected snapshot IDs, digest mismatches, invalid bounds and the original HTTP route. Client tests cover a URL deployment prefix, a mismatched response identity and a non-JSON HTTP error. The installed-package smoke imports the public client from an independent consumer. Self-hosted deployment, PostgreSQL and remote MCP qualification have their own [acceptance cases](SELF-HOSTED-GRAPH-PLAN.md).
+
 ## Focused viewer navigation candidate
 
 Sandboxed Chromium 154 exercised the public reservation fixture in the local explorer and a focused export served from a static subdirectory. Searching for “after reservation” opened the rule by label. Its implementation filter led to `dispatchShipment`, where the incoming `calls` filter returned `consumeReservation` with its saved line citation. The named breadcrumb restored the rule and implementation filter. The test also checks drag/pan/zoom and layout restoration, authority filters, empty results, and a portable frontier that identifies the missing neighborhood while keeping the selected worker visible. The fixture supplies saved facts for browser interaction. A second test hydrates the cross-service business fixture with real TypeScript indexing and an offline semantic provider. It takes the three steps returned by impact.scan and follows each in its recorded direction in the local and portable neighborhood services. All three facts, including their citations, match the agent response.

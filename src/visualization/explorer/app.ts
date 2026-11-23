@@ -1,6 +1,6 @@
 import type { GraphCatalogRequest, GraphCatalogView, GraphFact, GraphNeighborsRequest, GraphNode, GraphPathsRequest } from '@weftlet/core';
 import type { ExplorerDataSource, ExplorerMetadata } from '../explorer-contract.js';
-import { LiveEvidenceSource } from './client.js';
+import { createGraphReadClient } from '../../infrastructure/graph-read-client.js';
 import { PortableEvidenceSource } from './portable-client.js';
 import { EvidenceCanvas, type ViewportState } from './graph.js';
 import { byId, element, navigationButton } from './dom.js';
@@ -15,7 +15,9 @@ async function main() {
   if (!response.ok) throw new Error('Unable to open the saved-evidence explorer');
   const metadata: ExplorerMetadata = await response.json();
   if (metadata.version !== 1) throw new Error('Unsupported explorer data version');
-  const source: ExplorerDataSource = metadata.mode === 'portable' ? await PortableEvidenceSource.open(metadata) : new LiveEvidenceSource(metadata);
+  const source: ExplorerDataSource = metadata.mode === 'portable' ? await PortableEvidenceSource.open(metadata)
+    : { metadata, ...createGraphReadClient({ baseUrl: new URL('./', document.baseURI), snapshotId: metadata.snapshot.snapshotId,
+      contentDigest: metadata.snapshot.contentDigest }) };
   const snapshotId = metadata.snapshot.snapshotId;
   let scope: Scope | undefined, generation = 0;
   const history: SavedScope[] = [];

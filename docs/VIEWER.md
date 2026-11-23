@@ -96,3 +96,20 @@ in this cloud environment. This is a bounded inspection tool, not a whole-reposi
 Future sources such as Figma should enter through `ContextGraphAdapter` / `FactExtractor`,
 preserving stable IDs, source citations, approval boundaries and extraction identity. They must
 produce the same graph records and pass SHACL/projection tests. No Figma adapter is implemented.
+
+## JavaScript client for saved graph reads
+
+In the next toolkit candidate, a browser or Node application can import the lightweight client directly. Start the local viewer, then pass its printed service URL and the exact saved snapshot ID.
+
+```js
+import { createGraphReadClient } from '@weftlet/toolkit/client';
+
+const graph = createGraphReadClient({ baseUrl: serviceUrl, snapshotId });
+const page = await graph.catalog({ view: 'intent', search: 'reservation' });
+if (page.nodes.length) {
+  const focus = await graph.neighbors({ nodeId: page.nodes[0].node.id, maxFacts: 30 });
+  console.log(focus.facts, focus.selection.continuation);
+}
+```
+
+The client uses `POST api/v1/query` relative to the service directory and pins every read to the supplied snapshot ID. Pass `contentDigest` from a trusted manifest for an additional identity check. `fact` and `paths` accept the same bounded query fields as their CLI equivalents. The server retains the original local endpoint for existing callers. The [self-hosted plan](SELF-HOSTED-GRAPH-PLAN.md) tracks remote access and PostgreSQL.

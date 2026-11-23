@@ -4,6 +4,7 @@ import { parseGraphCatalogRequest, parseGraphFactRequest } from '../graph/discov
 import { parseGraphNeighborsRequest } from '../graph/neighborhood-request.js';
 import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
+import { graphReadPath } from '../infrastructure/graph-read-client.js';
 import { sourceLink } from './source-links.js';
 import { explorerAssetsRoot } from './explorer-assets.js';
 
@@ -77,7 +78,7 @@ export async function startExplorerServer(service: ExplorerService, options: { p
       if (request.method === 'GET' && asset) {
         response.writeHead(200, { 'Content-Type': asset[1]! }); response.end(assetBytes.get(asset[0]!)); return;
       }
-      if (request.url !== '/api/query') { send(response, 404, { error: 'Unknown explorer resource' }); return; }
+      if (request.url !== '/' + graphReadPath && request.url !== '/api/query') { send(response, 404, { error: 'Unknown explorer resource' }); return; }
       if (request.method !== 'POST') { send(response, 405, { error: 'Use POST for bounded read queries' }); return; }
       if (request.headers['content-type']?.split(';')[0] !== 'application/json') { send(response, 415, { error: 'Use application/json' }); return; }
       if (activeQueries >= 4) { send(response, 429, { error: 'Explorer is busy; retry after current reads complete' }); return; }

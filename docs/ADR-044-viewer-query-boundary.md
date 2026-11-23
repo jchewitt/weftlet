@@ -1,5 +1,7 @@
 # ADR 044: shared evidence queries for the graph explorer
 
+**November 23 scope decision.** The [self-hosted 1.0 plan](SELF-HOSTED-GRAPH-PLAN.md) moves deployable graph reads, optional PostgreSQL storage, a Sigma overview and the vocabulary viewer into open-source 1.0. It supersedes earlier hosting deferrals below. The managed commercial product remains in 2.0.
+
 Status: agreed on 2026-11-05; shared discovery/index and the local application are implemented.
 Focused portable reports are the next independent implementation; hosted deployment remains pending.
 
