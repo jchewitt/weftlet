@@ -1,5 +1,15 @@
 # @weftlet/toolkit
 
+## 0.16.0
+
+### Minor Changes
+
+- 1bf7beb: Follow saved rules to their implementing methods, callers and citations in the local explorer and focused portable reports. Search by a partial name or source path, filter relationships by direction and return to a previous scope by its name.
+
+### Patch Changes
+
+- @weftlet/core@0.16.0
+
 ## 0.15.0
 
 ### Minor Changes
