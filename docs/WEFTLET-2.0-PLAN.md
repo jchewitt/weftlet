@@ -274,10 +274,10 @@ Managed AI reduces setup friction and can be offered separately from the collabo
 
 | Offering | Proposed scope |
 | --- | --- |
-| Open-source toolkit | Local extraction/graphs/queries/MCP, portable decision records and file workflows |
+| Open-source toolkit | Local extraction and queries, MCP, portable reports and file workflows. The 1.0 scope adds the self-hosted read service, JavaScript client and optional PostgreSQL driver. |
 | Hosted companion | Shared review queues, permissions/history, source synchronization, managed PRs and organization administration |
 | Managed inference | Included usage or transparent metered credits with explicit budgets; customers can also choose local tools or supported BYOK |
-| Enterprise options | Evaluate self-hosting, organizational controls, deployment needs and support from customer evidence |
+| Enterprise options | Evaluate organizational controls, deployment support and private operation of the managed companion based on customer needs. |
 
 No prices, margins, provider commitments or subscription terms are set. Keep workspace/team pricing
 and AI consumption understandable and separable. Validate review burden, recurring usefulness and

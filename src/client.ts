@@ -7,7 +7,7 @@ export interface GraphReadClientOptions {
   /** Service directory, including any deployment prefix. */
   readonly baseUrl: string | URL;
   readonly snapshotId: string;
-  /** Verify the expected logical graph content when a trusted digest is available. */
+  /** Compare the digest reported in each response with a trusted manifest digest. */
   readonly contentDigest?: string;
   readonly fetch?: typeof fetch;
 }
