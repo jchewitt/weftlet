@@ -1,5 +1,18 @@
 # Validation evidence
 
+## 0.14.0 release verification
+
+Both npm packages carried the `latest` tag at verification. Their downloads matched the trusted workflow archives byte for byte. Both Git tags resolved to release commit `344ee9d17038a63cabd82155f2026864c00d42b9`. The release contains one minor changeset. [Feature PR](https://github.com/jchewitt/weftlet/pull/133) · [Version PR](https://github.com/jchewitt/weftlet/pull/134) · [Publication and docs dispatch](https://github.com/jchewitt/weftlet/actions/runs/45091708299)
+
+| Package | Archive bytes | Verified SHA-512 integrity |
+| --- | ---: | --- |
+| `@weftlet/core@0.14.0` | 22,614 | `sha512-MjQ4MK9J57hcwzC2BrI7WXxMq+gxMaBndNkNxkmXu9mraPTSwbq6ijTT0eahiwAijwVvORBAGrUAvU7bqL7iSQ==` |
+| `@weftlet/toolkit@0.14.0` | 1,053,736 | `sha512-VEfAUjtNBMgEvc/4yiho11Zzl72K5eQP2lXGsSntua4SaWZc09DTcjqQbnSURWCiwTcaOndfcireeMVemQ9QWQ==` |
+
+Immediately after publication, npm briefly returned ETARGET for the toolkit. A fresh Linux consumer retried successfully, installed the exact registry pair and ran coordinated retention preparation against a disposable cache. Both text and JSON identified the uncovered profile with four snapshots and one index totaling 2,699 logical bytes. A separate candidate policy selected only the superseded snapshot and preserved the current, rollback and pinned generations. All fixture evidence files retained their original SHA-256 values. The consumer's production policy and enrollment decision remain with its owner.
+
+The release rehearsal passed 1,300 toolkit and 38 core tests, with four optional or platform-specific skips, plus architecture, notices, inventory and the packed-consumer smoke. The version PR matched the independently reviewed release tree. Native NTFS and Linux qualification ran on the feature PR. The [separate documentation deployment](https://github.com/jchewitt/weftlet-docs/actions/runs/45093881691) verifies the hosted site marker.
+
 ## Unmanaged profiles in retention reports
 
 The 0.14.0 candidate builds on `73c009b`. The retention regression exercises a declared profile alongside two uncovered profiles, compares a second candidate policy with the original, and checks the exact snapshot and index bytes in the report. It uses disposable local files. The [retention guide](guides/CACHE-RETENTION.md#preview-enrollment-of-a-recently-used-profile) documents the text and JSON summaries. The change is confined to retention reporting, so the setup tutorial, extraction providers, viewer and skills continue to use their existing contracts. Consumer qualification of the new summary remains open.
