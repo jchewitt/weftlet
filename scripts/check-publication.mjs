@@ -703,10 +703,12 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     for (const asset of ['/', '/assets/app.js', '/assets/style.css', '/assets/CYTOSCAPE-LICENSE.txt', '/explorer.json']) {
       if (!(await fetch(viewer.url + asset)).ok) throw new Error('Installed viewer asset unavailable: ' + asset);
     }
-    const result = await fetch(viewer.url + '/api/query', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'graph.catalog', params: { snapshotId: 'publication-smoke', view: 'all' } }) });
-    const catalog = await result.json();
-    if (!result.ok || !catalog.nodes.length) throw new Error('Installed viewer must query the real saved extraction');
+    const { stdout } = await promisify(execFile)(process.execPath, ['--input-type=module', '-e',
+      `import { createGraphReadClient } from '@weftlet/toolkit/client';
+       const client = createGraphReadClient({ baseUrl: process.argv[1], snapshotId: 'publication-smoke' });
+       console.log(JSON.stringify(await client.catalog({ view: 'all' })));`, viewer.url], { cwd: consumer });
+    const catalog = JSON.parse(stdout);
+    if (!catalog.nodes.length) throw new Error('Installed read client must query the extracted snapshot');
     const exported = JSON.parse(run(process.execPath, [join(installedRoot, 'dist/cli.js'), 'viewer', 'export',
       '--config', join(consumer, 'context-graph.config.json'), '--snapshot', 'publication-smoke',
       '--node', catalog.nodes[0].node.id, '--depth', '1', '--output', join(consumer, 'portable-report')], consumer));

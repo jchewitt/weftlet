@@ -17,11 +17,7 @@ The 0.2.x status descriptions below are historical planning context. Use the cur
 consumer acceptance status; they supersede the early M0 intake statuses without changing the
 proposed 2.0 scope. Keep the compiler compatibility fix separate from this future platform work.
 
-The maintainer subsequently requested the [graph explorer milestone](VIEWER-EXPLORER-PLAN.md)
-before starting 2.0. Its shared read-query boundary, portable/local application and optional
-Docker deployment prepare agent/browser access without implementing review writes. Hosted
-review/approval records can later use PostgreSQL; immutable graph storage and any RDF-database
-adoption remain separate concerns. See [ADR 044](ADR-044-viewer-query-boundary.md).
+The [self-hosted 1.0 plan](SELF-HOSTED-GRAPH-PLAN.md) owns the deployable Node service, optional PostgreSQL storage, JS client, MCP read transport, Sigma overview and vocabulary viewer. Weftlet Cloud builds on these open-source interfaces. Its product scope includes managed hosting, organizations, source review and backfill, hosted AI and billing.
 
 The maintainer also requested an [architecture-only tooling direction](ARCHITECTURE-TOOLING-PLAN.md).
 It follows 0.10 provider/onboarding work and reuses composable code evidence without

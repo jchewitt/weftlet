@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "d49456044651abd7f5c44c613411aed9394052383f53a4d392c8d90979beca9a"
+      "destinationSha256": "0879f0664084d2fa9c10fdbcbdac852f96f5bd4ef13cfe75a91fba3938e49fd7"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "3bd6de5df2255a73118a23b5ee0d01c3b9704c5b6e37e679750bcf2b4f8f7958"
+      "destinationSha256": "213826022592641ab8b58736c7c749fc13b4df10d40ac759dd2a287448227565"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/versioned-graph-reads.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/storage-qualification.yml",
@@ -682,6 +683,7 @@
     "docs/RELEASES.md",
     "docs/RELEASING.md",
     "docs/ROADMAP.md",
+    "docs/SELF-HOSTED-GRAPH-PLAN.md",
     "docs/SOURCE-INVENTORY.md",
     "docs/VALIDATION.md",
     "docs/VIEWER-EXPLORER-PLAN.md",
@@ -1102,6 +1104,8 @@
     "src/application/setup/skills.ts",
     "src/application/setup/verify.ts",
     "src/cli.ts",
+    "src/client.test.ts",
+    "src/client.ts",
     "src/configuration/cache.test.ts",
     "src/configuration/document-traversal.ts",
     "src/configuration/scip-project.ts",
@@ -1356,7 +1360,6 @@
     "src/visualization/explorer-contract.ts",
     "src/visualization/explorer-server.ts",
     "src/visualization/explorer/app.ts",
-    "src/visualization/explorer/client.ts",
     "src/visualization/explorer/dom.ts",
     "src/visualization/explorer/graph.ts",
     "src/visualization/explorer/index.html",

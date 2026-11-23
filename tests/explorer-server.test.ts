@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+import { createGraphReadClient } from '../src/client.js';
 import { request } from 'node:http';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -27,6 +28,21 @@ it('serves pinned evidence and packaged assets without adapters/providers, prese
       const result = await fetch(`${server.url}/api/query`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ method, params }) });
       expect(result.status).toBe(200); expect(await result.json()).toEqual(await expected());
     }
+    const client = createGraphReadClient({ baseUrl: server.url, snapshotId, contentDigest: metadata.snapshot.contentDigest });
+    expect(await client.catalog()).toEqual(await service.discovery.catalog({ snapshotId }));
+    expect(await client.fact({ factId: 'policy-queue' })).toEqual(await service.discovery.fact({ snapshotId, factId: 'policy-queue' }));
+    const endpoints = { fromNodeId: 'workflow:reserve', toNodeId: 'workflow:ship' };
+    expect(await client.paths(endpoints)).toEqual(await service.paths.paths({ snapshotId, ...endpoints }));
+    const node = { nodeId: 'workflow:reserve', maxFacts: 1 };
+    const page = await client.neighbors(node);
+    expect(page).toEqual(await service.exploration.neighbors({ snapshotId, ...node }));
+    const continuation = page.selection.continuation;
+    expect(continuation).toBeTruthy();
+    expect(await client.neighbors({ ...node, continuation })).toEqual(await service.exploration.neighbors({ snapshotId, ...node, continuation }));
+    await expect(client.catalog({ snapshotId: 'other' })).rejects.toThrow('pinned snapshot');
+    await expect(client.catalog({ maxNodes: 1000 })).rejects.toThrow('HTTP 400');
+    const wrongDigest = createGraphReadClient({ baseUrl: server.url, snapshotId, contentDigest: 'different' });
+    await expect(wrongDigest.catalog()).rejects.toThrow('pinned snapshot');
     const html = await fetch(server.url);
     expect(html.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
     expect(await html.text()).toContain('Evidence explorer');

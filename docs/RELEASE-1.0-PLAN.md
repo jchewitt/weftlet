@@ -1,5 +1,7 @@
 # Consumer hardening and the 1.0 release plan
 
+**November 23 scope decision.** The [self-hosted 1.0 plan](SELF-HOSTED-GRAPH-PLAN.md) moves deployable graph reads, optional PostgreSQL storage, a Sigma overview and the vocabulary viewer into open-source 1.0. It supersedes earlier hosting deferrals below. The managed commercial product remains in 2.0.
+
 Status: original T01–T10 engineering work complete; 0.6.0 candidate publication verified on 2026-10-28.
 The maintainer has requested additional [business-context baseline work](PRE-1.0-BASELINE.md)
 before official 1.0: precise exploration, symbol-level implementation links, cross-boundary

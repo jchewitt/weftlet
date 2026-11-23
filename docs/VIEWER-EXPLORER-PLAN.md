@@ -1,12 +1,6 @@
 # Graph explorer milestone before 2.0
 
-Status: implementation started, 2026-11-05. The narrow optional-compiler SELinux fix shipped
-separately in 0.7.5. [Saved-evidence discovery](EXPLORER-DISCOVERY.md) is the first independent
-implementation increment. The next increment implements the bundled local browser application;
-focused portable exports are implemented in the next independent increment. Deployable hosting
-and private viewer acceptance remain pending. Both separate retrieval tickets
-have consumer passes on 0.8.1; the [work queue](1.0-WORK-QUEUE.md) records the
-remaining official 1.0 release decision.
+The local and portable Cytoscape explorer shipped in 0.8.0. Focused caller navigation is part of 0.16.0. The [self-hosted 1.0 plan](SELF-HOSTED-GRAPH-PLAN.md) schedules the deployable service, PostgreSQL, Sigma overview and vocabulary viewer before 1.0.
 
 The maintainer selected **both portable reports and a local explorer**, explicitly allowing
 a bundled application rather than a single HTML file. Portable reports should cover explicit
@@ -112,7 +106,7 @@ Start ontology exploration with a **Graph vocabulary** view in Cytoscape. Show t
 
 Refine the existing Cytoscape application in the second minor release. Keep the current renderer and query interfaces. Give search a plain-language label and examples drawn from included nodes. Make the selected method, the breadcrumb back to intent and the direction of the highlighted relationship readable at a glance. Group the inspector by callers, callees, linked intent and tests, with citations available beside the relationship they support. Use the existing stylesheet to improve spacing, typography, contrast and keyboard focus for these controls.
 
-Verify the journey in a browser with a saved public fixture: find a rule by a recognizable word, open its implementing method, inspect a caller and its citation, then go back to the rule with the prior layout restored. Exercise it in the full local explorer and a portable report containing those neighborhoods. In a shallower export, the frontier should explain which neighborhood is outside the report. The optional Sigma overview and a richer ontology workbench can each be evaluated separately after this release.
+Verify the journey in a browser with a saved public fixture: find a rule by a recognizable word, open its implementing method, inspect a caller and its citation, then go back to the rule with the prior layout restored. Exercise it in the full local explorer and a portable report containing those neighborhoods. In a shallower export, the frontier should explain which neighborhood is outside the report. The subsequent 1.0 milestone covers the Sigma overview and read-only vocabulary viewer. Ontology authoring remains a separate decision.
 
 ## Focused portable-report boundary
 
@@ -139,7 +133,7 @@ layers over shared semantics; current local stdio MCP remains supported. A porta
 answers the same supported read contract from exported indexed data and states its limits.
 
 Initially preserve immutable snapshots/artifacts in a persistent volume; object storage is a
-natural hosted extension. Reuse PostgreSQL for project/snapshot metadata when needed and for
+natural hosted extension. The optional 1.0 PostgreSQL adapter serves immutable snapshots and metadata. A separate schema can support
 2.0 proposal/review/publication records. Redis is optional for later jobs/coordination. Vector
 search is a separate future capability, not a replacement for graph edges or provenance. No
 MySQL/MongoDB/RDF-database migration is selected merely because a service is available.
