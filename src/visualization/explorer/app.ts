@@ -82,8 +82,13 @@ async function main() {
   }
   function showHistory() {
     byId('breadcrumbs').replaceChildren();
-    for (const [index, prior] of history.entries()) {
-      if (index < history.length - 5) continue;
+    const identity = (item: Scope) => item.kind === 'catalog' ? `catalog:${item.result.selection.view}`
+      : item.kind === 'node' ? `node:${item.request.nodeId}` : 'paths';
+    const stops = history.map((prior, index) => ({ prior, index })).filter(({ prior, index }) => {
+      const next = history[index + 1]?.scope ?? scope;
+      return !next || identity(prior.scope) !== identity(next);
+    });
+    for (const { prior, index } of stops.slice(-5)) {
       const label = prior.scope.kind === 'catalog' ? `${prior.scope.result.selection.view} overview` :
         prior.scope.kind === 'node' ? knownNodes.get(prior.scope.request.nodeId)?.label ?? prior.scope.request.nodeId : 'Paths';
       const button = element('button', label.length > 45 ? label.slice(0, 42) + '…' : label);

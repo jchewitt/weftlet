@@ -4,7 +4,7 @@
 #coverage-label,#snapshot-state{font-size:11px;color:#536e7b}#snapshot-state{color:#795c2b}.context>div{max-width:65%}.context>details>button{font-size:11px;margin-top:8px}
 
 #search-form button[type=submit]{background:#164e50;color:white;text-align:center;border-color:#164e50}
-#search-help,.relationship-group summary small{display:block;color:#425f6b;margin-top:4px;overflow-wrap:anywhere}
+.relationship-group button small,#search-help,.relationship-group summary small{display:block;color:#425f6b;margin-top:4px;overflow-wrap:anywhere}
 #shortcuts{display:flex;gap:5px;flex-wrap:wrap}
 #shortcuts:empty{display:none}
 #shortcuts button[aria-pressed=true]{background:#164e50;color:white}
