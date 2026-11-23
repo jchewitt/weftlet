@@ -1,5 +1,9 @@
 # Validation evidence
 
+## Focused viewer navigation candidate
+
+Sandboxed Chromium 154 exercised the public reservation fixture in the local explorer and a focused export served from a static subdirectory. Searching for “after reservation” opened the rule by label. Its implementation filter led to `dispatchShipment`, where the incoming `calls` filter returned `consumeReservation` with its saved line citation. The named breadcrumb restored the rule and implementation filter. The test also checks drag/pan/zoom and layout restoration, authority filters, empty results, and a portable frontier that identifies the missing neighborhood while keeping the selected worker visible. The fixture supplies saved facts for browser interaction. The separate business-context acceptance test covers extraction.
+
 ## First-page impact handoffs candidate
 
 Base release 0.14.0. The public business-context fixture queries the collection task and file on two independently hydrated commits. The only source change between commits is a documented handoff. The query checks its cited implementation path at a fixed page budget, CLI/stdio MCP agreement, provenance and continuation. The public obligation fixture exercises both a stored-data path and a queue path using the producer file alone. The tests use an offline semantic fixture and real TypeScript indexing. The focused business-context, contract-obligation and handoff suites passed 16 tests. The exact-owner, worker and same-group ranking controls also passed. The consumer replay remains outstanding.

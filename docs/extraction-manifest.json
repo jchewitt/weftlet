@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/cited-downstream-impact.md",
     ".changeset/config.json",
+    ".changeset/focused-viewer-navigation.md",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",

@@ -48,6 +48,7 @@ export class EvidenceCanvas {
       if (focus) this.cy.getElementById(nodeKey(focus)).addClass('focus');
       for (const id of boundaries ?? []) this.cy.getElementById(nodeKey(id)).addClass('boundary');
     });
+    this.cy.resize();
     this.cy.layout({ name: 'breadthfirst', directed: true, spacingFactor: 1.25, padding: 60, animate: false }).run();
     if (restore) {
       for (const item of restore.positions) this.cy.getElementById(item.id).position(item.position);
