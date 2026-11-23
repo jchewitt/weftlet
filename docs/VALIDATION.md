@@ -1,5 +1,9 @@
 # Validation evidence
 
+## Unmanaged profiles in retention reports
+
+The 0.14.0 candidate builds on `73c009b`. The retention regression exercises a declared profile alongside two uncovered profiles, compares a second candidate policy with the original, and checks the exact snapshot and index bytes in the report. It uses disposable local files. The [retention guide](guides/CACHE-RETENTION.md#preview-enrollment-of-a-recently-used-profile) documents the text and JSON summaries. The change is confined to retention reporting, so the setup tutorial, extraction providers, viewer and skills continue to use their existing contracts. Consumer qualification of the new summary remains open.
+
 ## 0.13.0 TradePilot storage replay
 
 The November 22 consumer report verified the exact frozen-install npm pair against its SHA-512 digests and all 46 core and 769 toolkit archive members. On native Windows, the direct-RDF task graph passed strict validation with 591,289 facts and 182,834 nodes. An independent clean rebuild reproduced the digest, removed its temporary output and left zero new compiler workspaces. A separate explicit RDF export remained readable with the same compiler digest. On hosted Linux the consumer compiled its ontologies and uploaded a nonempty artifact. CI uploaders that need RDF should request a standalone [compiler export](guides/CACHE-HISTORY.md#compiler-workspace-lifetime).

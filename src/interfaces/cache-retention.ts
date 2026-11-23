@@ -1,3 +1,4 @@
+import type { UnmanagedProfileSummary } from '../storage/retention/history-accounting.js';
 import { previewIndexSharing } from '../storage/retention/index-sharing-preview.js';
 import { readRetentionPolicy } from '../storage/retention/policy.js';
 import { recurringRetentionOperation } from '../application/retention/maintenance.js';
@@ -94,6 +95,14 @@ function format(result: Awaited<ReturnType<typeof initializeRetentionPolicy>> | 
   return `Retention review ${result.readyForReview ? 'ready' : 'blocked'}: ${result.totals.candidateFiles} candidate files, ${result.totals.candidateLogicalBytes} logical bytes.\nPlan: ${result.planId}\n${historySummary(result.history)}${result.issues.length} issues; use --json for per-object reasons, dependencies, declarations and recovery limits. This observational report cannot be applied.\n`;
 }
 
-function historySummary(history: { mode: string; root: { projectedBytes: number; projectedOverageBytes: number; protectedOverageBytes: number } }) {
-  return `History policy: ${history.mode}; projected retained ${history.root.projectedBytes} logical bytes; projected overage ${history.root.projectedOverageBytes}; protected minimum overage ${history.root.protectedOverageBytes}.\n`;
+function historySummary(history: { mode: string; unmanagedProfiles?: UnmanagedProfileSummary[]; root: { projectedBytes: number; projectedOverageBytes: number; protectedOverageBytes: number } }) {
+  const profiles = history.unmanagedProfiles ?? [];
+  const preview = profiles.length ? [
+    'Snapshots and SCIP indexes outside the retention policy:',
+    ...profiles.slice(0, 10).map(p => `  ${JSON.stringify(p.profile)}: ${p.logicalBytes} logical bytes (snapshots ${p.snapshotFiles}, SCIP indexes ${p.indexFiles})`),
+    ...(profiles.length > 10 ? [`  ${profiles.length - 10} more profiles; see history.unmanagedProfiles in --json.`] : []),
+    'Verify the profile and repository with cache usage --verify, then preview cache retention prepare with a copy of the policy.',
+    '',
+  ].join('\n') : '';
+  return `History policy: ${history.mode}; projected retained ${history.root.projectedBytes} logical bytes; projected overage ${history.root.projectedOverageBytes}; protected minimum overage ${history.root.protectedOverageBytes}.\n${preview}`;
 }

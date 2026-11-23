@@ -103,7 +103,9 @@ as explicit pins; an old inventory listing is not automatically a pin.
 
 A successful build can write to a profile your existing policy has never declared. The target still counts those bytes. A prepare with zero issues and zero candidates can mean that the new snapshots and indexes are all protected by `profile-not-managed`.
 
-1. Save the JSON output of `weftlet cache retention prepare --root ROOT --policy retention.json --json` outside the cache as `before.json`. The following optional jq query groups undeclared snapshot and index bytes by profile. It works on an existing prepare report.
+In 0.14.0 the text summary from `cache retention plan`, `prepare` and `maintain` names up to ten uncovered profiles, largest first. The JSON field `history.unmanagedProfiles` lists every matching profile with snapshot and SCIP index file counts and their combined logical bytes. It appears when an inventoried snapshot or index carries the existing `profile-not-managed` reason. The totals cover individually classified files, excluding shared SCIP blobs, references, and files protected for a different reason. After upgrading, regenerate a saved plan if its ID changes when the new summary appears. These figures describe files under the observed paths. They do not establish ownership, last use or how many bytes enrollment would make eligible.
+
+1. Save the JSON output of `weftlet cache retention prepare --root ROOT --policy retention.json --json` outside the cache as `before.json`. In 0.14.0, read `history.unmanagedProfiles` directly. For 0.13.0, the following optional jq query groups undeclared snapshot and index bytes by profile. It works on an existing prepare report.
 
    ```sh
    jq '[.objects[] | select((.category == "snapshot" or .category == "scip-index") and

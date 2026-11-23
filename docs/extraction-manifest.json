@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/visible-retention-profiles.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/storage-qualification.yml",
