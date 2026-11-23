@@ -100,6 +100,14 @@ framework, bundles the MIT library and license, and needs no runtime CDN. React 
 were metadata/design comparisons, not implemented benchmark competitors. Positions are restored
 in session history; persistent per-user layouts remain future work.
 
+## Recommended viewer direction
+
+Keep Cytoscape.js for the evidence explorer. Offer Intent and Code as two starting points on the same pinned snapshot. When a user follows a rule to a method, retain the breadcrumb and show the method's callers, callees, references and linked intent. Label the selected path and immediate neighbors without requiring hover. A file-level binding should open the file. Preserve the distinction between an export boundary and a missing binding in the saved snapshot.
+
+Prototype Sigma.js for an optional **Repository map** after focused navigation works. Label domains and services at the overview scale. Selecting a cluster narrows the map; selecting a concrete node opens its exact neighborhood in Cytoscape. Both renderers should share snapshot and node identities, citations, navigation history and report boundaries. Evaluate the prototype by having a user find a downstream service, open its implementation, inspect the supporting evidence and return to the same map position.
+
+Start ontology exploration with a **Graph vocabulary** view in Cytoscape. Show the meaning and direction of each predicate alongside a cited instance from the selected snapshot when available. Revisit Reactodia if authoring RDF or editing ontologies becomes a product requirement. These renderer choices are recommendations; the Sigma prototype is independent of the [1.0 retrieval item](1.0-WORK-QUEUE.md).
+
 ## Focused portable-report boundary
 
 The maintainer selected focused portable reports, not an automatic copy of the entire graph.
