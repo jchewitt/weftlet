@@ -82,7 +82,7 @@ describe('impact scan facade', () => {
     const request = { capabilities: ['search'], maxFacts: 17 };
     const first = await service.scan(request);
     const version = first.exploration?.rankingVersion;
-    expect(version).toBe('owner-intent-priority-v5');
+    expect(version).toBe('cited-handoffs-v6');
     expect(first.markdown).toContain(`Ranking: ${version}`);
     let page = first;
     const collected = [...first.facts];

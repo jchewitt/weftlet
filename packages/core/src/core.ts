@@ -251,6 +251,16 @@ export interface ImpactScanRequest {
   readonly continuation?: string;
 }
 
+export interface ImpactHandoff {
+  readonly producerId: string;
+  readonly consumerId: string;
+  readonly endpointId: string;
+  readonly endpointBasis: 'implementedBy' | 'declared-requirement';
+  /** Every step refers to an unchanged fact on this page. */
+  readonly steps: readonly { readonly factId: string; readonly direction: 'forward' | 'reverse' }[];
+  readonly followUp: { readonly tool: 'graph.neighbors'; readonly arguments: { readonly snapshotId: string; readonly nodeId: string } };
+}
+
 export interface ContextPack {
   readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest' | 'overlayCapture'> &
     Partial<Pick<SnapshotManifest, 'extractorVersions' | 'documentSelection'>>;
@@ -277,6 +287,9 @@ export interface ContextPack {
   readonly exploration?: {
     /** Ordering policy for this query; independent of the immutable snapshot's assembly version. */
     readonly rankingVersion?: string;
+    /** Bounded selection over reachable facts; the page lists only complete paths. */
+    readonly selectedHandoffCount?: number;
+    readonly handoffs?: readonly ImpactHandoff[];
     /** Unresolved code targets are terminal for automatic impact expansion; inspect exact neighbors explicitly. */
     readonly codeTraversalVersion?: string;
     readonly unexpandedCodeTargets?: readonly string[];

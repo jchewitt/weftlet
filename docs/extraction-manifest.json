@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "af6dcd33233b59cbf6b1d55ed7f83c524d9b8892c4db8debbfb7a4ebf18d2a47"
+      "destinationSha256": "c60dbec20c9a921dfb3b2b3a56c9fde88475c03f7908f40aa1b190fbf1332c5a"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -388,14 +388,14 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "6e37d376813c509950686eec9a39a111a148e904103eae8dd65cd7016d096157"
+      "destinationSha256": "18b6ee981f8118e44a305d2a3e03517dff1300f3cd39f1a154bb7f0e5473c7b5"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "fd245c5930c0bf158b219d53e4037eed03adbe5ae1b135dfed792427db507c56"
+      "destinationSha256": "2398f54f3c8faa70aa64da8950bee8458c8054868b84b58552d60769b6b3cf52"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -528,7 +528,7 @@
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
       "modified": true,
-      "destinationSha256": "f6da8567d2e32d46ca74ffd48e7e2d94eda30a7d9146ef4a4273331dbefaf998"
+      "destinationSha256": "710ed0e1437f9b9a2d3ace21ae65ef9e52d3cab6f8b0b2fadd7bc5739ca45f70"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
+    ".changeset/cited-downstream-impact.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".github/workflows/check.yml",
@@ -1208,6 +1209,8 @@
     "src/graph/impact-affinity-order.ts",
     "src/graph/impact-affinity.test.ts",
     "src/graph/impact-affinity.ts",
+    "src/graph/impact-handoffs.test.ts",
+    "src/graph/impact-handoffs.ts",
     "src/graph/impact-order.test.ts",
     "src/graph/impact-order.ts",
     "src/graph/impact-signals.ts",

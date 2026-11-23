@@ -1,5 +1,9 @@
 # Validation evidence
 
+## First-page impact handoffs candidate
+
+Base release 0.14.0. The public business-context fixture queries the collection task and file on two independently hydrated commits. The only source change between commits is a documented handoff. The query checks its cited implementation path at a fixed page budget, CLI/stdio MCP agreement, provenance and continuation. The public obligation fixture exercises both a stored-data path and a queue path using the producer file alone. The tests use an offline semantic fixture and real TypeScript indexing. The focused business-context, contract-obligation and handoff suites passed 16 tests. The exact-owner, worker and same-group ranking controls also passed. The consumer replay remains outstanding.
+
 ## 0.14.0 release verification
 
 Both npm packages carried the `latest` tag at verification. Their downloads matched the trusted workflow archives byte for byte. Both Git tags resolved to release commit `344ee9d17038a63cabd82155f2026864c00d42b9`. The release contains one minor changeset. [Feature PR](https://github.com/jchewitt/weftlet/pull/133) · [Version PR](https://github.com/jchewitt/weftlet/pull/134) · [Publication and docs dispatch](https://github.com/jchewitt/weftlet/actions/runs/45091708299)

@@ -35,7 +35,9 @@ async function fixture() {
       '.gitignore': '.context-graph/\ncontext-graph.config.json\n', '.gitattributes': '* text eol=lf\n',
       'package.json': JSON.stringify({ name: 'public-business-context', private: true, type: 'module' }),
       'pnpm-workspace.yaml': "packages:\n  - 'services/*'\n  - 'apps/*'\n  - 'packages/*'\n",
-      [paths.collection]: 'export function collect(reading: { observedAt: number; value: number }) { return JSON.stringify(reading); }\n',
+      [paths.collection]: Array.from({ length: 22 }, (_, i) => `export const local${i} = ${i};\n`).join('') +
+        'export function cacheKey(reading: number) { return String(reading); }\n' +
+        'export function collect(reading: { observedAt: number; value: number }) { return JSON.stringify(reading); }\n',
       [paths.execution]: 'export function execute(reading: { observedAt: number; value: number }, now: number) { return now - reading.observedAt <= 60000; }\n',
       [paths.notifications]: 'export function notify(message: string) { return message; }\n',
       [paths.mobile]: "import type { Status } from '@public/contracts';\nexport function show(status: Status) { return status.state; }\n",
@@ -43,7 +45,7 @@ async function fixture() {
       [paths.contract]: "export interface Status { state: 'queued' | 'complete' }\n",
       'packages/contracts/src/index.ts': "export type { Status } from './status.js';\n",
       [paths.test]: "import { execute } from '../services/execution/src/execute.js';\nexport const result = execute({ observedAt: 0, value: 1 }, 61000);\n",
-      [paths.unrelated]: 'export function report(value: number) { return value; }\n',
+      [paths.unrelated]: 'export function cacheKey(value: number) { return String(value); }\n',
       'docs/collection.md': collection,
       'docs/execution.md': 'semantic-id: public:execution\n# Execution\n' +
         `The execution workflow is implemented by ${paths.execution}.\n` +
@@ -135,6 +137,34 @@ describe('public business-context acceptance boundaries', () => {
     expect(await application.snapshotStore.read(control.snapshot.manifest.snapshotId)).toEqual(control.snapshot);
   });
 
+  it('returns a cited downstream implementation on the first bounded page only when the handoff exists', async () => {
+    const { application, control, linked } = state;
+    const input = { task: 'Change collection caching', changedFiles: [paths.collection], maxDepth: 3, maxFacts: 3 };
+    const fullPage = await application.queryService.scan({ ...input, maxFacts: 60, snapshotId: linked.snapshot.manifest.snapshotId });
+    expect(fullPage.facts).toHaveLength(60);
+    expect(fullPage.exploration?.reachableFacts).toBeGreaterThan(60);
+    expect(fullPage.exploration?.handoffs?.[0]?.consumerId).toBe('workflow:execution');
+    const missing = await application.queryService.scan({ ...input, snapshotId: control.snapshot.manifest.snapshotId });
+    expect(missing.exploration?.handoffs ?? []).toEqual([]);
+    const snapshotId = linked.snapshot.manifest.snapshotId;
+    const pack = await application.queryService.scan({ ...input, snapshotId });
+    const [path] = pack.exploration?.handoffs ?? [];
+    expect(pack.facts).toHaveLength(3);
+    expect(pack.exploration?.continuation).toBeTruthy();
+    expect(path).toMatchObject({ producerId: 'workflow:collection', consumerId: 'workflow:execution',
+      endpointId: `component:file:${paths.execution}`, followUp: { tool: 'graph.neighbors',
+        arguments: { snapshotId, nodeId: 'workflow:execution' } } });
+    expect(path!.steps.map(step => step.direction)).toEqual(['reverse', 'forward', 'forward']);
+    expect(path!.steps.map(step => step.factId)).toEqual(pack.facts.map(f => f.id));
+    expect(pack.facts.map(f => f.predicate)).toEqual(['implementedBy', 'routesThrough', 'implementedBy']);
+    for (const fact of pack.facts) expect(fact).toEqual(linked.snapshot.facts.find(saved => saved.id === fact.id));
+    expect(ids(pack)).not.toContain(`component:file:${paths.unrelated}`);
+    expect(pack.markdown).toContain('Could this change affect workflow:execution');
+    const tiny = await application.queryService.scan({ ...input, snapshotId, maxFacts: 2 });
+    expect(tiny.facts).toHaveLength(2);
+    expect(tiny.exploration).toMatchObject({ selectedHandoffCount: 1, handoffs: [] });
+  });
+
   it('supports bounded MCP-facade pagination and focused follow-up without hiding depth exhaustion', async () => {
     const { application, linked } = state;
     const snapshotId = linked.snapshot.manifest.snapshotId;
@@ -210,6 +240,17 @@ describe('public business-context acceptance boundaries', () => {
     const client = new Client({ name: 'public-exploration-acceptance', version: '1' });
     try {
       const savedApp = await createContextGraphApplication(configPath);
+      await client.connect(transport);
+      const impact = await client.callTool({ name: 'impact.scan', arguments: {
+        snapshotId, changedFiles: [paths.collection], task: 'Change collection caching', maxFacts: 3, maxDepth: 3 } });
+      const cliImpact = await execute(process.execPath, ['--import', tsx, fileURLToPath(new URL('../src/cli.ts', import.meta.url)),
+        'impact', 'scan', '--config', configPath, '--snapshot', snapshotId, '--changed-file', paths.collection,
+        '--task', 'Change collection caching', '--max-depth', '3', '--max-facts', '3', '--json'], { cwd: tmpdir(), timeout: 30_000 });
+      const cliPack: ContextPack = JSON.parse(cliImpact.stdout);
+      const mcpPack: ContextPack = JSON.parse((impact.content as { text: string }[])[1]!.text);
+      expect(cliPack.exploration?.handoffs?.[0]?.consumerId).toBe('workflow:execution');
+      expect(mcpPack.exploration?.handoffs).toEqual(cliPack.exploration?.handoffs);
+      expect(mcpPack.facts).toEqual(cliPack.facts);
       const direct = await handleGraphNeighbors(savedApp.explorationService, request);
       expect(direct.facts).toEqual(linked.snapshot.facts.filter(fact =>
         fact.subject.id === request.nodeId && fact.predicate === 'routesThrough'));
@@ -221,7 +262,6 @@ describe('public business-context acceptance boundaries', () => {
         'graph', 'neighbors', '--config', configPath, '--snapshot', snapshotId, '--node', request.nodeId,
         '--direction', 'outgoing', '--predicate', 'routesThrough', '--max-facts', '1', '--json'], { cwd: tmpdir(), timeout: 30_000 });
       expect(JSON.parse(cli.stdout)).toEqual(JSON.parse(JSON.stringify(direct)));
-      await client.connect(transport);
       const tools = (await client.listTools()).tools;
       expect(tools.map(tool => tool.name)).toContain('graph.neighbors');
       expect(tools.find(tool => tool.name === 'graph.neighbors')!.annotations?.readOnlyHint).toBe(true);
