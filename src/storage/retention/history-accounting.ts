@@ -1,4 +1,5 @@
 import { posix } from 'node:path';
+import type { RetentionDecision } from './decisions.js';
 import type { CacheObject } from '../inspection/layout.js';
 import type { ProfileDeclaration } from './policy.js';
 
@@ -39,4 +40,30 @@ export function historyAccounting(objects: readonly CacheObject[], profiles: rea
   const coordinationBytes = sumBytes([reservedControlBytes, ...measured.filter(o => isCoordinationObject(o.path)).map(o => o.logicalBytes)]);
   return { repositoryFor, repositoryBytes, unattributedBytes: sumBytes([unattributedBytes, reservedControlBytes]), coordinationBytes,
     observedBytes: sumBytes([reservedControlBytes, ...measured.map(o => o.logicalBytes)]) };
+}
+
+export interface UnmanagedProfileSummary {
+  profile: string;
+  snapshotFiles: number;
+  indexFiles: number;
+  logicalBytes: number;
+}
+
+/** Explain existing retention decisions without inferring activity or repository ownership. */
+export function summarizeUnmanagedProfiles(decisions: readonly RetentionDecision[]) {
+  const profiles = new Map<string, UnmanagedProfileSummary>();
+  for (const entry of decisions) {
+    if ((entry.category !== 'snapshot' && entry.category !== 'scip-index') ||
+        !entry.reasons.includes('profile-not-managed')) continue;
+    let row = profiles.get(entry.profile);
+    if (!row) {
+      row = { profile: entry.profile, snapshotFiles: 0, indexFiles: 0, logicalBytes: 0 };
+      profiles.set(entry.profile, row);
+    }
+    if (entry.category === 'snapshot') row.snapshotFiles++;
+    else row.indexFiles++;
+    row.logicalBytes = sumBytes([row.logicalBytes, entry.logicalBytes]);
+  }
+  return [...profiles.values()].sort((a, b) => b.logicalBytes - a.logicalBytes ||
+    (a.profile < b.profile ? -1 : a.profile > b.profile ? 1 : 0));
 }

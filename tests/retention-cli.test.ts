@@ -8,6 +8,9 @@ import { join } from 'node:path';
 import { afterEach, expect, it } from 'vitest';
 import { initializeRetentionPolicy, retentionOperation } from '../src/application/retention/operations.js';
 import { runCacheRetention } from '../src/interfaces/cache-retention.js';
+import { enableCacheCoordination } from '../src/storage/coordination/managed-root.js';
+import { prepareRetention } from '../src/storage/retention/prepared.js';
+import { emptyRetentionPolicy } from '../src/storage/retention/policy.js';
 
 const roots: string[] = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 }))); });
@@ -45,7 +48,10 @@ it('runs the installed-style CLI from a directory with no Git, config or provide
   const run = (...args: string[]) => execute(process.execPath, ['--import', tsx, cli, 'cache', 'retention', ...args, '--json', '--quiet'], { cwd: f.root, timeout: 30_000 });
   expect(JSON.parse((await run('init', '--file', f.policyPath)).stdout).initialized).toBe(true);
   const plan = JSON.parse((await run('plan', '--root', f.cache, '--policy', f.policyPath)).stdout);
-  expect(plan).toMatchObject({ readyForReview: true, canApply: false });
+  expect(plan).toMatchObject({ readyForReview: true, canApply: false,
+    history: { unmanagedProfiles: [{ profile: '.', snapshotFiles: 1, indexFiles: 0 }] } });
+  const text = await execute(process.execPath, ['--import', tsx, cli, 'cache', 'retention', 'plan', '--root', f.cache, '--policy', f.policyPath], { cwd: f.root });
+  expect(text.stdout).toContain(`".": ${plan.history.unmanagedProfiles[0].logicalBytes} logical bytes (snapshots 1, SCIP indexes 0)`);
   await writeFile(f.planPath, JSON.stringify(plan));
   await writeFile(join(f.cache, 'new-unknown.txt'), 'Kept');
   const error = await run('check', '--root', f.cache, '--policy', f.policyPath, '--plan', f.planPath).catch(e => e);
@@ -58,4 +64,31 @@ it('rejects incomplete apply, missing arguments and unknown or duplicate switche
     await expect(runCacheRetention(['cache', 'retention', ...args])).rejects.toThrow();
   }
   expect(await runCacheRetention(['cache', 'usage'])).toBe(false);
+});
+
+it('previews enrollment separately from retention eligibility across profiles', async () => {
+  const f = await fixture();
+  const bytes = await readFile(join(f.cache, 'snapshots/saved.json'));
+  const policy = emptyRetentionPolicy();
+  for (const profile of ['managed', 'new']) {
+    await mkdir(join(f.cache, profile, 'snapshots'), { recursive: true });
+    await writeFile(join(f.cache, profile, 'snapshots/saved.json'), bytes);
+  }
+  await mkdir(join(f.cache, 'new/scip'));
+  await writeFile(join(f.cache, 'new/scip/saved.scip'), '12345');
+  await writeFile(join(f.cache, 'new/other'), 'unknown');
+  policy.profiles.push({ path: 'managed', repositoryId: 'public/demo', owner: 'demo', reason: 'Current policy' });
+  await enableCacheCoordination(f.cache, { acknowledgeQuiescence: true });
+  const before = await prepareRetention({ root: f.cache, policy });
+  expect(before.history.unmanagedProfiles).toEqual([
+    { profile: 'new', snapshotFiles: 1, indexFiles: 1, logicalBytes: bytes.length + 5 },
+    { profile: '.', snapshotFiles: 1, indexFiles: 0, logicalBytes: bytes.length },
+  ]);
+  expect(before.objects.find(o => o.path === 'new/snapshots/saved.json')?.disposition).toBe('retain');
+  const candidate = structuredClone(policy);
+  candidate.profiles.push({ ...policy.profiles[0]!, path: 'new' });
+  const after = await prepareRetention({ root: f.cache, policy: candidate });
+  expect(after.history.unmanagedProfiles).toEqual(before.history.unmanagedProfiles!.slice(1));
+  expect(after.objects.find(o => o.path === 'new/snapshots/saved.json')?.disposition).toBe('candidate');
+  expect(await readFile(join(f.cache, 'new/snapshots/saved.json'))).toEqual(bytes);
 });

@@ -3,7 +3,7 @@ import type { HistoryPolicy } from './history-policy.js';
 import type { CacheObject } from '../inspection/layout.js';
 import type { RetentionPolicy } from './policy.js';
 import type { RetentionDecision } from './decisions.js';
-import { historyAccounting, sumBytes, isCoordinationObject } from './history-accounting.js';
+import { historyAccounting, sumBytes, isCoordinationObject, summarizeUnmanagedProfiles } from './history-accounting.js';
 
 export type { RetentionDecision } from './decisions.js';
 type Accounting = ReturnType<typeof historyAccounting>;
@@ -50,7 +50,9 @@ export function selectHistory(objects: CacheObject[], decisions: RetentionDecisi
   }
   const available = totalsFor(eligible, byPath, account);
   const adjusted = decisions.map(d => adjustDecision(d, selected, causes, eligible, history?.mode === 'indefinite' || overrides.get(account.repositoryFor(d.path) ?? '')?.mode === 'indefinite'));
+  const unmanagedProfiles = summarizeUnmanagedProfiles(adjusted);
   return { objects: adjusted, history: {
+    ...(unmanagedProfiles.length ? { unmanagedProfiles } : {}),
     mode: history?.mode ?? 'manual', accountingScope: history ? 'root-with-persistent-controls' : 'evidence-only-manual-retry', ordering: 'oldest-filesystem-mtime-then-path', accounting: 'logical-by-path',
     root: reportTarget(account.observedBytes, selection.bytes, available.bytes, history?.mode === 'target' ? history.maxBytes : null),
     repositories: [...account.repositoryBytes].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([repositoryId, observed]) => {
