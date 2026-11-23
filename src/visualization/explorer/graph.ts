@@ -21,7 +21,7 @@ export class EvidenceCanvas {
       { selector: 'node.boundary', style: { 'border-style': 'dashed', 'background-opacity': 0.5 } },
       { selector: 'edge', style: { label: 'data(label)', width: 2, 'line-color': '#8ca8b0', 'target-arrow-color': '#8ca8b0',
         'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'font-size': 10, 'text-background-opacity': 1,
-        'text-background-color': '#f2f6f7', 'text-background-padding': '3px', 'text-rotation': 'autorotate' } },
+        'text-background-color': '#f2f6f7', 'text-background-padding': '3px', 'text-rotation': 'none' } },
       { selector: 'edge:selected, edge.path', style: { 'line-color': '#16896f', 'target-arrow-color': '#16896f', width: 4 } },
     ] });
     this.cy.on('tap', 'node', event => enter(event.target.data('nodeId')));
@@ -48,6 +48,7 @@ export class EvidenceCanvas {
       if (focus) this.cy.getElementById(nodeKey(focus)).addClass('focus');
       for (const id of boundaries ?? []) this.cy.getElementById(nodeKey(id)).addClass('boundary');
     });
+    this.cy.resize();
     this.cy.layout({ name: 'breadthfirst', directed: true, spacingFactor: 1.25, padding: 60, animate: false }).run();
     if (restore) {
       for (const item of restore.positions) this.cy.getElementById(item.id).position(item.position);

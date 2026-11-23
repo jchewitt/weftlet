@@ -31,38 +31,57 @@ export function showGaps(container: HTMLElement, report: DiagnosticReport) {
   if (report.unclassifiedLegacyCount) container.append(element('p', `${report.unclassifiedLegacyCount} legacy diagnostics have no reliable category.`));
   if (!container.childElementCount) container.append(element('p', 'No diagnostic records in this selection. This does not prove complete coverage.'));
 }
-export function showAssertions(facts: readonly GraphFact[], enter: (id: string) => void, template?: string) {
+function relationshipGroup(fact: GraphFact, focus?: string) {
+  if (!focus) return fact.predicate;
+  const outgoing = fact.subject.id === focus;
+  if (outgoing && fact.object.id === focus) return fact.predicate === 'calls' ? 'Recursive calls' : `Self · ${fact.predicate}`;
+  if (fact.predicate === 'calls') return outgoing ? 'Callees' : 'Callers';
+  if (fact.predicate === 'implementedBy') return outgoing ? 'Implementations' : 'What this implements';
+  if (fact.predicate === 'verifiedBy') return outgoing ? 'Verification evidence' : 'Verifies';
+  return `${outgoing ? 'Outgoing' : 'Incoming'} · ${fact.predicate}`;
+}
+
+export function showAssertions(facts: readonly GraphFact[], enter: (id: string) => void, template?: string, focus?: string) {
   const container = byId('evidence'); container.replaceChildren();
-  const groups = new Map<string, HTMLDetailsElement>();
-  for (const predicate of new Set(facts.map(fact => fact.predicate))) {
-    const group = element('details'); group.className = 'relationship-group';
-    group.append(element('summary', `${predicate} · ${facts.filter(fact => fact.predicate === predicate).length} assertions`));
-    groups.set(predicate, group); container.append(group);
-  }
+  const groups = new Map<string, GraphFact[]>();
   for (const fact of facts) {
-    const detail = element('details'); detail.dataset.factId = fact.id;
-    detail.append(element('summary', `${fact.predicate} · ${contextPackEvidenceAuthority(fact)}`));
-    detail.append(element('p', `Source: ${fact.sourceAuthority ?? 'unspecified'} · Review: ${fact.extractionReview ?? 'unspecified'} · Confidence: ${fact.confidence}`));
-    if (fact.sourceRole) detail.append(element('p', `Source role: ${fact.sourceRole}`));
-    if (fact.sourceOwnership) detail.append(element('p', `Ownership: ${fact.sourceOwnership.status} · ${fact.sourceOwnership.ownerDocuments.join(', ') || 'no resolved owner document'}`));
-    navigationButton(detail, fact.subject.label, `From · ${fact.subject.kind}`, () => enter(fact.subject.id));
-    navigationButton(detail, fact.object.label, `To · ${fact.object.kind}`, () => enter(fact.object.id));
-    const citation = element('p'); source(citation, fact.provenance, template); detail.append(citation);
-    for (const proof of evidenceSources(fact)) {
-      const p = element('p', `${proof.role}: `); source(p, proof.provenance, template); detail.append(p);
-    }
-    detail.append(element('p', `Assertion ${fact.id}`), element('p', `Extractor ${fact.extractor.id}@${fact.extractor.version}`));
-    const raw = element('details'); raw.append(element('summary', 'Full saved assertion'));
-    const pre = element('pre', JSON.stringify(fact, null, 2)); raw.append(pre); detail.append(raw);
-    groups.get(fact.predicate)!.append(detail);
+    const name = relationshipGroup(fact, focus);
+    const group = groups.get(name);
+    if (group) group.push(fact); else groups.set(name, [fact]);
   }
+  for (const [name, items] of groups) {
+    const group = element('details'); group.className = 'relationship-group';
+    group.append(element('summary', `${name} · ${items.length}`));
+    for (const fact of items) group.append(assertionDetail(fact, enter, template));
+    container.append(group);
+  }
+}
+
+function assertionDetail(fact: GraphFact, enter: (id: string) => void, template?: string) {
+  const detail = element('details'); detail.dataset.factId = fact.id;
+  const summary = element('summary', `${fact.subject.label} → ${fact.object.label}`);
+  summary.append(element('small', `${fact.predicate} · ${contextPackEvidenceAuthority(fact)} · ${fact.provenance.path}:${fact.provenance.startLine}`));
+  detail.append(summary);
+  detail.append(element('p', `Source: ${fact.sourceAuthority ?? 'unspecified'} · Review: ${fact.extractionReview ?? 'unspecified'} · Confidence: ${fact.confidence}`));
+  if (fact.sourceRole) detail.append(element('p', `Source role: ${fact.sourceRole}`));
+  if (fact.sourceOwnership) detail.append(element('p', `Ownership: ${fact.sourceOwnership.status} · ${fact.sourceOwnership.ownerDocuments.join(', ') || 'no resolved owner document'}`));
+  navigationButton(detail, fact.subject.label, `From · ${fact.subject.kind}`, () => enter(fact.subject.id));
+  navigationButton(detail, fact.object.label, `To · ${fact.object.kind}`, () => enter(fact.object.id));
+  const citation = element('p'); source(citation, fact.provenance, template); detail.append(citation);
+  for (const proof of evidenceSources(fact)) {
+    const p = element('p', `${proof.role}: `); source(p, proof.provenance, template); detail.append(p);
+  }
+  detail.append(element('p', `Assertion ${fact.id}`), element('p', `Extractor ${fact.extractor.id}@${fact.extractor.version}`));
+  const raw = element('details'); raw.append(element('summary', 'Full saved assertion'));
+  const pre = element('pre', JSON.stringify(fact, null, 2)); raw.append(pre); detail.append(raw);
+  return detail;
 }
 export function showFocus(node: GraphNode | undefined, facts: readonly GraphFact[], enter: (id: string) => void, template?: string, paths = true) {
   byId('kind').textContent = node?.kind.toUpperCase() ?? 'SAVED EVIDENCE';
   byId('title').textContent = node?.label ?? 'Follow the why.';
   byId('intro').textContent = node ? 'Enter a connected item to explore its scope. Arrows retain the saved direction; static links do not prove runtime causality.'
     : 'Start with an intent item and follow its contracts, implementation and downstream evidence.';
-  showAssertions(facts, enter, template);
+  showAssertions(facts, enter, template, node?.id);
   if (node) {
     const id = element('span', `Exact node: ${node.id}`); id.className = 'node-id'; byId('intro').append(id);
     if (!paths) return;

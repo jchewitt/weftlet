@@ -14,6 +14,9 @@ import { handleImpactScan } from '../src/interfaces/mcp-facade.js';
 import { handleGraphNeighbors } from '../src/interfaces/graph-exploration.js';
 import { CG, nodeIri, RdfEvidenceGraph } from '../src/graph/rdf.js';
 import { sha256 } from '../src/infrastructure/util.js';
+import { createExplorerService } from '../src/application/explorer-service.js';
+import { exportExplorerReport } from '../src/application/explorer-export.js';
+import { PortableEvidenceSource } from '../src/visualization/explorer/portable-client.js';
 
 const execute = promisify(execFile);
 const tsx = pathToFileURL(createRequire(import.meta.url).resolve('tsx')).href;
@@ -163,6 +166,32 @@ describe('public business-context acceptance boundaries', () => {
     const tiny = await application.queryService.scan({ ...input, snapshotId, maxFacts: 2 });
     expect(tiny.facts).toHaveLength(2);
     expect(tiny.exploration).toMatchObject({ selectedHandoffCount: 1, handoffs: [] });
+  });
+
+  it('exposes the exact first-page handoff through local and portable viewer neighborhoods', async () => {
+    const { application, root, linked } = state;
+    const snapshotId = linked.snapshot.manifest.snapshotId;
+    const pack = await application.queryService.scan({ snapshotId, changedFiles: [paths.collection], maxDepth: 3, maxFacts: 3 });
+    const handoff = pack.exploration?.handoffs?.[0];
+    expect(handoff?.steps).toHaveLength(3);
+    const viewer = await createExplorerService(join(root, 'context-graph.config.json'), snapshotId);
+    const output = join(root, '.context-graph/reports/business-handoff');
+    await exportExplorerReport(viewer, { output, roots: ['workflow:collection', 'workflow:execution'], depth: 2 });
+    const read = async (path: string) => JSON.parse(await readFile(join(output, path), 'utf8'));
+    const report = await PortableEvidenceSource.open(await read('explorer.json'), read);
+    let focus = `component:file:${paths.collection}`;
+    for (const step of handoff!.steps) {
+      const saved = pack.facts.find(fact => fact.id === step.factId)!;
+      const forward = step.direction === 'forward';
+      expect(forward ? saved.subject.id : saved.object.id).toBe(focus);
+      const request = { snapshotId, nodeId: focus, direction: forward ? 'outgoing' as const : 'incoming' as const, predicates: [saved.predicate] };
+      for (const reader of [viewer.exploration, report]) {
+        const page = await reader.neighbors(request);
+        expect(page.facts.find(fact => fact.id === saved.id)).toEqual(saved);
+      }
+      focus = forward ? saved.object.id : saved.subject.id;
+    }
+    expect(focus).toBe(handoff!.endpointId);
   });
 
   it('supports bounded MCP-facade pagination and focused follow-up without hiding depth exhaustion', async () => {

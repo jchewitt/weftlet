@@ -8,7 +8,7 @@
 <section id="report-scope" class="notice" aria-label="Portable report boundaries" hidden></section>
 <main><nav aria-label="Evidence navigation"><h2>Explore evidence</h2><form id="search-form"><label for="view">Start from</label>
 <select id="view"><option value="intent">Product intent</option><option value="contracts">Contracts</option><option value="implementation">Implementation</option><option value="evidence">Tests and observations</option><option value="all">All saved evidence</option></select>
-<label for="search">Search saved IDs, labels or sources</label><input id="search" type="search" maxlength="256"><button type="submit">Find</button></form>
+<label for="search">Find a rule, symbol or file</label><input id="search" type="search" maxlength="256" aria-describedby="search-help"><small id="search-help">Match part of a name, ID or cited source path in this view.</small><button type="submit">Find</button></form>
 <p class="muted">Enter an item to follow its cited relationships. Intent-source evidence may still need review.</p><div id="related"></div>
 <details><summary>Explore a path</summary><form id="path-form"><label for="from-node">From exact node ID</label><input id="from-node" required maxlength="8192">
 <label for="to-node">To exact node ID</label><input id="to-node" required maxlength="8192">
@@ -22,7 +22,7 @@
 <div class="filters"><label for="authority">Assertion authority</label><select id="authority"><option value="all">All returned evidence</option><option>declared</option><option>implemented</option><option>validated</option><option>observed</option><option>inferred</option><option>draft</option></select>
 <span id="node-filters" hidden><label for="direction">Direction</label><select id="direction"><option value="both">Both</option><option value="outgoing">Outgoing</option><option value="incoming">Incoming</option></select>
 <label for="predicate">Relationship</label><select id="predicate"><option value="">All predicates</option></select></span>
-<button id="connections">Show overview connections</button></div><div id="breadcrumbs" aria-label="Recent scopes"></div>
+<div id="shortcuts" aria-label="Relationship shortcuts"></div><button id="connections">Show overview connections</button></div><div id="breadcrumbs" role="navigation" aria-label="Recent scopes"></div>
 <div id="graph" aria-label="Evidence graph canvas"></div><p id="empty" hidden></p>
 <div class="canvas-note">Drag to arrange · scroll to zoom · drag the background to pan · click a node to enter its scope</div><p id="status" role="status"></p><button id="next" hidden>Next evidence page</button>
 <details class="query-details"><summary>Query coverage and limits</summary><pre id="selection-details"></pre></details></section>

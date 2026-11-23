@@ -21,7 +21,7 @@ async function main() {
   const history: SavedScope[] = [];
   const knownNodes = new Map<string, GraphNode>();
   const authority = byId<HTMLSelectElement>('authority');
-  const canvas = new EvidenceCanvas(byId('graph'), id => void enter(id), facts => showAssertions(facts, id => void enter(id), metadata.sourceUrlTemplate));
+  const canvas = new EvidenceCanvas(byId('graph'), id => void enter(id), facts => showAssertions(facts, id => void enter(id), metadata.sourceUrlTemplate, scope?.kind === 'node' ? scope.request.nodeId : undefined));
   const status = (text: string) => { byId('status').textContent = text; };
   const run = async (work: (ticket: number) => Promise<void>) => {
     const ticket = ++generation;
@@ -43,8 +43,6 @@ async function main() {
       byId<HTMLSelectElement>('direction').value = value.request.direction ?? 'both';
       byId<HTMLSelectElement>('predicate').value = value.request.predicates?.[0] ?? '';
     }
-    canvas.render([...nodes.values()], facts, focus?.id, viewport, new Set([...nodes.keys()].filter(id => source.canExplore?.(id) === false)));
-    if (value.kind === 'path') canvas.highlight(new Set(value.result.paths.flatMap(path => path.factIds)));
     showFocus(focus, facts, id => void enter(id), metadata.sourceUrlTemplate, metadata.capabilities.paths);
     byId('scope').textContent = value.kind === 'catalog' ? `${value.result.selection.view} overview` : focus?.label ?? 'Evidence paths';
     byId('related').replaceChildren();
@@ -53,19 +51,48 @@ async function main() {
     byId<HTMLButtonElement>('back').disabled = !history.length;
     const next = byId<HTMLButtonElement>('next'); next.hidden = value.kind === 'path' ? !value.result.search.continuation : !value.result.selection.continuation;
     byId('node-filters').hidden = value.kind !== 'node';
+    const shortcuts = byId('shortcuts'); shortcuts.replaceChildren();
+    if (focus && value.kind === 'node') {
+      const options: [string, 'incoming' | 'outgoing', GraphFact['predicate']][] = focus.kind === 'CodeSymbol'
+        ? [['Callers', 'incoming', 'calls'], ['Callees', 'outgoing', 'calls'], ['What this implements', 'incoming', 'implementedBy'], ['Verification evidence', 'outgoing', 'verifiedBy']]
+        : [['Implementations', 'outgoing', 'implementedBy'], ['What this implements', 'incoming', 'implementedBy'], ['Verification evidence', 'outgoing', 'verifiedBy']];
+      for (const [label, direction, predicate] of options) {
+        if (!metadata.predicates.includes(predicate)) continue;
+        const button = element('button', label);
+        button.title = `${direction} · ${predicate}`;
+        button.setAttribute('aria-pressed', String(value.request.direction === direction && value.request.predicates?.includes(predicate) === true));
+        button.onclick = () => {
+          byId<HTMLSelectElement>('direction').value = direction;
+          byId<HTMLSelectElement>('predicate').value = predicate;
+          void enter(focus.id, undefined, true);
+        };
+        shortcuts.append(button);
+      }
+    }
+    if (value.kind === 'catalog' && value.result.nodes.length) {
+      byId<HTMLInputElement>('search').placeholder = `Try ${value.result.nodes[0]!.node.label}`;
+    }
     byId('connections').hidden = value.kind !== 'catalog';
     showScopeDetails(value, nodes.size, facts.length, metadata, status);
     const selectionDetail = value.kind === 'path' ? { search: value.result.search, frontier: value.result.frontier } : value.result.selection;
     byId('selection-details').textContent = JSON.stringify(selectionDetail, null, 2);
     showHistory();
+    canvas.render([...nodes.values()], facts, focus?.id, viewport, new Set([...nodes.keys()].filter(id => source.canExplore?.(id) === false)));
+    if (value.kind === 'path') canvas.highlight(new Set(value.result.paths.flatMap(path => path.factIds)));
   }
   function showHistory() {
     byId('breadcrumbs').replaceChildren();
-    for (const [index, prior] of history.entries()) {
-      if (index < history.length - 5) continue;
-      const label = prior.scope.kind === 'catalog' ? prior.scope.result.selection.view : prior.scope.kind === 'node' ? prior.scope.request.nodeId : 'Paths';
+    const identity = (item: Scope) => item.kind === 'catalog' ? `catalog:${item.result.selection.view}`
+      : item.kind === 'node' ? `node:${item.request.nodeId}` : 'paths';
+    const stops = history.map((prior, index) => ({ prior, index })).filter(({ prior, index }) => {
+      const next = history[index + 1]?.scope ?? scope;
+      return !next || identity(prior.scope) !== identity(next);
+    });
+    for (const { prior, index } of stops.slice(-5)) {
+      const label = prior.scope.kind === 'catalog' ? `${prior.scope.result.selection.view} overview` :
+        prior.scope.kind === 'node' ? knownNodes.get(prior.scope.request.nodeId)?.label ?? prior.scope.request.nodeId : 'Paths';
       const button = element('button', label.length > 45 ? label.slice(0, 42) + '…' : label);
-      button.title = label; button.onclick = () => backTo(index); byId('breadcrumbs').append(button);
+      button.title = label; button.setAttribute('aria-label', label); button.onclick = () => backTo(index); byId('breadcrumbs').append(button);
     }
   }
   function backTo(index: number) {
@@ -82,11 +109,18 @@ async function main() {
   }
   async function enter(nodeId: string, continuation?: string, force = false) {
     if (scope?.kind === 'node' && scope.request.nodeId === nodeId && !continuation && !force) return;
+    if (source.canExplore?.(nodeId) === false) {
+      ++generation;
+      byId('error').hidden = true;
+      status(`${knownNodes.get(nodeId)?.label ?? nodeId} is outside the focused report. Open the full saved snapshot in the local explorer to explore this neighborhood.`);
+      return;
+    }
+    const sameNode = scope?.kind === 'node' && scope.request.nodeId === nodeId;
     await run(async ticket => {
       status('Loading cited relationships…');
       const request: GraphNeighborsRequest = { snapshotId, nodeId, maxFacts: 30,
-        direction: byId<HTMLSelectElement>('direction').value as 'both' | 'incoming' | 'outgoing',
-        predicates: metadata.predicates.filter(predicate => predicate === byId<HTMLSelectElement>('predicate').value),
+        direction: sameNode ? byId<HTMLSelectElement>('direction').value as 'both' | 'incoming' | 'outgoing' : 'both',
+        predicates: sameNode ? metadata.predicates.filter(predicate => predicate === byId<HTMLSelectElement>('predicate').value) : [],
         ...(continuation ? { continuation } : {}) };
       const result = await source.neighbors(request); if (ticket !== generation) return;
       save(); render({ kind: 'node', request, result });

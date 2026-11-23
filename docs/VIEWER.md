@@ -35,6 +35,15 @@ are a separate milestone; do not expose this local server through a public proxy
 product areas, with navigation boundaries, while the local explorer browses the full snapshot.
 See the [milestone plan](VIEWER-EXPLORER-PLAN.md) and [shared discovery contract](EXPLORER-DISCOVERY.md).
 
+## Follow a rule to its callers
+
+1. Choose **Product intent** and type a recognizable word from the rule, such as `reservation`. Search matches part of a saved label, node ID or cited source path, ignoring case. Choose **All saved evidence** to search across facets.
+2. Open the rule and choose **Implementations**. Each arrow follows a saved `implementedBy` assertion. Open a method when the binding names a method. A file-level binding takes you to the file.
+3. At a method, choose **Callers** for incoming `calls` or **Callees** for outgoing `calls`. Expand a group in **Cited relationships** to see both endpoints, the direction and the source line. Open the assertion to inspect its authority, review state and supporting citations. A `references` assertion stays available under its own predicate.
+4. Use the named breadcrumb to return to the rule. Back restores the previous filters and canvas layout. Each newly opened node starts with both directions so an incoming caller can be discovered after an outgoing implementation link.
+
+The local explorer can query every saved neighborhood. In a focused report, a dashed endpoint names a real relationship whose other neighborhood needs the full snapshot. Selecting it keeps your place and identifies the boundary.
+
 ## Authority inspection and resolution
 
 The viewer is read-only. Inspect grouped assertion citations and authority/review

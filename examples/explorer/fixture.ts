@@ -1,6 +1,6 @@
 import type { GraphFact, GraphNode, GraphSnapshot } from '@weftlet/core';
 
-export function explorerFixture(noise = 250): GraphSnapshot {
+export function explorerFixture(noise = 250, includeMethod = false): GraphSnapshot {
   const node = (id: string, kind: GraphNode['kind'], label = id): GraphNode => ({ id, kind, label });
   const fact = (id: string, subject: GraphNode, predicate: GraphFact['predicate'], object: GraphNode,
     options: Partial<GraphFact> = {}): GraphFact => ({ id, subject, predicate, object,
@@ -27,6 +27,13 @@ export function explorerFixture(noise = 250): GraphSnapshot {
         provenance: { path: `src/noise-${i}.ts`, startLine: 1, endLine: 1, digest: `public-${i}`, commitSha: 'a'.repeat(40) },
       })),
   ];
+  if (includeMethod) {
+    const dispatch = node('code:symbol:dispatch', 'CodeSymbol', 'dispatchShipment');
+    const caller = node('code:symbol:consume', 'CodeSymbol', 'consumeReservation');
+    facts.push(fact('rule-method', ship, 'implementedBy', dispatch, intent),
+      fact('worker-calls-dispatch', caller, 'calls', dispatch, { authority: 'implemented', extractionReview: 'deterministic',
+        provenance: { path: 'src/worker.ts', startLine: 4, endLine: 4, digest: 'public-worker', commitSha: 'a'.repeat(40) } }));
+  }
   return { manifest: { schemaVersion: 1, repositoryId: 'public/explorer', ref: 'HEAD', commitSha: 'a'.repeat(40),
     snapshotId: 'public-explorer', contentDigest: 'public-content', configurationDigest: 'public-config', scope: ['docs/order-policy.md'],
     ontologyVersion: '1', extractorVersions: {}, semanticModel: 'none', semanticPromptVersion: '1', generatedAt: '2026-11-05T00:00:00Z',
