@@ -4,7 +4,7 @@ import { parseGraphCatalogRequest, parseGraphFactRequest } from '../graph/discov
 import { parseGraphNeighborsRequest } from '../graph/neighborhood-request.js';
 import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
-import { graphReadPath } from '../client.js';
+import { graphReadPath } from '../infrastructure/graph-read-client.js';
 import { sourceLink } from './source-links.js';
 import { explorerAssetsRoot } from './explorer-assets.js';
 

@@ -1,6 +1,6 @@
 import type { GraphCatalogRequest, GraphCatalogView, GraphFact, GraphNeighborsRequest, GraphNode, GraphPathsRequest } from '@weftlet/core';
 import type { ExplorerDataSource, ExplorerMetadata } from '../explorer-contract.js';
-import { createGraphReadClient } from '../../client.js';
+import { createGraphReadClient } from '../../infrastructure/graph-read-client.js';
 import { PortableEvidenceSource } from './portable-client.js';
 import { EvidenceCanvas, type ViewportState } from './graph.js';
 import { byId, element, navigationButton } from './dom.js';

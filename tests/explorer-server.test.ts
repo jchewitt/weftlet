@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { createGraphReadClient } from '../src/client.js';
+import { createGraphReadClient } from '../src/infrastructure/graph-read-client.js';
 import { request } from 'node:http';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

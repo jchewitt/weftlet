@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest';
-import { createGraphReadClient } from './client.js';
+import { createGraphReadClient } from './graph-read-client.js';
 
 it('keeps the deployment prefix and rejects responses from a different snapshot', async () => {
   const snapshotId = 'pinned', params = { nodeId: 'workflow:reserve', maxFacts: 3, continuation: 'page-two' };
