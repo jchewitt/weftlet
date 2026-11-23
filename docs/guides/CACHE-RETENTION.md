@@ -99,6 +99,22 @@ active-process registration service or a pin/archive registry discovered from
 arbitrary files. Include external reports or other checkouts' exact-replay needs
 as explicit pins; an old inventory listing is not automatically a pin.
 
+## Preview enrollment of a recently used profile
+
+A successful build can write to a profile your existing policy has never declared. The target still counts those bytes. A prepare with zero issues and zero candidates can mean that the new snapshots and indexes are all protected by `profile-not-managed`.
+
+1. Save the JSON output of `weftlet cache retention prepare --root ROOT --policy retention.json --json` outside the cache as `before.json`. The following optional jq query groups undeclared snapshot and index bytes by profile. It works on an existing prepare report.
+
+   ```sh
+   jq '[.objects[] | select((.category == "snapshot" or .category == "scip-index") and
+        (.reasons | index("profile-not-managed")))] | group_by(.profile) |
+        map({profile: .[0].profile, files: length, logicalBytes: (map(.logicalBytes) | add)})' before.json
+   ```
+
+2. Match the recently produced snapshot ID to the verified inventory from `weftlet cache usage --root ROOT --verify --json`. Confirm the exact relative profile and manifest repository ID. If the profile contains conflicting identities or its ownership is uncertain, leave it undeclared.
+3. Copy the existing policy to `candidate.json` outside the cache. Keep its target, existing declarations and pins. Add the confirmed profile to `profiles` with its path, repository ID, owner and reason. Record the active heads, rollback needs and any externally required historical IDs as described above.
+4. Run `weftlet cache retention prepare --root ROOT --policy candidate.json --json` and save the output separately. Compare issues, candidate paths, logical bytes, current/previous heads and pin protection with the first report. Enrollment can expose previously protected generations to future removal. The candidate preview leaves the live policy in place. If you have scheduled maintenance, review its bound policy digest before adopting a changed policy.
+
 ## Produce and check a review
 
 ```sh

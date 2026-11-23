@@ -1,5 +1,22 @@
 # Validation evidence
 
+## 0.13.0 TradePilot storage replay
+
+The November 22 consumer report verified the exact frozen-install npm pair against its SHA-512 digests and all 46 core and 769 toolkit archive members. On native Windows, the direct-RDF task graph passed strict validation with 591,289 facts and 182,834 nodes. An independent clean rebuild reproduced the digest, removed its temporary output and left zero new compiler workspaces. A separate explicit RDF export remained readable with the same compiler digest. On hosted Linux the consumer compiled its ontologies and uploaded a nonempty artifact. CI uploaders that need RDF should request a standalone [compiler export](guides/CACHE-HISTORY.md#compiler-workspace-lifetime).
+
+The default CLI, fresh stdio server and restarted Codex desktop host returned the same historical digest and four ordered facts from saved evidence. The desktop distinguished the historical configuration mismatch from the matching current task snapshot.
+
+Both native NTFS prepares used the same 10,000,000,000-byte history target and 12 pins. Each completed with zero issues and zero eligible bytes.
+
+| Observation | Logical bytes observed | Bytes over target |
+| --- | ---: | ---: |
+| Before the task build | 14,208,346,175 | 4,208,346,175 |
+| After task and feature comparisons | 14,997,188,619 | 4,997,188,619 |
+
+The 788,842,444-byte increase was classified as `profile-not-managed`, predominantly ordinary snapshots and SCIP indexes in the new direct-RDF profile. An issue-free prepare can therefore leave a recently used profile outside the retention policy. See [previewing profile enrollment](guides/CACHE-RETENTION.md#preview-enrollment-of-a-recently-used-profile). The consumer kept its policy and evidence intact. Real-item eviction, index migration, scheduled maintenance and a private viewer deployment remain outside this replay.
+
+A separate disposable Linux fixture checked the guide with the published 0.13.0 CLI. The original policy retained all four snapshots in an undeclared profile. A preview with a separate candidate policy selected only the superseded snapshot and preserved the current, rollback and pinned generations. All fixture evidence files kept their original hashes.
+
 ## 0.13.0 release verification
 
 Both public npm packages carried the `latest` tag at verification. Their registry downloads matched the trusted workflow archives byte for byte. Both Git tags resolved to release commit `3742f4317ecde8834f2d4ce62ecd1b782ceb6254`. The fixed-pair release incorporated six changesets. [Version PR](https://github.com/jchewitt/weftlet/pull/125) · [Trusted publishing and documentation dispatch](https://github.com/jchewitt/weftlet/actions/runs/44956528303)
