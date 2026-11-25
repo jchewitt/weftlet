@@ -26,3 +26,10 @@ export function createHostedAccess(publicOrigin: string, token: string | undefin
     },
   };
 }
+
+export function acceptsExplorerOrigin(request: IncomingMessage, port: number, hosted?: HostedAccess): boolean {
+  const host = request.headers.host, origin = request.headers.origin;
+  if (hosted) return host === new URL(hosted.origin).host && (origin === undefined || origin === hosted.origin);
+  const hosts = [`127.0.0.1:${port}`, `localhost:${port}`];
+  return hosts.includes(host ?? '') && (origin === undefined || hosts.some(value => origin === 'http://' + value));
+}

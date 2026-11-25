@@ -115,6 +115,8 @@ The client uses `POST api/v1/query` relative to the service directory and pins e
 
 ## Serve CI evidence from another machine
 
+**Availability.** Bundle serving is in the next minor candidate after 0.16.0. To try this change before publication, install the paired core and toolkit archives built from the candidate on the host (see [local candidate installation](RELEASING.md)). Run its installed binary with `npx --no-install weftlet`.
+
 **Build once in the producer checkout.** Export the exact committed snapshot. Record the returned `manifestSha256` in your trusted deployment configuration. Transfer the output directory to the host as a private artifact. The default export contains the graph and its manifest. Keep the separate semantic cache on the producer.
 
 ```sh

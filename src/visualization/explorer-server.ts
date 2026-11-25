@@ -6,7 +6,7 @@ import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
 import { graphReadPath } from '../infrastructure/graph-read-client.js';
 import { sourceLink } from './source-links.js';
-import type { HostedAccess } from './hosted-access.js';
+import { acceptsExplorerOrigin, type HostedAccess } from './hosted-access.js';
 import { explorerAssetsRoot } from './explorer-assets.js';
 
 const assets = new Map([
@@ -67,10 +67,7 @@ export async function startExplorerServer(service: ExplorerService, options: { p
     response.setHeader('Referrer-Policy', 'no-referrer');
     response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'");
     const hosted = options.hostedAccess;
-    const allowedHosts = hosted ? [new URL(hosted.origin).host] : [`127.0.0.1:${actualPort}`, `localhost:${actualPort}`];
-    const allowedOrigins = hosted ? [hosted.origin] : allowedHosts.map(host => `http://${host}`);
-    if (!allowedHosts.includes(request.headers.host ?? '') ||
-      (request.headers.origin !== undefined && !allowedOrigins.includes(request.headers.origin))) {
+    if (!acceptsExplorerOrigin(request, actualPort, hosted)) {
       send(response, 403, { error: 'Unexpected explorer host or origin' }); return;
     }
     if (hosted && !hosted.authorized(request)) {

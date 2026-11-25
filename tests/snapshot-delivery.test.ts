@@ -118,6 +118,12 @@ describe('verified snapshot delivery', () => {
           await writeFile(file, Buffer.concat([bytes, Buffer.from(' ')]));
           await expect(open()).rejects.toThrow('byte limit');
           expect(await a.catalog()).toEqual(catalog);
+          const changed = Buffer.from(bytes);
+          const offset = changed.indexOf(snapshot.manifest.commitSha);
+          expect(offset).toBeGreaterThanOrEqual(0);
+          changed[offset] = changed[offset] === 48 ? 49 : 48;
+          await writeFile(file, changed);
+          await expect(open()).rejects.toThrow('payload integrity');
           await writeFile(file, bytes);
         }
       } finally { await server.close(); }
