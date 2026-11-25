@@ -10,7 +10,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
 import { createContextGraphApplication } from "../application/application.js";
-import { handleImpactScan, impactScanToolName } from "./mcp-facade.js";
+import { handleImpactScan, impactScanTool, impactScanToolName } from "./mcp-facade.js";
 import { parseImpactScanRequest } from "./request.js";
 import { graphNeighborsTool, handleGraphNeighbors } from './graph-exploration.js';
 import { graphPathsTool, handleGraphPaths } from './graph-paths.js';
@@ -21,6 +21,10 @@ import { mappingPlanTool, mappingReadTool, handleMappingTool } from './mapping-p
 import { toolkitIdentity } from '../infrastructure/package-identity.js';
 
 async function main(): Promise<void> {
+  if (process.argv.length > 2) {
+    const { startHostedMcp } = await import('./hosted-read-mcp.js');
+    return startHostedMcp(process.argv.slice(2));
+  }
   const local = resolve('context-graph.config.json');
   const configPath =
     process.env.CONTEXT_GRAPH_CONFIG ??
@@ -45,33 +49,7 @@ async function main(): Promise<void> {
       graphFactTool,
       graphCompatibilityTool,
       graphCoverageTool,
-      {
-        name: impactScanToolName,
-        description:
-          'Return a bounded, provenance-bearing impact Context Pack for a task, document, file, symbol, or capability. An explicit ownerDocument gives up to four early positions to exact owner-cited intent evidence, preferring assertions over generated document links. Inspect ownerIntent counts, citations, review and continuation; priority does not prove task relevance or completeness.',
-        inputSchema: {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            snapshotId: { type: 'string' },
-            ownerDocument: { type: 'string' },
-            task: { type: 'string' },
-            checklistItems: { type: 'array', items: { type: 'string' } },
-            changedFiles: { type: 'array', items: { type: 'string' } },
-            symbols: { type: 'array', items: { type: 'string' } },
-            capabilities: { type: 'array', items: { type: 'string' } },
-            maxFacts: { type: 'integer', minimum: 1, maximum: 200 },
-            maxDepth: { type: 'integer', minimum: 1, maximum: 128 },
-            continuation: { type: 'string', maxLength: 2048 },
-          },
-        },
-        annotations: {
-          readOnlyHint: true,
-          destructiveHint: false,
-          idempotentHint: true,
-          openWorldHint: false,
-        },
-      },
+      impactScanTool,
     ],
   }));
   server.setRequestHandler(CallToolRequestSchema, async (request) => {

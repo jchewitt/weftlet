@@ -1,3 +1,5 @@
+import { SnapshotImpactQueryService } from '../graph/query.js';
+import type { ImpactScanRequest } from '@weftlet/core';
 import { resolve } from 'node:path';
 import { readBundleManifest, readHostedSnapshot } from './delivery/read-bundle.js';
 import { transferLimit } from './delivery/contract.js';
@@ -57,6 +59,7 @@ async function buildExplorerService(store: RevisionedSnapshotReader, snapshotId:
     return current;
   };
   return coordinateMethods({ index,
+    impact: (request: ImpactScanRequest) => SnapshotImpactQueryService.scanIndex(index, request),
     withOperation: <T>(run: () => Promise<T>, additionalPaths: readonly string[] = []) => withManagedCacheAccess([...roots, ...additionalPaths], run),
     discovery: coordinateMethods(discovery, roots, ['catalog', 'fact']),
     exploration: coordinateMethods(exploration, roots, ['neighbors']),

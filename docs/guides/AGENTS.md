@@ -220,3 +220,15 @@ Claude/OpenCode development sessions are not established by those tests. Codex
 reference pages were checked for this guide; Claude's documentation site
 returned HTTP 403. OpenCode 1.x was subsequently checked against its upstream
 versioned guide. Real-client verification remains distinct from protocol checks.
+
+## Use a self-hosted snapshot
+
+The candidate after 0.16.0 supports a read-only MCP connection to a team's [bundle reader](../VIEWER.md#serve-ci-evidence-from-another-machine). Install matching host and client toolkit packages. Choose the agent client's stdio server configuration and supply the following command and arguments, using the path to the installed executable:
+
+```text
+weftlet-mcp --graph-url https://graph.example.org --snapshot <saved-id> --content-digest <saved-content-digest>
+```
+
+The operator supplies the snapshot ID and optional **content digest** from the export receipt. The host separately uses the **manifest SHA-256** to verify the bundle. For authenticated HTTPS, pass `WEFTLET_VIEWER_TOKEN` to the MCP process using your agent's secret/environment configuration. Keep the credential out of command arguments and committed config. For an SSH tunnel, use the forwarded loopback HTTP URL.
+
+Start with `impact.scan` for a task or changed file. Inspect a cited assertion with `graph.fact`, discover entry points with `graph.catalog`, then follow `graph.neighbors` and `graph.paths`. Each call defaults to the configured snapshot ID. Continuation tokens keep the original query and snapshot constraints. If the host is unreachable, the agent receives a tool error and can retry that same query when connectivity returns. This process reads saved evidence; current checkout and current-diff validation belong to the source project. Ordinary project MCP registration still uses `weftlet-mcp` without hosted arguments.
