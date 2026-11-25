@@ -241,7 +241,7 @@
       "destinationPath": "src/interfaces/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "d184ab1c83ae5283cc4c47ca7a6618a534fed5960bcd38f5a5afb9bdd65bc09d"
+      "destinationSha256": "81aa112095bab8daeceeeb3f3c3d41c593493b4421b2c35737564e93a94e6eff"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".agents/skills/release-documentation/SKILL.md",
     ".changeset/README.md",
+    ".changeset/checkout-independent-graph-service.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
     ".changeset/versioned-graph-reads.md",
@@ -1048,6 +1049,7 @@
     "src/application/delivery/contract.ts",
     "src/application/delivery/export.ts",
     "src/application/delivery/import.ts",
+    "src/application/delivery/read-bundle.ts",
     "src/application/delivery/semantic.ts",
     "src/application/delivery/stored-json.ts",
     "src/application/delivery/validation.ts",
@@ -1370,6 +1372,7 @@
     "src/visualization/explorer/scope-details.ts",
     "src/visualization/explorer/scope.ts",
     "src/visualization/explorer/style.css",
+    "src/visualization/hosted-access.ts",
     "src/visualization/path-parity.test.ts",
     "src/visualization/portable-contract.ts",
     "src/visualization/report-json.ts",

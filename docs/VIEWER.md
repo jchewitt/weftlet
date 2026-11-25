@@ -28,8 +28,7 @@ The diagnostic panel retains gaps and omitted-summary counts.
 To enable source links, add `--source-url-template` with an HTTPS template containing `{commit}`
 and `{path}` (and optionally `{line}`), as in the legacy example below. Nothing is sent to a CDN.
 The server binds only to loopback, rejects other Host/Origin values, accepts bounded read queries,
-and serves an allowlist of packaged assets. Remote binding, authentication and Docker deployment
-are a separate milestone; do not expose this local server through a public proxy.
+and serves an allowlist of packaged assets. For remote access, follow the [self-hosting instructions](#serve-ci-evidence-from-another-machine) to deploy an exported snapshot.
 
 `weftlet viewer export` creates [focused portable bundles](PORTABLE-EXPLORER.md) around explicit
 product areas, with navigation boundaries, while the local explorer browses the full snapshot.
@@ -113,3 +112,46 @@ if (page.nodes.length) {
 ```
 
 The client uses `POST api/v1/query` relative to the service directory and pins every read to the supplied snapshot ID. Pass `contentDigest` from a trusted manifest for an additional identity check. `fact` and `paths` accept the same bounded query fields as their CLI equivalents. The server retains the original local endpoint for existing callers. The [self-hosted plan](SELF-HOSTED-GRAPH-PLAN.md) tracks remote access and PostgreSQL.
+
+## Serve CI evidence from another machine
+
+**Build once in the producer checkout.** Export the exact committed snapshot. Record the returned `manifestSha256` in your trusted deployment configuration. Transfer the output directory to the host as a private artifact. The default export contains the graph and its manifest. Keep the separate semantic cache on the producer.
+
+```sh
+weftlet snapshot export --config context-graph.config.json --snapshot "$SNAPSHOT_ID" --output ./graph-bundle
+```
+
+**Run on the host.** Install the same release of `@weftlet/toolkit` with Node 24. The service reads the bundle once, verifies its manifest, payload bytes and persisted graph digest, runs identity checks and strict SHACL, and then opens the listener. A running process keeps that generation in memory. To change generations, start another instance with the new trusted digest, check its catalog, and switch clients. Each restart rechecks the files.
+
+```sh
+weftlet viewer serve --bundle /srv/weftlet/graph-bundle --expect-digest "$MANIFEST_SHA256" --port 4173
+```
+
+For personal access, forward `127.0.0.1:4173` with SSH and open the printed loopback URL on your machine. Use the same port at both ends so the browser Host matches. The default trusts processes with access to the host's loopback interface. For a shared machine, use the authenticated mode below.
+
+```sh
+ssh -N -L 127.0.0.1:4173:127.0.0.1:4173 your-graph-host
+```
+
+**Give a team read access over HTTPS.** Set `WEFTLET_VIEWER_TOKEN` from your service manager's secret store to a random secret of at least 32 printable ASCII characters (up to 256, without spaces). Configure an exact origin dedicated to this project. The service checks the credential on every route, including metadata and static assets. It checks the HTTP Host and any browser Origin against the configured origin. Run one service and credential per project or access group. A credential grants read access to the entire selected snapshot, including saved citations.
+
+```sh
+weftlet viewer serve --bundle /srv/weftlet/graph-bundle --expect-digest "$MANIFEST_SHA256" \
+  --public-origin https://graph.example.org --port 4173
+```
+
+Terminate TLS at a reverse proxy on the same host, forward to `127.0.0.1:4173` and preserve the public Host and Authorization headers. Exclude Authorization from proxy logs. Browsers use the HTTP login prompt with username `weftlet` and the token as password. Programmatic clients can send `Authorization: Bearer <token>` over HTTPS. Rotate the token by updating the service secret and restarting. For example, a Node process can use the shared client:
+
+```js
+import { createGraphReadClient } from '@weftlet/toolkit/client';
+
+const baseUrl = 'https://graph.example.org';
+const headers = { Authorization: `Bearer ${process.env.WEFTLET_VIEWER_TOKEN}` };
+const graph = createGraphReadClient({
+  baseUrl, snapshotId: process.env.SNAPSHOT_ID,
+  fetch: (url, options) => fetch(url, { ...options, headers: { ...options.headers, ...headers } }),
+});
+const page = await graph.catalog({ view: 'intent', maxNodes: 10 });
+```
+
+The host needs the exported bundle and installed package. The viewer reports the saved commit, coverage and authority with checkout freshness unavailable. Plan memory for one full snapshot and its query index. The default bundle limit is 2 GiB of input bytes, configurable up to 16 GiB with `--max-bytes`. Measure startup and resident memory with your own snapshot. The service accepts four concurrent bounded queries. Remote MCP impact queries and PostgreSQL have separate implementation and acceptance steps in the [self-hosting plan](SELF-HOSTED-GRAPH-PLAN.md).

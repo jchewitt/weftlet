@@ -4,13 +4,13 @@ import { storedJsonDigest } from './stored-json.js';
 import { withManagedCacheAccess } from '../../storage/coordination/managed-access.js';
 import { cacheOperationPaths } from '../cache-operation.js';
 import { randomUUID } from 'node:crypto';
-import { link, lstat, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { link, lstat, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
-import { sha256 } from '@weftlet/core';
+import { readBundleManifest, assertBundleSnapshot } from './read-bundle.js';
 import { fileDigest, copyTransferFile, requireFreeSpace, safeTransferPath, transferDirectory } from '../../storage/transfer-files.js';
 import { snapshotPath, semanticArtifactPath } from '../../storage/storage.js';
 import { activationHead, deliveryContext, deliveryState } from './context.js';
-import { assertBundle, manifestByteLimit, transferLimit, validDigest, type TransferFile } from './contract.js';
+import { manifestByteLimit, transferLimit, type TransferFile } from './contract.js';
 import { checkpoint, sameValue, validateTransferredSnapshot, type TransferControl } from './validation.js';
 import { validateBundleArtifact } from './semantic.js';
 
@@ -30,23 +30,11 @@ export async function importSnapshot(configPath: string, options: ImportSnapshot
     () => importSnapshotOwned(context, options), { signal: options.signal });
 }
 async function importSnapshotOwned(context: Awaited<ReturnType<typeof deliveryContext>>, options: ImportSnapshotOptions) {
-  if (!validDigest(options.expectDigest)) throw Error('Import requires the trusted manifest SHA-256 via --expect-digest');
   if (options.activate !== (options.expectHead !== undefined) && (options.activate || options.expectHead !== undefined)) {
     throw Error('--activate requires --expect-head <id|none>; --expect-head requires --activate');
   }
   const maxBytes = transferLimit(options.maxBytes), input = resolve(options.input);
-  await safeTransferPath(input, true);
-  const manifestPath = join(input, 'manifest.json');
-  // Bound before buffering this small file; snapshot and artifact copying stays streamed.
-  await fileDigest(manifestPath, manifestByteLimit);
-  const raw = await readFile(manifestPath);
-  if (raw.length > manifestByteLimit || sha256(raw) !== options.expectDigest) throw Error('Bundle manifest integrity mismatch');
-  let bundle: unknown;
-  try { bundle = JSON.parse(raw.toString('utf8')); }
-  catch { throw Error('Invalid bundle manifest JSON'); }
-  assertBundle(bundle, maxBytes);
-  const names = (await readdir(input)).sort();
-  if (!sameValue(names, ['manifest.json', ...bundle.files.map(file => file.name)].sort())) throw Error('Bundle contains missing or unlisted files');
+  const bundle = await readBundleManifest(input, options.expectDigest, maxBytes);
   if (bundle.snapshot.repositoryId !== context.config.repositoryId) throw Error('Bundle belongs to a different repository identity');
   await transferDirectory(context.storageRoot);
   await requireFreeSpace(context.storageRoot, bundle.payloadBytes + manifestByteLimit);
@@ -64,9 +52,7 @@ async function importSnapshotOwned(context: Awaited<ReturnType<typeof deliveryCo
     }
     const validated = await validateTransferredSnapshot(join(stage, 'snapshot.json'), options);
     const { snapshot } = validated;
-    if (!sameValue(snapshot.manifest, bundle.snapshot) || validated.persistedGraphDigest !== bundle.persistedGraphDigest) {
-      throw Error('Persisted snapshot identity or canonical digest mismatch');
-    }
+    assertBundleSnapshot(bundle, validated);
     const evidenceState = await deliveryState(context, snapshot);
     const headName = options.activate ? activationHead(context, snapshot) : undefined;
     if (options.activate && (!evidenceState.configurationMatches || !evidenceState.extractionCompatible)) {

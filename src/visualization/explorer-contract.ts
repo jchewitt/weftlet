@@ -4,7 +4,7 @@ import type { PortableReportScope } from './portable-contract.js';
 
 export interface ExplorerMetadata {
   readonly version: 1;
-  readonly mode: 'local' | 'portable';
+  readonly mode: 'local' | 'hosted' | 'portable';
   readonly snapshot: ContextPack['snapshot'];
   readonly repositoryId: string;
   readonly evidenceDigest: string;
