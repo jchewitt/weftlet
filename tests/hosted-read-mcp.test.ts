@@ -65,14 +65,15 @@ it('reads the pinned graph over real stdio and HTTP with filesystem impact parit
   }
 }, 60_000);
 
-it('fails startup for a remote plaintext URL or credentials in the URL', async () => {
+it('rejects unsafe URL and credential configuration before any protocol output', async () => {
   const launch = promisify(execFile);
-  for (const [url, diagnostic] of [
-    ['http://graph.example.org', 'HTTPS or a loopback URL'],
-    ['https://user:never-print-this@graph.example.org', 'omit credentials'],
+  for (const [url, diagnostic, token] of [
+    ['http://graph.example.org', 'HTTPS or a loopback URL', 'x'.repeat(32)],
+    ['https://user:never-print-this@graph.example.org', 'omit credentials', 'x'.repeat(32)],
+    ['https://graph.example.org', 'WEFTLET_VIEWER_TOKEN', 'never-print-this-credential-around-a\nline-break'],
   ] as const) {
     try {
-      await launch(process.execPath, [resolve(import.meta.dirname, '../dist/mcp.js'), '--graph-url', url, '--snapshot', 'public']);
+      await launch(process.execPath, [resolve(import.meta.dirname, '../dist/mcp.js'), '--graph-url', url, '--snapshot', 'public'], { env: { ...process.env, WEFTLET_VIEWER_TOKEN: token } });
       throw Error('Expected hosted configuration rejection');
     } catch (error) {
       const result = error as { code: number; stdout: string; stderr: string };
@@ -82,4 +83,4 @@ it('fails startup for a remote plaintext URL or credentials in the URL', async (
       expect(result.stderr).not.toContain('never-print-this');
     }
   }
-});
+}, 60_000);

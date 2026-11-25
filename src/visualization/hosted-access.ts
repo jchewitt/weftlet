@@ -1,3 +1,4 @@
+import { graphReadCredential } from '../infrastructure/graph-read-credential.js';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import type { IncomingMessage } from 'node:http';
 
@@ -12,12 +13,10 @@ export function createHostedAccess(publicOrigin: string, token: string | undefin
   if (url.protocol !== 'https:' || (publicOrigin !== url.origin && publicOrigin !== url.origin + '/')) {
     throw Error('--public-origin requires an exact HTTPS origin');
   }
-  if (!token || !/^[\x21-\x7e]{32,256}$/.test(token)) {
-    throw Error('Set WEFTLET_VIEWER_TOKEN to a 32–256 character printable ASCII secret for this deployment');
-  }
+  const credential = graphReadCredential(token);
   const digest = (value: string) => createHash('sha256').update(value).digest();
-  const basic = digest('Basic ' + Buffer.from('weftlet:' + token).toString('base64'));
-  const bearer = digest('Bearer ' + token);
+  const basic = digest('Basic ' + Buffer.from('weftlet:' + credential).toString('base64'));
+  const bearer = digest('Bearer ' + credential);
   return {
     origin: url.origin,
     authorized(request) {

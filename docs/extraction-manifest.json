@@ -1249,6 +1249,7 @@
     "src/infrastructure/compiler-docker.ts",
     "src/infrastructure/graph-read-client.test.ts",
     "src/infrastructure/graph-read-client.ts",
+    "src/infrastructure/graph-read-credential.ts",
     "src/infrastructure/json-digest.ts",
     "src/infrastructure/module-resolution.ts",
     "src/infrastructure/package-identity.ts",

@@ -1,3 +1,4 @@
+import { graphReadCredential } from '../infrastructure/graph-read-credential.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
@@ -33,7 +34,8 @@ function options(args: readonly string[]) {
 
 export async function startHostedMcp(args: readonly string[]) {
   const pinned = options(args);
-  const token = process.env.WEFTLET_VIEWER_TOKEN;
+  const configuredToken = process.env.WEFTLET_VIEWER_TOKEN;
+  const token = configuredToken === undefined ? undefined : graphReadCredential(configuredToken);
   const identity = await toolkitIdentity();
   const server = new Server({ name: 'weftlet-hosted-reader', version: identity.version }, {
     capabilities: { tools: {} },
@@ -49,10 +51,15 @@ export async function startHostedMcp(args: readonly string[]) {
       const params = { snapshotId: pinned.snapshotId, ...request.params.arguments };
       if (params.snapshotId !== pinned.snapshotId) throw Error('Query must use the pinned snapshot');
       const name = request.params.name;
-      const reader = createGraphReadClient({ ...pinned, fetch(url, init) {
+      const reader = createGraphReadClient({ ...pinned, async fetch(url, init) {
         const headers = new Headers(init?.headers);
         if (token) headers.set('Authorization', 'Bearer ' + token);
-        return fetch(url, { ...init, headers, signal: extra.signal });
+        const response = await fetch(url, { ...init, headers, signal: extra.signal });
+        if (!response.ok) {
+          await response.body?.cancel();
+          throw Error(`Hosted graph read failed (HTTP ${response.status})`);
+        }
+        return response;
       } });
       const result = name === impactScanTool.name ? await reader.scan(parseImpactScanRequest(params))
         : name === graphNeighborsTool.name ? await handleGraphNeighbors(reader, params)
