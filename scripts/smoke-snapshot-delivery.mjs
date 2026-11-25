@@ -1,5 +1,9 @@
-import { execFileSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { tmpdir } from 'node:os';
+import { createInterface } from 'node:readline';
+import { execFileSync, spawn } from 'node:child_process';
+import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -9,6 +13,7 @@ export async function smokeSnapshotDelivery(consumer, installedRoot, producingCo
     { cwd: consumer, encoding: 'utf8', timeout: 60_000, stdio: ['ignore', 'pipe', 'pipe'] }));
   const input = join(consumer, 'snapshot-bundle');
   const exported = cli('snapshot', 'export', '--config', 'traversal.config.json', '--snapshot', snapshotId, '--output', input);
+  await smokeHostedReader(installedRoot, input, exported);
   const receivingConfig = { ...producingConfig, storagePath: '.context-graph/import-smoke', adapter: './must-not-load.mjs',
     semantic: { ...producingConfig.semantic, providerModule: './must-not-load.mjs' } };
   await writeFile(join(consumer, 'delivery.config.json'), JSON.stringify(receivingConfig));
@@ -39,4 +44,31 @@ export async function smokeSnapshotDelivery(consumer, installedRoot, producingCo
   cli('snapshot', 'export', '--config', 'compact.config.json', '--snapshot', snapshotId, '--output', rollback);
   if (!(await readFile(join(rollback, 'snapshot.json'))).equals(await readFile(join(input, 'snapshot.json')))) throw Error('Compact CLI export changed JSON bytes');
   console.log('Packed CLI compact import and byte-exact JSON rollback passed.');
+}
+
+async function smokeHostedReader(installedRoot, bundle, receipt) {
+  const directory = await mkdtemp(join(tmpdir(), 'weftlet-installed-reader-'));
+  try {
+    await cp(bundle, join(directory, 'bundle'), { recursive: true });
+    const child = spawn(process.execPath, [join(installedRoot, 'dist/cli.js'), 'viewer', 'serve',
+      '--bundle', 'bundle', '--expect-digest', receipt.manifestSha256, '--port', '0'], {
+      cwd: directory, stdio: ['ignore', 'pipe', 'inherit'], timeout: 60_000,
+    });
+    const exit = once(child, 'exit');
+    const lines = createInterface({ input: child.stdout });
+    try {
+      const ready = await Promise.race([once(lines, 'line'), exit.then(() => { throw Error('Installed bundle reader exited before startup'); })]);
+      const { url, snapshotId } = JSON.parse(ready[0]);
+      assert.equal(snapshotId, receipt.snapshotId);
+      const meta = await (await fetch(url + '/explorer.json')).json();
+      assert.equal(meta.mode, 'hosted');
+      assert.equal(meta.checkout, undefined);
+      assert.equal(meta.snapshot.contentDigest, receipt.contentDigest);
+      const page = await (await fetch(url + '/api/v1/query', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'graph.catalog', params: { snapshotId, maxNodes: 1 } }) })).json();
+      assert.equal(page.nodes.length, 1);
+      assert.equal(page.snapshot.snapshotId, snapshotId);
+    } finally { lines.close(); child.kill(); await exit; }
+    console.log('Packed reader served verified CI evidence from a directory containing only the exported bundle.');
+  } finally { await rm(directory, { recursive: true, force: true }); }
 }

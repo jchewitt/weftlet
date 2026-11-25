@@ -146,7 +146,7 @@ async function main() {
     });
   }
   byId('repository').textContent = metadata.repositoryId;
-  byId('mode').textContent = metadata.mode === 'local' ? 'Local · saved evidence' : 'Portable · saved evidence';
+  byId('mode').textContent = ({ local: 'Local', hosted: 'Self-hosted', portable: 'Portable' })[metadata.mode] + ' · saved evidence';
   if (metadata.report) {
     const report = metadata.report, banner = byId('report-scope'); banner.hidden = false;
     banner.append(element('p', `Focused report: ${report.includedFacts.toLocaleString()} of ${report.sourceFacts.toLocaleString()} source facts · ${report.expandedNodes} complete neighborhoods · ${report.frontierNodes} frontier nodes. Search covers this report. Dashed nodes require the full snapshot for further exploration. Full-snapshot path search is available in the local explorer.`));
@@ -163,7 +163,7 @@ async function main() {
       current.checkout ? `${current.mode === 'portable' ? 'captured at export' : 'checked'} ${new Date(current.checkout.checkedAt).toLocaleString()}` : 'checkout state unavailable'].filter(Boolean).join(' · ');
   };
   displayState(metadata);
-  byId('refresh-state').hidden = metadata.mode === 'portable';
+  byId('refresh-state').hidden = metadata.mode !== 'local';
   byId('refresh-state').onclick = () => {
     void fetch('./explorer.json').then(async response => {
       if (!response.ok) throw new Error('Unable to refresh checkout state');

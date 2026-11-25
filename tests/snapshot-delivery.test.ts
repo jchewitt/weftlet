@@ -1,3 +1,6 @@
+import { createBundleExplorerService, createExplorerService } from '../src/application/explorer-service.js';
+import { startExplorerServer } from '../src/visualization/explorer-server.js';
+import { createGraphReadClient } from '../src/infrastructure/graph-read-client.js';
 import { enableCacheCoordination } from '../src/storage/coordination/managed-root.js';
 import { withSavedScipIndex } from '../src/storage/shared-scip.js';
 import { execFile } from 'node:child_process';
@@ -77,6 +80,56 @@ beforeAll(async () => {
 afterAll(async () => { if (root) await rm(root, { recursive: true, force: true }); });
 
 describe('verified snapshot delivery', () => {
+  it('serves only the pinned exported generation across clients and restarts without checkout metadata', async () => {
+    const id = snapshot.manifest.snapshotId;
+    const plain = join(root, 'hosted-bundle');
+    const receipt = await exportSnapshot(configPath, { snapshotId: id, output: plain });
+    const local = await createExplorerService(configPath, id);
+    const open = () => createBundleExplorerService(plain, receipt.manifestSha256);
+    await expect(createBundleExplorerService(plain, '0'.repeat(64))).rejects.toThrow('manifest integrity');
+    await expect(createBundleExplorerService(plain, receipt.manifestSha256, 16)).rejects.toThrow('oversized');
+    await expect(createBundleExplorerService(bundle, exported.manifestSha256)).rejects.toThrow('snapshot-only');
+    const query = { nodeId: 'capability:search', maxFacts: 1 };
+    const [expected, catalog] = await Promise.all([local.exploration.neighbors({ snapshotId: id, ...query }), local.discovery.catalog({ snapshotId: id })]);
+    const expectedFact = await local.discovery.fact({ snapshotId: id, factId: expected.facts[0]!.id });
+    const endpoints = { fromNodeId: expectedFact.fact!.subject.id, toNodeId: expectedFact.fact!.object.id };
+    const paths = await local.paths.paths({ snapshotId: id, ...endpoints });
+    const page = await local.discovery.catalog({ snapshotId: id, maxNodes: 1 });
+    expect(page.selection.continuation).toBeTruthy();
+    const next = { maxNodes: 1, continuation: page.selection.continuation };
+    const expectedNext = await local.discovery.catalog({ snapshotId: id, ...next });
+    for (const restart of [false, true]) {
+      const server = await startExplorerServer(await open(), { port: 0 });
+      try {
+        const metadata = await (await fetch(server.url + '/explorer.json')).json();
+        expect(metadata.mode).toBe('hosted');
+        expect(metadata.snapshot).toEqual(catalog.snapshot);
+        expect(metadata).not.toHaveProperty('checkout');
+        const connect = () => createGraphReadClient({ baseUrl: server.url, snapshotId: id, contentDigest: receipt.contentDigest });
+        const a = connect(), b = connect();
+        expect(await Promise.all([a.catalog(), b.fact({ factId: expectedFact.factId }), b.neighbors(query), a.paths(endpoints)]))
+          .toEqual([catalog, expectedFact, expected, paths]);
+        expect(await b.catalog(next)).toEqual(expectedNext);
+        const foreign = createGraphReadClient({ baseUrl: server.url, snapshotId: 'another-project' });
+        await expect(foreign.catalog()).rejects.toThrow('pinned snapshot');
+        if (restart) {
+          const file = join(plain, 'snapshot.json');
+          const bytes = await readFile(file);
+          await writeFile(file, Buffer.concat([bytes, Buffer.from(' ')]));
+          await expect(open()).rejects.toThrow('byte limit');
+          expect(await a.catalog()).toEqual(catalog);
+          const changed = Buffer.from(bytes);
+          const offset = changed.indexOf(snapshot.manifest.commitSha);
+          expect(offset).toBeGreaterThanOrEqual(0);
+          changed[offset] = changed[offset] === 48 ? 49 : 48;
+          await writeFile(file, changed);
+          await expect(open()).rejects.toThrow('payload integrity');
+          await writeFile(file, bytes);
+        }
+      } finally { await server.close(); }
+    }
+  }, 60000);
+
   it('imports real extracted/indexed evidence, queries it, preserves exact bytes and reuses artifacts on independent repeat hydration', async () => {
     const c = await consumer();
     const options = { input: bundle, expectDigest: exported.manifestSha256, includeSemantic: true, activate: true, expectHead: null };

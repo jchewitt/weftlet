@@ -1,5 +1,9 @@
 # Validation evidence
 
+## Checkout-independent graph service candidate
+
+A real TypeScript-indexed public snapshot was exported and opened through the bundle reader. Two clients and a restarted instance returned the same catalog, exact fact, cited neighborhood, path, and catalog continuation as the source reader. The bundle has its saved commit and scope. Checkout state is unavailable. Tests reject a different requested snapshot, untrusted manifest digest, oversized input, semantic-cache bundle and altered payload. Two-client reads still return the pinned facts after an invalid on-disk replacement. The HTTP access suite exercises credentials, public Host and browser Origin, including metadata and static assets. An independent packed installation served the exported bundle from a temporary directory outside any checkout. A local TLS reverse proxy accepted browser Basic and programmatic bearer credentials, rejected anonymous metadata reads, and served the same catalog snapshot. Sandboxed Chromium 154 opened the authenticated viewer, displayed its detached checkout state and queried its catalog. This used a public fixture. Production ingress and consumer-scale memory remain to be qualified. Remote MCP and PostgreSQL qualification are tracked in the [deployment plan](SELF-HOSTED-GRAPH-PLAN.md).
+
 ## Versioned graph read client candidate
 
 The local HTTP regression compares catalog, exact fact, neighborhood and path responses with the underlying snapshot readers, including a second neighborhood page. It checks rejected snapshot IDs, digest mismatches, invalid bounds and the original HTTP route. Client tests cover a URL deployment prefix, a mismatched response identity and a non-JSON HTTP error. The installed-package smoke imports the public client from an independent consumer. Self-hosted deployment, PostgreSQL and remote MCP qualification have their own [acceptance cases](SELF-HOSTED-GRAPH-PLAN.md).

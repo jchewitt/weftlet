@@ -103,7 +103,7 @@ npx weftlet viewer serve --snapshot "<snapshot-id>"
 ```
 
 The local explorer supports intent-first navigation, drag/pan/zoom and cited
-relationship drill-down. See the [viewer guide](docs/VIEWER.md) for portable reports.
+relationship drill-down. See the [viewer guide](docs/VIEWER.md) for portable reports and the [self-hosted reader candidate](docs/VIEWER.md#serve-ci-evidence-from-another-machine) for serving a CI snapshot from another machine.
 
 ## Go deeper
 

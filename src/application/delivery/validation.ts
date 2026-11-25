@@ -15,7 +15,10 @@ export function checkpoint(control: TransferControl, phase: string) {
 /** Validate the persisted evidence without executing repository code or reclassifying authority. */
 export async function validateTransferredSnapshot(path: string, control: TransferControl) {
   checkpoint(control, 'read-snapshot');
-  const snapshot = await readJsonFile<GraphSnapshot>(path);
+  return validateSnapshotRecords(await readJsonFile<GraphSnapshot>(path), control);
+}
+
+export async function validateSnapshotRecords(snapshot: GraphSnapshot, control: TransferControl) {
   const m = snapshot?.manifest;
   if (!m || m.schemaVersion !== 1 || typeof m.repositoryId !== 'string' || !m.repositoryId ||
       !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(m.commitSha) || !validDigest(m.contentDigest) ||

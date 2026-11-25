@@ -15,7 +15,7 @@ export async function readJsonProperty<T>(path: string, property: string, snapsh
   return parseJsonChunks<T | undefined>(snapshot ? storedSnapshotChunks(path) : createReadStream(path), `$.${property}`);
 }
 
-async function parseJsonChunks<T>(chunks: AsyncIterable<Buffer>, selector: string): Promise<T> {
+export async function parseJsonChunks<T>(chunks: AsyncIterable<Buffer>, selector = '$'): Promise<T> {
   let value: T | undefined;
   const parser = new JSONParser({ paths: [selector], keepStack: selector === '$' });
   let complete = false;

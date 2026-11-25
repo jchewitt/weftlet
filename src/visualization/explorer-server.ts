@@ -6,6 +6,7 @@ import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
 import { graphReadPath } from '../infrastructure/graph-read-client.js';
 import { sourceLink } from './source-links.js';
+import { acceptsExplorerOrigin, type HostedAccess } from './hosted-access.js';
 import { explorerAssetsRoot } from './explorer-assets.js';
 
 const assets = new Map([
@@ -44,8 +45,8 @@ async function query(service: ExplorerService, value: unknown): Promise<unknown>
   });
 }
 
-/** Local-only server. Hosting/authentication is a separate deployment milestone. */
-export async function startExplorerServer(service: ExplorerService, options: { port?: number; assetsRoot?: URL; sourceUrlTemplate?: string } = {}) {
+/** Bind loopback in both modes. A hosted origin requires authenticated reads on every route. */
+export async function startExplorerServer(service: ExplorerService, options: { port?: number; assetsRoot?: URL; sourceUrlTemplate?: string; hostedAccess?: HostedAccess } = {}) {
   const port = options.port ?? 4173;
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('Invalid viewer port');
   if (options.sourceUrlTemplate) sourceLink({ path: 'README.md', startLine: 1, endLine: 1,
@@ -65,10 +66,13 @@ export async function startExplorerServer(service: ExplorerService, options: { p
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('Referrer-Policy', 'no-referrer');
     response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'");
-    const allowedHosts = [`127.0.0.1:${actualPort}`, `localhost:${actualPort}`];
-    if (!allowedHosts.includes(request.headers.host ?? '') ||
-      (request.headers.origin !== undefined && !allowedHosts.map(host => `http://${host}`).includes(request.headers.origin))) {
-      send(response, 403, { error: 'Explorer access is limited to its loopback origin' }); return;
+    const hosted = options.hostedAccess;
+    if (!acceptsExplorerOrigin(request, actualPort, hosted)) {
+      send(response, 403, { error: 'Unexpected explorer host or origin' }); return;
+    }
+    if (hosted && !hosted.authorized(request)) {
+      response.setHeader('WWW-Authenticate', 'Basic realm="Weftlet saved graph", charset="UTF-8"');
+      send(response, 401, { error: 'Graph read credential required' }); return;
     }
     try {
       if (request.method === 'GET' && request.url === '/explorer.json') {

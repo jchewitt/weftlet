@@ -84,3 +84,40 @@ it('rejects cross-origin/rebinding access, writes, arbitrary files and unbounded
     expect((await fetch(`${server.url}/explorer.json`)).status).toBe(200);
   } finally { await server.close(); await fixture.cleanup(); }
 });
+
+it('requires the credential for every public-origin route and checks the exact host and browser origin', async () => {
+  const { createHostedAccess } = await import('../src/visualization/hosted-access.js');
+  const origin = 'https://graphs.example.org';
+  const token = 'public-fixture-'.repeat(3);
+  expect(() => createHostedAccess(origin, undefined)).toThrow('WEFTLET_VIEWER_TOKEN');
+  for (const invalid of ['http://graphs.example.org', origin + '/mount', origin + '?query', 'https://user@graphs.example.org']) {
+    expect(() => createHostedAccess(invalid, token)).toThrow();
+  }
+  const fixture = await createExplorerFixtureProject(0);
+  const id = fixture.snapshot.manifest.snapshotId;
+  const service = await createExplorerService(fixture.configPath, id);
+  const server = await startExplorerServer(service, { port: 0, hostedAccess: createHostedAccess(origin, token) });
+  // Simulate a reverse proxy preserving the public Host on its loopback connection.
+  const proxy = (path: string, headers: Record<string, string> = {}, body?: string) =>
+    new Promise<number>((resolve, reject) => {
+      const req = request(server.url + path, { method: body ? 'POST' : 'GET',
+        headers: { Host: 'graphs.example.org', 'Content-Type': 'application/json', ...headers } }, response => {
+        response.resume(); resolve(response.statusCode!);
+      });
+      req.on('error', reject); req.end(body);
+    });
+  try {
+    const auth = { Authorization: 'Bearer ' + token };
+    for (const path of ['/explorer.json', '/', '/assets/app.js', '/api/v1/query', '/api/query']) {
+      expect(await proxy(path)).toBe(401);
+    }
+    expect(await proxy('/explorer.json', { Authorization: 'Bearer wrong' })).toBe(401);
+    expect(await proxy('/explorer.json', { Authorization: 'Basic ' + Buffer.from('weftlet:' + token).toString('base64') })).toBe(200);
+    expect(await proxy('/explorer.json', { ...auth, Host: '127.0.0.1' })).toBe(403);
+    expect(await proxy('/explorer.json', { ...auth, Origin: 'https://other.example.org' })).toBe(403);
+    expect(await proxy('/api/v1/query', { ...auth, Origin: origin },
+      JSON.stringify({ method: 'graph.catalog', params: { snapshotId: id } }))).toBe(200);
+    expect(await proxy('/api/v1/query', auth,
+      JSON.stringify({ method: 'graph.catalog', params: { snapshotId: 'other-project' } }))).toBe(400);
+  } finally { await server.close(); await fixture.cleanup(); }
+});
