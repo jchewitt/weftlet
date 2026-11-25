@@ -1,5 +1,17 @@
 # @weftlet/toolkit
 
+## 0.17.0
+
+### Minor Changes
+
+- 6694380: Serve a verified CI snapshot bundle from a standalone Node installation with `weftlet viewer serve --bundle`. Browse it over SSH or configure a dedicated HTTPS reverse proxy and read credential for the viewer and JavaScript clients.
+- f09e05e: Connect an agent to a self-hosted saved snapshot with `weftlet-mcp --graph-url`. Query impact, catalog, facts, neighborhoods and paths over the shared read service using the same snapshot as the browser.
+- e856d12: Query a pinned saved snapshot from JavaScript or TypeScript with the lightweight `@weftlet/toolkit/client` entry point. The local explorer uses the same versioned HTTP endpoint for catalog, fact, neighborhood and bounded path reads.
+
+### Patch Changes
+
+- @weftlet/core@0.17.0
+
 ## 0.16.0
 
 ### Minor Changes

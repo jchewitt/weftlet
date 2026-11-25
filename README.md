@@ -34,7 +34,7 @@ npx weftlet doctor
 ```
 
 <!-- weftlet:release:start -->
-Package versions in this checkout/archive: `@weftlet/toolkit@0.16.0` and `@weftlet/core@0.16.0`.
+Package versions in this checkout/archive: `@weftlet/toolkit@0.17.0` and `@weftlet/core@0.17.0`.
 <!-- weftlet:release:end -->
 
 `init` creates `context-graph.config.json`, offers source/provider/client choices,

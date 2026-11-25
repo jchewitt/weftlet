@@ -3,16 +3,18 @@
   "packages": [
     {
       "name": "@weftlet/core",
-      "version": "0.16.0",
-      "previousVersion": "0.15.0"
+      "version": "0.17.0",
+      "previousVersion": "0.16.0"
     },
     {
       "name": "@weftlet/toolkit",
-      "version": "0.16.0",
-      "previousVersion": "0.15.0"
+      "version": "0.17.0",
+      "previousVersion": "0.16.0"
     }
   ],
   "changesets": [
-    "focused-viewer-navigation.md"
+    "checkout-independent-graph-service.md",
+    "hosted-read-mcp.md",
+    "versioned-graph-reads.md"
   ]
 }
