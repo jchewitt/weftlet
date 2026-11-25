@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { readFile } from 'node:fs/promises';
 import { parseGraphCatalogRequest, parseGraphFactRequest } from '../graph/discovery-request.js';
 import { parseGraphNeighborsRequest } from '../graph/neighborhood-request.js';
+import { parseImpactScanRequest } from '../graph/impact-request.js';
 import { parseGraphPathsRequest } from '../graph/path-request.js';
 import type { ExplorerService } from '../application/explorer-service.js';
 import { graphReadPath } from '../infrastructure/graph-read-client.js';
@@ -29,6 +30,7 @@ async function query(service: ExplorerService, value: unknown): Promise<unknown>
   const envelope = value as Record<string, unknown>;
   if (Object.keys(envelope).sort().join(',') !== 'method,params') throw new Error('Expected method and params');
   const methods = {
+    'impact.scan': (params: unknown) => service.impact(parseImpactScanRequest(params)),
     'graph.catalog': (params: unknown) => service.discovery.catalog(parseGraphCatalogRequest(params)),
     'graph.fact': (params: unknown) => service.discovery.fact(parseGraphFactRequest(params)),
     'graph.neighbors': (params: unknown) => service.exploration.neighbors(parseGraphNeighborsRequest(params)),

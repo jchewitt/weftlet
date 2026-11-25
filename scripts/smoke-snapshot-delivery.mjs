@@ -1,3 +1,5 @@
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { tmpdir } from 'node:os';
@@ -68,6 +70,20 @@ async function smokeHostedReader(installedRoot, bundle, receipt) {
         body: JSON.stringify({ method: 'graph.catalog', params: { snapshotId, maxNodes: 1 } }) })).json();
       assert.equal(page.nodes.length, 1);
       assert.equal(page.snapshot.snapshotId, snapshotId);
+      const agent = new Client({ name: 'packed-hosted-reader', version: '1' });
+      const transport = new StdioClientTransport({ command: process.execPath, args: [join(installedRoot, 'dist/mcp.js'),
+        '--graph-url', url, '--snapshot', snapshotId, '--content-digest', receipt.contentDigest], cwd: directory, stderr: 'pipe' });
+      try {
+        await agent.connect(transport);
+        const args = { ownerDocument: 'role-owner.md', maxFacts: 1 };
+        const reply = await agent.callTool({ name: 'impact.scan', arguments: args });
+        assert.ok(!reply.isError);
+        const viaMcp = JSON.parse(reply.content[1].text);
+        const viaHttp = await (await fetch(url + '/api/v1/query', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ method: 'impact.scan', params: { ...args, snapshotId } }) })).json();
+        assert.deepEqual(viaMcp, viaHttp);
+        assert.equal(viaMcp.facts.length, 1);
+      } finally { await agent.close(); await transport.close(); }
     } finally { lines.close(); child.kill(); await exit; }
     console.log('Packed reader served verified CI evidence from a directory containing only the exported bundle.');
   } finally { await rm(directory, { recursive: true, force: true }); }

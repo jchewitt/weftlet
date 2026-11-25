@@ -4,12 +4,14 @@ import { unexpandedCodeDescription } from './code-description.js';
 import { factEvidenceDescription } from './evidence-description.js';
 import { sourceLocation } from '@weftlet/core';
 import { contextPackEvidenceAuthority } from "./authority.js";
+import type { SnapshotEvidenceIndex } from "./snapshot-index.js";
 import { RdfEvidenceGraph } from "./rdf.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import type {
   ContextPack,
   ContextPackRenderer,
   GraphFact,
+  GraphSnapshot,
   GraphDiagnostic,
   ImpactQueryService,
   ImpactScanRequest,
@@ -179,6 +181,15 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     if (!saved)
       throw new Error('No graph snapshot is available; run context-graph hydrate first');
     const snapshot = { ...saved, facts: await new RdfEvidenceGraph(saved).facts() };
+    return SnapshotImpactQueryService.scanFacts(snapshot, request, maxFacts, this.renderer);
+  }
+
+  static scanIndex(index: SnapshotEvidenceIndex, request: ImpactScanRequest): ContextPack {
+    if (request.snapshotId !== index.snapshot.manifest.snapshotId) throw Error('Impact scan must use the pinned snapshot');
+    return this.scanFacts(index.snapshot, request, boundedFactLimit(request.maxFacts), new MarkdownContextPackRenderer());
+  }
+
+  private static scanFacts(snapshot: GraphSnapshot, request: ImpactScanRequest, maxFacts: number, renderer: ContextPackRenderer): ContextPack {
     const maxDepth = request.maxDepth ?? 32;
     if (!Number.isInteger(maxDepth) || maxDepth < 1 || maxDepth > 128) {
       throw new Error('maxDepth must be an integer between 1 and 128');
@@ -373,10 +384,10 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         continuation,
       },
     };
-    return { ...plain, markdown: this.renderer.render(plain) };
+    return { ...plain, markdown: renderer.render(plain) };
   }
 
-  private matches(fact: GraphFact, terms: readonly string[]): boolean {
+  private static matches(fact: GraphFact, terms: readonly string[]): boolean {
     if (terms.length === 0) return true;
     const haystack = factSearchText(fact);
     return terms.some((term) => haystack.includes(term));

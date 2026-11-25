@@ -332,7 +332,7 @@
       "destinationPath": "src/interfaces/mcp-facade.ts",
       "sourceSha256": "1ea8db04b9e148d995ca7d350e8de1e0744ac71db1c71484993d2bb3b548ee76",
       "modified": true,
-      "destinationSha256": "41fe5a147d71def6e8d6080653da05cb1a9a88ebb158156dbf78f271abdd3f44"
+      "destinationSha256": "654a63f9dcaa1b1bc46422ce1f3434d16b7346fce94e57abc15dfe1de8e5d948"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-startup.test.ts",
@@ -346,7 +346,7 @@
       "destinationPath": "src/interfaces/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "029ddb57a3a31c884ed2c14d5620c528c6a9881391fe7c3cfbb5bf22edc1cb87"
+      "destinationSha256": "7fc3d85ecf5f4161a3a2d576d22c859b48324e9aeb615d7f13f4f231829f4046"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "2398f54f3c8faa70aa64da8950bee8458c8054868b84b58552d60769b6b3cf52"
+      "destinationSha256": "858023914be06ca4a3e574b44f643f5f3fba0e18af4de96eed84298e0966972a"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -406,7 +406,7 @@
     },
     {
       "sourcePath": "tools/context-graph/src/request.ts",
-      "destinationPath": "src/interfaces/request.ts",
+      "destinationPath": "src/graph/impact-request.ts",
       "sourceSha256": "4a3081549cab56fce144ee86208b8c800f26dfbe0d1a3950551d2f313cbf5b9d",
       "modified": true,
       "destinationSha256": "9dc0fd6652773f87ee8516670b4782342fdc1907a6adfbce1aced97ffe39d605"
@@ -581,6 +581,7 @@
     ".changeset/README.md",
     ".changeset/checkout-independent-graph-service.md",
     ".changeset/config.json",
+    ".changeset/hosted-read-mcp.md",
     ".changeset/release-plan.json",
     ".changeset/versioned-graph-reads.md",
     ".github/workflows/check.yml",
@@ -1273,6 +1274,7 @@
     "src/interfaces/graph-paths.test.ts",
     "src/interfaces/graph-paths.ts",
     "src/interfaces/graph-query-args.ts",
+    "src/interfaces/hosted-read-mcp.ts",
     "src/interfaces/hydration-failure.test.ts",
     "src/interfaces/hydration-plan.test.ts",
     "src/interfaces/identity-preflight.test.ts",
@@ -1282,6 +1284,7 @@
     "src/interfaces/mapping-proposals.test.ts",
     "src/interfaces/mapping-proposals.ts",
     "src/interfaces/opencode-readiness.ts",
+    "src/interfaces/request.ts",
     "src/interfaces/setup-assist.test.ts",
     "src/interfaces/setup-assist.ts",
     "src/interfaces/setup-ci.test.ts",
@@ -1424,6 +1427,7 @@
     "tests/fixtures/traversal.ts",
     "tests/head-generations.test.ts",
     "tests/history-retention.test.ts",
+    "tests/hosted-read-mcp.test.ts",
     "tests/hydration-failure.test.ts",
     "tests/hydration-plan.test.ts",
     "tests/identity-preflight.test.ts",

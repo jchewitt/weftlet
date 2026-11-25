@@ -1,4 +1,4 @@
-import type { GraphCatalog, GraphCatalogRequest, GraphFactDetail, GraphFactRequest, GraphNeighborhood,
+import type { ContextPack, ImpactScanRequest, GraphCatalog, GraphCatalogRequest, GraphFactDetail, GraphFactRequest, GraphNeighborhood,
   GraphNeighborsRequest, GraphPaths, GraphPathsRequest } from '@weftlet/core';
 
 export const graphReadPath = 'api/v1/query';
@@ -15,6 +15,7 @@ export interface GraphReadClientOptions {
 type Pinned<T> = Omit<T, 'snapshotId'> & { readonly snapshotId?: string };
 
 export interface GraphReadClient {
+  scan(request: Pinned<ImpactScanRequest>): Promise<ContextPack>;
   catalog(request?: Pinned<GraphCatalogRequest>): Promise<GraphCatalog>;
   neighbors(request: Pinned<GraphNeighborsRequest>): Promise<GraphNeighborhood>;
   fact(request: Pinned<GraphFactRequest>): Promise<GraphFactDetail>;
@@ -45,6 +46,7 @@ export function createGraphReadClient({ baseUrl, snapshotId, contentDigest, fetc
     return result;
   }
   return {
+    scan: request => query('impact.scan', request),
     catalog: (request = {}) => query('graph.catalog', request),
     neighbors: request => query('graph.neighbors', request),
     fact: request => query('graph.fact', request),
